@@ -15,13 +15,31 @@
             }
         });
     }
+    $(function(){
+        $("#loginnameInAdd").blur(function(){
+            $.ajax({
+                url:"<%=request.getContextPath()%>/user/checkLoginnameDuplicate?loginname="
+                    + $("#loginnameInAdd").val()+"&random_id="+Math.random(),
+                type:'get',
+                async:true,
+                error:function(data){
+                    alert(data);
+                },
+                success:function(data){
+                    if(data == 'true'){
+                        alert("用户名" + $("#loginnameInAdd").val() + "已经存在");
+                    }
+                }
+            });
+        });
+    });
 </script>
 <div style="padding:10px 60px 20px 60px">
     <form id="masterAddForm">
         <table cellpadding="5">
             <tr>
                 <td>登录名:</td>
-                <td><input class="easyui-validatebox" type="text" id="loginname" name="loginname" data-options="required:true,missingMessage:'请输入登录名'" /></td>
+                <td><input class="easyui-validatebox" type="text" id="loginnameInAdd" name="loginname" data-options="required:true,missingMessage:'请输入登录名'" /></td>
             </tr>
             <tr>
                 <td>密码:</td>

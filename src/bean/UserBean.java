@@ -1,9 +1,9 @@
-package entity;
+package bean;
 
 /**
  * Created by zhj on 2017/3/13.
  */
-public class User {
+public class UserBean {
     private String uid = null;//主键。后台用户ID，分为两种身份，掌门和管理员。生成规则：u+年+月+日+3位数字。例如：u170312001
     private String name = null;//用户姓名
     private String mphone = null;//手机号码
@@ -13,6 +13,15 @@ public class User {
     private String loginname = null; //登录系统时的账户名称
     private String remarks = null; //备注信息
     private String isdel = null; //用户是否为已删除状态。1:已删除，0:正常状态
+    private String loginnameorginal = null;//用户判定修改登录名时的重复
+
+    public String getLoginnameorginal() {
+        return loginnameorginal;
+    }
+
+    public void setLoginnameorginal(String loginnameorginal) {
+        this.loginnameorginal = loginnameorginal;
+    }
 
     public String getUid() {
         return uid;

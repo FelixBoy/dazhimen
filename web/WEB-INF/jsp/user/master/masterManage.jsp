@@ -25,18 +25,27 @@
                 height: 400,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/user/fwdMasterModifyPage",
+                href: "<%=request.getContextPath()%>/user/fwdMasterModifyPage?uid="+row.uid,
                 modal: true
             });
-            alert("<%=request.getContextPath()%>/user/fwdMasterModifyPage?uid="+row.uid);
-            $('#masterModifyDialog').dialog("open");
-//            $('#masterAddDialog').dialog('open').dialog('setTitle','修改学生信息');
-//            $('#masterAddForm').form('load',row);
-            <%--url = '${ctx}updateStudent.do?id='+row.id;--%>
+            $('#masterModifyDialog').dialog("open").dialog('setTitle','修改掌门信息');
         }
     }
     function saveMasterDel(index){
-        alert("in");
+        $('#masterList').datagrid('selectRow',index);// 关键在这里
+        var row = $('#masterList').datagrid('getSelected');
+        if(row){
+            $.messager.confirm('确认','您确认想要删除记录吗？',function(r){
+                if (r){
+                    $.get("<%=request.getContextPath()%>/user/saveMasterDel?uid=" + row.uid,
+                        function(data){
+                            alert(data);
+                            $('#masterList').datagrid('reload');
+                        }
+                    );
+                }
+            });
+        }
     }
 </script>
 

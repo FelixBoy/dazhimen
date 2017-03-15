@@ -8,10 +8,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
-    <title>$Title$</title>
+    <title>大职门后台管理</title>
   </head>
   <body>
-  fffff
+  <%--<img src="<%=request.getContextPath()%>/image/login/login_bg.jpg" width="100%" height="100%"--%>
+       <%--style="z-index:-100;position:absolute;left:0;top:0"/>--%>
   <a href="<%=request.getContextPath()%>/user/fwdMainPage">go main</a>
   </body>
 </html>

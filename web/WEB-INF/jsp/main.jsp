@@ -25,7 +25,6 @@
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/user/fwdMasterManagePage",
                         onLoad:function(){
-//                alert('loaded successfully');
                         }
                     });
                     break;
