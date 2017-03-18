@@ -8,5 +8,8 @@ public class Constant {
     //数据库中 uid编码序列的名称
     public static final String userSeqName = "user_seq";
     //uid中编码中，最后面部分的，数字序列的长度
-    public static final int UserSeqLength = 3;
+    public static final int userSeqLength = 3;
+    //数据库中 cid编码序列的名称
+    public static final String customerSeqName = "customer_seq";
+    public static final int customerSeqLength = 5;
 }

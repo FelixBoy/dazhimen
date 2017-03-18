@@ -1,8 +1,8 @@
 package test;
 
 import com.google.gson.Gson;
-import dazhimen.bg.bean.UserBean;
-import dazhimen.bg.service.UserService;
+import bean.UserBean;
+import service.UserService;
 
 import java.sql.SQLException;
 import java.util.List;

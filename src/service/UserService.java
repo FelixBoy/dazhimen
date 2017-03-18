@@ -1,7 +1,7 @@
-package dazhimen.bg.service;
+package service;
 
-import dazhimen.bg.bean.SingleValueBean;
-import dazhimen.bg.bean.UserBean;
+import bean.SingleValueBean;
+import bean.UserBean;
 import db.DBConnUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;

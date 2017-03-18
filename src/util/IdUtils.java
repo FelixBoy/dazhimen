@@ -16,7 +16,7 @@ public class IdUtils {
     public static String getUid(){
         String curDateStr = getCurrentDate();
         String user_seq = SeqUtils.getSeqNextVal(Constant.userSeqName);
-        user_seq = SeqUtils.autoAttachZeroFromStart(user_seq, Constant.UserSeqLength);
+        user_seq = SeqUtils.autoAttachZeroFromStart(user_seq, Constant.userSeqLength);
         return "u" + curDateStr + user_seq;
     }
 
@@ -29,5 +29,12 @@ public class IdUtils {
         SimpleDateFormat s=new SimpleDateFormat("yyMMdd");
         String curDate = s.format(now.getTime());
         return curDate;
+    }
+
+    public static String getCid(){
+        String curDateStr = getCurrentDate();
+        String customer_seq = SeqUtils.getSeqNextVal(Constant.customerSeqName);
+        customer_seq = SeqUtils.autoAttachZeroFromStart(customer_seq, Constant.customerSeqLength);
+        return "c" + curDateStr + customer_seq;
     }
 }

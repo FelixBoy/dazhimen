@@ -1,11 +1,12 @@
 package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
-import dazhimen.bg.bean.UserBean;
-import dazhimen.bg.service.ProductService;
+import bean.UserBean;
+import service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -36,5 +37,10 @@ public class ProductController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @RequestMapping("/saveAddProduct")
+    public String saveAddProduct(HttpServletRequest resq, HttpServletResponse resp){
+        return null;
     }
 }
