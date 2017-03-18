@@ -1,11 +1,11 @@
-package controller;
+package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
-import bean.UserBean;
+import dazhimen.bg.bean.UserBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import service.UserService;
+import dazhimen.bg.service.UserService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -39,11 +39,15 @@ public class UserController {
         return "user/master/masterAdd";
     }
     @RequestMapping("/saveMasterAdd")
-    public void saveMasterAdd(HttpServletResponse resp, UserBean userBean) throws IOException, SQLException {
-        UserService userService = new UserService();
-        if(userService.saveMasterAdd(userBean)){
-            resp.setCharacterEncoding("utf-8");
-            resp.getWriter().write("添加成功");
+    public void saveMasterAdd(HttpServletResponse resp, UserBean userBean) {
+        try{
+            UserService userService = new UserService();
+            if(userService.saveMasterAdd(userBean)){
+                resp.setCharacterEncoding("utf-8");
+                resp.getWriter().write("添加成功");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
     @RequestMapping("/checkLoginnameDuplicate")
@@ -64,14 +68,17 @@ public class UserController {
     }
 
     @RequestMapping("/queryAllMasters")
-    public String queryAllMasters(HttpServletResponse resp, Map model) throws SQLException, IOException {
+    public void queryAllMasters(HttpServletResponse resp) {
         UserService userService = new UserService();
         List<UserBean> users = userService.queryAllMasters();
         Gson gson = new Gson();
         String usersJson = gson.toJson(users);
         resp.setCharacterEncoding("utf-8");
-        resp.getWriter().write(usersJson);
-        return null;
+        try {
+            resp.getWriter().write(usersJson);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @RequestMapping("/fwdMasterModifyPage")
     public String forwardMasterModifyPage(@RequestParam("uid") String uid, HttpServletResponse resp, Map model){
@@ -79,29 +86,41 @@ public class UserController {
         return "/user/master/masterModify";
     }
     @RequestMapping("/getMasterData")
-    public String getMasterData(@RequestParam("uid") String uid, HttpServletResponse resp) throws IOException, SQLException {
+    public String getMasterData(@RequestParam("uid") String uid, HttpServletResponse resp){
         UserService userService = new UserService();
         UserBean user = userService.getMasterDataByUid(uid);
         Gson gson = new Gson();
         String userJson = gson.toJson(user);
         resp.setCharacterEncoding("utf-8");
-        resp.getWriter().write(userJson);
+        try {
+            resp.getWriter().write(userJson);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
     @RequestMapping("/saveMasterModify")
-    public void saveMasterModify(HttpServletResponse resp, UserBean user) throws SQLException, IOException {
+    public void saveMasterModify(HttpServletResponse resp, UserBean user){
         UserService userService = new UserService();
         if(userService.saveMasterModify(user)){
             resp.setCharacterEncoding("utf-8");
-            resp.getWriter().write("修改成功");
+            try {
+                resp.getWriter().write("修改成功");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     @RequestMapping("/saveMasterDel")
-    public void saveMasterDel(@RequestParam("uid") String uid, HttpServletResponse resp) throws IOException, SQLException {
+    public void saveMasterDel(@RequestParam("uid") String uid, HttpServletResponse resp){
         UserService userService = new UserService();
         if(userService.saveMasterDel(uid)){
             resp.setCharacterEncoding("utf-8");
-            resp.getWriter().write("删除成功");
+            try {
+                resp.getWriter().write("删除成功");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

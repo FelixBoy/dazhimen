@@ -1,11 +1,7 @@
 package test;
 
 import db.DBConnUtil;
-import entity.User;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-
-import java.util.List;
 
 public class DBUtilsSampleCode {
 	  public static void main(String[] args) throws  Exception{
@@ -32,12 +28,12 @@ public class DBUtilsSampleCode {
 //	            System.out.println(acc);
 //	             
 	            //4.BeanListHandler：将结果集中的每一行数据都封装到一个对应的JavaBean实例中，存放到List里。
-	            List<User> tests = qr.query("select * from user",new BeanListHandler<User>(User.class));
-	            System.out.println(tests);
-	            int i = 0;
-                for (User test:tests){
-                    System.out.println(test);
-                }
+//	            List<User> tests = qr.query("select * from user",new BeanListHandler<User>(User.class));
+//	            System.out.println(tests);
+//	            int i = 0;
+//                for (User test:tests){
+//                    System.out.println(test);
+//                }
 //	             
 //	            //5.MapHandler：将结果集中的第一行数据封装到一个Map里，key是列名，value就是对应的值。
 //	            Map map = runner.query("select * from account",new MapHandler() );

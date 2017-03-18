@@ -1,4 +1,6 @@
-package bean;
+package dazhimen.bg.bean;
+
+import java.util.Date;
 
 /**
  * Created by zhj on 2017/3/13.
@@ -14,6 +16,15 @@ public class UserBean {
     private String remarks = null; //备注信息
     private String isdel = null; //用户是否为已删除状态。1:已删除，0:正常状态
     private String loginnameorginal = null;//用户判定修改登录名时的重复
+    private Date createDate = null; //用户创建时间
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
     public String getLoginnameorginal() {
         return loginnameorginal;

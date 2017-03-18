@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Fluid Layout - jQuery EasyUI Demo</title>
+    <title>大职门后台管理</title>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/demo/demo.css">
@@ -12,10 +12,8 @@
         $(function(){
             $('#menu-tree').tree({
                 onClick: function(node){
-//            alert(node.id);  // 在用户点击的时候提示
                     $("#center_oper_area").panel({title: node.text});
                     forwardUserManage(node.id);
-
                 }
             });
         });
@@ -23,7 +21,14 @@
             switch (nodeid){
                 case 'master_manage':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdMasterManagePage",
+                        href:"<%=request.getContextPath() %>/user/fwdMasterManagePage?random_id="+Math.random(),
+                        onLoad:function(){
+                        }
+                    });
+                    break;
+                case 'product_upload':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/product/fwdAddProductPage?random_id="+Math.random(),
                         onLoad:function(){
                         }
                     });
