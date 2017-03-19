@@ -11,5 +11,14 @@ public class Constant {
     public static final int userSeqLength = 3;
     //数据库中 cid编码序列的名称
     public static final String customerSeqName = "customer_seq";
+    //cid中编码中，最后面部分的，数字序列的长度
     public static final int customerSeqLength = 5;
+    //数据库中 cid编码序列的名称
+    public static final String productSeqName = "product_seq";
+    //cid中编码中，最后面部分的，数字序列的长度
+    public static final int productSeqLength = 5;
+    //加密签名Key
+    public static final String signKey = "dazhimen666";
+    //产品上传文件 前缀路径
+    public static final String proPrefixPath = "web\\upload\\product\\";
 }

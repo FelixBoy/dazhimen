@@ -1,6 +1,6 @@
 package dazhimen.api.controller;
 
-import bean.CustomerBean;
+import dazhimen.bg.bean.CustomerBean;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dazhimen.api.bean.MphoneLoginBean;
@@ -9,6 +9,7 @@ import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import util.ApiUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,13 +22,13 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/api/customer")
 public class ApiLoginController {
-    @RequestMapping("/thirdPartLogin")
+    @RequestMapping(value = "/thirdPartLogin",method = RequestMethod.POST)
     public void doThirdPartLogin(HttpServletRequest resq,
                                  HttpServletResponse resp){
         resp.setCharacterEncoding("utf-8");
         try {
             checkThirdPartLoginParam(resq);
-            ApiUtils.checkSignatureThirdPart(resq);
+            ApiUtils.checkSignature(resq);
             ThirdPartLoginBean loginBean = getThirdPartLoginBean(resq);
             LoginService loginService = new LoginService();
             CustomerBean customerBean = loginService.doThirdPartLogin(loginBean);
@@ -53,13 +54,13 @@ public class ApiLoginController {
         }
     }
 
-    @RequestMapping("/mphoneLogin")
+    @RequestMapping(value="/mphoneLogin",method = RequestMethod.POST)
     public void doMphoneLogin(HttpServletRequest resq,
                         HttpServletResponse resp){
         resp.setCharacterEncoding("utf-8");
         try {
             checkMphoneLoginParam(resq);
-            ApiUtils.checkSignatureMphone(resq);
+            ApiUtils.checkSignature(resq);
             MphoneLoginBean loginBean = getMphoneLoginBean(resq);
             LoginService loginService = new LoginService();
             CustomerBean customerBean = loginService.doMphoneLogin(loginBean);
@@ -139,8 +140,8 @@ public class ApiLoginController {
         return loginBean;
     }
     private void checkMphoneLoginParam(HttpServletRequest resq) throws ParameterCheckException {
-        String loginType = resq.getParameter("mphone");
-        if(loginType == null){
+        String mphone = resq.getParameter("mphone");
+        if(mphone == null){
             throw new ParameterCheckException("未取到参数[mphone]");
         }
     }

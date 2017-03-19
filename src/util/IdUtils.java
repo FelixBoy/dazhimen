@@ -37,4 +37,11 @@ public class IdUtils {
         customer_seq = SeqUtils.autoAttachZeroFromStart(customer_seq, Constant.customerSeqLength);
         return "c" + curDateStr + customer_seq;
     }
+
+    public static String getPid(){
+        String curDateStr = getCurrentDate();
+        String product_seq = SeqUtils.getSeqNextVal(Constant.productSeqName);
+        product_seq = SeqUtils.autoAttachZeroFromStart(product_seq, Constant.productSeqLength);
+        return "p" + curDateStr + product_seq;
+    }
 }

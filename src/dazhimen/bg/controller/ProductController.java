@@ -1,13 +1,18 @@
 package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
-import bean.UserBean;
-import service.ProductService;
+import dazhimen.bg.bean.UploadProductBean;
+import dazhimen.bg.bean.UserBean;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import dazhimen.bg.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -41,6 +46,39 @@ public class ProductController {
 
     @RequestMapping("/saveAddProduct")
     public String saveAddProduct(HttpServletRequest resq, HttpServletResponse resp){
+        UploadProductBean productBean = getUploadProductBean(resq);
+        ProductService productService = new ProductService();
+//        productService.saveAddProduct(productBean);
         return null;
+    }
+    private UploadProductBean getUploadProductBean(HttpServletRequest resq){
+        UploadProductBean productBean = new UploadProductBean();
+        String pname = resq.getParameter("pname");
+        productBean.setPname(pname);
+        String type = resq.getParameter("type");
+        productBean.setType(type);
+        Double price = Double.parseDouble(resq.getParameter("price"));
+        productBean.setPrice(price);
+        Double derateProportion = Double.parseDouble(resq.getParameter("derateProportion"));
+        productBean.setDerateProportion(derateProportion);
+        String introduction = resq.getParameter("introduction");
+        productBean.setIntroduction(introduction);
+        String indexSort = resq.getParameter("indexosrt");
+        productBean.setIndexSort(indexSort);
+        String indexPlay = resq.getParameter("indexplay");
+        productBean.setIndexPlay(indexPlay);
+
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
+        CommonsMultipartFile listImgFile = (CommonsMultipartFile) multipartRequest.getFile("listimg");
+        productBean.setListImgFile(listImgFile);
+        List<MultipartFile> mainImgFiles = multipartRequest.getFiles("mainimg");
+        productBean.setMainImgFiles(mainImgFiles);
+
+        String uid = resq.getParameter("uid");
+        productBean.setUid(uid);
+
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        productBean.setBasePath(basePath);
+        return productBean;
     }
 }

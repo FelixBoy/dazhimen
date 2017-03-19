@@ -1,11 +1,11 @@
 package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
-import bean.UserBean;
+import dazhimen.bg.bean.UserBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import service.UserService;
+import dazhimen.bg.service.UserService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

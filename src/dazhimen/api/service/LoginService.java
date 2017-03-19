@@ -1,6 +1,6 @@
 package dazhimen.api.service;
 
-import bean.CustomerBean;
+import dazhimen.bg.bean.CustomerBean;
 import dazhimen.api.bean.MphoneLoginBean;
 import dazhimen.api.bean.ThirdPartLoginBean;
 import dazhimen.api.exception.ParameterCheckException;
@@ -55,7 +55,7 @@ public class LoginService {
             throw new ParameterCheckException(e.getMessage());
         }
     }
-    private CustomerBean getCustomerInfoByCid(String cid){
+    public CustomerBean getCustomerInfoByCid(String cid){
         CustomerBean customerBean = null;
         try {
             QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());

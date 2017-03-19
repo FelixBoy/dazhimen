@@ -1,0 +1,79 @@
+﻿/**
+ * 登陆页面CSS样式
+ */
+html{
+	 width: 100%;
+	 height: 100%;
+	 margin:0px;
+	 padding: 0px;
+}
+body{
+	width: 100%;
+	height: 100%;
+	margin:0px;
+	padding: 0px;
+}
+.dw-logon-bg {
+	width: 100%;
+	height: 100%;
+	border: none;
+}
+
+.dw-logon-form {
+	position: absolute;
+	border: none;
+	top: 95px;
+	right: 160px;
+	width: 326px;
+	height: 360px;
+	background: url(../image/login/logon_form.png) no-repeat center center;
+}
+
+.dw-logon-form-loginname {
+	position: absolute;
+	left: 55px;
+	top: 116px;
+	
+	border: none;
+	width: 216px;
+	height: 30px;
+	
+	font: normal 16px/2 "微软雅黑";
+	background: #fff;
+}
+
+.dw-logon-form-pwd {
+	position: absolute;
+	left: 55px;
+	top: 194px;
+	
+	border: none;
+	width: 216px;
+	height: 30px;
+	
+	font: normal 16px/2 "微软雅黑";
+	background: #fff;
+}
+
+.dw-logon-form-savepwd {
+	position: absolute;
+	left: 53px;
+	top: 234px;
+	
+	width: 13px;
+	height: 13px;
+}
+
+.dw-logon-form-btnlogin {
+	position: absolute;
+	left: 55px;
+	top: 264px;
+	
+	border: none;
+	width: 216px;
+	height: 32px;
+	
+	font: normal 16px/2 "微软雅黑";
+	background: transparent;
+	cursor: pointer;
+}
