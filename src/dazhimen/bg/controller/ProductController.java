@@ -48,7 +48,7 @@ public class ProductController {
     public String saveAddProduct(HttpServletRequest resq, HttpServletResponse resp){
         UploadProductBean productBean = getUploadProductBean(resq);
         ProductService productService = new ProductService();
-//        productService.saveAddProduct(productBean);
+        productService.saveAddProduct(productBean);
         return null;
     }
     private UploadProductBean getUploadProductBean(HttpServletRequest resq){
@@ -66,7 +66,11 @@ public class ProductController {
         String indexSort = resq.getParameter("indexosrt");
         productBean.setIndexSort(indexSort);
         String indexPlay = resq.getParameter("indexplay");
-        productBean.setIndexPlay(indexPlay);
+        if(indexPlay == null){
+            productBean.setIndexPlay("0");
+        }else{
+            productBean.setIndexPlay(indexPlay);
+        }
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
         CommonsMultipartFile listImgFile = (CommonsMultipartFile) multipartRequest.getFile("listimg");

@@ -20,5 +20,8 @@ public class Constant {
     //加密签名Key
     public static final String signKey = "dazhimen666";
     //产品上传文件 前缀路径
-    public static final String proPrefixPath = "web\\upload\\product\\";
+    public static final String proPrefixPath = "upload\\product\\";
+
+    //数据库中存储 上传文件的目录 前缀
+    public static final String uploadDbPrefixPath = "upload/product/";
 }

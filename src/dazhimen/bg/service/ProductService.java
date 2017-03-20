@@ -16,6 +16,7 @@ import util.IdUtils;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,57 +42,85 @@ public class ProductService {
 
     public boolean saveAddProduct(UploadProductBean productBean){
         DruidPooledConnection conn = null;
+        //1 生成pid
+        String pid = IdUtils.getPid();
+        //2 计算产品主目录路径
+        //工程所在路径+ proPrefixPath + pid_pname
+        String productMainFolderPath = productBean.getBasePath() + Constant.proPrefixPath  + pid + "\\";
+        FileManageService fileService = new FileManageService();
         try {
-            //1 生成pid
-            String pid = IdUtils.getPid();
-            //2 计算产品主目录路径
-            //C:\Users\Administrator\IdeaProjects\dazhimen\out\artifacts\dazhimen_war_exploded\web\upload\product\
-            String productMainFolderPath = productBean.getBasePath() + Constant.proPrefixPath + "\\" + pid + "_" + productBean.getPname() + "\\";
-            FileManageService fileService = new FileManageService();
             try {
                 fileService.createFolder(productMainFolderPath);
             } catch (CreateFolderException e) {
                 e.printStackTrace();
                 System.out.println(e.getMessage());
             }
-            productBean.getListImgFile().transferTo(new File(productMainFolderPath + pid+"_listimg."));;
+            CommonsMultipartFile listImageFile = productBean.getListImgFile();
+            //获得文件的原始名称
+            String lisgImageOrginalName = listImageFile.getOriginalFilename();
+            //获得原始文件的后缀
+            String listImageSuffixName = lisgImageOrginalName.substring(lisgImageOrginalName.lastIndexOf("."));
+            //新文件名
+            String listImageFileNewName = pid + "_listimg" + listImageSuffixName;
+
+            //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+            String listImageTransferFilename = productMainFolderPath + listImageFileNewName;
+
+            try {
+                productBean.getListImgFile().transferTo(new File(listImageTransferFilename));
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+            }
+            //计算列表图片在工程中的相对路径，用于记录到数据库
+            String listImageFileRelPath = Constant.uploadDbPrefixPath + pid + "/" + listImageFileNewName;
 
             QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
             conn = DBConnUtil.getDataSource().getConnection();
             conn.setAutoCommit(false);
-            runner.update("insert into product(pid,pname,type,price,derateProportion," +
-                    "introduction,indexplay,indexsort,uid,createdatetime) ");
+            runner.update(conn,"insert into product(pid,pname,type,price,derateProportion," +
+                    "introduction,indexplay,indexsort,uid,createdatetime,listimage) " +
+                    "                       values(?,    ?,   ?,    ?,       ?,   " +
+                    "  ?,             ?,         ?,    ?,       ?,          ?) ",
+                    pid,productBean.getPname(),productBean.getType(),productBean.getPrice(),productBean.getDerateProportion(),
+                    productBean.getIntroduction(),productBean.getIndexPlay(),productBean.getIndexSort(),productBean.getUid(),new Date(),
+                    listImageFileRelPath);
+            List<MultipartFile> mainImgFiles = productBean.getMainImgFiles();
 
+            //处理产品主图
+            for(int i = 1; i <= mainImgFiles.size(); i++){
+                MultipartFile mainImgFile = mainImgFiles.get(i-1);
+                String mainImageOrginalName = mainImgFile.getOriginalFilename();
+                String mainImageSuffixName = mainImageOrginalName.substring(mainImageOrginalName.lastIndexOf("."));
+                //重新编号之后的 新文件名
+                String mainImageFileNewName = pid + "_mainimg_"+ i + mainImageSuffixName;
+                //存储到数据库中的相对路径+新文件名
+                String mainImageFileRelPath = Constant.uploadDbPrefixPath +  pid +  "/" + mainImageFileNewName;
+
+                String mainImageTransferFilename = productMainFolderPath + mainImageFileNewName;
+                try {
+                    mainImgFile.transferTo(new File(mainImageTransferFilename));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                }
+                runner.update(conn,"insert into product_image(imageid,path,pid) "+
+                                "                           values(?,    ?,   ?) ",
+                              pid + "_" + i, mainImageFileRelPath, pid);
+
+            }
+            conn.commit();
+            conn.setAutoCommit(true);
         } catch (SQLException e) {
+            try {
+                conn.rollback();
+                fileService.deleteFolder(productMainFolderPath);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+
             e.printStackTrace();
         }
-//        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
-//        CommonsMultipartFile listImg = (CommonsMultipartFile) multipartRequest.getFile("listimg");
-//        System.out.println(listImg.getName());
-//        System.out.println(listImg.getOriginalFilename());
-//        System.out.println(listImg.getSize());
-//        System.out.println(listImg.getStorageDescription());
-//        System.out.println(listImg.isEmpty());
-//        try {
-//            listImg.transferTo(new File("e://1.png"));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        int i = 2;
-//        List<MultipartFile> mainImgs = multipartRequest.getFiles("mainimg");
-//        for (MultipartFile mainImg:mainImgs) {
-//            CommonsMultipartFile mainImgCommons = (CommonsMultipartFile)mainImg;
-//            System.out.println(mainImgCommons.getName());
-//            System.out.println(mainImgCommons.getOriginalFilename());
-//            System.out.println(mainImgCommons.getSize());
-//            System.out.println(mainImgCommons.getStorageDescription());
-//            System.out.println(mainImgCommons.isEmpty());
-//            try {
-//                mainImg.transferTo(new File("e://"+(i++)+".png"));
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-        return false;
+        return true;
     }
 }
