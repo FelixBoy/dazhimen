@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/demo/demo.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dazhimen.css">
     <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.min.js"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.easyui.min.js"></script>
     <script>
@@ -31,6 +32,11 @@
                         href:"<%=request.getContextPath() %>/product/fwdAddProductPage?random_id="+Math.random(),
                         onLoad:function(){
                         }
+                    });
+                    break;
+                case 'test_fileuploadcb':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/demo/fwdTestFileUploadCallBack?random_id="+Math.random()
                     });
                     break;
             }
@@ -109,11 +115,17 @@
                     <li id="admin_add" >新增管理员</li>
                 </ul>
             </li>
+            <li id="test" data-options="state:'closed'">
+                <span>测试</span>
+                <ul>
+                    <li id="test_fileuploadcb" >测试文件上传回调</li>
+                </ul>
+            </li>
         </ul>
     </div>
 </div>
 <div id="center_oper_area" data-options="region:'center',title:' '">
-    <div id="content_panel" class="easyui-panel"style="width:100%;height:200px;padding:10px;"
+    <div id="content_panel" class="easyui-panel"style="padding:10px;text-align: center"
          data-options="fit:true,border:false">
     </div>
 </div>

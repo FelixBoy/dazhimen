@@ -1,4 +1,4 @@
-package test;
+package demo;
 
 import db.DBConnUtil;
 import org.apache.commons.dbutils.QueryRunner;

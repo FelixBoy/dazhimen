@@ -1,4 +1,4 @@
-package test;
+package demo;
 
 import com.google.gson.Gson;
 import dazhimen.bg.bean.UserBean;
