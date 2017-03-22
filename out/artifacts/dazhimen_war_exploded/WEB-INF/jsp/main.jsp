@@ -7,8 +7,11 @@
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/demo/demo.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dazhimen.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/msgbox.css">
     <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.min.js"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/StringUtil.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/MsgBox.js"></script>
     <script>
         $(function(){
             $('#menu-tree').tree({
@@ -39,6 +42,11 @@
                         href:"<%=request.getContextPath() %>/demo/fwdTestFileUploadCallBack?random_id="+Math.random()
                     });
                     break;
+                case 'test_msgbox':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/demo/fwdTestMsgBox?random_id="+Math.random()
+                    });
+                    break;
             }
         }
     </script>
@@ -49,6 +57,22 @@
     <div style="margin:20px 0;"></div>
     <div class="easyui-panel" style="padding:5px">
         <ul id="menu-tree" class="easyui-tree">
+            <li id="product_manage" data-options="state:'open'">
+                <span>产品管理</span>
+                <ul>
+                    <li id="product_info">产品详情</li>
+                    <li id="product_upload">上传商品</li>
+                    <li id="product_modify">修改商品</li>
+                </ul>
+            </li>
+            <li id="master_manage" data-options="state:'open'">
+                <span>掌门管理</span>
+                <ul>
+                    <li id="master_info" >掌门详情</li>
+                    <li id="master_add">新增掌门</li>
+                    <li id="master_modify">修改掌门</li>
+                </ul>
+            </li>
             <li  id="user_manage" data-options="state:'closed'">
                 <span>用户管理</span>
                 <ul>
@@ -71,27 +95,6 @@
                     <li id="order_add">添加订单</li>
                     <li id="order_modify">修改订单</li>
                     <li id="order_history">订单记录</li>
-                </ul>
-            </li>
-            <li id="product_manage" data-options="state:'closed'">
-`               <span>产品管理</span>
-                <ul>
-                <li id="product_info" data-options="state:'closed'">
-                    <span>产品详情</span>
-                    <ul>
-                        <li id="product_order_infor">订单详情</li>
-                    </ul>
-                </li>
-                <li id="product_upload">上传商品</li>
-                <li id="product_modify">修改商品</li>
-                </ul>
-            </li>
-            <li id="master_manage" data-options="state:'closed'">
-                <span>掌门管理</span>
-                <ul>
-                    <li id="master_info" >掌门详情</li>
-                    <li id="master_add">新增掌门</li>
-                    <li id="master_modify">修改掌门</li>
                 </ul>
             </li>
             <li id="content_manage" data-options="state:'closed'">
@@ -119,6 +122,7 @@
                 <span>测试</span>
                 <ul>
                     <li id="test_fileuploadcb" >测试文件上传回调</li>
+                    <li id="test_msgbox" >MsgBoxDemo</li>
                 </ul>
             </li>
         </ul>

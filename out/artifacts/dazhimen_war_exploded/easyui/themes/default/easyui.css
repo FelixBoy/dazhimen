@@ -2627,7 +2627,8 @@
   padding: 0;
 }
 .tree-node {
-  height: 18px;
+  height: 28px;
+  line-height:28px;
   white-space: nowrap;
   cursor: pointer;
 }
@@ -2705,18 +2706,18 @@
   background: url('images/tree_icons.png') no-repeat -240px -18px;
 }
 .tree-title {
-  font-size: 12px;
+  font-size: 16px;
   display: inline-block;
   text-decoration: none;
   vertical-align: top;
   white-space: nowrap;
   padding: 0 2px;
-  height: 18px;
-  line-height: 18px;
+  height: 26px;
+  line-height: 26px;
 }
 .tree-node-proxy {
-  font-size: 12px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 26px;
   padding: 0 2px 0 20px;
   border-width: 1px;
   border-style: solid;

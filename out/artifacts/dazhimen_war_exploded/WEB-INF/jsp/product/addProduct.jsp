@@ -11,23 +11,78 @@
         });
         $('#selectMasterDialog').dialog("open");
     }
+    var checkCount = 10;
+    function cbInAddProduct(){
+        var f = $('#ProductForm_iframe'), data = "";
+        if (!f.length){
+            return
+        }
+        f.unbind();
+        var body = f.contents().find('body');
+        data = body.html();
+        if (data == ""){
+            if (--checkCount){
+                setTimeout(cbInAddProduct, 100);
+                return;
+            }
+        }
+        setTimeout(function(){
+            f.unbind();
+            f.remove();
+        }, 100);
+    }
+    function dealProductFormBeforeSubmit(){
+        var frameId = "ProductForm_iframe", $frame = null;
+        var testFrameId = $('#'+frameId);
+        if(testFrameId.length>0){
+            testFrameId.unbind();
+            testFrameId.remove();
+        }
+        $frame = $('<iframe id='+frameId+' name='+frameId+'></iframe>').appendTo('body');
+        $frame.attr('src', window.ActiveXObject ? 'javascript:false' : 'about:blank');
+        $frame.css({
+            display:"none"
+        });
+        $frame.bind('load', cbInAddProduct);
+        $("#productForm").attr('target', frameId);
+    }
     function submitAddProduct(){
         if(!checkProductForm()){
             return;
         }
+        dealProductFormBeforeSubmit();
         $("#productForm").submit();
     }
     function checkProductForm(){
         if($("#uid").val().length == 0){
-            alert("请选择掌门后新增");
+            MsgBox.show("请选择掌门信息");
             return false;
         }
+        if($("#pname").val().length == 0){
+            MsgBox.show("请填写产品名称");
+            $("#pname").focus();
+            return false;
+        }
+        if($("#price").val().length == 0){
+            MsgBox.show("请填写产品价格");
+            $("#price").focus();
+            return false;
+        }
+        var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+        if(!reg.test($("#price").val())){
+            MsgBox.show("产品价格[" + $("#price").val() + "]格式不正确");
+            return false;
+        }
+        return true;
+    }
+    function actionAfterSubmit(jsonObj){
+        alert(jsonObj);
     }
     function addMainImage(){
-        alert("功能正在开发");
+        MsgBox.show("功能正在开发，敬请期待");
     }
 </script>
-<div style="margin:0px auto;width: 800px;">
+<div style="margin:0px auto;width: 810px;">
     <form id="productForm" action="<%=request.getContextPath()%>/product/saveAddProduct"
           enctype="multipart/form-data" method="post">
         <table cellpadding="5">
@@ -35,31 +90,32 @@
                 <td colspan="6" >
                     <div class="formTitle" style="background-color:#f2f2f2;">
                         <div class="formTitle-icon">
-                        </div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">请选择掌门</div>
+                        </div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">请选择掌门<span style="color:red">*</span></div>
                     </div>
                 </td>
             </tr>
             <tr>
-                <td>掌门ID:</td>
-                <td><input class="easyui-textbox" readonly="true" id="uid" name="uid"></td>
-                <td>登录名:</td>
-                <td><input class="easyui-textbox" readonly="true" id="loginname" name="loginname"></td>
+                <td>责任掌门ID:</td>
+                <td><input class="dzm-noBorder-text" readonly="true" id="uid" name="uid">&nbsp&nbsp</td>
+                <td>登录账号:</td>
+                <td><input class="dzm-noBorder-text" readonly="true" id="loginname" name="loginname">&nbsp&nbsp</td>
                 <td>姓名:</td>
-                <td><input class="easyui-textbox" readonly="true" id="name" name="name" /></td>
+                <td><input class="dzm-noBorder-text" readonly="true" id="name" name="name" /></td>
             </tr>
             <tr>
-                <td>手机:</td>
-                <td><input class="easyui-textbox" readonly="true" id="mphone" name="mphone"/></td>
+                <td>手机号码:</td>
+                <td><input class="dzm-noBorder-text" readonly="true" id="mphone" name="mphone"/>&nbsp&nbsp</td>
                 <td>性别:</td>
-                <td><input class="easyui-textbox" readonly="true" id="gender" name="gender" /></td>
-                <td>备注:</td>
-                <td><input class="easyui-textbox" readonly="true" name="remarks" data-options="multiline:true" style="height:50px"/></td>
+                <td><input class="dzm-noBorder-text" readonly="true" id="gender" name="gender" />&nbsp&nbsp</td>
+                <td>备注信息:</td>
+                <td><input class="dzm-noBorder-text" readonly="true" name="remarks" data-options="multiline:true" style="height:50px"/></td>
             </tr>
         </table>
         <div style="text-align: right;margin-right: 80px;">
             <a href="javascript:void(0)" class="easyui-linkbutton" onclick="selectMaster()">选择掌门</a>
             <div id="selectMasterDialog"></div>
         </div>
+        <br/>
         <table cellpadding="5">
             <tr>
                 <td colspan="6" >
@@ -71,11 +127,16 @@
             </tr>
             <tr>
                 <td>类型:</td>
-                <td><input class="easyui-textbox"  id="type" name="type"></td>
+                <td>
+                    <select class="easyui-combobox" name="type" id="type" style="width:98%">
+                        <option value="1">技能包</option>
+                        <option value="2">经验包</option>
+                    </select>
+                    <span style="color:red">*</span></td>
                 <td>名称:</td>
-                <td><input class="easyui-textbox"  id="pname" name="pname"></td>
-                <td>价格:</td>
-                <td><input class="easyui-textbox" id="price" name="price" /></td>
+                <td><input class="easyui-textbox"  id="pname" name="pname"><span style="color:red">*</span></td>
+                <td>价格/年:</td>
+                <td><input class="easyui-textbox" id="price" name="price" data-options="prompt:'请输入金额，两位小数'" /><span style="color:red">*</span></td>
             </tr>
             <tr>
                 <td>余额支付减免:</td>
@@ -101,19 +162,32 @@
             </tr>
             <tr>
                 <td>列表图片:</td>
-                <td colspan="4"><input class="easyui-filebox" id="listimg" name="listimg" style="width:85%" data-options="prompt:'请选择列表图片',buttonText:'&nbsp;选&nbsp;择&nbsp;'"></td>
+                <td colspan="4">
+                        <input class="easyui-filebox" id="listimg" name="listimg" style="width:85%"
+                               data-options="prompt:'请选择列表图片',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <span style="color:red">*</span>
+                </td>
             </tr>
             <tr>
                 <td>产品主图-1:</td>
-                <td colspan="4"><input class="easyui-filebox" id="mainimg1" name="mainimg" style="width:85%" data-options="prompt:'请选择产品主图一',buttonText:'&nbsp;选&nbsp;择&nbsp;'"></td>
+                <td colspan="4">
+                    <input class="easyui-filebox" id="mainimg1" name="mainimg" style="width:85%" data-options="prompt:'请选择产品主图一',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <span style="color:red">*</span>
+                </td>
             </tr>
             <tr>
                 <td>产品主图-2:</td>
-                <td colspan="4"><input class="easyui-filebox" id="mainimg2" name="mainimg" style="width:85%" data-options="prompt:'请选择产品主图二',buttonText:'&nbsp;选&nbsp;择&nbsp;'"></td>
+                <td colspan="4">
+                    <input class="easyui-filebox" id="mainimg2" name="mainimg" style="width:85%" data-options="prompt:'请选择产品主图二',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <span style="color:red">*</span>
+                </td>
             </tr>
             <tr>
                 <td>产品主图-3:</td>
-                <td colspan="4"><input class="easyui-filebox" id="mainimg3" name="mainimg" style="width:85%" data-options="prompt:'请选择产品主图三',buttonText:'&nbsp;选&nbsp;择&nbsp;'"></td>
+                <td colspan="4">
+                    <input class="easyui-filebox" id="mainimg3" name="mainimg" style="width:85%" data-options="prompt:'请选择产品主图三',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <span style="color:red">*</span>
+                </td>
                 <td><a href="#" class="easyui-linkbutton" style="text-align: left" data-options="iconCls:'icon-add'" onclick="addMainImage()">添加主图</a></td>
             </tr>
         </table>

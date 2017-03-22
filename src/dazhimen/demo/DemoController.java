@@ -25,4 +25,9 @@ public class DemoController {
         mav.addObject("parameters", "testPara");
         return mav;
     }
+
+    @RequestMapping(value="fwdTestMsgBox")
+    public String fwdTestMsgBox(){
+        return "/demo/msgbox";
+    }
 }

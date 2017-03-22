@@ -42,6 +42,9 @@
         alert(" action after ");
         alert(jsonObj);
     }
+    function clearForm(){
+        MsgBox.show("哈哈哈");
+    }
 </script>
 <div style="margin:0px auto;width: 650px;">
     <br/>

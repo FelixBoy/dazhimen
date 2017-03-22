@@ -9,6 +9,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import dazhimen.bg.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,11 +46,15 @@ public class ProductController {
     }
 
     @RequestMapping("/saveAddProduct")
-    public String saveAddProduct(HttpServletRequest resq, HttpServletResponse resp){
+    public ModelAndView saveAddProduct(HttpServletRequest resq, HttpServletResponse resp){
         UploadProductBean productBean = getUploadProductBean(resq);
         ProductService productService = new ProductService();
         productService.saveAddProduct(productBean);
-        return null;
+//        resp.setCharacterEncoding("utf-8");
+        ModelAndView mav = new ModelAndView("fileUploadAfterAction");
+        mav.addObject("message", "testmessage");
+        mav.addObject("parameters", "上传成功");
+        return mav;
     }
     private UploadProductBean getUploadProductBean(HttpServletRequest resq){
         UploadProductBean productBean = new UploadProductBean();

@@ -11,7 +11,7 @@
        $("#selectMasterList").datagrid({
            onDblClickRow:function(index, row){
                if(row){
-                   $("#masterInfoForm").form("load",row);
+                   $("#productForm").form("load",row);
                    $('#selectMasterDialog').dialog('close');
                }
            }
@@ -20,7 +20,7 @@
     function onSelectMaster(){
         var row = $('#selectMasterList').datagrid('getSelected');
         if(row){
-            $("#masterInfoForm").form("load",row);
+            $("#productForm").form("load",row);
             $('#selectMasterDialog').dialog('close');
         }
     }
