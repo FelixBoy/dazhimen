@@ -1,7 +1,3 @@
-.login-bg {
-    width: 100%;
-    height: 100%;
-}
 /* formTitle */
 .formTitle {
     height: 45px;
@@ -25,4 +21,7 @@
     font-size: 12px;
     line-height: 23px;
     border: 1px solid ghostwhite !important;
+}
+.form-label-cell{
+    width: 70px;
 }

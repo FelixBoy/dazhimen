@@ -3,9 +3,12 @@ package dazhimen.bg.service;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import dazhimen.bg.bean.UploadProductBean;
 import dazhimen.bg.bean.UserBean;
-import dazhimen.bg.exception.CreateFolderException;
+import dazhimen.bg.bean.ViewMainImageBean;
+import dazhimen.bg.bean.ViewProductBean;
+import dazhimen.bg.exception.BgException;
 import db.DBConnUtil;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -40,7 +43,7 @@ public class ProductService {
         return userBeans;
     }
 
-    public boolean saveAddProduct(UploadProductBean productBean){
+    public String saveAddProduct(UploadProductBean productBean) throws BgException{
         DruidPooledConnection conn = null;
         //1 生成pid
         String pid = IdUtils.getPid();
@@ -48,13 +51,7 @@ public class ProductService {
         //工程所在路径+ proPrefixPath + pid_pname
         String productMainFolderPath = productBean.getBasePath() + Constant.proPrefixPath  + pid + "\\";
         FileManageService fileService = new FileManageService();
-        try {
-            try {
-                fileService.createFolder(productMainFolderPath);
-            } catch (CreateFolderException e) {
-                e.printStackTrace();
-                System.out.println(e.getMessage());
-            }
+        fileService.createFolder(productMainFolderPath);
             CommonsMultipartFile listImageFile = productBean.getListImgFile();
             //获得文件的原始名称
             String lisgImageOrginalName = listImageFile.getOriginalFilename();
@@ -70,15 +67,16 @@ public class ProductService {
                 productBean.getListImgFile().transferTo(new File(listImageTransferFilename));
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println(e.getMessage());
+                throw new BgException("保存产品列表图片失败");
             }
             //计算列表图片在工程中的相对路径，用于记录到数据库
             String listImageFileRelPath = Constant.uploadDbPrefixPath + pid + "/" + listImageFileNewName;
-
+        try {
             QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
             conn = DBConnUtil.getDataSource().getConnection();
+
             conn.setAutoCommit(false);
-            runner.update(conn,"insert into product(pid,pname,type,price,derateProportion," +
+             runner.update(conn,"insert into product(pid,pname,type,price,derateProportion," +
                     "introduction,indexplay,indexsort,uid,createdatetime,listimage) " +
                     "                       values(?,    ?,   ?,    ?,       ?,   " +
                     "  ?,             ?,         ?,    ?,       ?,          ?) ",
@@ -90,6 +88,9 @@ public class ProductService {
             //处理产品主图
             for(int i = 1; i <= mainImgFiles.size(); i++){
                 MultipartFile mainImgFile = mainImgFiles.get(i-1);
+                if(mainImgFile.isEmpty()){
+                    continue;
+                }
                 String mainImageOrginalName = mainImgFile.getOriginalFilename();
                 String mainImageSuffixName = mainImageOrginalName.substring(mainImageOrginalName.lastIndexOf("."));
                 //重新编号之后的 新文件名
@@ -102,7 +103,7 @@ public class ProductService {
                     mainImgFile.transferTo(new File(mainImageTransferFilename));
                 } catch (IOException e) {
                     e.printStackTrace();
-                    System.out.println(e.getMessage());
+                    throw new BgException("保存产品主图-" + i + "失败");
                 }
                 runner.update(conn,"insert into product_image(imageid,path,pid) "+
                                 "                           values(?,    ?,   ?) ",
@@ -117,10 +118,43 @@ public class ProductService {
                 fileService.deleteFolder(productMainFolderPath);
             } catch (SQLException e1) {
                 e1.printStackTrace();
+                throw new BgException("事务回滚出错");
             }
+            e.printStackTrace();
+            throw new BgException("保存商品信息出错");
+        }
+        return pid;
+    }
 
+    public ViewProductBean getProductInforById(String pid){
+        ViewProductBean productBean = null;
+        try {
+            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
+            StringBuffer sqlBF = new StringBuffer();
+            sqlBF.append("select pid,pname,getcodetxt('producttype',a.type) as type,price,derateProportion," +
+                    "a.introduction,getcodetxt('indexsort',indexsort) as indexsort,getcodetxt('rightorwrong',indexplay) as indexplay," +
+                    "listimage,b.uid,b.name as uname,b.mphone ");
+            sqlBF.append("  from product a, ");
+            sqlBF.append("       user b ");
+            sqlBF.append(" where pid = ? and a.isdel = '0' ");
+            sqlBF.append("   and a.uid = b.uid ");
+            productBean = runner.query(sqlBF.toString(), new BeanHandler<ViewProductBean>(ViewProductBean.class),pid);
+        }catch (SQLException e){
             e.printStackTrace();
         }
-        return true;
+        return productBean;
+    }
+
+    public List<ViewMainImageBean> getProductMainImages(String pid){
+        List<ViewMainImageBean> mainImageBeans = null;
+        try {
+            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
+            mainImageBeans = runner.query("select imageid,path as mainimage " +
+                            " from product_image where pid = ? ",
+                    new BeanListHandler<ViewMainImageBean>(ViewMainImageBean.class), pid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return mainImageBeans;
     }
 }

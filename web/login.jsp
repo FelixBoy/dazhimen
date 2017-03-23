@@ -4,19 +4,23 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <link type="text/css" rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dazhimen.css">
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/msgbox.css">
   <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.min.js"></script>
   <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/jquery.md5.js"></script>
   <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/json2.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/StringUtil.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/MsgBox.js"></script>
   <title>系统登录</title>
   <script type="text/javascript">
     function onLogin(){
         if(!($("#userNameInput").val())){
-            alert("请输入用户名");
+            MsgBox.show("请输入用户名");
             $("#userNameInput").focus();
             return;
         }
         if(!($("#userPwdInput").val())){
-            alert("请输入密码");
+            MsgBox.show("请输入密码");
             $("#userPwdInput").focus();
             return;
         }
@@ -28,7 +32,7 @@
                if(resultObj.code == 'succ'){
                    location.href=resultObj.rediretUrl + "?random_id="+Math.random();
                }else{
-                   alert(resultObj.msg);
+                   MsgBox.show(resultObj.msg);
                }
             });
     }

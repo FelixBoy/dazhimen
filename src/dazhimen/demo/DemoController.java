@@ -30,4 +30,8 @@ public class DemoController {
     public String fwdTestMsgBox(){
         return "/demo/msgbox";
     }
+    @RequestMapping(value="/fwdSuspensionInfor")
+    public String fwdSuspensionInfor(){
+        return "/demo/SuspensionInfor";
+    }
 }

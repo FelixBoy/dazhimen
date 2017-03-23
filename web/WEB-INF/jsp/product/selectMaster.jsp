@@ -31,12 +31,12 @@
            rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
         <tr>
-            <th data-options="field:'uid',width:100">Id</th>
-            <th data-options="field:'name',width:60">姓名</th>
-            <th data-options="field:'mphone',width:100">手机号码</th>
-            <th data-options="field:'loginname',width:60">登录名</th>
-            <th data-options="field:'gender',width:20">性别</th>
-            <th data-options="field:'remarks',width:20">备注</th>
+            <th data-options="field:'uid'" width="20%">Id</th>
+            <th data-options="field:'name'" width="10%">姓名</th>
+            <th data-options="field:'mphone'" width="20%">手机号码</th>
+            <th data-options="field:'loginname'"  width="10%">登录名</th>
+            <th data-options="field:'gender'"  width="10%">性别</th>
+            <th data-options="field:'remarks'" width="30%">备注</th>
         </tr>
         </thead>
     </table>

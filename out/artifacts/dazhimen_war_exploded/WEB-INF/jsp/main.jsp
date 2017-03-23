@@ -37,6 +37,13 @@
                         }
                     });
                     break;
+                case 'customer_manage':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/customer/fwdCustomerManagePage?random_id="+Math.random(),
+                        onLoad:function(){
+                        }
+                    });
+                    break;
                 case 'test_fileuploadcb':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/demo/fwdTestFileUploadCallBack?random_id="+Math.random()
@@ -47,6 +54,11 @@
                         href:"<%=request.getContextPath() %>/demo/fwdTestMsgBox?random_id="+Math.random()
                     });
                     break;
+                default:
+                    MsgBox.show("功能正在开发，敬请期待！");
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/demo/fwdSuspensionInfor?random_id="+Math.random()
+                    });
             }
         }
     </script>
@@ -60,27 +72,13 @@
             <li id="product_manage" data-options="state:'open'">
                 <span>产品管理</span>
                 <ul>
-                    <li id="product_info">产品详情</li>
                     <li id="product_upload">上传商品</li>
+                    <li id="product_info">产品详情</li>
                     <li id="product_modify">修改商品</li>
                 </ul>
             </li>
-            <li id="master_manage" data-options="state:'open'">
-                <span>掌门管理</span>
-                <ul>
-                    <li id="master_info" >掌门详情</li>
-                    <li id="master_add">新增掌门</li>
-                    <li id="master_modify">修改掌门</li>
-                </ul>
-            </li>
-            <li  id="user_manage" data-options="state:'closed'">
-                <span>用户管理</span>
-                <ul>
-                    <li id="user_add">添加用户</li>
-                    <li id="user_infor">用户详情</li>
-                    <li id="user_modify">修改详情</li>
-                </ul>
-            </li>
+            <li id="master_manage">掌门管理</li>
+            <li id="customer_manage">会员管理</li>
             <li id="recharge_manage" data-options="state:'closed'">
                 <span>充值管理</span>
                 <ul>

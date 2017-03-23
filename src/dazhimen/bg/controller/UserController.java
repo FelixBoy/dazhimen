@@ -85,7 +85,7 @@ public class UserController {
         return "/user/master/masterModify";
     }
     @RequestMapping("/getMasterData")
-    public String getMasterData(@RequestParam("uid") String uid, HttpServletResponse resp){
+    public void getMasterData(@RequestParam("uid") String uid, HttpServletResponse resp){
         UserService userService = new UserService();
         UserBean user = userService.getMasterDataByUid(uid);
         Gson gson = new Gson();
@@ -96,7 +96,6 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
     }
     @RequestMapping("/saveMasterModify")
     public void saveMasterModify(HttpServletResponse resp, UserBean user){

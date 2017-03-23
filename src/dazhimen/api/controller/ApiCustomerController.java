@@ -1,11 +1,12 @@
 package dazhimen.api.controller;
 
-import dazhimen.bg.bean.CustomerBean;
+import dazhimen.api.bean.ApiCustomerBean;
+import dazhimen.api.service.ApiCustomerService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dazhimen.api.bean.ModifyCustomerInfoBean;
 import dazhimen.api.exception.ParameterCheckException;
-import dazhimen.api.service.LoginService;
+import dazhimen.api.service.ApiLoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +15,7 @@ import util.ApiUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Administrator on 2017/3/18.
@@ -28,8 +30,8 @@ public class ApiCustomerController {
             checkGetPersonalInfoPara(resq);
             ApiUtils.checkSignature(resq);
             String cid = resq.getParameter("cid");
-            LoginService loginService = new LoginService();
-            CustomerBean customerBean = loginService.getCustomerInfoByCid(cid);
+            ApiLoginService apiLoginService = new ApiLoginService();
+            ApiCustomerBean customerBean = apiLoginService.getCustomerInfoByCid(cid);
             try {
                 JsonObject jsonObj = new JsonObject();
                 jsonObj.addProperty("code","200");
@@ -53,12 +55,29 @@ public class ApiCustomerController {
     }
     @RequestMapping(value="modifyPersonalInfo", method = RequestMethod.POST)
     public void modifyPersonalInfo(HttpServletRequest resq, HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         resp.setCharacterEncoding("utf-8");
         try {
             checkModifyPersonalInfoPara(resq);
             ApiUtils.checkSignature(resq);
+            ModifyCustomerInfoBean customerInfoBean = getModifyPersonalInfoBean(resq);
+            ApiCustomerService customerService = new ApiCustomerService();
+            customerService.modifyPersonalInfo(customerInfoBean);
         } catch (ParameterCheckException e) {
             e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code","400");
+            jsonObj.addProperty("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
     private void checkGetPersonalInfoPara(HttpServletRequest resq) throws ParameterCheckException {

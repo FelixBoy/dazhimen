@@ -1,8 +1,13 @@
 package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dazhimen.bg.bean.UploadProductBean;
 import dazhimen.bg.bean.UserBean;
+import dazhimen.bg.bean.ViewMainImageBean;
+import dazhimen.bg.bean.ViewProductBean;
+import dazhimen.bg.exception.BgException;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -49,12 +54,76 @@ public class ProductController {
     public ModelAndView saveAddProduct(HttpServletRequest resq, HttpServletResponse resp){
         UploadProductBean productBean = getUploadProductBean(resq);
         ProductService productService = new ProductService();
-        productService.saveAddProduct(productBean);
-//        resp.setCharacterEncoding("utf-8");
         ModelAndView mav = new ModelAndView("fileUploadAfterAction");
-        mav.addObject("message", "testmessage");
-        mav.addObject("parameters", "上传成功");
+        String pid = null;
+        try {
+            pid = productService.saveAddProduct(productBean);
+        } catch (BgException e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code", "400");
+            jsonObj.addProperty("msg",e.getMessage());
+            mav.addObject("parameters", jsonObj.toString());
+            return mav;
+        }
+
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("code", "200");
+        jsonObj.addProperty("msg","商品上传成功");
+        jsonObj.addProperty("pid", pid);
+        mav.addObject("parameters", jsonObj.toString());
         return mav;
+    }
+    @RequestMapping("/fwdProductInfoPage")
+    public ModelAndView fwdProductInfoPage(@RequestParam("pid") String pid, HttpServletResponse resp){
+        ModelAndView mav = new ModelAndView("product/viewProductInfor");
+        mav.addObject("pid", pid);
+        return mav;
+    }
+    @RequestMapping("/getProductInforById")
+    public void getProductInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
+                                    HttpServletResponse resp){
+        ProductService productService = new ProductService();
+        ViewProductBean productBean = productService.getProductInforById(pid);
+        productBean = dealListImgUrlPrefix(resq.getContextPath() , productBean);
+        Gson gson = new Gson();
+        String productJson = gson.toJson(productBean);
+        resp.setCharacterEncoding("utf-8");
+        try {
+            resp.getWriter().write(productJson);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @RequestMapping("/getMainImagesInforById")
+    public void getMainImagesInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
+                                       HttpServletResponse resp){
+        ProductService productService = new ProductService();
+        List<ViewMainImageBean> mainImageBeans = productService.getProductMainImages(pid);
+        mainImageBeans = dealMainImageUrlPrefix(resq.getContextPath(), mainImageBeans);
+        Gson gson = new Gson();
+        String mainImagesJson = gson.toJson(mainImageBeans);
+        resp.setCharacterEncoding("utf-8");
+        try {
+            resp.getWriter().write(mainImagesJson);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private ViewProductBean dealListImgUrlPrefix(String prefix, ViewProductBean productBean){
+        productBean.setListImage(prefix + "/" + productBean.getListImage());
+        return productBean;
+    }
+    private List<ViewMainImageBean> dealMainImageUrlPrefix(String prefix, List<ViewMainImageBean> mainImageBeans){
+        for(int i = 0; i < mainImageBeans.size(); i++){
+            ViewMainImageBean mainImage = mainImageBeans.get(i);
+            mainImage.setMainImage(prefix + "/" + mainImage.getMainImage());
+        }
+//        for (ViewMainImageBean mainImage: mainImageBeans
+//                ) {
+//            System.out.println(mainImage);
+//        }
+        return mainImageBeans;
     }
     private UploadProductBean getUploadProductBean(HttpServletRequest resq){
         UploadProductBean productBean = new UploadProductBean();

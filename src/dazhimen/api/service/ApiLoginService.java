@@ -1,6 +1,6 @@
 package dazhimen.api.service;
 
-import dazhimen.bg.bean.CustomerBean;
+import dazhimen.api.bean.ApiCustomerBean;
 import dazhimen.api.bean.MphoneLoginBean;
 import dazhimen.api.bean.ThirdPartLoginBean;
 import dazhimen.api.exception.ParameterCheckException;
@@ -14,22 +14,22 @@ import java.util.Date;
 /**
  * Created by Administrator on 2017/3/18.
  */
-public class LoginService {
-    public CustomerBean doThirdPartLogin(ThirdPartLoginBean loginBean) throws ParameterCheckException {
+public class ApiLoginService {
+    public ApiCustomerBean doThirdPartLogin(ThirdPartLoginBean loginBean) throws ParameterCheckException {
         if(loginBean == null){
-            throw new ParameterCheckException("LoginService的doThirdPartLogin方法，参数为null");
+            throw new ParameterCheckException("ApiLoginService的doThirdPartLogin方法，参数为null");
         }
         try {
             QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            CustomerBean customerBean = null;
+            ApiCustomerBean customerBean = null;
             if(loginBean.getLoginType().equals("1")){
                 customerBean = runner.query(" select cid,headerurl,mphone,nickname," +
                                 " name,gender,email,education from customer where qq = ? ",
-                        new BeanHandler<CustomerBean>(CustomerBean.class), loginBean.getQq());
+                        new BeanHandler<ApiCustomerBean>(ApiCustomerBean.class), loginBean.getQq());
             }else if(loginBean.getLoginType().equals("2")){
                 customerBean = runner.query(" select cid,headerurl,mphone,nickname," +
                                 " name,gender,email,education from customer where weixin = ? ",
-                        new BeanHandler<CustomerBean>(CustomerBean.class), loginBean.getWeixin());
+                        new BeanHandler<ApiCustomerBean>(ApiCustomerBean.class), loginBean.getWeixin());
             }
             if(customerBean == null) {
                 StringBuffer sqlBF = new StringBuffer();
@@ -42,40 +42,41 @@ public class LoginService {
                         loginBean.getGender(), loginBean.getAge(), loginBean.getQq(), loginBean.getQqUid(),
                         loginBean.getWeixin(), loginBean.getWeixinUid(), new Date());
                 if (!(result == 1)) {
-                    throw new ParameterCheckException("新增客户信息出错");
+                    throw new ParameterCheckException("新增会员信息出错");
                 }
                 customerBean = getCustomerInfoByCid(cid);
             }
             return customerBean;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new ParameterCheckException(e.getMessage());
+            throw new ParameterCheckException("新增会员信息出错");
         } catch (ParameterCheckException e){
             e.printStackTrace();
-            throw new ParameterCheckException(e.getMessage());
+            throw new ParameterCheckException("新增会员信息出错");
         }
     }
-    public CustomerBean getCustomerInfoByCid(String cid){
-        CustomerBean customerBean = null;
+    public ApiCustomerBean getCustomerInfoByCid(String cid) throws ParameterCheckException {
+        ApiCustomerBean customerBean = null;
         try {
             QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
             customerBean = runner.query(" select cid,headerurl,mphone,nickname," +
                             " name,gender,email,education from customer where cid = ? ",
-                    new BeanHandler<CustomerBean>(CustomerBean.class), cid);
+                    new BeanHandler<ApiCustomerBean>(ApiCustomerBean.class), cid);
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new ParameterCheckException("查询会员信息出错");
         }
         return customerBean;
     }
-    public CustomerBean doMphoneLogin(MphoneLoginBean loginBean) throws ParameterCheckException {
+    public ApiCustomerBean doMphoneLogin(MphoneLoginBean loginBean) throws ParameterCheckException {
         if(loginBean == null){
-            throw new ParameterCheckException("doMphoneLogin，参数为null");
+            throw new ParameterCheckException("ApiLoginService的doMphoneLogin，参数为null");
         }
         try {
             QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            CustomerBean customerBean = runner.query(" select cid,headerurl,mphone,nickname," +
+            ApiCustomerBean customerBean = runner.query(" select cid,headerurl,mphone,nickname," +
                             " name,gender,email,education from customer where mphone = ? ",
-                    new BeanHandler<CustomerBean>(CustomerBean.class), loginBean.getMphone());
+                    new BeanHandler<ApiCustomerBean>(ApiCustomerBean.class), loginBean.getMphone());
             if(customerBean == null){
                 StringBuffer sqlBF = new StringBuffer();
                 sqlBF.append("insert into customer(cid,mphone,createdate) ");
@@ -83,17 +84,17 @@ public class LoginService {
                 String cid = IdUtils.getCid();
                 int result = runner.update(sqlBF.toString(), cid, loginBean.getMphone(),new Date());
                 if (!(result == 1)) {
-                    throw new ParameterCheckException("新增客户信息出错");
+                    throw new ParameterCheckException("新增会员信息出错");
                 }
                 customerBean = getCustomerInfoByCid(cid);
             }
             return customerBean;
         }catch (SQLException e) {
             e.printStackTrace();
-            throw new ParameterCheckException(e.getMessage());
+            throw new ParameterCheckException("新增会员信息出错");
         } catch (ParameterCheckException e){
             e.printStackTrace();
-            throw new ParameterCheckException(e.getMessage());
+            throw new ParameterCheckException("新增会员信息出错");
         }
     }
 }

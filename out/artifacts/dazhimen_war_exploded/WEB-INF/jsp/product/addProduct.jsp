@@ -76,7 +76,33 @@
         return true;
     }
     function actionAfterSubmit(jsonObj){
-        alert(jsonObj);
+        alert("innn");
+        var resultObj = JSON.parse(jsonObj);
+        if(!resultObj){
+            return;
+        }
+        var code = resultObj.code;
+        if(code == '200'){
+            var msg = resultObj.msg;
+            var pid = resultObj.pid;
+            alert("pid");
+            MsgBox.show(msg);
+            $('#content_panel').panel({
+                href:"<%=request.getContextPath() %>/product/fwdProductInfoPage?random_id=" + Math.random()+"&pid=" + pid,
+                onLoad:function(){
+                }
+            });
+        }else{
+            MsgBox.show("上传商品失败。"+resultObj.msg);
+        }
+    }
+    function clearForm(){
+        var pid = "p17032300042";
+        $('#content_panel').panel({
+            href:"<%=request.getContextPath() %>/product/fwdProductInfoPage?random_id=" + Math.random()+"&pid=" + pid,
+            onLoad:function(){
+            }
+        });
     }
     function addMainImage(){
         MsgBox.show("功能正在开发，敬请期待");
@@ -112,7 +138,7 @@
             </tr>
         </table>
         <div style="text-align: right;margin-right: 80px;">
-            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="selectMaster()">选择掌门</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="selectMaster()">选择掌门</a>
             <div id="selectMasterDialog"></div>
         </div>
         <br/>
@@ -126,17 +152,17 @@
                 </td>
             </tr>
             <tr>
-                <td>类型:</td>
+                <td>类型:<span style="color:red">*</span></td>
                 <td>
                     <select class="easyui-combobox" name="type" id="type" style="width:98%">
                         <option value="1">技能包</option>
                         <option value="2">经验包</option>
                     </select>
-                    <span style="color:red">*</span></td>
-                <td>名称:</td>
-                <td><input class="easyui-textbox"  id="pname" name="pname"><span style="color:red">*</span></td>
-                <td>价格/年:</td>
-                <td><input class="easyui-textbox" id="price" name="price" data-options="prompt:'请输入金额，两位小数'" /><span style="color:red">*</span></td>
+                </td>
+                <td>名称:<span style="color:red">*</span></td>
+                <td><input class="easyui-textbox"  id="pname" name="pname"></td>
+                <td>价格/年:<span style="color:red">*</span></td>
+                <td><input class="easyui-textbox" id="price" name="price" data-options="prompt:'请输入金额，两位小数'" ></td>
             </tr>
             <tr>
                 <td>余额支付减免:</td>
@@ -161,39 +187,35 @@
                                        name="introduction" data-options="multiline:true"/></td>
             </tr>
             <tr>
-                <td>列表图片:</td>
+                <td>列表图片:<span style="color:red">*</span></td>
                 <td colspan="4">
                         <input class="easyui-filebox" id="listimg" name="listimg" style="width:85%"
                                data-options="prompt:'请选择列表图片',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
-                    <span style="color:red">*</span>
                 </td>
             </tr>
             <tr>
-                <td>产品主图-1:</td>
+                <td>产品主图-1:<span style="color:red">*</span></td>
                 <td colspan="4">
                     <input class="easyui-filebox" id="mainimg1" name="mainimg" style="width:85%" data-options="prompt:'请选择产品主图一',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
-                    <span style="color:red">*</span>
                 </td>
             </tr>
             <tr>
-                <td>产品主图-2:</td>
+                <td>产品主图-2:<span style="color:red">*</span></td>
                 <td colspan="4">
                     <input class="easyui-filebox" id="mainimg2" name="mainimg" style="width:85%" data-options="prompt:'请选择产品主图二',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
-                    <span style="color:red">*</span>
                 </td>
             </tr>
             <tr>
-                <td>产品主图-3:</td>
+                <td>产品主图-3:<span style="color:red">*</span></td>
                 <td colspan="4">
                     <input class="easyui-filebox" id="mainimg3" name="mainimg" style="width:85%" data-options="prompt:'请选择产品主图三',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
-                    <span style="color:red">*</span>
                 </td>
                 <td><a href="#" class="easyui-linkbutton" style="text-align: left" data-options="iconCls:'icon-add'" onclick="addMainImage()">添加主图</a></td>
             </tr>
         </table>
     </form>
     <div style="text-align: center;">
-        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitAddProduct()">保存</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">重置</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submitAddProduct()">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">测试上传完成</a>
     </div>
 </div>

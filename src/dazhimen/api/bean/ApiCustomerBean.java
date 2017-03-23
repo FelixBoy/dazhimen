@@ -1,6 +1,9 @@
-package dazhimen.bg.bean;
+package dazhimen.api.bean;
 
-public class CustomerBean {
+/**
+ * Created by Administrator on 2017/3/18.
+ */
+public class ApiCustomerBean {
     private String cid = null;
     private String nickname = "";
     private String name = "";
@@ -24,13 +27,20 @@ public class CustomerBean {
                 '}';
     }
 
+    private String dealNull(String value){
+        if(value == null){
+            return "";
+        }else{
+            return value;
+        }
+    }
 
     public String getCid() {
         return cid;
     }
 
     public void setCid(String cid) {
-        this.cid = cid;
+        this.cid = dealNull(cid);
     }
 
     public String getNickname() {
@@ -38,7 +48,7 @@ public class CustomerBean {
     }
 
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        this.nickname = dealNull(nickname);
     }
 
     public String getName() {
@@ -46,7 +56,7 @@ public class CustomerBean {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = dealNull(name);
     }
 
     public String getHeaderurl() {
@@ -54,7 +64,7 @@ public class CustomerBean {
     }
 
     public void setHeaderurl(String headerurl) {
-        this.headerurl = headerurl;
+        this.headerurl = dealNull(headerurl);
     }
 
     public String getMphone() {
@@ -62,7 +72,7 @@ public class CustomerBean {
     }
 
     public void setMphone(String mphone) {
-        this.mphone = mphone;
+        this.mphone = dealNull(mphone);
     }
 
     public String getEmail() {
@@ -70,7 +80,7 @@ public class CustomerBean {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = dealNull(email);
     }
 
     public String getEducation() {
@@ -78,7 +88,7 @@ public class CustomerBean {
     }
 
     public void setEducation(String education) {
-        this.education = education;
+        this.education = dealNull(education);
     }
 
     public String getGender() {
@@ -86,6 +96,6 @@ public class CustomerBean {
     }
 
     public void setGender(String gender) {
-        this.gender = gender;
+        this.gender = dealNull(gender);
     }
 }

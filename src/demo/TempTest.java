@@ -13,6 +13,7 @@ import java.sql.SQLException;
  */
 public class TempTest {
     public static void main(String[] args) throws SQLException {
-        System.out.println(GlobalUtils.hex_md5("abc1231.1com.dazhimen.product20170318153922"+ Constant.signKey));
+//        System.out.println(GlobalUtils.hex_md5("abc1231.1com.dazhimen.product20170318153922"+ Constant.signKey));
+        System.out.println(GlobalUtils.hex_md5("AB0027144").toUpperCase());
     }
 }

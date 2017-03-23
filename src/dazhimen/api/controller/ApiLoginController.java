@@ -1,12 +1,12 @@
 package dazhimen.api.controller;
 
-import dazhimen.bg.bean.CustomerBean;
+import dazhimen.api.bean.ApiCustomerBean;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dazhimen.api.bean.MphoneLoginBean;
 import dazhimen.api.bean.ThirdPartLoginBean;
 import dazhimen.api.exception.ParameterCheckException;
-import dazhimen.api.service.LoginService;
+import dazhimen.api.service.ApiLoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,8 +30,8 @@ public class ApiLoginController {
             checkThirdPartLoginParam(resq);
             ApiUtils.checkSignature(resq);
             ThirdPartLoginBean loginBean = getThirdPartLoginBean(resq);
-            LoginService loginService = new LoginService();
-            CustomerBean customerBean = loginService.doThirdPartLogin(loginBean);
+            ApiLoginService apiLoginService = new ApiLoginService();
+            ApiCustomerBean customerBean = apiLoginService.doThirdPartLogin(loginBean);
             try {
                 JsonObject jsonObj = new JsonObject();
                 jsonObj.addProperty("code","200");
@@ -62,8 +62,8 @@ public class ApiLoginController {
             checkMphoneLoginParam(resq);
             ApiUtils.checkSignature(resq);
             MphoneLoginBean loginBean = getMphoneLoginBean(resq);
-            LoginService loginService = new LoginService();
-            CustomerBean customerBean = loginService.doMphoneLogin(loginBean);
+            ApiLoginService apiLoginService = new ApiLoginService();
+            ApiCustomerBean customerBean = apiLoginService.doMphoneLogin(loginBean);
             try {
                 JsonObject jsonObj = new JsonObject();
                 jsonObj.addProperty("code","200");
