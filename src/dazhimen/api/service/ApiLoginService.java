@@ -72,6 +72,10 @@ public class ApiLoginService {
         if(loginBean == null){
             throw new ParameterCheckException("ApiLoginService的doMphoneLogin，参数为null");
         }
+        //校验验证码
+        if(!checkVerifyCode(loginBean.getVerifyCode())){
+            throw new ParameterCheckException("验证码输入错误");
+        }
         try {
             QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
             ApiCustomerBean customerBean = runner.query(" select cid,headerurl,mphone,nickname," +
@@ -96,5 +100,14 @@ public class ApiLoginService {
             e.printStackTrace();
             throw new ParameterCheckException("新增会员信息出错");
         }
+    }
+    private boolean checkVerifyCode(String verfiyCode) throws ParameterCheckException {
+        if(verfiyCode == null || verfiyCode.equals("")){
+            throw new ParameterCheckException("传入的验证码为空");
+        }
+        if(verfiyCode.equals("1234")){
+            return true;
+        }
+        return false;
     }
 }

@@ -76,7 +76,6 @@
         return true;
     }
     function actionAfterSubmit(jsonObj){
-        alert("innn");
         var resultObj = JSON.parse(jsonObj);
         if(!resultObj){
             return;
@@ -85,7 +84,6 @@
         if(code == '200'){
             var msg = resultObj.msg;
             var pid = resultObj.pid;
-            alert("pid");
             MsgBox.show(msg);
             $('#content_panel').panel({
                 href:"<%=request.getContextPath() %>/product/fwdProductInfoPage?random_id=" + Math.random()+"&pid=" + pid,

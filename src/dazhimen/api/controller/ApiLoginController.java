@@ -85,6 +85,40 @@ public class ApiLoginController {
             }
         }
     }
+    @RequestMapping(value="/getVerifyCode",method = RequestMethod.POST)
+    public void getVerifyCode(HttpServletRequest resq,
+                              HttpServletResponse resp){
+        resp.setCharacterEncoding("utf-8");
+        try {
+            checkGetVerifyCodePara(resq);
+            ApiUtils.checkSignature(resq);
+            try {
+                JsonObject jsonObj = new JsonObject();
+                jsonObj.addProperty("code","200");
+                jsonObj.addProperty("msg","成功");
+                jsonObj.addProperty("data","");
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code","400");
+            jsonObj.addProperty("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    private void checkGetVerifyCodePara(HttpServletRequest resq) throws ParameterCheckException {
+        String mphone = resq.getParameter("mphone");
+        if(mphone == null){
+            throw new ParameterCheckException("未取到参数[mphone]");
+        }
+    }
     private void checkThirdPartLoginParam(HttpServletRequest resq) throws ParameterCheckException{
         String loginType = resq.getParameter("loginType");
         if(loginType == null){
@@ -144,12 +178,17 @@ public class ApiLoginController {
         if(mphone == null){
             throw new ParameterCheckException("未取到参数[mphone]");
         }
+        String verifycode = resq.getParameter("verifycode");
+        if(verifycode == null){
+            throw new ParameterCheckException("未取到参数[verifycode]");
+        }
     }
     private MphoneLoginBean getMphoneLoginBean(HttpServletRequest resq){
         MphoneLoginBean mphoneLoginBean = new MphoneLoginBean();
         String mphone = resq.getParameter("mphone");
         mphoneLoginBean.setMphone(mphone);
+        String verifyCode = resq.getParameter("verifycode");
+        mphoneLoginBean.setVerifyCode(verifyCode);
         return mphoneLoginBean;
     }
-
 }

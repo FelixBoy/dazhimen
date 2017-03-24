@@ -12,9 +12,12 @@ import java.sql.SQLException;
  */
 public class ApiCustomerService {
     public void modifyPersonalInfo(ModifyCustomerInfoBean customerInfoBean) throws ParameterCheckException {
-        System.out.println(customerInfoBean);
         if(customerInfoBean == null){
             throw new ParameterCheckException("ApiCustomerService的modifyPersonalInfo方法，参数为null");
+        }
+        //校验验证码
+        if(!checkVerifyCode(customerInfoBean.getVerifycode())){
+            throw new ParameterCheckException("验证码输入错误");
         }
         try {
             QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
@@ -25,10 +28,18 @@ public class ApiCustomerService {
                             " where cid = ? ");
             int result = runner.update(sqlBF.toString(), customerInfoBean.getNickname(), customerInfoBean.getMphone(), customerInfoBean.getName(),
                     customerInfoBean.getGender(), customerInfoBean.getEmail(), customerInfoBean.getEducation(), customerInfoBean.getCid());
-            System.out.println(result);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new ParameterCheckException("修改客户信息出错");
         }
+    }
+    private boolean checkVerifyCode(String verfiyCode) throws ParameterCheckException {
+        if(verfiyCode == null || verfiyCode.equals("")){
+            throw new ParameterCheckException("传入的验证码为空");
+        }
+        if(verfiyCode.equals("1234")){
+            return true;
+        }
+        return false;
     }
 }

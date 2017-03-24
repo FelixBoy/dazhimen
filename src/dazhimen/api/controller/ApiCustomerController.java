@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import dazhimen.api.bean.ModifyCustomerInfoBean;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiLoginService;
+import dazhimen.bg.service.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,6 +69,17 @@ public class ApiCustomerController {
             ModifyCustomerInfoBean customerInfoBean = getModifyPersonalInfoBean(resq);
             ApiCustomerService customerService = new ApiCustomerService();
             customerService.modifyPersonalInfo(customerInfoBean);
+            ApiLoginService loginService = new ApiLoginService();
+            ApiCustomerBean customerBean = loginService.getCustomerInfoByCid(customerInfoBean.getCid());
+            try {
+                JsonObject jsonObj = new JsonObject();
+                jsonObj.addProperty("code","200");
+                jsonObj.addProperty("msg","成功");
+                jsonObj.addProperty("data",new Gson().toJson(customerBean));
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
             JsonObject jsonObj = new JsonObject();
@@ -95,6 +107,10 @@ public class ApiCustomerController {
         if(mphone == null){
             throw new ParameterCheckException("未取到参数[mphone]");
         }
+        String verifycode = resq.getParameter("verifycode");
+        if(verifycode == null){
+            throw new ParameterCheckException("未取到参数[verifycode]");
+        }
     }
     private ModifyCustomerInfoBean getModifyPersonalInfoBean(HttpServletRequest resq) {
         ModifyCustomerInfoBean customerInfoBean = new ModifyCustomerInfoBean();
@@ -105,6 +121,7 @@ public class ApiCustomerController {
         customerInfoBean.setGender(resq.getParameter("gender"));
         customerInfoBean.setEmail(resq.getParameter("email"));
         customerInfoBean.setEducation(resq.getParameter("education"));
+        customerInfoBean.setVerifycode(resq.getParameter("verifycode"));
         return customerInfoBean;
     }
 }

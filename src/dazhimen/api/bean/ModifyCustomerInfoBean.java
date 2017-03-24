@@ -12,6 +12,7 @@ public class ModifyCustomerInfoBean {
     private String email = null;
     private String education = null;
     private String gender = null;
+    private String verifycode = null;
 
     @Override
     public String toString() {
@@ -24,6 +25,7 @@ public class ModifyCustomerInfoBean {
                 ", email='" + email + '\'' +
                 ", education='" + education + '\'' +
                 ", gender='" + gender + '\'' +
+                ", verifycode='" + verifycode + '\'' +
                 '}';
     }
 
@@ -89,5 +91,13 @@ public class ModifyCustomerInfoBean {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getVerifycode() {
+        return verifycode;
+    }
+
+    public void setVerifycode(String verifycode) {
+        this.verifycode = verifycode;
     }
 }

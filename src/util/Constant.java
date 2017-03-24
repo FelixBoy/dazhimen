@@ -24,4 +24,9 @@ public class Constant {
 
     //数据库中存储 上传文件的目录 前缀
     public static final String uploadDbPrefixPath = "upload/product/";
+
+    //技能包的code值
+    public static final String SkillPack = "1";
+    //经验包的code值
+    public static final String ExperiencePack = "2";
 }
