@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>大职门后台管理</title>
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/demo/demo.css">
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dazhimen.css">
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/msgbox.css">
-    <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.min.js"></script>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/StringUtil.js"></script>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/MsgBox.js"></script>
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/default/easyui.css?_=<%=Math.random()%>">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/icon.css?_=<%=Math.random()%>">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/demo/demo.css?_=<%=Math.random()%>">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dazhimen.css?_=<%=Math.random()%>">
+    <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.min.js?_=<%=Math.random()%>"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.easyui.min.js?_=<%=Math.random()%>"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/StringUtil.js?_=<%=Math.random()%>"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/MsgBox.js?_=<%=Math.random()%>"></script>
     <script>
         $(function(){
             $('#menu-tree').tree({
@@ -26,6 +25,13 @@
                 case 'master_manage':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/user/fwdMasterManagePage?random_id="+Math.random(),
+                        onLoad:function(){
+                        }
+                    });
+                    break;
+                case 'product_manage':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/product/fwdManageProductPage?random_id="+Math.random(),
                         onLoad:function(){
                         }
                     });
@@ -73,8 +79,8 @@
                 <span>产品管理</span>
                 <ul>
                     <li id="product_upload">上传商品</li>
-                    <li id="product_info">产品详情</li>
-                    <li id="product_modify">修改商品</li>
+                    <%--<li id="product_info">产品详情</li>--%>
+                    <%--<li id="product_modify">修改商品</li>--%>
                 </ul>
             </li>
             <li id="master_manage">掌门管理</li>

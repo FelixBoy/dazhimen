@@ -17,6 +17,15 @@ public class UserBean {
     private String isdel = null; //用户是否为已删除状态。1:已删除，0:正常状态
     private String loginnameorginal = null;//用户判定修改登录名时的重复
     private Date createDate = null; //用户创建时间
+    private String createDatestr = null;//用户创建时间,对应的string
+
+    public String getCreateDatestr() {
+        return createDatestr;
+    }
+
+    public void setCreateDatestr(String createDatestr) {
+        this.createDatestr = createDatestr;
+    }
 
     public Date getCreateDate() {
         return createDate;

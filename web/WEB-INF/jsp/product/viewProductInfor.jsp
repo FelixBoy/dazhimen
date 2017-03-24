@@ -9,9 +9,6 @@
         $("#viewProductForm").form("load", "<%=request.getContextPath()%>/product/getProductInforById" +
             "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random());
     });
-    function viewMasterInfo(){
-        MsgBox.show("功能正在开发，敬请期待");
-    }
     function dealMainImages(){
         $.get("<%=request.getContextPath()%>/product/getMainImagesInforById" +
             "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random()
@@ -21,16 +18,46 @@
                 if(!arrLength){
                     return;
                 }
-                for(var i = 0; i < arrLength; i++){
-                    $("<tr><td>产品主图-" + (i+1) + "</td>"
-                        + "<td><input type='hidden' id='mainimg"+i+"' value="+ arr[i].imageId +"/></td>"
-                        + "<td colspan='6'><img src='" + arr[i].mainImage + "' width='60px' height='60px'/></td>"
-                        + "</tr>").insertAfter("#listimgtr");
+                var rowLength = Math.floor(arrLength / 3);
+                if(rowLength <= 1){
+                    var htmlArr = [];
+                    htmlArr.push("<tr>");
+                    for(var i = 0; i < arrLength; i++){
+                        htmlArr.push("<td>产品主图-" + (i+1) + "</td>");
+                        htmlArr.push("<td align='left'>");
+                        htmlArr.push("       <input type='hidden' id='mainimg"+i+"' value="+ arr[i].imageId +"/> ");
+                        htmlArr.push("       <img src='" + arr[i].mainImage + "' width='120px' height='60px'/>");
+                        htmlArr.push("</td>")
+                    }
+                    htmlArr.push("</tr>");
+                    $(htmlArr.join("")).insertAfter("#listimgtr")
                 }
         });
     }
+    function viewMasterInfo(){
+        $('#viewMasterDialog').dialog({
+            title: '查看掌门信息',
+            width: 600,
+            height: 400,
+            closed: true,
+            cache: false,
+            href: "<%=request.getContextPath()%>/product/fwdViewMasterInforPage?uid="+$("#uid").val(),
+            modal: true
+        });
+        $('#viewMasterDialog').dialog("open").dialog('setTitle','查看掌门信息');
+    }
+    function returnManageProduct(){
+        $('#content_panel').panel({
+            href:"<%=request.getContextPath() %>/product/fwdManageProductPage?random_id="+Math.random(),
+            onLoad:function(){
+            }
+        });
+    }
 </script>
-<div style="margin:0px auto;width: 950px;border: 1px solid red">
+<div style="text-align: left;">
+<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="returnManageProduct()">返回</a>
+</div>
+<div style="margin:0px auto;width: 950px">
     <form id="viewProductForm" action="<%=request.getContextPath()%>/product/saveAddProduct"
           enctype="multipart/form-data" method="post">
         <br/>
@@ -93,6 +120,7 @@
                 </td>
             </tr>
         </table>
+        <div id="viewMasterDialog"></div>
     </form>
         <br/>
         <table cellpadding="5">
@@ -100,16 +128,9 @@
                 <td colspan="6" >
                     <div class="formTitle" style="background-color:#f2f2f2;">
                         <div class="formTitle-icon">
-                        </div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">编辑课程信息</div>
+                        </div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">编辑课程信息(正在开发，敬请期待)</div>
                     </div>
                 </td>
-            </tr>
-            <tr>
-                <td>课程ID:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="couid" name="uid"></td>
-                <td>姓名:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="couname" name="uname" /></td>
-                <td colspan="2">查看详细信息按钮</td>
             </tr>
         </table>
 </div>

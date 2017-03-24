@@ -1,10 +1,7 @@
 package dazhimen.bg.service;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
-import dazhimen.bg.bean.UploadProductBean;
-import dazhimen.bg.bean.UserBean;
-import dazhimen.bg.bean.ViewMainImageBean;
-import dazhimen.bg.bean.ViewProductBean;
+import dazhimen.bg.bean.*;
 import dazhimen.bg.exception.BgException;
 import db.DBConnUtil;
 import org.apache.commons.dbutils.QueryRunner;
@@ -26,6 +23,26 @@ import java.util.List;
  * Created by Administrator on 2017/3/17.
  */
 public class ProductService {
+    /**
+     * 通过uid获取 制定掌门的信息
+     * @param uid 要获取信息的掌门ID
+     * @return 返回要获取的掌门信息
+     */
+    public UserBean getMasterDataByUid(String uid){
+        UserBean user = null;
+        try {
+            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
+            StringBuffer sqlBF = new StringBuffer();
+            sqlBF.append("select uid,name,mphone,gender,loginname,date_format(createdate,'%Y-%m-%d %H:%i:%s') as createDatestr,remarks ");
+            sqlBF.append("  from user ");
+            sqlBF.append(" where uid = ? ");
+            user = runner.query(sqlBF.toString(), new BeanHandler<UserBean>(UserBean.class),uid);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return user;
+    }
     /**
      * 查询所有掌门的信息
      * @return 包含所有掌门信息的 list
@@ -75,14 +92,14 @@ public class ProductService {
             QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
             conn = DBConnUtil.getDataSource().getConnection();
 
-            conn.setAutoCommit(false);
+             conn.setAutoCommit(false);
              runner.update(conn,"insert into product(pid,pname,type,price,derateProportion," +
-                    "introduction,indexplay,indexsort,uid,createdatetime,listimage) " +
+                    "introduction,indexplay,indexsort,uid,createdatetime,listimage,updatedatetime) " +
                     "                       values(?,    ?,   ?,    ?,       ?,   " +
-                    "  ?,             ?,         ?,    ?,       ?,          ?) ",
+                    "  ?,             ?,         ?,    ?,       ?,          ?,   ?) ",
                     pid,productBean.getPname(),productBean.getType(),productBean.getPrice(),productBean.getDerateProportion(),
                     productBean.getIntroduction(),productBean.getIndexPlay(),productBean.getIndexSort(),productBean.getUid(),new Date(),
-                    listImageFileRelPath);
+                    listImageFileRelPath,new Date());
             List<MultipartFile> mainImgFiles = productBean.getMainImgFiles();
 
             //处理产品主图
@@ -156,5 +173,31 @@ public class ProductService {
             e.printStackTrace();
         }
         return mainImageBeans;
+    }
+
+    public List<ListViewProductBean> queryAllProducts(){
+        List<ListViewProductBean> productBeans = null;
+        try {
+            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
+            productBeans = runner.query(" select pid,pname,getcodetxt('producttype',a.type) type," +
+                            " getcodetxt('productstatus',a.status) status,a.status statusnum," +
+                            " date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createtime," +
+                            " b.name uname " +
+                            " from product a, user b " +
+                            " where a.uid = b.uid and a.isdel = '0' " +
+                            " order by indexsort,createdatetime desc ",
+                    new BeanListHandler<ListViewProductBean>(ListViewProductBean.class));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productBeans;
+    }
+    public void saveModifyProductStatus(String pid, String status){
+        try {
+            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
+            runner.update("update product set status = ? where pid = ? ", status, pid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

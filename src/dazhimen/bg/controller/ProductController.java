@@ -2,11 +2,9 @@ package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import dazhimen.bg.bean.UploadProductBean;
-import dazhimen.bg.bean.UserBean;
-import dazhimen.bg.bean.ViewMainImageBean;
-import dazhimen.bg.bean.ViewProductBean;
+import dazhimen.bg.bean.*;
 import dazhimen.bg.exception.BgException;
+import dazhimen.bg.service.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -106,6 +104,60 @@ public class ProductController {
         resp.setCharacterEncoding("utf-8");
         try {
             resp.getWriter().write(mainImagesJson);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @RequestMapping("/fwdViewMasterInforPage")
+    public String fwdViewMasterInforPage(@RequestParam("uid") String uid, HttpServletRequest resq,
+                                       HttpServletResponse resp){
+        resq.setAttribute("uid", uid);
+        return "/product/viewMasterInfor";
+    }
+    @RequestMapping("/getMasterInfor")
+    public void getMasterInfor(@RequestParam("uid") String uid, HttpServletRequest resq,
+                                       HttpServletResponse resp){
+        ProductService productService = new ProductService();
+        UserBean userBean = productService.getMasterDataByUid(uid);
+        Gson gson = new Gson();
+        String mainImagesJson = gson.toJson(userBean);
+        resp.setCharacterEncoding("utf-8");
+        try {
+            resp.getWriter().write(mainImagesJson);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @RequestMapping("/fwdManageProductPage")
+    public String fwdManageProductPage(){
+        return "/product/manageProduct";
+    }
+    @RequestMapping("/queryAllProducts")
+    public void queryAllProducts(HttpServletResponse resp){
+        ProductService productService = new ProductService();
+        List<ListViewProductBean> productBeans = productService.queryAllProducts();
+        resp.setCharacterEncoding("utf-8");
+        try {
+            resp.getWriter().write(new Gson().toJson(productBeans));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @RequestMapping("/fwdModifyProductStatusPage")
+    public String fwdModifyProductStatusPage(HttpServletRequest resq){
+        resq.setAttribute("pid", resq.getParameter("pid"));
+        resq.setAttribute("status" ,resq.getParameter("status"));
+        return "/product/modifyProductStatus";
+    }
+    @RequestMapping("/saveModifyProductStatus")
+    public void saveModifyProductStatus(HttpServletRequest resq,HttpServletResponse resp){
+        String pid = resq.getParameter("pid");
+        String status = resq.getParameter("status");
+        ProductService productService = new ProductService();
+        productService.saveModifyProductStatus(pid, status);
+        resp.setCharacterEncoding("utf-8");
+        try {
+            resp.getWriter().write("修改成功");
         } catch (IOException e) {
             e.printStackTrace();
         }

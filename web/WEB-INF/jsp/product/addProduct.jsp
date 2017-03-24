@@ -73,6 +73,29 @@
             MsgBox.show("产品价格[" + $("#price").val() + "]格式不正确");
             return false;
         }
+        if($("#derateProportion").val().length > 0){
+            if($("#derateProportion").val() >99 || $("#derateProportion").val() < 1){
+                MsgBox.show("余额支付减免[" +$("#derateProportion").val() + "]超出范围");
+                return false;
+            }
+        }
+
+        if(!$("#listimg").filebox("getValue")){
+            MsgBox.show("请选择列表图片");
+            return false;
+        }
+        if(!$("#mainimg1").filebox("getValue")){
+            MsgBox.show("请选择产品主图-1");
+            return false;
+        }
+        if(!$("#mainimg2").filebox("getValue")){
+            MsgBox.show("请选择产品主图-2");
+            return false;
+        }
+        if(!$("#mainimg3").filebox("getValue")){
+            MsgBox.show("请选择产品主图-3");
+            return false;
+        }
         return true;
     }
     function actionAfterSubmit(jsonObj){
@@ -164,7 +187,7 @@
             </tr>
             <tr>
                 <td>余额支付减免:</td>
-                <td><input class="easyui-textbox" id="derateProportion" name="derateProportion"/></td>
+                <td><input class="easyui-textbox" id="derateProportion" data-options="prompt:'请输入百分比'"  name="derateProportion"/>%</td>
                 <td>首页轮播:</td>
                 <td><input type="checkbox" id="indexplay" name="indexplay" value="1"/></td>
                 <td>热卖排序:</td>
@@ -187,26 +210,29 @@
             <tr>
                 <td>列表图片:<span style="color:red">*</span></td>
                 <td colspan="4">
-                        <input class="easyui-filebox" id="listimg" name="listimg" style="width:85%"
-                               data-options="prompt:'请选择列表图片',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                        <input class="easyui-filebox" id="listimg" name="listimg" style="width:85%" accept="image/jpeg,image/png"
+                               data-options="prompt:'请选择列表图片，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>
             <tr>
                 <td>产品主图-1:<span style="color:red">*</span></td>
                 <td colspan="4">
-                    <input class="easyui-filebox" id="mainimg1" name="mainimg" style="width:85%" data-options="prompt:'请选择产品主图一',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <input class="easyui-filebox" id="mainimg1" name="mainimg" style="width:85%" accept="image/jpeg,image/png"
+                            data-options="prompt:'请选择产品主图一，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>
             <tr>
                 <td>产品主图-2:<span style="color:red">*</span></td>
                 <td colspan="4">
-                    <input class="easyui-filebox" id="mainimg2" name="mainimg" style="width:85%" data-options="prompt:'请选择产品主图二',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <input class="easyui-filebox" id="mainimg2" name="mainimg" style="width:85%" accept="image/jpeg,image/png"
+                           data-options="prompt:'请选择产品主图二，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>
             <tr>
                 <td>产品主图-3:<span style="color:red">*</span></td>
                 <td colspan="4">
-                    <input class="easyui-filebox" id="mainimg3" name="mainimg" style="width:85%" data-options="prompt:'请选择产品主图三',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <input class="easyui-filebox" id="mainimg3" name="mainimg" style="width:85%" accept="image/jpeg,image/png"
+                           data-options="prompt:'请选择产品主图三，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
                 <td><a href="#" class="easyui-linkbutton" style="text-align: left" data-options="iconCls:'icon-add'" onclick="addMainImage()">添加主图</a></td>
             </tr>
@@ -214,6 +240,6 @@
     </form>
     <div style="text-align: center;">
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submitAddProduct()">保存</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">测试上传完成</a>
+        <%--<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">测试上传完成</a>--%>
     </div>
 </div>

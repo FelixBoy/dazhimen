@@ -3,14 +3,18 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-  <link type="text/css" rel="stylesheet" href="css/login.css">
-  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dazhimen.css">
-  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/msgbox.css">
-  <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.min.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/jquery.md5.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/json2.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/StringUtil.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/MsgBox.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/default/easyui.css?_=<%=Math.random()%>">
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/icon.css?_=<%=Math.random()%>">
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/demo/demo.css?_=<%=Math.random()%>">
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dazhimen.css?_=<%=Math.random()%>">
+  <link type="text/css" rel="stylesheet" href="css/login.css?_=<%=Math.random()%>">
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dazhimen.css?_=<%=Math.random()%>" >
+  <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.min.js?_=<%=Math.random()%>"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.easyui.min.js?_=<%=Math.random()%>"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/jquery.md5.js?_=<%=Math.random()%>"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/json2.js?_=<%=Math.random()%>"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/MsgBox.js?_=<%=Math.random()%>"></script>
   <title>系统登录</title>
   <script type="text/javascript">
     function onLogin(){

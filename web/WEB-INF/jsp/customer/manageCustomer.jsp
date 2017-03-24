@@ -1,8 +1,17 @@
 <script type="text/javascript">
     function formatOper(val,row,index){
-        return '<a href="javascript:void(0)" onclick="fwdMasterEditPage('+index+')">查看</a>&nbsp&nbsp'+
-            '<a href="javascript:void(0)" onclick="fwdMasterEditPage('+index+')">修改</a>&nbsp&nbsp' +
-            '<a href="javascript:void(0)" onclick="saveMasterDel('+index+')">删除</a>';
+        return '<a href="javascript:void(0)" onclick="fwdViewCustomerPage('+index+')">查看</a>&nbsp&nbsp'+
+            '<a href="javascript:void(0)" onclick="fwdModifyCustomerPage('+index+')">修改</a>&nbsp&nbsp' +
+            '<a href="javascript:void(0)" onclick="saveCustomerDel('+index+')">删除</a>';
+    }
+    function fwdViewCustomerPage(index){
+        MsgBox.show("功能正在开发，敬请期待");
+    }
+    function fwdModifyCustomerPage(index){
+        MsgBox.show("功能正在开发，敬请期待");
+    }
+    function saveCustomerDel(index){
+        MsgBox.show("功能正在开发，敬请期待");
     }
 </script>
 <div style="padding:5px 0;">

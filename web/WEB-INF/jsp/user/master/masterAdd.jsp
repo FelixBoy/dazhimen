@@ -6,10 +6,10 @@
             type:'post',
             async:false,
             error:function(data){
-                alert(data);
+                MsgBox.show(data);
             },
             success:function(data){
-                alert(data);
+                MsgBox.show(data);
                 $('#masterAddDialog').dialog('close');		// close the dialog
                 $('#masterList').datagrid('reload');
             }
