@@ -10,10 +10,22 @@ Target Server Type    : MYSQL
 Target Server Version : 50528
 File Encoding         : 65001
 
-Date: 2017-03-18 08:18:18
+Date: 2017-03-24 21:47:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for codemap
+-- ----------------------------
+DROP TABLE IF EXISTS `codemap`;
+CREATE TABLE `codemap` (
+  `codeid` varchar(20) NOT NULL COMMENT '字典的id',
+  `codename` varchar(100) DEFAULT NULL COMMENT '字典的名称',
+  `codevalue` varchar(10) NOT NULL COMMENT '字典id对应的值',
+  `codetext` varchar(255) DEFAULT NULL COMMENT '字典值对应的文本',
+  PRIMARY KEY (`codeid`,`codevalue`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for course
@@ -40,10 +52,16 @@ CREATE TABLE `customer` (
   `name` varchar(40) DEFAULT NULL COMMENT '客户姓名，不超过20个字符',
   `email` varchar(100) DEFAULT NULL COMMENT '邮箱地址',
   `education` varchar(1) DEFAULT NULL COMMENT '学历，1:义务教育，2:高中，3:专科，4:本科，5:硕士研究生，6:博士研究生',
-  `headerimage` varchar(500) DEFAULT NULL COMMENT '用户头像图片文件，存储地址',
-  `gender` varchar(1) DEFAULT NULL COMMENT '性别，1:男，2:女',
+  `headerurl` varchar(500) DEFAULT NULL COMMENT '用户头像图片文件，存储地址',
+  `gender` varchar(2) DEFAULT NULL COMMENT '性别:男或者女',
   `remarks` varchar(500) DEFAULT NULL COMMENT '备注信息',
   `isdel` varchar(1) DEFAULT '0' COMMENT '用户是否已被删除，1:已删除，0:正常状态',
+  `qq` varchar(20) DEFAULT NULL COMMENT '客户QQ号',
+  `qquid` varchar(100) DEFAULT NULL COMMENT '客户QQ号对应的uid',
+  `weixin` varchar(50) DEFAULT NULL COMMENT '用户微信号',
+  `weixinuid` varchar(100) DEFAULT NULL COMMENT '用户微信号对应的UID',
+  `createdate` datetime DEFAULT NULL COMMENT '客户账号生成时间',
+  `age` int(3) DEFAULT NULL,
   PRIMARY KEY (`cid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='前台客户信息表。';
 
@@ -151,16 +169,19 @@ CREATE TABLE `product` (
   `pid` varchar(12) NOT NULL COMMENT '主键。产品ID，生成规则：p+年+月+日+5位数字。例如：p17031200001',
   `pname` varchar(100) DEFAULT NULL COMMENT '产品名称',
   `type` varchar(1) DEFAULT NULL COMMENT '产品类型。1:技能包，2:经验包。',
-  `price` decimal(6,2) unsigned DEFAULT NULL COMMENT '产品价格',
-  `derateProportion` decimal(2,2) DEFAULT NULL,
+  `price` decimal(10,2) unsigned DEFAULT NULL COMMENT '产品价格',
+  `derateProportion` decimal(4,2) unsigned DEFAULT NULL,
   `introduction` varchar(3000) DEFAULT NULL COMMENT '产品文本介绍',
   `listimage` varchar(500) DEFAULT NULL COMMENT '列表图片地址',
   `indexplay` varchar(1) DEFAULT NULL COMMENT '首页轮播状态。1:首页轮播，0:非首页轮播。',
-  `indexsort` varchar(2) DEFAULT NULL COMMENT '首页排名。0代表按上架时间排序，1-99代表手动排序的顺序',
+  `indexsort` varchar(3) DEFAULT '999' COMMENT '首页排名。999代表按上架时间排序，1-998代表手动排序的顺序',
   `uid` varchar(12) DEFAULT NULL COMMENT '负责此产品的掌门的ID',
   `status` varchar(1) DEFAULT '3' COMMENT '产品状态。1:上架，2:预告，3:下架。默认是，下架状态',
   `createdatetime` datetime DEFAULT NULL COMMENT '产品创建时间',
   `isdel` varchar(1) DEFAULT '0' COMMENT '产品是否为删除状态。1:已删除，0:正常状态。',
+  `updatedatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `buycount` int(6) DEFAULT NULL COMMENT '购买人数',
+  `istry` varchar(1) DEFAULT NULL COMMENT '是否可以试学。产品是否可以试学，取决于产品下是否存在试学课程',
   PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品表。';
 
@@ -169,7 +190,7 @@ CREATE TABLE `product` (
 -- ----------------------------
 DROP TABLE IF EXISTS `product_image`;
 CREATE TABLE `product_image` (
-  `imageid` varchar(15) NOT NULL COMMENT '主键。产品主图id。生成规则：所属产品ID+‘-2位数字’。例如p17031200001-01',
+  `imageid` varchar(15) NOT NULL COMMENT '主键。产品主图id。生成规则：所属产品ID+‘_2位数字’。例如p17031200001_01',
   `path` varchar(500) DEFAULT NULL COMMENT '对应的图片存储路径',
   `pid` varchar(12) DEFAULT NULL COMMENT '所属的产品id',
   PRIMARY KEY (`imageid`)
@@ -215,6 +236,16 @@ CREATE TABLE `sequence` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='自动生成序列的表';
 
 -- ----------------------------
+-- Table structure for test
+-- ----------------------------
+DROP TABLE IF EXISTS `test`;
+CREATE TABLE `test` (
+  `id` varchar(10) NOT NULL,
+  `name` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
@@ -229,6 +260,9 @@ CREATE TABLE `user` (
   `remarks` varchar(500) DEFAULT NULL COMMENT '备注信息',
   `isdel` varchar(1) DEFAULT '0' COMMENT '用户是否为已删除状态。1:已删除，0:正常状态。',
   `createdate` datetime DEFAULT NULL COMMENT '用户创建时间',
+  `identity` varchar(100) DEFAULT NULL COMMENT '如果是掌门时，用于存储掌门的身份信息',
+  `introduction` varchar(3000) DEFAULT NULL COMMENT '掌门的介绍信息',
+  `headerimg` varchar(500) DEFAULT NULL COMMENT '掌门头像的存储地址',
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台用户信息表。注意，type字段用于区分 当前用户是掌门还是管理员。';
 
@@ -239,7 +273,7 @@ DROP PROCEDURE IF EXISTS `test_next_val`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `test_next_val`(in p_seq_name varchar(50),out r_next_val int)
 begin
-start transaction; 
+start transaction;
 update sequence set current_val = (current_val + increment_val) % max_val  where seq_name = p_seq_name;
 select current_val into r_next_val  from sequence where seq_name = p_seq_name;
 commit;
@@ -253,11 +287,26 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `currval`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` FUNCTION `currval`(v_seq_name VARCHAR(50)) RETURNS int(11)
-begin     
-    declare value integer;       
-    set value = 0;       
-    select current_val into value  from sequence where seq_name = v_seq_name; 
-   return value; 
+begin
+    declare value integer;
+    set value = 0;
+    select current_val into value  from sequence where seq_name = v_seq_name;
+   return value;
+end
+;;
+DELIMITER ;
+
+-- ----------------------------
+-- Function structure for getcodetxt
+-- ----------------------------
+DROP FUNCTION IF EXISTS `getcodetxt`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `getcodetxt`(p_codeid VARCHAR(20),p_codevalue varchar(10)) RETURNS varchar(255) CHARSET utf8
+begin
+    declare value varchar(255);
+    set value = '';
+    select codetext into value  from codemap where codeid = p_codeid and codevalue = p_codevalue;
+   return value;
 end
 ;;
 DELIMITER ;
@@ -274,3 +323,34 @@ begin
 end
 ;;
 DELIMITER ;
+
+
+-- ----------------------------
+-- Records of codemap
+-- ----------------------------
+INSERT INTO `codemap` VALUES ('indexsort', '首页排序', '999', '按上架时间排序');
+INSERT INTO `codemap` VALUES ('productstatus', '产品状态', '1', '上架');
+INSERT INTO `codemap` VALUES ('productstatus', '产品状态', '2', '预告');
+INSERT INTO `codemap` VALUES ('productstatus', '产品状态', '3', '下架');
+INSERT INTO `codemap` VALUES ('producttype', '产品类型', '1', '技能包');
+INSERT INTO `codemap` VALUES ('producttype', '产品类型', '2', '经验包');
+INSERT INTO `codemap` VALUES ('rightorwrong', '对叉号标志', '0', '×');
+INSERT INTO `codemap` VALUES ('rightorwrong', '对叉号标志', '1', '√');
+INSERT INTO `codemap` VALUES ('yesorno', '是否标志', '0', '否');
+INSERT INTO `codemap` VALUES ('yesorno', '是否标志', '1', '是');
+
+-- ----------------------------
+-- Records of sequence
+-- ----------------------------
+INSERT INTO `sequence` VALUES ('customer_seq', '1', '1', '100000');
+INSERT INTO `sequence` VALUES ('product_seq', '1', '1', '100000');
+INSERT INTO `sequence` VALUES ('user_seq', '1', '1', '1000');
+
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+INSERT INTO `user` VALUES ('u170318002', '小明', '13569721354', 'c493fe01749b3add91214af329c98761', '1', '1', 'xm', '', '0', '2017-03-18 10:04:06', null, null, null);
+INSERT INTO `user` VALUES ('u170324003', '管理员', '18764678231', '8880443972f045283ee4e0729e668fa6', '1', '1', 'dzm', '', '0', '2017-03-24 21:50:39', null, null, null);
+INSERT INTO `user` VALUES ('u170324004', '小军', '18697613456', 'fce369dc41110b892caab8d222c08e29', '1', '1', 'xj', '', '0', '2017-03-24 21:51:08', null, null, null);
+

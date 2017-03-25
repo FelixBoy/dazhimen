@@ -3,7 +3,7 @@ package dazhimen.api.controller;
 import dazhimen.api.bean.ApiCustomerBean;
 import dazhimen.api.service.ApiCustomerService;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import net.sf.json.JSONObject;
 import dazhimen.api.bean.ModifyCustomerInfoBean;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiLoginService;
@@ -34,19 +34,19 @@ public class ApiCustomerController {
             ApiLoginService apiLoginService = new ApiLoginService();
             ApiCustomerBean customerBean = apiLoginService.getCustomerInfoByCid(cid);
             try {
-                JsonObject jsonObj = new JsonObject();
-                jsonObj.addProperty("code","200");
-                jsonObj.addProperty("msg","成功");
-                jsonObj.addProperty("data",new Gson().toJson(customerBean));
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("code","200");
+                jsonObj.put("msg","成功");
+                jsonObj.put("data",new Gson().toJson(customerBean));
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JsonObject jsonObj = new JsonObject();
-            jsonObj.addProperty("code","400");
-            jsonObj.addProperty("msg",e.getMessage());
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
             try {
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e1) {
@@ -72,19 +72,19 @@ public class ApiCustomerController {
             ApiLoginService loginService = new ApiLoginService();
             ApiCustomerBean customerBean = loginService.getCustomerInfoByCid(customerInfoBean.getCid());
             try {
-                JsonObject jsonObj = new JsonObject();
-                jsonObj.addProperty("code","200");
-                jsonObj.addProperty("msg","成功");
-                jsonObj.addProperty("data",new Gson().toJson(customerBean));
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("code","200");
+                jsonObj.put("msg","成功");
+                jsonObj.put("data",new Gson().toJson(customerBean));
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JsonObject jsonObj = new JsonObject();
-            jsonObj.addProperty("code","400");
-            jsonObj.addProperty("msg",e.getMessage());
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
             try {
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e1) {

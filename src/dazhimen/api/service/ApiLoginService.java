@@ -7,9 +7,11 @@ import dazhimen.api.exception.ParameterCheckException;
 import db.DBConnUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
+import util.Constant;
 import util.IdUtils;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Created by Administrator on 2017/3/18.
@@ -109,5 +111,17 @@ public class ApiLoginService {
             return true;
         }
         return false;
+    }
+    public String genVerifyCode() {
+        String charValue = "";
+        for (int i = 0; i < Constant.verifyCodeLength; i++) {
+            char c = (char) (randomInt(0, 10) + '0');
+            charValue += String.valueOf(c);
+        }
+        return charValue;
+    }
+    private int randomInt(int from, int to) {
+        Random r = new Random();
+        return from + r.nextInt(to - from);
     }
 }

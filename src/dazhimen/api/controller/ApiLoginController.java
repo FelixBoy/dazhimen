@@ -2,11 +2,11 @@ package dazhimen.api.controller;
 
 import dazhimen.api.bean.ApiCustomerBean;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import dazhimen.api.bean.MphoneLoginBean;
 import dazhimen.api.bean.ThirdPartLoginBean;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiLoginService;
+import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,19 +33,19 @@ public class ApiLoginController {
             ApiLoginService apiLoginService = new ApiLoginService();
             ApiCustomerBean customerBean = apiLoginService.doThirdPartLogin(loginBean);
             try {
-                JsonObject jsonObj = new JsonObject();
-                jsonObj.addProperty("code","200");
-                jsonObj.addProperty("msg","成功");
-                jsonObj.addProperty("data",new Gson().toJson(customerBean));
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("code","200");
+                jsonObj.put("msg","成功");
+                jsonObj.put("data",new Gson().toJson(customerBean));
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JsonObject jsonObj = new JsonObject();
-            jsonObj.addProperty("code","400");
-            jsonObj.addProperty("msg",e.getMessage());
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
             try {
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e1) {
@@ -65,19 +65,19 @@ public class ApiLoginController {
             ApiLoginService apiLoginService = new ApiLoginService();
             ApiCustomerBean customerBean = apiLoginService.doMphoneLogin(loginBean);
             try {
-                JsonObject jsonObj = new JsonObject();
-                jsonObj.addProperty("code","200");
-                jsonObj.addProperty("msg","成功");
-                jsonObj.addProperty("data",new Gson().toJson(customerBean));
-                resp.getWriter().write(jsonObj.toString());
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("code","200");
+                jsonObject.put("msg","成功");
+                jsonObject.put("data",new Gson().toJson(customerBean));
+                resp.getWriter().write(jsonObject.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JsonObject jsonObj = new JsonObject();
-            jsonObj.addProperty("code","400");
-            jsonObj.addProperty("msg",e.getMessage());
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
             try {
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e1) {
@@ -93,19 +93,19 @@ public class ApiLoginController {
             checkGetVerifyCodePara(resq);
             ApiUtils.checkSignature(resq);
             try {
-                JsonObject jsonObj = new JsonObject();
-                jsonObj.addProperty("code","200");
-                jsonObj.addProperty("msg","成功");
-                jsonObj.addProperty("data","");
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("code","200");
+                jsonObj.put("msg","成功");
+                jsonObj.put("data","");
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JsonObject jsonObj = new JsonObject();
-            jsonObj.addProperty("code","400");
-            jsonObj.addProperty("msg",e.getMessage());
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
             try {
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e1) {

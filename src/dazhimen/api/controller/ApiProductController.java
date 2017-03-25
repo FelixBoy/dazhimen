@@ -1,10 +1,10 @@
 package dazhimen.api.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import dazhimen.api.bean.ApiProductBean;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiProductService;
+import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,21 +32,21 @@ public class ApiProductController {
             ApiUtils.checkSignature(resq);
             ApiProductService productService = new ApiProductService();
             List<ApiProductBean> productBeans = productService.getHomePageSkillPack(resq.getParameter("getcount"));
-            productBeans = dealApiProductBean(resq, productBeans);
+            productBeans = dealApiHomePageProductBean(resq, productBeans);
             try {
-                JsonObject jsonObj = new JsonObject();
-                jsonObj.addProperty("code","200");
-                jsonObj.addProperty("msg","成功");
-                jsonObj.addProperty("data",new Gson().toJson(productBeans));
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("code","200");
+                jsonObj.put("msg","成功");
+                jsonObj.put("data",new Gson().toJson(productBeans));
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JsonObject jsonObj = new JsonObject();
-            jsonObj.addProperty("code","400");
-            jsonObj.addProperty("msg",e.getMessage());
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
             try {
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e1) {
@@ -62,21 +62,21 @@ public class ApiProductController {
             ApiUtils.checkSignature(resq);
             ApiProductService productService = new ApiProductService();
             List<ApiProductBean> productBeans = productService.getHomePageExperiencePack(resq.getParameter("getcount"));
-            productBeans = dealApiProductBean(resq, productBeans);
+            productBeans = dealApiHomePageProductBean(resq, productBeans);
             try {
-                JsonObject jsonObj = new JsonObject();
-                jsonObj.addProperty("code","200");
-                jsonObj.addProperty("msg","成功");
-                jsonObj.addProperty("data",new Gson().toJson(productBeans));
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("code","200");
+                jsonObj.put("msg","成功");
+                jsonObj.put("data",new Gson().toJson(productBeans));
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JsonObject jsonObj = new JsonObject();
-            jsonObj.addProperty("code","400");
-            jsonObj.addProperty("msg",e.getMessage());
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
             try {
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e1) {
@@ -84,7 +84,26 @@ public class ApiProductController {
             }
         }
     }
-    private List<ApiProductBean> dealApiProductBean(HttpServletRequest resq,
+
+    @RequestMapping(value = "/getProductInforById",method = RequestMethod.POST)
+    public void getProductInforById(HttpServletRequest resq,
+                                          HttpServletResponse resp){
+        resp.setCharacterEncoding("utf-8");
+        try {
+            ApiUtils.checkSignature(resq);
+            checkGetProductInforPara(resq);
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+        }
+
+    }
+    private void checkGetProductInforPara(HttpServletRequest resq) throws ParameterCheckException {
+        String pid = resq.getParameter("pid");
+        if(pid == null){
+            throw new ParameterCheckException("未取到参数[pid]");
+        }
+    }
+    private List<ApiProductBean> dealApiHomePageProductBean(HttpServletRequest resq,
                                                     List<ApiProductBean> productBeans){
         String localIp = resq.getLocalAddr();//获取本地ip
         int localPort = resq.getLocalPort();//获取本地的端口

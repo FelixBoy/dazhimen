@@ -29,4 +29,6 @@ public class Constant {
     public static final String SkillPack = "1";
     //经验包的code值
     public static final String ExperiencePack = "2";
+    //验证码长度
+    public static final int verifyCodeLength = 4;
 }
