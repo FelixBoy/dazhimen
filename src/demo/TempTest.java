@@ -30,15 +30,16 @@ public class TempTest {
 //        Date date = new Date(util.getDBDate().getTime());
 //        System.out.println(date);
 
-        ApiLoginService loginService = new ApiLoginService();
-        ApiCustomerBean customerBean = loginService.getCustomerInfoByCid("c17031800007");
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code","200");
-        jsonObject.put("msg","成功");
-
-        System.out.println(new Gson().toJson(customerBean));
-        jsonObject.put("data",new Gson().toJson(customerBean));
-        System.out.println(jsonObject.toString());
+//        ApiLoginService loginService = new ApiLoginService();
+//        ApiCustomerBean customerBean = loginService.getCustomerInfoByCid("c17031800007");
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("code","200");
+//        jsonObject.put("msg","成功");
+//
+//        System.out.println(new Gson().toJson(customerBean));
+//        jsonObject.put("data",new Gson().toJson(customerBean));
+//        System.out.println(jsonObject.toString());
+        System.out.println(new Gson().toJson(null));
 
     }
 //    public static String getRandNum(int charCount) {

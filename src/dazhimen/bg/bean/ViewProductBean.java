@@ -16,6 +16,8 @@ public class ViewProductBean {
     private String uid = null;
     private String uname = null;
     private String mphone = null;
+    private String gender = null;
+    private String loginname = null;
 
     @Override
     public String toString() {
@@ -33,6 +35,22 @@ public class ViewProductBean {
                 ", uname='" + uname + '\'' +
                 ", mphone='" + mphone + '\'' +
                 '}';
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getLoginname() {
+        return loginname;
+    }
+
+    public void setLoginname(String loginname) {
+        this.loginname = loginname;
     }
 
     public String getPid() {

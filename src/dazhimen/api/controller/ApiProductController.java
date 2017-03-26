@@ -37,7 +37,12 @@ public class ApiProductController {
                 JSONObject jsonObj = new JSONObject();
                 jsonObj.put("code","200");
                 jsonObj.put("msg","成功");
-                jsonObj.put("data",new Gson().toJson(productBeans));
+                if(productBeans.size() == 0){
+                    jsonObj.put("data",new Gson().toJson(null));
+                }else{
+                    jsonObj.put("data",new Gson().toJson(productBeans));
+                }
+
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -67,7 +72,11 @@ public class ApiProductController {
                 JSONObject jsonObj = new JSONObject();
                 jsonObj.put("code","200");
                 jsonObj.put("msg","成功");
-                jsonObj.put("data",new Gson().toJson(productBeans));
+                if(productBeans.size() == 0){
+                    jsonObj.put("data",new Gson().toJson(null));
+                }else{
+                    jsonObj.put("data",new Gson().toJson(productBeans));
+                }
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e) {
                 e.printStackTrace();

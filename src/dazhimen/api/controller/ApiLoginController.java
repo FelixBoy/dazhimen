@@ -96,7 +96,7 @@ public class ApiLoginController {
                 JSONObject jsonObj = new JSONObject();
                 jsonObj.put("code","200");
                 jsonObj.put("msg","成功");
-                jsonObj.put("data","");
+                jsonObj.put("data",new Gson().toJson(null));
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e) {
                 e.printStackTrace();

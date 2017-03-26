@@ -162,6 +162,32 @@ public class ProductController {
             e.printStackTrace();
         }
     }
+    @RequestMapping("/saveProductDel")
+    public void saveProductDel(HttpServletRequest resq,HttpServletResponse resp){
+        String pid = resq.getParameter("pid");
+        ProductService productService = new ProductService();
+        productService.saveProductDel(pid, resq);
+        resp.setCharacterEncoding("utf-8");
+        try {
+            resp.getWriter().write("删除成功");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @RequestMapping("/fwdManageCoursePage")
+    public String fwdManageCoursePage(HttpServletRequest resq,HttpServletResponse resp){
+        resq.setAttribute("pid", resq.getParameter("pid"));
+        return "/product/manageCourse";
+    }
+    @RequestMapping("/queryAllCourseByPid")
+    public void queryAllCourseByPid(HttpServletRequest resq,HttpServletResponse resp){
+
+    }
+    @RequestMapping("/fwdAddCoursePage")
+    public String fwdAddCoursePage(HttpServletRequest resq,HttpServletResponse resp){
+        resq.setAttribute("pid", resq.getParameter("pid"));
+        return "/product/addCourse";
+    }
     private ViewProductBean dealListImgUrlPrefix(String prefix, ViewProductBean productBean){
         productBean.setListImage(prefix + "/" + productBean.getListImage());
         return productBean;

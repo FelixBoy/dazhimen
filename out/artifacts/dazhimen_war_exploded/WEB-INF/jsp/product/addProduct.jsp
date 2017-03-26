@@ -118,7 +118,7 @@
         }
     }
     function clearForm(){
-        var pid = "p17032300042";
+        var pid = "p17032600047";
         $('#content_panel').panel({
             href:"<%=request.getContextPath() %>/product/fwdProductInfoPage?random_id=" + Math.random()+"&pid=" + pid,
             onLoad:function(){
@@ -173,6 +173,8 @@
                 </td>
             </tr>
             <tr>
+                <td>名称:<span style="color:red">*</span></td>
+                <td><input class="easyui-textbox"  id="pname" name="pname"></td>
                 <td>类型:<span style="color:red">*</span></td>
                 <td>
                     <select class="easyui-combobox" name="type" id="type" style="width:98%">
@@ -180,8 +182,6 @@
                         <option value="2">经验包</option>
                     </select>
                 </td>
-                <td>名称:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox"  id="pname" name="pname"></td>
                 <td>价格/年:<span style="color:red">*</span></td>
                 <td><input class="easyui-textbox" id="price" name="price" data-options="prompt:'请输入金额，两位小数'" ></td>
             </tr>
@@ -189,9 +189,9 @@
                 <td>余额支付减免:</td>
                 <td><input class="easyui-textbox" id="derateProportion" data-options="prompt:'请输入百分比'"  name="derateProportion"/>%</td>
                 <td>首页轮播:</td>
-                <td><input type="checkbox" id="indexplay" name="indexplay" value="1"/></td>
+                <td><input type="checkbox" id="indexplay" name="indexplay" /></td>
                 <td>热卖排序:</td>
-                <td><select class="easyui-combobox" name="indexosrt" id="indexsort" style="width:140px;">
+                <td><select class="easyui-combobox" name="indexsort" id="indexsort" style="width:140px;">
                     <option value="0">按上架时间排序</option>
                     <option value="1">排序1</option>
                     <option value="2">排序2</option>
@@ -240,6 +240,6 @@
     </form>
     <div style="text-align: center;">
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submitAddProduct()">保存</a>
-        <%--<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">测试上传完成</a>--%>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">测试上传完成</a>
     </div>
 </div>

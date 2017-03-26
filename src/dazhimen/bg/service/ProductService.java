@@ -13,6 +13,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import util.Constant;
 import util.IdUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -150,7 +151,7 @@ public class ProductService {
             StringBuffer sqlBF = new StringBuffer();
             sqlBF.append("select pid,pname,getcodetxt('producttype',a.type) as type,price,derateProportion," +
                     "a.introduction,getcodetxt('indexsort',indexsort) as indexsort,getcodetxt('rightorwrong',indexplay) as indexplay," +
-                    "listimage,b.uid,b.name as uname,b.mphone ");
+                    "listimage,b.uid,b.name as uname,b.mphone,b.loginname,getcodetxt('gender',b.gender) as gender ");
             sqlBF.append("  from product a, ");
             sqlBF.append("       user b ");
             sqlBF.append(" where pid = ? and a.isdel = '0' ");
@@ -199,5 +200,18 @@ public class ProductService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public void saveProductDel(String pid, HttpServletRequest resq){
+        try {
+            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
+            runner.update(" delete from product_image where pid = ? ", pid);
+            runner.update(" update product set isdel = '1' where pid = ? ", pid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String productMainFolderPath = resq.getSession().getServletContext().getRealPath("/") + Constant.proPrefixPath  + pid + "\\";
+
+        FileManageService fileService = new FileManageService();
+        fileService.deleteFolder(productMainFolderPath);
     }
 }

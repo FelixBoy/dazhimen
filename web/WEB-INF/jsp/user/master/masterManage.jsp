@@ -39,7 +39,7 @@
                 if (r){
                     $.get("<%=request.getContextPath()%>/user/saveMasterDel?uid=" + row.uid+"&random_id="+Math.random(),
                         function(data){
-                            alert(data);
+                            MsgBox.show(data);
                             $('#masterList').datagrid('reload');
                         }
                     );
