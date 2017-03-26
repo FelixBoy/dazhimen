@@ -13,7 +13,7 @@ public class IdUtils {
      * 自动生成uid的方法
      * @return 生成的uid
      */
-    public static String getUid(){
+    public String getUid(){
         String curDateStr = getCurrentDate();
         String user_seq = SeqUtils.getSeqNextVal(Constant.userSeqName);
         user_seq = SeqUtils.autoAttachZeroFromStart(user_seq, Constant.userSeqLength);
@@ -24,24 +24,31 @@ public class IdUtils {
      * 获取当前日期的方法
      * @return 当前日期，格式为 年(后两位)+月+日，例如 170312
      */
-    private static String getCurrentDate(){
+    private String getCurrentDate(){
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT+08:00"));//获得东八区时间
         SimpleDateFormat s=new SimpleDateFormat("yyMMdd");
         String curDate = s.format(now.getTime());
         return curDate;
     }
 
-    public static String getCid(){
+    public String getCid(){
         String curDateStr = getCurrentDate();
         String customer_seq = SeqUtils.getSeqNextVal(Constant.customerSeqName);
         customer_seq = SeqUtils.autoAttachZeroFromStart(customer_seq, Constant.customerSeqLength);
         return "c" + curDateStr + customer_seq;
     }
 
-    public static String getPid(){
+    public String getPid(){
         String curDateStr = getCurrentDate();
         String product_seq = SeqUtils.getSeqNextVal(Constant.productSeqName);
         product_seq = SeqUtils.autoAttachZeroFromStart(product_seq, Constant.productSeqLength);
         return "p" + curDateStr + product_seq;
     }
+    public String getCourseid(){
+        String curDateStr = getCurrentDate();
+        String course_seq = SeqUtils.getSeqNextVal(Constant.courseSeqName);
+        course_seq = SeqUtils.autoAttachZeroFromStart(course_seq, Constant.courseSeqLength);
+        return "cou" + curDateStr + course_seq;
+    }
+
 }

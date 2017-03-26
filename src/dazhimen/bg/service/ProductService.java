@@ -60,11 +60,67 @@ public class ProductService {
         }
         return userBeans;
     }
+    public String saveAddCourse(UploadCourseBean courseBean) throws BgException {
+        //1 生成courseid
+        String courseid = new IdUtils().getCourseid();
+        //2 获得课程所属的pid
+        String pid = courseBean.getPid();
+        //2 计算课程主目录路径
+        //工程所在路径+ proPrefixPath + pid + course
+        String cousreMainFolderPath = courseBean.getBasePath() + Constant.proPrefixPath  + pid + "\\course\\";
+        FileManageService fileService = new FileManageService();
+        try {
+            fileService.createFolder(cousreMainFolderPath);
+        } catch (BgException e) {
+            e.printStackTrace();
+            throw new BgException("保存课程信息出错");
+        }
+            CommonsMultipartFile audioFile = courseBean.getAudio();
+            //获得文件的原始名称
+            String audioOrginalName = audioFile.getOriginalFilename();
+            //获得原始文件的后缀
+            String audioSuffixName = audioOrginalName.substring(audioOrginalName.lastIndexOf("."));
+            //新文件名
+            String audioFileNewName = courseid + audioSuffixName;
+            //通过课程主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+            String audioFileTransferFilename = cousreMainFolderPath + audioFileNewName;
 
+            try {
+                audioFile.transferTo(new File(audioFileTransferFilename));
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new BgException("保存课程音频失败");
+            }
+            //计算列表图片在工程中的相对路径，用于记录到数据库
+            String audioFileRelPath = Constant.uploadDbPrefixPath + pid + "/course/" + audioFileNewName;
+            DruidPooledConnection conn = null;
+            try {
+                QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
+                conn = DBConnUtil.getDataSource().getConnection();
+
+                conn.setAutoCommit(false);
+                runner.update(conn,"insert into course(courseid,coursename,istry,sort,audiopath,pid)" +
+                                "                 values(?,        ?,        ?,    ?,       ?,  ?) ",
+                        courseid,courseBean.getCoursename(),courseBean.getIstry(),courseBean.getSort(),audioFileRelPath,pid);
+                conn.commit();
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                try {
+                    conn.rollback();
+                    fileService.deleteFile(audioFileTransferFilename);
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                    throw new BgException("事务回滚出错");
+                }
+                e.printStackTrace();
+                throw new BgException("保存课程信息出错");
+            }
+        return pid;
+    }
     public String saveAddProduct(UploadProductBean productBean) throws BgException{
         DruidPooledConnection conn = null;
         //1 生成pid
-        String pid = IdUtils.getPid();
+        String pid = new IdUtils().getPid();
         //2 计算产品主目录路径
         //工程所在路径+ proPrefixPath + pid_pname
         String productMainFolderPath = productBean.getBasePath() + Constant.proPrefixPath  + pid + "\\";

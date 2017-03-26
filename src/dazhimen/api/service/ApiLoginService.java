@@ -39,7 +39,7 @@ public class ApiLoginService {
                         "qq,qquid,weixin,weixinuid,createdate) ");
                 sqlBF.append("               values(?,    ?,       ?,       ?,      ?, " +
                         "  ?,   ?,  ? ,     ?,      ?)");
-                String cid = IdUtils.getCid();
+                String cid = new IdUtils().getCid();
                 int result = runner.update(sqlBF.toString(), cid, loginBean.getNickname(), loginBean.getHeaderurl(),
                         loginBean.getGender(), loginBean.getAge(), loginBean.getQq(), loginBean.getQqUid(),
                         loginBean.getWeixin(), loginBean.getWeixinUid(), new Date());
@@ -87,7 +87,7 @@ public class ApiLoginService {
                 StringBuffer sqlBF = new StringBuffer();
                 sqlBF.append("insert into customer(cid,mphone,createdate) ");
                 sqlBF.append("               values(?,    ?,       ?) ");
-                String cid = IdUtils.getCid();
+                String cid = new IdUtils().getCid();
                 int result = runner.update(sqlBF.toString(), cid, loginBean.getMphone(),new Date());
                 if (!(result == 1)) {
                     throw new ParameterCheckException("新增会员信息出错");

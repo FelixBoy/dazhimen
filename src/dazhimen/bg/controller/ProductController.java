@@ -188,6 +188,31 @@ public class ProductController {
         resq.setAttribute("pid", resq.getParameter("pid"));
         return "/product/addCourse";
     }
+
+    @RequestMapping("/saveAddCourse")
+    public ModelAndView saveAddCourse(HttpServletRequest resq, HttpServletResponse resp){
+        UploadCourseBean courseBean = getUploadCourseBean(resq);
+        ProductService productService = new ProductService();
+        ModelAndView mav = new ModelAndView("fileUploadAfterAction");
+        String pid = null;
+        try {
+            pid = productService.saveAddCourse(courseBean);
+        } catch (BgException e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code", "400");
+            jsonObj.addProperty("msg",e.getMessage());
+            mav.addObject("parameters", jsonObj.toString());
+            return mav;
+        }
+
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("code", "200");
+        jsonObj.addProperty("msg","课程新增成功");
+        jsonObj.addProperty("pid", pid);
+        mav.addObject("parameters", jsonObj.toString());
+        return mav;
+    }
     private ViewProductBean dealListImgUrlPrefix(String prefix, ViewProductBean productBean){
         productBean.setListImage(prefix + "/" + productBean.getListImage());
         return productBean;
@@ -197,12 +222,26 @@ public class ProductController {
             ViewMainImageBean mainImage = mainImageBeans.get(i);
             mainImage.setMainImage(prefix + "/" + mainImage.getMainImage());
         }
-//        for (ViewMainImageBean mainImage: mainImageBeans
-//                ) {
-//            System.out.println(mainImage);
-//        }
         return mainImageBeans;
     }
+    private UploadCourseBean getUploadCourseBean(HttpServletRequest resq){
+        UploadCourseBean courseBean = new UploadCourseBean();
+        String pid = resq.getParameter("pid");
+        courseBean.setPid(pid);
+        String coursename = resq.getParameter("coursename");
+        courseBean.setCoursename(coursename);
+        String sort = resq.getParameter("sort");
+        courseBean.setSort(sort);
+        String istry = resq.getParameter("istry");
+        courseBean.setIstry(istry);
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
+        CommonsMultipartFile audioFile = (CommonsMultipartFile) multipartRequest.getFile("audio");
+        courseBean.setAudio(audioFile);
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        courseBean.setBasePath(basePath);
+        return courseBean;
+    }
+
     private UploadProductBean getUploadProductBean(HttpServletRequest resq){
         UploadProductBean productBean = new UploadProductBean();
         String pname = resq.getParameter("pname");

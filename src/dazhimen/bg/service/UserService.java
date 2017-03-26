@@ -25,7 +25,7 @@ public class UserService {
     public boolean saveMasterAdd(UserBean userBean){
         int result = 0;
         try{
-            userBean.setUid(IdUtils.getUid());
+            userBean.setUid(new IdUtils().getUid());
             userBean.setCreateDate(new Date());
             QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
             //密码加密规则，是loginname+password明文之后，md5
