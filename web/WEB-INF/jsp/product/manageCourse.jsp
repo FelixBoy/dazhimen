@@ -4,17 +4,52 @@
             "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random());
     });
     function courseListFormatOper(val,row,index){
-        return  '<a href="javascript:void(0)" onclick="fwdEditCoursePage('+index+')">编辑信息</a>&nbsp&nbsp&nbsp' +
+        return  '<a href="javascript:void(0)" onclick="fwdEditCoursePage('+index+')">修改信息</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
                 '<a href="javascript:void(0)" onclick="saveCourseDel('+index+')">删除</a>';
     }
+    function returnManageProduct(){
+        $('#content_panel').panel({
+            href:"<%=request.getContextPath() %>/product/fwdManageProductPage?random_id="+Math.random(),
+            onLoad:function(){
+            }
+        });
+    }
     function fwdEditCoursePage(index){
-        MsgBox.show("in");
+        $("#courseList").datagrid("selectRow", index);
+        var row = $("#courseList").datagrid("getSelected");
+        if(row){
+            $("#modifyCourseDialog").dialog({
+                title:'修改课程信息',
+                width: 580,
+                height: 310,
+                closed: true,
+                cache: false,
+                href: "<%=request.getContextPath()%>/product/fwdModifyCoursePage?courseid=" + row.courseid +
+                        "&pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random(),
+                modal: true
+            });
+            $("#modifyCourseDialog").dialog("open");
+        }
     }
     function saveCourseDel(index){
-        MsgBox.show("123");
+        $("#courseList").datagrid("selectRow",index);
+        var row = $("#courseList").datagrid("getSelected");
+        if(row){
+            $.messager.confirm('确认','您确认删除课程【'+ row.coursename + '】吗？',function(r){
+                if (r){
+                    $.get("<%=request.getContextPath()%>/product/saveCourseDel?courseid=" + row.courseid
+                        + "&pid=<%=request.getAttribute("pid").toString()%>&random_id="+Math.random(),
+                        function(data){
+                            MsgBox.show(data);
+                            $('#courseList').datagrid('reload');
+                        }
+                    );
+                }
+            });
+        }
     }
     function downloadCourseAudio(index){
-        MsgBox.show("123");
+        MsgBox.show("功能正在开发，敬请期待");
     }
     function downloadAudioFormatOper(val,row,index){
         return '<a href="#" class="easyui-linkbutton" onclick="downloadCourseAudio('+index+')">下载音频</a>';
@@ -62,8 +97,7 @@
         <br/>
 </div>
 <div style="padding:5px 0;">
-
-    <div id="modifyCourseDialog"></div>
+    <div id="modifyCourseDialog" style="text-align: center"></div>
     <div id="addCourseDialog" style="text-align: center"></div>
     <table id="courseList" title="课程列表" class="easyui-datagrid" style="width: auto;height: auto;"
            url="<%=request.getContextPath()%>/product/queryAllCourseByPid?pid=<%=request.getAttribute("pid").toString()%>&
@@ -71,14 +105,13 @@
            rownumbers="true" fitColumns="true" singleSelect="true" >
         <thead>
         <tr>
-            <th data-options="field:'pid'" width="10%">Pid</th>
-            <th data-options="field:'courseid'" width="10%">ID</th>
-            <th data-options="field:'coursename'" width="10%">名称</th>
+            <th data-options="field:'courseid'" width="15%">ID</th>
+            <th data-options="field:'coursename'" width="15%">名称</th>
             <th data-options="field:'sort'"  width="15%">首页排名</th>
-            <th data-options="field:'istry'"  width="10%">是否试学</th>
-            <th data-options="field:'audiourl'" width="10%">音频url</th>
+            <th data-options="field:'istry'"  width="15%">是否试学</th>
+            <th data-options="field:'audiourl',hidden:'true'" width="20%">音频url</th>
             <th data-options="field:'downloadaudio',align:'center',formatter:downloadAudioFormatOper" width="15%">音频</th>
-            <th data-options="field:'operate',align:'center',formatter:courseListFormatOper" width="20%">操作</th>
+            <th data-options="field:'operate',align:'center',formatter:courseListFormatOper" width="25%">操作</th>
         </tr>
         </thead>
     </table>

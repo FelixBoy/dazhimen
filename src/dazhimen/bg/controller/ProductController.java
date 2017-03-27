@@ -181,7 +181,25 @@ public class ProductController {
     }
     @RequestMapping("/queryAllCourseByPid")
     public void queryAllCourseByPid(HttpServletRequest resq,HttpServletResponse resp){
+        String pid = resq.getParameter("pid");
+        ProductService productService = new ProductService();
+        List<ListViewCourseBean> courseBeans = productService.queryAllCourseByPid(pid);
 
+        String localIp = resq.getLocalAddr();//获取本地ip
+        int localPort = resq.getLocalPort();//获取本地的端口
+        String appName = resq.getContextPath();
+
+        for(int i = 0; i < courseBeans.size(); i++){
+            ListViewCourseBean courseBean = courseBeans.get(i);
+            String audioUrl = "http://" + localIp + ":" + localPort + appName + "/" + courseBean.getAudiourl();
+            courseBean.setAudiourl(audioUrl);
+        }
+        resp.setCharacterEncoding("utf-8");
+        try {
+            resp.getWriter().write(new Gson().toJson(courseBeans));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @RequestMapping("/fwdAddCoursePage")
     public String fwdAddCoursePage(HttpServletRequest resq,HttpServletResponse resp){
@@ -213,6 +231,64 @@ public class ProductController {
         mav.addObject("parameters", jsonObj.toString());
         return mav;
     }
+
+    @RequestMapping("/fwdModifyCoursePage")
+    public String fwdModifyCoursePage(HttpServletRequest resq,HttpServletResponse resp){
+        resq.setAttribute("courseid", resq.getParameter("courseid"));
+        resq.setAttribute("pid", resq.getParameter("pid"));
+        return "/product/modifyCourse";
+    }
+    @RequestMapping("/getCourseInforByCourseid")
+    public void getCourseInforByCourseid(HttpServletRequest resq,HttpServletResponse resp){
+        String courseid = resq.getParameter("courseid");
+        ProductService productService = new ProductService();
+        UploadCourseBean courseBean = productService.getCourseInforByCourseid(courseid);
+        resp.setCharacterEncoding("utf-8");
+        System.out.println(new Gson().toJson(courseBean));
+        try {
+            resp.getWriter().write(new Gson().toJson(courseBean));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @RequestMapping("/saveModifyCourse")
+    public ModelAndView saveModifyCourse(HttpServletRequest resq,HttpServletResponse resp){
+        UploadCourseBean courseBean = getUploadCourseBean(resq);
+        ProductService productService = new ProductService();
+        ModelAndView mav = new ModelAndView("fileUploadAfterAction");
+        String pid = null;
+        try {
+            pid = productService.saveModifyCourse(courseBean);
+        } catch (BgException e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code", "400");
+            jsonObj.addProperty("msg",e.getMessage());
+            mav.addObject("parameters", jsonObj.toString());
+            return mav;
+        }
+
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("code", "200");
+        jsonObj.addProperty("msg","修改课程信息成功");
+        jsonObj.addProperty("pid", pid);
+        mav.addObject("parameters", jsonObj.toString());
+        return mav;
+    }
+
+    @RequestMapping("/saveCourseDel")
+    public void saveCourseDel(HttpServletRequest resq,HttpServletResponse resp){
+        String courseid = resq.getParameter("courseid");
+        String pid = resq.getParameter("pid");
+        ProductService productService = new ProductService();
+        productService.saveCourseDel(courseid,pid, resq);
+        resp.setCharacterEncoding("utf-8");
+        try {
+            resp.getWriter().write("删除成功");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private ViewProductBean dealListImgUrlPrefix(String prefix, ViewProductBean productBean){
         productBean.setListImage(prefix + "/" + productBean.getListImage());
         return productBean;
@@ -228,6 +304,8 @@ public class ProductController {
         UploadCourseBean courseBean = new UploadCourseBean();
         String pid = resq.getParameter("pid");
         courseBean.setPid(pid);
+        String courseid = resq.getParameter("courseid");
+        courseBean.setCourseid(courseid);
         String coursename = resq.getParameter("coursename");
         courseBean.setCoursename(coursename);
         String sort = resq.getParameter("sort");

@@ -12,7 +12,7 @@
     }
     var checkCount = 10;
     function cbInAddCourse(){
-        var f = $('#ProductForm_iframe'), data = "";
+        var f = $('#CourseForm_iframe'), data = "";
         if (!f.length){
             return
         }

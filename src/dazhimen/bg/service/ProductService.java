@@ -24,6 +24,31 @@ import java.util.List;
  * Created by Administrator on 2017/3/17.
  */
 public class ProductService {
+    public UploadCourseBean getCourseInforByCourseid(String courseid){
+        UploadCourseBean courseBean = null;
+        try {
+            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
+            courseBean = runner.query(" select courseid,coursename,sort,istry " +
+                            " from course where courseid = ? ",
+                    new BeanHandler<UploadCourseBean>(UploadCourseBean.class), courseid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courseBean;
+    }
+    public List<ListViewCourseBean> queryAllCourseByPid(String pid){
+        List<ListViewCourseBean> courseBeans = null;
+        try {
+            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
+            courseBeans = runner.query(" select courseid,coursename,getcodetxt('indexsort',sort) as sort " +
+                            " ,getcodetxt('rightorwrong',istry) as istry,audiopath as audiourl " +
+                            " from course where pid = ? ",
+                    new BeanListHandler<ListViewCourseBean>(ListViewCourseBean.class), pid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courseBeans;
+    }
     /**
      * 通过uid获取 制定掌门的信息
      * @param uid 要获取信息的掌门ID
@@ -59,6 +84,49 @@ public class ProductService {
             e.printStackTrace();
         }
         return userBeans;
+    }
+    public void saveCourseDel(String courseid,String pid, HttpServletRequest resq){
+        try {
+            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
+            runner.update(" delete from course where courseid = ? ", courseid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String audioFolderPath = resq.getSession().getServletContext().getRealPath("/") + Constant.proPrefixPath  + pid + "\\course\\";
+        String audioFileName = audioFolderPath + courseid+ ".mp3";
+        FileManageService fileService = new FileManageService();
+        fileService.deleteFile(audioFileName);
+    }
+    public String saveModifyCourse(UploadCourseBean courseBean) throws BgException{
+        if(courseBean.getIstry() == null || courseBean.getIstry().equals("")){
+            courseBean.setIstry("0");
+        }
+        try {
+            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
+            runner.update(" update course set coursename = ?,istry = ?, sort = ? where courseid =  ? ",
+                    courseBean.getCoursename(),courseBean.getIstry(),courseBean.getSort(),courseBean.getCourseid());
+            CommonsMultipartFile audioFile = courseBean.getAudio();
+            if(audioFile != null && !audioFile.isEmpty()){
+                String cousreMainFolderPath = courseBean.getBasePath() + Constant.proPrefixPath  + courseBean.getPid() + "\\course\\";
+                //获得文件的原始名称
+                String audioOrginalName = audioFile.getOriginalFilename();
+                //获得原始文件的后缀
+                String audioSuffixName = audioOrginalName.substring(audioOrginalName.lastIndexOf("."));
+                //新文件名
+                String audioFileNewName = courseBean.getCourseid() + audioSuffixName;
+                //通过课程主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+                String audioFileTransferFilename = cousreMainFolderPath + audioFileNewName;
+                try {
+                    audioFile.transferTo(new File(audioFileTransferFilename));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new BgException("保存课程音频失败");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return courseBean.getPid();
     }
     public String saveAddCourse(UploadCourseBean courseBean) throws BgException {
         //1 生成courseid
@@ -125,7 +193,13 @@ public class ProductService {
         //工程所在路径+ proPrefixPath + pid_pname
         String productMainFolderPath = productBean.getBasePath() + Constant.proPrefixPath  + pid + "\\";
         FileManageService fileService = new FileManageService();
-        fileService.createFolder(productMainFolderPath);
+        try{
+            fileService.createFolder(productMainFolderPath);
+        }catch (BgException e){
+            e.printStackTrace();
+            throw new BgException("创建产品主目录失败");
+        }
+
             CommonsMultipartFile listImageFile = productBean.getListImgFile();
             //获得文件的原始名称
             String lisgImageOrginalName = listImageFile.getOriginalFilename();
@@ -177,6 +251,9 @@ public class ProductService {
                     mainImgFile.transferTo(new File(mainImageTransferFilename));
                 } catch (IOException e) {
                     e.printStackTrace();
+                    conn.rollback();
+                    conn.setAutoCommit(true);
+                    fileService.deleteFolder(productMainFolderPath);
                     throw new BgException("保存产品主图-" + i + "失败");
                 }
                 runner.update(conn,"insert into product_image(imageid,path,pid) "+
@@ -189,6 +266,7 @@ public class ProductService {
         } catch (SQLException e) {
             try {
                 conn.rollback();
+                conn.setAutoCommit(true);
                 fileService.deleteFolder(productMainFolderPath);
             } catch (SQLException e1) {
                 e1.printStackTrace();
