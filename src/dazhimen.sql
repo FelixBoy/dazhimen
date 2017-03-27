@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50528
 File Encoding         : 65001
 
-Date: 2017-03-24 21:47:34
+Date: 2017-03-27 22:09:33
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -33,10 +33,13 @@ CREATE TABLE `codemap` (
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE `course` (
   `courseid` varchar(14) NOT NULL COMMENT '主键。课程id。生成规则：cou+年+月+日+5位数字。例如：cou17031300002',
-  `name` varchar(100) DEFAULT NULL COMMENT '课程名称',
-  `istry` varchar(1) DEFAULT NULL COMMENT '是否试学。1:试学，0:非试学。',
-  `sort` varchar(2) DEFAULT NULL COMMENT '排序标志。0代表按时间排序。1-99代表按手动指定的序号排序。',
+  `coursename` varchar(100) DEFAULT NULL COMMENT '课程名称',
+  `istry` varchar(1) DEFAULT '0' COMMENT '是否试学。1:试学，0:非试学。',
+  `sort` varchar(3) DEFAULT NULL COMMENT '排序标志。999代表按时间排序。1-99代表按手动指定的序号排序。',
   `audiopath` varchar(500) DEFAULT NULL COMMENT '音频存储地址',
+  `createdate` datetime DEFAULT NULL COMMENT '新增日期',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `viewcount` varchar(10) DEFAULT '0' COMMENT '播放次数，默认是0',
   `pid` varchar(12) DEFAULT NULL COMMENT '所属产品ID',
   PRIMARY KEY (`courseid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='课程信息表。';
@@ -147,10 +150,10 @@ CREATE TABLE `operation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='操作信息表。';
 
 -- ----------------------------
--- Table structure for order
+-- Table structure for orders
 -- ----------------------------
-DROP TABLE IF EXISTS `order`;
-CREATE TABLE `order` (
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE `orders` (
   `orid` varchar(13) NOT NULL COMMENT '主键。订单ID，生成规则是；or+年+月+日+5位数字。例如，or17031100002',
   `ordatetime` datetime DEFAULT NULL COMMENT '下单时间',
   `ordersum` decimal(6,2) unsigned NOT NULL COMMENT '订单金额',
@@ -267,13 +270,26 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台用户信息表。注意，type字段用于区分 当前用户是掌门还是管理员。';
 
 -- ----------------------------
+-- Table structure for verifycode
+-- ----------------------------
+DROP TABLE IF EXISTS `verifycode`;
+CREATE TABLE `verifycode` (
+  `vid` varchar(12) NOT NULL COMMENT '验证码ID，生成规则=v+年+月+日+5位数字，例如v17032500001',
+  `mphone` varchar(15) DEFAULT NULL COMMENT '要获取验证码的手机号',
+  `code` varchar(10) DEFAULT NULL COMMENT '验证码',
+  `expiredatetime` varchar(50) DEFAULT NULL COMMENT '验证码超时时间，用于计算的 str 时间戳类型',
+  `expiredate` datetime DEFAULT NULL COMMENT '验证码超时时间，用于展示的日期类型',
+  PRIMARY KEY (`vid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 -- Procedure structure for test_next_val
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `test_next_val`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `test_next_val`(in p_seq_name varchar(50),out r_next_val int)
 begin
-start transaction;
+start transaction; 
 update sequence set current_val = (current_val + increment_val) % max_val  where seq_name = p_seq_name;
 select current_val into r_next_val  from sequence where seq_name = p_seq_name;
 commit;
@@ -287,11 +303,11 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `currval`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` FUNCTION `currval`(v_seq_name VARCHAR(50)) RETURNS int(11)
-begin
-    declare value integer;
-    set value = 0;
-    select current_val into value  from sequence where seq_name = v_seq_name;
-   return value;
+begin     
+    declare value integer;       
+    set value = 0;       
+    select current_val into value  from sequence where seq_name = v_seq_name; 
+   return value; 
 end
 ;;
 DELIMITER ;
@@ -302,11 +318,11 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `getcodetxt`;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` FUNCTION `getcodetxt`(p_codeid VARCHAR(20),p_codevalue varchar(10)) RETURNS varchar(255) CHARSET utf8
-begin
-    declare value varchar(255);
-    set value = '';
-    select codetext into value  from codemap where codeid = p_codeid and codevalue = p_codevalue;
-   return value;
+begin     
+    declare value varchar(255);       
+    set value = '';       
+    select codetext into value  from codemap where codeid = p_codeid and codevalue = p_codevalue; 
+   return value; 
 end
 ;;
 DELIMITER ;
@@ -325,9 +341,22 @@ end
 DELIMITER ;
 
 
+
 -- ----------------------------
 -- Records of codemap
 -- ----------------------------
+INSERT INTO `codemap` VALUES ('gender', '性别', '1', '男');
+INSERT INTO `codemap` VALUES ('gender', '性别', '2', '女');
+INSERT INTO `codemap` VALUES ('indexsort', '首页排序', '', null);
+INSERT INTO `codemap` VALUES ('indexsort', '首页排序', '10', '排序10');
+INSERT INTO `codemap` VALUES ('indexsort', '首页排序', '2', '排序2');
+INSERT INTO `codemap` VALUES ('indexsort', '首页排序', '3', '排序3');
+INSERT INTO `codemap` VALUES ('indexsort', '首页排序', '4', '排序4');
+INSERT INTO `codemap` VALUES ('indexsort', '首页排序', '5', '排序5');
+INSERT INTO `codemap` VALUES ('indexsort', '首页排序', '6', '排序6');
+INSERT INTO `codemap` VALUES ('indexsort', '首页排序', '7', '排序7');
+INSERT INTO `codemap` VALUES ('indexsort', '首页排序', '8', '排序8');
+INSERT INTO `codemap` VALUES ('indexsort', '首页排序', '9', '排序9');
 INSERT INTO `codemap` VALUES ('indexsort', '首页排序', '999', '按上架时间排序');
 INSERT INTO `codemap` VALUES ('productstatus', '产品状态', '1', '上架');
 INSERT INTO `codemap` VALUES ('productstatus', '产品状态', '2', '预告');
@@ -342,9 +371,10 @@ INSERT INTO `codemap` VALUES ('yesorno', '是否标志', '1', '是');
 -- ----------------------------
 -- Records of sequence
 -- ----------------------------
-INSERT INTO `sequence` VALUES ('customer_seq', '1', '1', '100000');
-INSERT INTO `sequence` VALUES ('product_seq', '1', '1', '100000');
-INSERT INTO `sequence` VALUES ('user_seq', '1', '1', '1000');
+INSERT INTO `sequence` VALUES ('course_seq', '6', '1', '100000');
+INSERT INTO `sequence` VALUES ('customer_seq', '9', '1', '100000');
+INSERT INTO `sequence` VALUES ('product_seq', '47', '1', '100000');
+INSERT INTO `sequence` VALUES ('user_seq', '4', '1', '1000');
 
 
 -- ----------------------------
