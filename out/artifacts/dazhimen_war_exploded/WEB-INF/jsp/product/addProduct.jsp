@@ -240,6 +240,6 @@
     </form>
     <div style="text-align: center;">
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submitAddProduct()">保存</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">测试上传完成</a>
+        <%--<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">测试上传完成</a>--%>
     </div>
 </div>

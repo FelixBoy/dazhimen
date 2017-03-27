@@ -70,7 +70,9 @@
     </script>
 </head>
 <body class="easyui-layout">
-<div data-options="region:'north',border:false" style="height:60px;background:#B3DFDA;padding:10px">主标题栏</div>
+<div data-options="region:'north',border:false" style="height:60px;background:#B3DFDA;padding:10px;text-align: center">
+    <div style="font-size: 30px;margin: 0 auto;">大职门后台管理系统</div>
+</div>
 <div data-options="region:'west',split:false,title:'导航菜单'" style="width:240px;padding:10px;">
     <div style="margin:20px 0;"></div>
     <div class="easyui-panel" style="padding:5px">
@@ -116,19 +118,14 @@
                     <li id="permisssion_modify">权限修改</li>
                 </ul>
             </li>
-            <li id="admin_manage" data-options="state:'closed'">
-                <span>管理员管理</span>
-                <ul>
-                    <li id="admin_add" >新增管理员</li>
-                </ul>
-            </li>
-            <li id="test" data-options="state:'closed'">
-                <span>测试</span>
-                <ul>
-                    <li id="test_fileuploadcb" >测试文件上传回调</li>
-                    <li id="test_msgbox" >MsgBoxDemo</li>
-                </ul>
-            </li>
+            <li id="admin_manage">管理员管理</li>
+            <%--<li id="test" data-options="state:'closed'">--%>
+                <%--<span>测试</span>--%>
+                <%--<ul>--%>
+                    <%--<li id="test_fileuploadcb" >测试文件上传回调</li>--%>
+                    <%--<li id="test_msgbox" >MsgBoxDemo</li>--%>
+                <%--</ul>--%>
+            <%--</li>--%>
         </ul>
     </div>
 </div>
