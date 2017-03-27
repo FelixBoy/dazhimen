@@ -317,6 +317,7 @@ public class ApiProductController {
         if(courseBeans != null && courseBeans.size()==0){
             dataObject.put("courselist", new Gson().toJson(null));
         }else{
+            courseBeans = dealApiListViewCourseBean(resq,courseBeans);
             dataObject.put("courselist", new Gson().toJson(courseBeans));
         }
         jsonObject.put("data", dataObject.toString());
@@ -341,6 +342,26 @@ public class ApiProductController {
         if(cid == null){
             throw new ParameterCheckException("未取到参数[cid]");
         }
+    }
+    private List<ApiListViewCourseBean> dealApiListViewCourseBean(HttpServletRequest resq,
+                                                            List<ApiListViewCourseBean> courseBeans){
+        String localIp = resq.getLocalAddr();//获取本地ip
+        int localPort = resq.getLocalPort();//获取本地的端口
+        String appName = resq.getContextPath();
+        for(int i = 0; i < courseBeans.size(); i++){
+            ApiListViewCourseBean courseBean = courseBeans.get(i);
+            Date createDateO = courseBean.getCreatedateo();
+            SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(createDateO);
+            String createdate = cal.get(Calendar.MONTH) + 1 + "月" + cal.get(Calendar.DAY_OF_MONTH)+"日";
+            courseBean.setCreatedate(createdate);
+            courseBean.setCreatedateo(null);
+
+            String audioUrl = "http://" + localIp + ":" + localPort + appName + "/" + courseBean.getAudiourl();
+            courseBean.setAudiourl(audioUrl);
+        }
+        return courseBeans;
     }
     private List<ApiProductBean> dealApiHomePageProductBean(HttpServletRequest resq,
                                                     List<ApiProductBean> productBeans){
