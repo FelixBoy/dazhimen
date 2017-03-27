@@ -103,7 +103,7 @@ public class ProductService {
         }
         try {
             QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            runner.update(" update course set coursename = ?,istry = ?, sort = ? where courseid =  ? ",
+            runner.update(" update course set coursename = ?,istry = ?, sort = ?,updatetime=now() where courseid =  ? ",
                     courseBean.getCoursename(),courseBean.getIstry(),courseBean.getSort(),courseBean.getCourseid());
             CommonsMultipartFile audioFile = courseBean.getAudio();
             if(audioFile != null && !audioFile.isEmpty()){
@@ -167,8 +167,8 @@ public class ProductService {
                 conn = DBConnUtil.getDataSource().getConnection();
 
                 conn.setAutoCommit(false);
-                runner.update(conn,"insert into course(courseid,coursename,istry,sort,audiopath,pid)" +
-                                "                 values(?,        ?,        ?,    ?,       ?,  ?) ",
+                runner.update(conn,"insert into course(courseid,coursename,istry,sort,audiopath,createdate,updatetime,pid)" +
+                                "                 values(?,        ?,        ?,    ?,       ?, now() , now(), ?) ",
                         courseid,courseBean.getCoursename(),courseBean.getIstry(),courseBean.getSort(),audioFileRelPath,pid);
                 conn.commit();
                 conn.setAutoCommit(true);

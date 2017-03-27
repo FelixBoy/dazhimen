@@ -11,8 +11,7 @@ public class ApiProductBean {
     private String pname = "";
     private Date updatetimeo = null;
     private String updatetime = "";
-    private Double priceo = null;
-    private String price = "";
+    private Double price = null;
 
     @Override
     public String toString() {
@@ -22,7 +21,6 @@ public class ApiProductBean {
                 ", pname='" + pname + '\'' +
                 ", updatetimeo=" + updatetimeo +
                 ", updatetime='" + updatetime + '\'' +
-                ", priceo=" + priceo +
                 ", price='" + price + '\'' +
                 '}';
     }
@@ -67,13 +65,6 @@ public class ApiProductBean {
         this.updatetimeo = updatetimeo;
     }
 
-    public Double getPriceo() {
-        return priceo;
-    }
-
-    public void setPriceo(Double priceo) {
-        this.priceo = priceo;
-    }
 
     public String getUpdatetime() {
         return updatetime;
@@ -83,11 +74,11 @@ public class ApiProductBean {
         this.updatetime = dealNull(updatetime);
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
-        this.price = dealNull(price);
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }
