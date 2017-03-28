@@ -10,6 +10,7 @@
     <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.min.js?_=<%=Math.random()%>"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.easyui.min.js?_=<%=Math.random()%>"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/StringUtil.js?_=<%=Math.random()%>"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/json2.js?_=<%=Math.random()%>"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/MsgBox.js?_=<%=Math.random()%>"></script>
     <script>
         $(function(){
