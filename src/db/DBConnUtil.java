@@ -19,7 +19,7 @@ public class DBConnUtil {
      */
  public static synchronized ApplicationContext getCtx() {
      if (ctx == null) {
-             ctx = new ClassPathXmlApplicationContext("classpath:application-jdbc.xml");
+             ctx = new ClassPathXmlApplicationContext("classpath:application-jdbc-dbutils.xml");
      }
      return ctx;
  }

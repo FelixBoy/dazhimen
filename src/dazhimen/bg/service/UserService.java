@@ -3,9 +3,11 @@ package dazhimen.bg.service;
 import dazhimen.bg.bean.SingleValueBean;
 import dazhimen.bg.bean.UserBean;
 import db.DBConnUtil;
+import db.MyBatisUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.ibatis.session.SqlSession;
 import util.GlobalUtils;
 import util.IdUtils;
 
@@ -24,36 +26,25 @@ public class UserService {
      */
     public boolean saveMasterAdd(UserBean userBean){
         int result = 0;
-        try{
-            userBean.setUid(new IdUtils().getUid());
-            userBean.setCreateDate(new Date());
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            //密码加密规则，是loginname+password明文之后，md5
-            String passwordMd5 = GlobalUtils.hex_md5(userBean.getLoginname()+userBean.getPassword());
-            StringBuffer sqlBF = new StringBuffer();
-            sqlBF.append("insert into user(uid,name,mphone,password,gender,type,loginname,remarks,createdate) ");
-            sqlBF.append("          values(?,    ?,   ?,       ?,      ?,   ?,    ?,        ? ,     ?)");
-            result = runner.update(sqlBF.toString(),userBean.getUid(),userBean.getName(), userBean.getMphone(),
-                    passwordMd5, userBean.getGender(), userBean.getType(), userBean.getLoginname(), userBean.getRemarks(),userBean.getCreateDate());
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
+        userBean.setUid(new IdUtils().getUid());
+        //密码加密规则，是loginname+password明文之后，md5
+        String passwordMd5 = GlobalUtils.hex_md5(userBean.getLoginname()+userBean.getPassword());
+        userBean.setPassword(passwordMd5);
+        SqlSession sqlSession = MyBatisUtil.createSession();
+        result = sqlSession.insert("dazhimen.bg.bean.User.addMater", userBean);
+        sqlSession.commit();
+        MyBatisUtil.closeSession(sqlSession);
         return result == 1;
     }
     public boolean checkLoginnameDuplicate(String loginName){
-        QueryRunner runner = null;
         boolean result = false;
-        try {
-            runner = new QueryRunner(DBConnUtil.getDataSource());
-            SingleValueBean value = runner.query(" select 1 as valueinfo from user where loginname = '" + loginName +"'",
-                    new BeanHandler<SingleValueBean>(SingleValueBean.class));
-            if(value == null){
-                return false;
-            }
-            result = value.getValueInfo() == null? false:true;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        SqlSession sqlSession = MyBatisUtil.createSession();
+        SingleValueBean value = sqlSession.selectOne("checkLoginname", loginName);
+        MyBatisUtil.closeSession(sqlSession);
+        if(value == null){
+            return false;
         }
+        result = value.getValueInfo() == null? false:true;
         return result;
     }
 
@@ -62,15 +53,9 @@ public class UserService {
      * @return 包含所有掌门信息的 list
      */
     public List<UserBean> queryAllMasters(){
-        List<UserBean> userBeans = null;
-        try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            userBeans = runner.query("select uid,name,mphone,gender,loginname,remarks " +
-                            " from user where type = '1' and isdel = '0' ",
-                    new BeanListHandler<UserBean>(UserBean.class));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        SqlSession sqlSession = MyBatisUtil.createSession();
+        List<UserBean> userBeans = sqlSession.selectList("dazhimen.bg.bean.User.listAllMaster");
+        MyBatisUtil.closeSession(sqlSession);
         return userBeans;
     }
 
@@ -80,18 +65,9 @@ public class UserService {
      * @return 返回要获取的掌门信息
      */
     public UserBean getMasterDataByUid(String uid){
-        UserBean user = null;
-        try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            StringBuffer sqlBF = new StringBuffer();
-            sqlBF.append("select uid,name,mphone,gender,loginname,loginname as loginnameorginal ");
-            sqlBF.append("  from user ");
-            sqlBF.append(" where uid = ? ");
-            user = runner.query(sqlBF.toString(), new BeanHandler<UserBean>(UserBean.class),uid);
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-
+        SqlSession sqlSession = MyBatisUtil.createSession();
+        UserBean user = sqlSession.selectOne("dazhimen.bg.bean.User.getMasterById", uid);
+        MyBatisUtil.closeSession(sqlSession);
         return user;
     }
 
@@ -102,32 +78,18 @@ public class UserService {
      * @throws SQLException
      */
     public boolean saveMasterModify(UserBean user){
-        int result = 0;
-        try{
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            StringBuffer sqlBF = new StringBuffer();
-            sqlBF.append(" update user  ");
-            sqlBF.append(" set name = ?,mphone = ?,gender = ?, ");
-            sqlBF.append(" loginname = ?,remarks = ? ");
-            sqlBF.append(" where uid = ? ");
-            result = runner.update(sqlBF.toString(),user.getName(), user.getMphone(),
-                    user.getGender(), user.getLoginname(), user.getRemarks(), user.getUid());
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-
+        SqlSession sqlSession = MyBatisUtil.createSession();
+        int result = sqlSession.update("dazhimen.bg.bean.User.saveMasterModify", user);
+        sqlSession.commit();
+        MyBatisUtil.closeSession(sqlSession);
         return result == 1;
     }
 
     public boolean saveMasterDel(String uid){
-        int result = 0;
-        try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            result = runner.update(" update user set isdel = '1' where uid = ? ", uid);
-            System.out.println(result);
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
+        SqlSession sqlSession = MyBatisUtil.createSession();
+        int result = sqlSession.update("dazhimen.bg.bean.User.saveMasterDel", uid);
+        sqlSession.commit();
+        MyBatisUtil.closeSession(sqlSession);
         return result == 1;
     }
 }

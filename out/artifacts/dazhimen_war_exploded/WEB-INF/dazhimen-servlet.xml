@@ -27,7 +27,7 @@
         <property name="uploadTempDir" value="upload/temp" />
     </bean>
 
-
+    <import resource="classpath:application-jdbc-mybatis.xml"/>
     <!--在web.xml中指定了由DispatcherServlet过滤所有请求，
     让所有的请求都通过springmvc过滤，但是需要指定一些路径下的静态资源还可以被 直接访问-->
     <mvc:resources location="/" mapping="/**/*.html"/>

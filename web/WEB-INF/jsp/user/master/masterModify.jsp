@@ -9,7 +9,7 @@
                 alert(data);
             },
             success:function(data){
-                alert(data);
+                MsgBox.show(data);
                 $('#masterModifyDialog').dialog('close');		// close the dialog
                 $('#masterList').datagrid('reload');
             }
@@ -33,7 +33,7 @@
                   },
                   success:function(data){
                       if(data == 'true'){
-                          alert("用户名" + $("#loginnameInModify").val() + "已经存在");
+                          MsgBox.show("登录名" + $("#loginnameInModify").val() + "已经存在");
                       }
                   }
               });

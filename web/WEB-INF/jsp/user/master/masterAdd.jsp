@@ -27,7 +27,7 @@
                 },
                 success:function(data){
                     if(data == 'true'){
-                        alert("用户名" + $("#loginnameInAdd").val() + "已经存在");
+                        MsgBox.show("登录名" + $("#loginnameInAdd").val() + "已经存在");
                     }
                 }
             });
