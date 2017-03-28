@@ -203,7 +203,6 @@ public class ProductController {
     }
     @RequestMapping("/fwdAddCoursePage")
     public String fwdAddCoursePage(HttpServletRequest resq,HttpServletResponse resp){
-        resq.setAttribute("pid", resq.getParameter("pid"));
         return "/product/addCourse";
     }
 
@@ -234,8 +233,8 @@ public class ProductController {
 
     @RequestMapping("/fwdModifyCoursePage")
     public String fwdModifyCoursePage(HttpServletRequest resq,HttpServletResponse resp){
-        resq.setAttribute("courseid", resq.getParameter("courseid"));
-        resq.setAttribute("pid", resq.getParameter("pid"));
+        String courseid = resq.getParameter("courseid");
+        resq.setAttribute("courseid", courseid);
         return "/product/modifyCourse";
     }
     @RequestMapping("/getCourseInforByCourseid")
@@ -244,7 +243,6 @@ public class ProductController {
         ProductService productService = new ProductService();
         UploadCourseBean courseBean = productService.getCourseInforByCourseid(courseid);
         resp.setCharacterEncoding("utf-8");
-        System.out.println(new Gson().toJson(courseBean));
         try {
             resp.getWriter().write(new Gson().toJson(courseBean));
         } catch (IOException e) {

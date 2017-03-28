@@ -28,7 +28,7 @@ public class ProductService {
         UploadCourseBean courseBean = null;
         try {
             QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            courseBean = runner.query(" select courseid,coursename,sort,istry " +
+            courseBean = runner.query(" select pid,courseid,coursename,sort,istry " +
                             " from course where courseid = ? ",
                     new BeanHandler<UploadCourseBean>(UploadCourseBean.class), courseid);
         } catch (SQLException e) {

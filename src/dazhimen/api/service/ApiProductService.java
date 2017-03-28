@@ -79,7 +79,7 @@ public class ApiProductService {
     }
     public ApiSpecifyProductBean getProductInforById(String pid, String cid) throws ApiException {
         StringBuffer sqlBF = new StringBuffer();
-        sqlBF.append(" select pid,pname,price,listimage as listimgurl, ");
+        sqlBF.append(" select pid,pname,price,listimage as listimgurl,introduction, ");
         sqlBF.append("        buycount,istry,introduction,'0' as iscollection, '0' as isbuy ");
         sqlBF.append("   from product a ");
         sqlBF.append("  where a.pid = ? ");

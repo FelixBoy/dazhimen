@@ -1,10 +1,13 @@
 <script>
+    $(function(){
+        $("#pidInAddCourse").val($("#pidInManageCourse").val());
+    });
     function checkCourseForm(){
-        if($("#coursename").val().length == 0){
+        if($("#coursenameInAddCourse").val().length == 0){
             MsgBox.show("请填写课程名称");
             return false;
         }
-        if(!$("#audio").filebox("getValue")){
+        if(!$("#audioInAddCourse").filebox("getValue")){
             MsgBox.show("请选择课程音频");
             return false;
         }
@@ -84,9 +87,9 @@
         </tr>
         <tr>
             <td>名称:<span style="color:red">*</span></td>
-            <td><input class="easyui-textbox"  id="coursename" name="coursename"
+            <td><input class="easyui-textbox"  id="coursenameInAddCourse" name="coursename"
                        data-options="prompt:'请填写课程名称'" style="width:350px">
-                <input type="hidden" id="pidInAddCourse" name="pid" value="<%=request.getAttribute("pid").toString()%>"/>
+                <input type="hidden" id="pidInAddCourse" name="pid"/>
             </td>
         </tr>
         <tr>
@@ -109,7 +112,7 @@
         <tr>
             <td>音频文件:<span style="color:red">*</span></td>
             <td>
-                <input class="easyui-filebox" id="audio" name="audio" style="width:350px" accept="audio/mpeg"
+                <input class="easyui-filebox" id="audioInAddCourse" name="audio" style="width:350px" accept="audio/mpeg"
                        data-options="prompt:'请选课程音频文件，支持mp3',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
             </td>
         </tr>

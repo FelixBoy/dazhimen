@@ -14,6 +14,7 @@ public class ApiSpecifyProductBean {
     private String istry = "";
     private String iscollection = "";
     private String isbuy = "";
+    private String introduction = "";
 
     private String dealNull(String value){
         if(value == null){
@@ -99,5 +100,13 @@ public class ApiSpecifyProductBean {
 
     public void setIscollection(String iscollection) {
         this.iscollection = dealNull(iscollection);
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = dealNull(introduction);
     }
 }

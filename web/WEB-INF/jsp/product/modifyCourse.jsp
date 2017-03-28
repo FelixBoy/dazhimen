@@ -5,7 +5,7 @@
             + Math.random());
     });
     function checkModifyCourseForm(){
-        if($("#coursename").val().length == 0){
+        if($("#coursenameInModifyCourse").val().length == 0){
             MsgBox.show("请填写课程名称");
             return false;
         }
@@ -85,10 +85,10 @@
             </tr>
             <tr>
                 <td>名称:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox"  id="coursename" name="coursename"
+                <td><input class="easyui-textbox"  id="coursenameInModifyCourse" name="coursename"
                            data-options="prompt:'请填写课程名称'" style="width:350px">
                     <input type="hidden" id="courseidInModifyCourse" name="courseid" />
-                    <input type="hidden" id="pidInModifyCourse" name="pid" value="<%=request.getAttribute("pid").toString()%>"/>
+                    <input type="hidden" id="pidInModifyCourse" name="pid" />
                 </td>
             </tr>
             <tr>
@@ -111,7 +111,7 @@
             <tr>
                 <td>音频文件:</td>
                 <td>
-                    <input class="easyui-filebox" id="audio" name="audio" style="width:350px" accept="audio/mpeg"
+                    <input class="easyui-filebox" id="audioInModifyCourse" name="audio" style="width:350px" accept="audio/mpeg"
                            data-options="prompt:'修改音频文件，将会覆盖原有音频，支持mp3',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>

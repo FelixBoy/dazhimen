@@ -24,10 +24,9 @@
                 height: 310,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/product/fwdModifyCoursePage?courseid=" + row.courseid +
-                        "&pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random(),
                 modal: true
             });
+            $("#modifyCourseDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyCoursePage?courseid=" + row.courseid + "&random_id=" + Math.random());
             $("#modifyCourseDialog").dialog("open");
         }
     }
@@ -38,7 +37,7 @@
             $.messager.confirm('确认','您确认删除课程【'+ row.coursename + '】吗？',function(r){
                 if (r){
                     $.get("<%=request.getContextPath()%>/product/saveCourseDel?courseid=" + row.courseid
-                        + "&pid=<%=request.getAttribute("pid").toString()%>&random_id="+Math.random(),
+                        + "&pid=" + $("#pidInManageCourse").val() + "&random_id="+Math.random(),
                         function(data){
                             MsgBox.show(data);
                             $('#courseList').datagrid('reload');
@@ -61,9 +60,9 @@
             height: 310,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/product/fwdAddCoursePage?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random(),
             modal: true
         });
+        $("#addCourseDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdAddCoursePage?random_id=" + Math.random());
         $('#addCourseDialog').dialog("open");
     }
 </script>
@@ -84,7 +83,7 @@
             </tr>
             <tr>
                 <td>产品ID:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="pid" name="pid"></td>
+                <td><input class="dzm-noBorder-text" readonly="true" id="pidInManageCourse" name="pid"></td>
                 <td>名称:</td>
                 <td><input class="dzm-noBorder-text" readonly="true" id="pname" name="pname"></td>
                 <td>类型:</td>
