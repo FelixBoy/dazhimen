@@ -1,6 +1,6 @@
 package util;
 
-import db.DBConnUtil;
+import db.DBUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ArrayHandler;
 
@@ -19,7 +19,7 @@ public class SeqUtils {
     public static synchronized String getSeqNextVal(String seqName){
         QueryRunner runner = null;
         try {
-            runner = new QueryRunner(DBConnUtil.getDataSource());
+            runner = new QueryRunner(DBUtils.getDataSource());
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("获取数据库连接，创建runner出现错误");

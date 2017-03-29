@@ -6,8 +6,6 @@ import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 
-import java.sql.SQLException;
-
 /**
  * Created by Administrator on 2017/3/17.
  */

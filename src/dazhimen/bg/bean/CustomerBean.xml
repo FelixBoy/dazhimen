@@ -7,4 +7,9 @@
          from customer
         where isdel = '0'
     </select>
+
+    <update id="saveCustomerDel">
+        update customer set isdel = '1',mphone = null,qquid = null,weixinuid = null
+          where cid = #{cid}
+    </update>
 </mapper>

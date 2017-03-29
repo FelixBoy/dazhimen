@@ -16,6 +16,15 @@ public class ThirdPartLoginBean {
     private String gender = null;
     private Integer age = null;
     private Date createDate = null;
+    private String cid = null;
+
+    public String getCid() {
+        return cid;
+    }
+
+    public void setCid(String cid) {
+        this.cid = cid;
+    }
 
     @Override
     public String toString() {
@@ -26,10 +35,11 @@ public class ThirdPartLoginBean {
                 ", weixin='" + weixin + '\'' +
                 ", weixinUid='" + weixinUid + '\'' +
                 ", nickname='" + nickname + '\'' +
-                ", headerUrl='" + headerurl + '\'' +
+                ", headerurl='" + headerurl + '\'' +
                 ", gender='" + gender + '\'' +
                 ", age=" + age +
                 ", createDate=" + createDate +
+                ", cid='" + cid + '\'' +
                 '}';
     }
 

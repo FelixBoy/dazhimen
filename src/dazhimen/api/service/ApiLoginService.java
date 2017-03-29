@@ -3,74 +3,66 @@ package dazhimen.api.service;
 import dazhimen.api.bean.ApiCustomerBean;
 import dazhimen.api.bean.MphoneLoginBean;
 import dazhimen.api.bean.ThirdPartLoginBean;
+import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
-import db.DBConnUtil;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
+import db.MyBatisUtil;
+import org.apache.ibatis.session.SqlSession;
 import util.Constant;
 import util.IdUtils;
-import java.sql.SQLException;
-import java.util.Date;
+
 import java.util.Random;
 
 /**
  * Created by Administrator on 2017/3/18.
  */
 public class ApiLoginService {
-    public ApiCustomerBean doThirdPartLogin(ThirdPartLoginBean loginBean) throws ParameterCheckException {
+    public ApiCustomerBean doThirdPartLogin(ThirdPartLoginBean loginBean) throws ParameterCheckException, ApiException {
         if(loginBean == null){
             throw new ParameterCheckException("ApiLoginService的doThirdPartLogin方法，参数为null");
         }
-        try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            ApiCustomerBean customerBean = null;
-            if(loginBean.getLoginType().equals("1")){
-                customerBean = runner.query(" select cid,headerurl,mphone,nickname," +
-                                " name,gender,email,education from customer where qq = ? ",
-                        new BeanHandler<ApiCustomerBean>(ApiCustomerBean.class), loginBean.getQq());
-            }else if(loginBean.getLoginType().equals("2")){
-                customerBean = runner.query(" select cid,headerurl,mphone,nickname," +
-                                " name,gender,email,education from customer where weixin = ? ",
-                        new BeanHandler<ApiCustomerBean>(ApiCustomerBean.class), loginBean.getWeixin());
-            }
-            if(customerBean == null) {
-                StringBuffer sqlBF = new StringBuffer();
-                sqlBF.append("insert into customer(cid,nickname,headerurl,gender,age," +
-                        "qq,qquid,weixin,weixinuid,createdate) ");
-                sqlBF.append("               values(?,    ?,       ?,       ?,      ?, " +
-                        "  ?,   ?,  ? ,     ?,      ?)");
-                String cid = new IdUtils().getCid();
-                int result = runner.update(sqlBF.toString(), cid, loginBean.getNickname(), loginBean.getHeaderurl(),
-                        loginBean.getGender(), loginBean.getAge(), loginBean.getQq(), loginBean.getQqUid(),
-                        loginBean.getWeixin(), loginBean.getWeixinUid(), new Date());
-                if (!(result == 1)) {
-                    throw new ParameterCheckException("新增会员信息出错");
-                }
-                customerBean = getCustomerInfoByCid(cid);
-            }
-            return customerBean;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new ParameterCheckException("新增会员信息出错");
-        } catch (ParameterCheckException e){
-            e.printStackTrace();
-            throw new ParameterCheckException("新增会员信息出错");
-        }
-    }
-    public ApiCustomerBean getCustomerInfoByCid(String cid) throws ParameterCheckException {
+        SqlSession sqlSession = null;
         ApiCustomerBean customerBean = null;
         try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            customerBean = runner.query(" select cid,headerurl,mphone,nickname," +
-                            " name,gender,email,education from customer where cid = ? ",
-                    new BeanHandler<ApiCustomerBean>(ApiCustomerBean.class), cid);
-        } catch (SQLException e) {
+            sqlSession = MyBatisUtil.createSession();
+            if(loginBean.getLoginType().equals("1")){
+                customerBean = sqlSession.selectOne("dazhimen.api.bean.ApiLogin.checkCustomerIsExistsByQQuid", loginBean.getQqUid());
+            }else if(loginBean.getLoginType().equals("2")){
+                customerBean = sqlSession.selectOne("dazhimen.api.bean.ApiLogin.checkCustomerIsExistsByWeixinuid", loginBean.getWeixinUid());
+            }
+            if(customerBean == null) {
+                String cid = new IdUtils().getCid();
+                loginBean.setCid(cid);
+                int result = sqlSession.insert("dazhimen.api.bean.ApiLogin.saveThirdPartLogin", loginBean);
+                if (!(result == 1)) {
+                    throw new ApiException("新增会员信息出错");
+                }
+                sqlSession.commit();
+                customerBean = getCustomerInfoByCid(cid);
+            }
+        } catch (Exception e) {
+            sqlSession.rollback();
             e.printStackTrace();
-            throw new ParameterCheckException("查询会员信息出错");
+            throw new ApiException("新增会员信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
         return customerBean;
     }
-    public ApiCustomerBean doMphoneLogin(MphoneLoginBean loginBean) throws ParameterCheckException {
+    public ApiCustomerBean getCustomerInfoByCid(String cid) throws ApiException {
+        ApiCustomerBean customerBean = null;
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            customerBean = sqlSession.selectOne("dazhimen.api.bean.ApiLogin.getCustomerInfoByCid", cid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApiException("查询会员信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return customerBean;
+    }
+    public ApiCustomerBean doMphoneLogin(MphoneLoginBean loginBean) throws ParameterCheckException, ApiException {
         if(loginBean == null){
             throw new ParameterCheckException("ApiLoginService的doMphoneLogin，参数为null");
         }
@@ -78,30 +70,29 @@ public class ApiLoginService {
         if(!checkVerifyCode(loginBean.getVerifyCode())){
             throw new ParameterCheckException("验证码输入错误");
         }
+        SqlSession sqlSession = null;
+        ApiCustomerBean customerBean = null;
         try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            ApiCustomerBean customerBean = runner.query(" select cid,headerurl,mphone,nickname," +
-                            " name,gender,email,education from customer where mphone = ? ",
-                    new BeanHandler<ApiCustomerBean>(ApiCustomerBean.class), loginBean.getMphone());
+            sqlSession = MyBatisUtil.createSession();
+            customerBean = sqlSession.selectOne("dazhimen.api.bean.ApiLogin.checkCustomerIsExistsByMphone", loginBean.getMphone());
             if(customerBean == null){
-                StringBuffer sqlBF = new StringBuffer();
-                sqlBF.append("insert into customer(cid,mphone,createdate) ");
-                sqlBF.append("               values(?,    ?,       ?) ");
                 String cid = new IdUtils().getCid();
-                int result = runner.update(sqlBF.toString(), cid, loginBean.getMphone(),new Date());
+                loginBean.setCid(cid);
+                int result = sqlSession.insert("dazhimen.api.bean.ApiLogin.saveMphoneLogin", loginBean);
                 if (!(result == 1)) {
-                    throw new ParameterCheckException("新增会员信息出错");
+                    throw new ApiException("新增会员信息出错");
                 }
+                sqlSession.commit();
                 customerBean = getCustomerInfoByCid(cid);
             }
-            return customerBean;
-        }catch (SQLException e) {
+        }catch (Exception e) {
             e.printStackTrace();
-            throw new ParameterCheckException("新增会员信息出错");
-        } catch (ParameterCheckException e){
-            e.printStackTrace();
-            throw new ParameterCheckException("新增会员信息出错");
+            sqlSession.rollback();
+            throw new ApiException("新增会员信息出错");
+        } finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
+        return customerBean;
     }
     private boolean checkVerifyCode(String verfiyCode) throws ParameterCheckException {
         if(verfiyCode == null || verfiyCode.equals("")){

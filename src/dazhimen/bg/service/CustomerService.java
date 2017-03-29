@@ -25,4 +25,19 @@ public class CustomerService {
         }
         return customerBeans;
     }
+
+    public void saveCustomerDel(String cid) throws BgException {
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            sqlSession.update("dazhimen.bg.bean.Customer.saveCustomerDel", cid);
+            sqlSession.commit();
+        }catch (Exception e){
+            sqlSession.rollback();
+            e.printStackTrace();
+            throw new BgException("出现异常，删除会员信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
 }

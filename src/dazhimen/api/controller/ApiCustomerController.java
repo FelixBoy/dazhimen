@@ -1,6 +1,7 @@
 package dazhimen.api.controller;
 
 import dazhimen.api.bean.ApiCustomerBean;
+import dazhimen.api.exception.ApiException;
 import dazhimen.api.service.ApiCustomerService;
 import com.google.gson.Gson;
 import net.sf.json.JSONObject;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import util.ApiUtils;
+import util.Constant;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,23 +28,40 @@ import java.io.UnsupportedEncodingException;
 public class ApiCustomerController {
     @RequestMapping(value="getPersonalInfo", method = RequestMethod.POST)
     public void getPersonalInfo(HttpServletRequest resq, HttpServletResponse resp){
-        resp.setCharacterEncoding("utf-8");
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
         try {
             checkGetPersonalInfoPara(resq);
             ApiUtils.checkSignature(resq);
             String cid = resq.getParameter("cid");
             ApiLoginService apiLoginService = new ApiLoginService();
             ApiCustomerBean customerBean = apiLoginService.getCustomerInfoByCid(cid);
+
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","成功");
+            jsonObj.put("data",new Gson().toJson(customerBean));
             try {
-                JSONObject jsonObj = new JSONObject();
-                jsonObj.put("code","200");
-                jsonObj.put("msg","成功");
-                jsonObj.put("data",new Gson().toJson(customerBean));
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } catch (ParameterCheckException e) {
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (ParameterCheckException e){
             e.printStackTrace();
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","400");
@@ -58,11 +77,11 @@ public class ApiCustomerController {
     public void modifyPersonalInfo(HttpServletRequest resq, HttpServletResponse resp){
         try {
             if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding("utf-8");
+                resq.setCharacterEncoding(Constant.CharSet);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        resp.setCharacterEncoding("utf-8");
+        resp.setCharacterEncoding(Constant.CharSet);
         try {
             checkModifyPersonalInfoPara(resq);
             ApiUtils.checkSignature(resq);
@@ -71,16 +90,26 @@ public class ApiCustomerController {
             customerService.modifyPersonalInfo(customerInfoBean);
             ApiLoginService loginService = new ApiLoginService();
             ApiCustomerBean customerBean = loginService.getCustomerInfoByCid(customerInfoBean.getCid());
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","成功");
+            jsonObj.put("data",new Gson().toJson(customerBean));
             try {
-                JSONObject jsonObj = new JSONObject();
-                jsonObj.put("code","200");
-                jsonObj.put("msg","成功");
-                jsonObj.put("data",new Gson().toJson(customerBean));
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } catch (ParameterCheckException e) {
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (ParameterCheckException e){
             e.printStackTrace();
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","400");

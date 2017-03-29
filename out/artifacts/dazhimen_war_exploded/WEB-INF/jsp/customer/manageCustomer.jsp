@@ -7,7 +7,26 @@
         MsgBox.show("功能正在开发，敬请期待");
     }
     function saveCustomerDel(index){
-        MsgBox.show("功能正在开发，敬请期待");
+        $("#customerList").datagrid("selectRow", index);
+        var row = $("#customerList").datagrid("getSelected");
+        if(row){
+            $.messager.confirm('确认','您确认删除用户【'+ row.cid + '】吗？',function(r){
+                if(r){
+                    $.ajax({
+                        url:"<%=request.getContextPath()%>/customer/saveCustomerDel?cid=" + row.cid + "&random_id=" + Math.random(),
+                        type:"get",
+                        async:false,
+                        error:function(data){
+                            MsgBox.show(data.responseText);
+                        },
+                        success:function(data){
+                            MsgBox.show(data);
+                            $("#customerList").datagrid("reload");
+                        }
+                    });
+                }
+            });
+        }
     }
 </script>
 <div style="padding:5px 0;">

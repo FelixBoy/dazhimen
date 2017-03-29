@@ -1,7 +1,7 @@
 package demo;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
-import db.DBConnUtil;
+import db.DBUtils;
 import org.apache.commons.dbutils.QueryRunner;
 
 import java.sql.SQLException;
@@ -12,8 +12,8 @@ import java.sql.SQLException;
 public class AutoCommitTest2 {
     public static void main(String[] args){
         try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            DruidPooledConnection conn = DBConnUtil.getDataSource().getConnection();
+            QueryRunner runner = new QueryRunner(DBUtils.getDataSource());
+            DruidPooledConnection conn = DBUtils.getDataSource().getConnection();
 //            conn.setAutoCommit(false);
             int result = runner.update(conn,"insert into test(id,name) values(?,?) ",
                     "444","哈哈");
