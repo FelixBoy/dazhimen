@@ -6,7 +6,8 @@
             type:'post',
             async:false,
             error:function(data){
-                MsgBox.show(data);
+                MsgBox.show(data.responseText);
+                $('#masterAddDialog').dialog('close');
             },
             success:function(data){
                 MsgBox.show(data);
@@ -23,11 +24,12 @@
                 type:'get',
                 async:true,
                 error:function(data){
-                    alert(data);
+                    MsgBox.show(data.responseText);
+                    $('#masterAddDialog').dialog('close');
                 },
                 success:function(data){
                     if(data == 'true'){
-                        alert("用户名" + $("#loginnameInAdd").val() + "已经存在");
+                        MsgBox.show("登录名" + $("#loginnameInAdd").val() + "已经存在");
                     }
                 }
             });

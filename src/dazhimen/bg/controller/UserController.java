@@ -2,10 +2,12 @@ package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
 import dazhimen.bg.bean.UserBean;
+import dazhimen.bg.exception.BgException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import dazhimen.bg.service.UserService;
+import util.Constant;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -39,44 +41,64 @@ public class UserController {
     }
     @RequestMapping("/saveMasterAdd")
     public void saveMasterAdd(HttpServletResponse resp, UserBean userBean) {
+        resp.setCharacterEncoding(Constant.CharSet);
         try{
             UserService userService = new UserService();
-            if(userService.saveMasterAdd(userBean)){
-                resp.setCharacterEncoding("utf-8");
+            boolean result = userService.saveMasterAdd(userBean);
+            if(result){
                 resp.getWriter().write("添加成功");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    @RequestMapping("/checkLoginnameDuplicate")
-    public void checkLoginnameDuplicate(@RequestParam("loginname") String loginName, HttpServletResponse resp) {
-        UserService userService = new UserService();
-        try{
-            if(userService.checkLoginnameDuplicate(loginName)){
-                resp.setCharacterEncoding("utf-8");
-                resp.getWriter().write("true");
             }else{
-                resp.setCharacterEncoding("utf-8");
-                resp.getWriter().write("");
+                resp.getWriter().write("添加失败");
             }
         }catch (Exception e){
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，添加掌门失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
 
+    }
+    @RequestMapping("/checkLoginnameDuplicate")
+    public void checkLoginnameDuplicate(@RequestParam("loginname") String loginName, HttpServletResponse resp){
+        UserService userService = new UserService();
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            boolean result = userService.checkLoginnameDuplicate(loginName);
+            if (result) {
+                resp.setStatus(HttpServletResponse.SC_OK);
+                resp.getWriter().write("true");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，检测用户名重复失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 
     @RequestMapping("/queryAllMasters")
     public void queryAllMasters(HttpServletResponse resp) {
-        UserService userService = new UserService();
-        List<UserBean> users = userService.queryAllMasters();
-        Gson gson = new Gson();
-        String usersJson = gson.toJson(users);
-        resp.setCharacterEncoding("utf-8");
+        resp.setCharacterEncoding(Constant.CharSet);
         try {
+            UserService userService = new UserService();
+            List<UserBean> users = userService.queryAllMasters();
+            Gson gson = new Gson();
+            String usersJson = gson.toJson(users);
             resp.getWriter().write(usersJson);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询所有掌门信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
     @RequestMapping("/fwdMasterModifyPage")
@@ -86,38 +108,64 @@ public class UserController {
     }
     @RequestMapping("/getMasterData")
     public void getMasterData(@RequestParam("uid") String uid, HttpServletResponse resp){
-        UserService userService = new UserService();
-        UserBean user = userService.getMasterDataByUid(uid);
-        Gson gson = new Gson();
-        String userJson = gson.toJson(user);
-        resp.setCharacterEncoding("utf-8");
-        try {
+        resp.setCharacterEncoding(Constant.CharSet);
+        try{
+            UserService userService = new UserService();
+            UserBean user = userService.getMasterDataByUid(uid);
+            Gson gson = new Gson();
+            String userJson = gson.toJson(user);
             resp.getWriter().write(userJson);
-        } catch (IOException e) {
+        }catch (Exception e){
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询指定掌门信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
     @RequestMapping("/saveMasterModify")
     public void saveMasterModify(HttpServletResponse resp, UserBean user){
+        resp.setCharacterEncoding(Constant.CharSet);
         UserService userService = new UserService();
-        if(userService.saveMasterModify(user)){
-            resp.setCharacterEncoding("utf-8");
-            try {
+        boolean result = false;
+        try {
+            result = userService.saveMasterModify(user);
+
+            if(result){
+                resp.setStatus(HttpServletResponse.SC_OK);
                 resp.getWriter().write("修改成功");
-            } catch (IOException e) {
-                e.printStackTrace();
+            }else{
+                resp.setStatus(HttpServletResponse.SC_OK);
+                resp.getWriter().write("修改失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，修改掌门信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
         }
     }
     @RequestMapping("/saveMasterDel")
     public void saveMasterDel(@RequestParam("uid") String uid, HttpServletResponse resp){
-        UserService userService = new UserService();
-        if(userService.saveMasterDel(uid)){
-            resp.setCharacterEncoding("utf-8");
-            try {
+        resp.setCharacterEncoding(Constant.CharSet);
+        try{
+            UserService userService = new UserService();
+            if(userService.saveMasterDel(uid)){
+
                 resp.getWriter().write("删除成功");
-            } catch (IOException e) {
-                e.printStackTrace();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，删除掌门信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
         }
     }

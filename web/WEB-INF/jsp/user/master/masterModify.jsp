@@ -6,11 +6,12 @@
             type:'post',
             async:false,
             error:function(data){
-                alert(data);
+                MsgBox.show(data.responseText);
+                $('#masterModifyDialog').dialog('close');
             },
             success:function(data){
                 MsgBox.show(data);
-                $('#masterModifyDialog').dialog('close');		// close the dialog
+                $('#masterModifyDialog').dialog('close');
                 $('#masterList').datagrid('reload');
             }
         });
@@ -29,7 +30,8 @@
                   type:'get',
                   async:true,
                   error:function(data){
-                      alert(data);
+                      MsgBox.show(data.responseText);
+                      $('#masterModifyDialog').dialog('close');
                   },
                   success:function(data){
                       if(data == 'true'){
