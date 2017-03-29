@@ -48,12 +48,18 @@
         if (row){
             $.messager.confirm('确认','您确认删除产品【'+ row.pname + '】吗？',function(r){
                 if (r){
-                    $.get("<%=request.getContextPath()%>/product/saveProductDel?pid=" + row.pid+"&random_id="+Math.random(),
-                        function(data){
+                    $.ajax({
+                        url:"<%=request.getContextPath()%>/product/saveProductDel?pid=" + row.pid+"&random_id="+Math.random(),
+                        type:'get',
+                        async:false,
+                        error:function(data){
+                            MsgBox.show(data.responseText);
+                        },
+                        success:function(data){
                             MsgBox.show(data);
                             $('#productList').datagrid('reload');
                         }
-                    );
+                    });
                 }
             });
         }

@@ -12,7 +12,16 @@ public class UploadCourseBean {
     private String sort = null;
     private String istry = null;
     private CommonsMultipartFile audio = null;
+    private String audiopath = null;
     private String basePath = null;
+
+    public String getAudiopath() {
+        return audiopath;
+    }
+
+    public void setAudiopath(String audiopath) {
+        this.audiopath = audiopath;
+    }
 
     public String getBasePath() {
         return basePath;

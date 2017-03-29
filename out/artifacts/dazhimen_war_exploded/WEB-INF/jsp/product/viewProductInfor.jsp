@@ -10,9 +10,15 @@
             "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random());
     });
     function dealMainImages(){
-        $.get("<%=request.getContextPath()%>/product/getMainImagesInforById" +
-            "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random()
-            ,function(data,status){
+        $.ajax({
+            url:"<%=request.getContextPath()%>/product/getMainImagesInforById" +
+                "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random(),
+            type:'get',
+            async:false,
+            error:function(data){
+                MsgBox.show(data.responseText);
+            },
+            success:function(data){
                 var arr = JSON.parse(data);
                 var arrLength = arr.length;
                 if(!arrLength){
@@ -32,6 +38,7 @@
                     htmlArr.push("</tr>");
                     $(htmlArr.join("")).insertAfter("#listimgtr");
                 }
+            }
         });
     }
     function viewMasterInfo(){

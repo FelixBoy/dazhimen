@@ -2,7 +2,6 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
   <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/default/easyui.css?_=<%=Math.random()%>">
   <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/icon.css?_=<%=Math.random()%>">
@@ -29,16 +28,19 @@
             return;
         }
         var md5Pw = $.md5($("#userNameInput").val() + $("#userPwdInput").val());
-        $.post("<%=request.getContextPath()%>/login/doLoginCheck?random_id="+Math.random(),
-            {loginname:$("#userNameInput").val(), password:md5Pw},
-            function(result){
-               var resultObj = JSON.parse(result);
-               if(resultObj.code == 'succ'){
-                   location.href=resultObj.rediretUrl + "?random_id="+Math.random();
-               }else{
-                   MsgBox.show(resultObj.msg);
-               }
-            });
+        $.ajax({
+            url:"<%=request.getContextPath()%>/login/doLoginCheck?random_id="+Math.random(),
+            data: {loginname:$("#userNameInput").val(), password:md5Pw},
+            type:'post',
+            async:false,
+            error:function(data){
+                MsgBox.show(data.responseText);
+            },
+            success:function(data){
+                var resultObj = JSON.parse(data);
+                location.href=resultObj.rediretUrl + "?random_id="+Math.random();
+            }
+        });
     }
     $(function(){
         $('#userNameInput').bind('keypress',function(event){

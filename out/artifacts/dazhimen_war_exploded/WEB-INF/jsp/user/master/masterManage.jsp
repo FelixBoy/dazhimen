@@ -37,12 +37,18 @@
         if(row){
             $.messager.confirm('确认','您确认想要删除记录吗？',function(r){
                 if (r){
-                    $.get("<%=request.getContextPath()%>/user/saveMasterDel?uid=" + row.uid+"&random_id="+Math.random(),
-                        function(data){
+                    $.ajax({
+                        url:"<%=request.getContextPath()%>/user/saveMasterDel?uid=" + row.uid+"&random_id="+Math.random(),
+                        type:'get',
+                        async:false,
+                        error:function(data){
+                            MsgBox.show(data.responseText);
+                        },
+                        success:function(data){
                             MsgBox.show(data);
                             $('#masterList').datagrid('reload');
                         }
-                    );
+                    });
                 }
             });
         }

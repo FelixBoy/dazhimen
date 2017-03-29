@@ -1,9 +1,10 @@
 package dazhimen.bg.service;
 
+import dazhimen.bg.bean.LoginBean;
 import dazhimen.bg.bean.SingleValueBean;
-import db.DBConnUtil;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
+import dazhimen.bg.exception.BgException;
+import db.MyBatisUtil;
+import org.apache.ibatis.session.SqlSession;
 
 import java.sql.SQLException;
 
@@ -11,42 +12,42 @@ import java.sql.SQLException;
  * Created by Administrator on 2017/3/17.
  */
 public class LoginService {
-    public boolean checkIsLoginnameExists(String lgoinname){
+    public boolean checkIsLoginnameExists(String loginname) throws BgException {
         boolean result = false;
+        SqlSession sqlSession = null;
         try{
-        QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-        SingleValueBean value = runner.query(" select 1 as valueinfo " +
-                            " from user " +
-                            " where loginname = ? " +
-                            "   and isdel = '0' ",
-                new BeanHandler<SingleValueBean>(SingleValueBean.class),
-                lgoinname);
+            sqlSession = MyBatisUtil.createSession();
+            SingleValueBean value = sqlSession.selectOne("dazhimen.bg.bean.Login.checkIsLoginnameExists", loginname);
             if(value == null){
                 return false;
             }
             result = value.getValueInfo() == null? false:true;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            throw new BgException("出现异常，登录失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
         return result;
     }
-    public boolean checkPassword(String loginname, String password){
+    public boolean checkPassword(String loginname, String password) throws BgException {
         boolean result = false;
+        SqlSession sqlSession = null;
         try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            SingleValueBean value = runner.query("select 1 as valueinfo " +
-                            " from user " +
-                            " where loginname = ? " +
-                            " and password = ? " +
-                            " and isdel = '0' ",
-                    new BeanHandler<SingleValueBean>(SingleValueBean.class),
-                    loginname,password);
+            LoginBean loginBean = new LoginBean();
+            loginBean.setLoginname(loginname);
+            loginBean.setPassword(password);
+            sqlSession = MyBatisUtil.createSession();
+            SingleValueBean value = sqlSession.selectOne("dazhimen.bg.bean.Login.checkPassword", loginBean);
             if(value == null){
                 return false;
             }
             result = value.getValueInfo() == null? false:true;
-        }catch (SQLException e){
+        }catch (Exception e){
             e.printStackTrace();
+            throw new BgException("出现异常，登录失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
         return result;
     }

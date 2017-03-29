@@ -37,15 +37,21 @@ public class ProductController {
     }
     @RequestMapping("/getSelectMasterData")
     public void getSelectMasterData(HttpServletResponse resp){
-        ProductService productService = new ProductService();
-        List<UserBean> users = productService.queryAllMasters();
-        Gson gson = new Gson();
-        String usersJson = gson.toJson(users);
-        resp.setCharacterEncoding("utf-8");
+        resp.setCharacterEncoding(Constant.CharSet);
         try {
+            ProductService productService = new ProductService();
+            List<UserBean> users = productService.queryAllMasters();
+            Gson gson = new Gson();
+            String usersJson = gson.toJson(users);
             resp.getWriter().write(usersJson);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询所有掌门信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -104,16 +110,22 @@ public class ProductController {
     @RequestMapping("/getMainImagesInforById")
     public void getMainImagesInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
                                        HttpServletResponse resp){
-        ProductService productService = new ProductService();
-        List<ViewMainImageBean> mainImageBeans = productService.getProductMainImages(pid);
-        mainImageBeans = dealMainImageUrlPrefix(resq.getContextPath(), mainImageBeans);
-        Gson gson = new Gson();
-        String mainImagesJson = gson.toJson(mainImageBeans);
-        resp.setCharacterEncoding("utf-8");
+        resp.setCharacterEncoding(Constant.CharSet);
         try {
+            ProductService productService = new ProductService();
+            List<ViewMainImageBean> mainImageBeans = productService.getProductMainImages(pid);
+            mainImageBeans = dealMainImageUrlPrefix(resq.getContextPath(), mainImageBeans);
+            Gson gson = new Gson();
+            String mainImagesJson = gson.toJson(mainImageBeans);
             resp.getWriter().write(mainImagesJson);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询产品主图信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
     @RequestMapping("/fwdViewMasterInforPage")
@@ -125,15 +137,21 @@ public class ProductController {
     @RequestMapping("/getMasterInfor")
     public void getMasterInfor(@RequestParam("uid") String uid, HttpServletRequest resq,
                                        HttpServletResponse resp){
-        ProductService productService = new ProductService();
-        UserBean userBean = productService.getMasterDataByUid(uid);
-        Gson gson = new Gson();
-        String mainImagesJson = gson.toJson(userBean);
-        resp.setCharacterEncoding("utf-8");
+        resp.setCharacterEncoding(Constant.CharSet);
         try {
+            ProductService productService = new ProductService();
+            UserBean userBean = productService.getMasterDataByUid(uid);
+            Gson gson = new Gson();
+            String mainImagesJson = gson.toJson(userBean);
             resp.getWriter().write(mainImagesJson);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询指定掌门信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
     @RequestMapping("/fwdManageProductPage")
@@ -165,27 +183,39 @@ public class ProductController {
     }
     @RequestMapping("/saveModifyProductStatus")
     public void saveModifyProductStatus(HttpServletRequest resq,HttpServletResponse resp){
-        String pid = resq.getParameter("pid");
-        String status = resq.getParameter("status");
-        ProductService productService = new ProductService();
-        productService.saveModifyProductStatus(pid, status);
-        resp.setCharacterEncoding("utf-8");
+        resp.setCharacterEncoding(Constant.CharSet);
         try {
+            String pid = resq.getParameter("pid");
+            String status = resq.getParameter("status");
+            ProductService productService = new ProductService();
+            productService.saveModifyProductStatus(pid, status);
             resp.getWriter().write("修改成功");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，修改产品状态失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
     @RequestMapping("/saveProductDel")
     public void saveProductDel(HttpServletRequest resq,HttpServletResponse resp){
-        String pid = resq.getParameter("pid");
-        ProductService productService = new ProductService();
-        productService.saveProductDel(pid, resq);
-        resp.setCharacterEncoding("utf-8");
+        resp.setCharacterEncoding(Constant.CharSet);
         try {
+            String pid = resq.getParameter("pid");
+            ProductService productService = new ProductService();
+            productService.saveProductDel(pid, resq);
             resp.getWriter().write("删除成功");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，删除产品失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
     @RequestMapping("/fwdManageCoursePage")
@@ -302,15 +332,21 @@ public class ProductController {
 
     @RequestMapping("/saveCourseDel")
     public void saveCourseDel(HttpServletRequest resq,HttpServletResponse resp){
-        String courseid = resq.getParameter("courseid");
-        String pid = resq.getParameter("pid");
-        ProductService productService = new ProductService();
-        productService.saveCourseDel(courseid,pid, resq);
-        resp.setCharacterEncoding("utf-8");
-        try {
+        resp.setCharacterEncoding(Constant.CharSet);
+        try{
+            String courseid = resq.getParameter("courseid");
+            String pid = resq.getParameter("pid");
+            ProductService productService = new ProductService();
+            productService.saveCourseDel(courseid,pid, resq);
             resp.getWriter().write("删除成功");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，删除课程信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
     private ViewProductBean dealListImgUrlPrefix(String prefix, ViewProductBean productBean){

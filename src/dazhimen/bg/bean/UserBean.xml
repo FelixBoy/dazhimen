@@ -4,7 +4,7 @@
 <mapper namespace="dazhimen.bg.bean.User">
 
     <select id="listAllMaster" resultType="dazhimen.bg.bean.UserBean">
-        select uid,name,mphone,gender,loginname,remarks
+        select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,remarks
           from user
         where type = '1'
           and isdel = '0'
