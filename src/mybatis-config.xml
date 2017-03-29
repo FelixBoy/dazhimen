@@ -5,5 +5,7 @@
 <configuration>
     <mappers>
         <mapper resource="dazhimen/bg/bean/UserBean.xml"/>
+        <mapper resource="dazhimen/bg/bean/CustomerBean.xml"/>
+        <mapper resource="dazhimen/bg/bean/ProductBean.xml"/>
     </mappers>
 </configuration>

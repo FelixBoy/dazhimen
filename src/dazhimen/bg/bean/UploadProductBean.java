@@ -18,6 +18,7 @@ public class UploadProductBean {
     private String indexSort = null;
     private String indexPlay = null;
     private CommonsMultipartFile listImgFile = null;
+    private String listimage = null;
     private List<MultipartFile> mainImgFiles = null;
     private String uid = null;
     private String basePath = null;
@@ -34,18 +35,11 @@ public class UploadProductBean {
                 ", indexSort='" + indexSort + '\'' +
                 ", indexPlay='" + indexPlay + '\'' +
                 ", listImgFile=" + listImgFile +
+                ", listimage='" + listimage + '\'' +
                 ", mainImgFiles=" + mainImgFiles +
                 ", uid='" + uid + '\'' +
                 ", basePath='" + basePath + '\'' +
                 '}';
-    }
-
-    public String getBasePath() {
-        return basePath;
-    }
-
-    public void setBasePath(String basePath) {
-        this.basePath = basePath;
     }
 
     public String getPid() {
@@ -120,6 +114,14 @@ public class UploadProductBean {
         this.listImgFile = listImgFile;
     }
 
+    public String getListimage() {
+        return listimage;
+    }
+
+    public void setListimage(String listimage) {
+        this.listimage = listimage;
+    }
+
     public List<MultipartFile> getMainImgFiles() {
         return mainImgFiles;
     }
@@ -134,5 +136,13 @@ public class UploadProductBean {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getBasePath() {
+        return basePath;
+    }
+
+    public void setBasePath(String basePath) {
+        this.basePath = basePath;
     }
 }

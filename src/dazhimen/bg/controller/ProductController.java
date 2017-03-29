@@ -13,6 +13,7 @@ import dazhimen.bg.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import util.Constant;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -81,17 +82,24 @@ public class ProductController {
     @RequestMapping("/getProductInforById")
     public void getProductInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
                                     HttpServletResponse resp){
-        ProductService productService = new ProductService();
-        ViewProductBean productBean = productService.getProductInforById(pid);
-        productBean = dealListImgUrlPrefix(resq.getContextPath() , productBean);
-        Gson gson = new Gson();
-        String productJson = gson.toJson(productBean);
-        resp.setCharacterEncoding("utf-8");
-        try {
+        resp.setCharacterEncoding(Constant.CharSet);
+        try{
+            ProductService productService = new ProductService();
+            ViewProductBean productBean = productService.getProductInforById(pid);
+            productBean = dealListImgUrlPrefix(resq.getContextPath() , productBean);
+            Gson gson = new Gson();
+            String productJson = gson.toJson(productBean);
             resp.getWriter().write(productJson);
-        } catch (IOException e) {
+        }catch (Exception e){
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询指定产品信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
+
     }
     @RequestMapping("/getMainImagesInforById")
     public void getMainImagesInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
@@ -134,14 +142,20 @@ public class ProductController {
     }
     @RequestMapping("/queryAllProducts")
     public void queryAllProducts(HttpServletResponse resp){
-        ProductService productService = new ProductService();
-        List<ListViewProductBean> productBeans = productService.queryAllProducts();
-        resp.setCharacterEncoding("utf-8");
-        try {
+        resp.setCharacterEncoding(Constant.CharSet);
+        try{
+            ProductService productService = new ProductService();
+            List<ListViewProductBean> productBeans = productService.queryAllProducts();
             resp.getWriter().write(new Gson().toJson(productBeans));
-        } catch (IOException e) {
-            e.printStackTrace();
+        }catch (Exception e){
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询所有产品信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
+
     }
     @RequestMapping("/fwdModifyProductStatusPage")
     public String fwdModifyProductStatusPage(HttpServletRequest resq){
@@ -181,24 +195,30 @@ public class ProductController {
     }
     @RequestMapping("/queryAllCourseByPid")
     public void queryAllCourseByPid(HttpServletRequest resq,HttpServletResponse resp){
-        String pid = resq.getParameter("pid");
-        ProductService productService = new ProductService();
-        List<ListViewCourseBean> courseBeans = productService.queryAllCourseByPid(pid);
-
-        String localIp = resq.getLocalAddr();//获取本地ip
-        int localPort = resq.getLocalPort();//获取本地的端口
-        String appName = resq.getContextPath();
-
-        for(int i = 0; i < courseBeans.size(); i++){
-            ListViewCourseBean courseBean = courseBeans.get(i);
-            String audioUrl = "http://" + localIp + ":" + localPort + appName + "/" + courseBean.getAudiourl();
-            courseBean.setAudiourl(audioUrl);
-        }
-        resp.setCharacterEncoding("utf-8");
-        try {
+        resp.setCharacterEncoding(Constant.CharSet);
+        try{
+            String pid = resq.getParameter("pid");
+            ProductService productService = new ProductService();
+            List<ListViewCourseBean> courseBeans = productService.queryAllCourseByPid(pid);
+            String localIp = resq.getLocalAddr();//获取本地ip
+            int localPort = resq.getLocalPort();//获取本地的端口
+            String appName = resq.getContextPath();
+            if(courseBeans != null){
+                for(int i = 0; i < courseBeans.size(); i++){
+                    ListViewCourseBean courseBean = courseBeans.get(i);
+                    String audioUrl = "http://" + localIp + ":" + localPort + appName + "/" + courseBean.getAudiourl();
+                    courseBean.setAudiourl(audioUrl);
+                }
+            }
             resp.getWriter().write(new Gson().toJson(courseBeans));
-        } catch (IOException e) {
+        }catch (Exception e){
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询产品的课程失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
     @RequestMapping("/fwdAddCoursePage")
@@ -239,14 +259,20 @@ public class ProductController {
     }
     @RequestMapping("/getCourseInforByCourseid")
     public void getCourseInforByCourseid(HttpServletRequest resq,HttpServletResponse resp){
-        String courseid = resq.getParameter("courseid");
-        ProductService productService = new ProductService();
-        UploadCourseBean courseBean = productService.getCourseInforByCourseid(courseid);
-        resp.setCharacterEncoding("utf-8");
+        resp.setCharacterEncoding(Constant.CharSet);
         try {
+            String courseid = resq.getParameter("courseid");
+            ProductService productService = new ProductService();
+            UploadCourseBean courseBean = productService.getCourseInforByCourseid(courseid);
             resp.getWriter().write(new Gson().toJson(courseBean));
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询指定课程信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
     @RequestMapping("/saveModifyCourse")
@@ -330,7 +356,7 @@ public class ProductController {
         productBean.setDerateProportion(derateProportion);
         String introduction = resq.getParameter("introduction");
         productBean.setIntroduction(introduction);
-        String indexSort = resq.getParameter("indexosrt");
+        String indexSort = resq.getParameter("indexsort");
         productBean.setIndexSort(indexSort);
         String indexPlay = resq.getParameter("indexplay");
         if(indexPlay == null){

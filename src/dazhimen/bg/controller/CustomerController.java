@@ -5,6 +5,7 @@ import dazhimen.bg.bean.CustomerBean;
 import dazhimen.bg.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import util.Constant;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,15 +23,21 @@ public class CustomerController {
     }
     @RequestMapping("/queryAllCustomers")
     public void queryAllCustomers(HttpServletResponse resp){
-        CustomerService customerService = new CustomerService();
-        List<CustomerBean> customerBeans = customerService.queryAllCustomers();
-        Gson gson = new Gson();
-        String customerJson = gson.toJson(customerBeans);
-        resp.setCharacterEncoding("utf-8");
-        try {
+        resp.setCharacterEncoding(Constant.CharSet);
+        try{
+            CustomerService customerService = new CustomerService();
+            List<CustomerBean> customerBeans = customerService.queryAllCustomers();
+            Gson gson = new Gson();
+            String customerJson = gson.toJson(customerBeans);
             resp.getWriter().write(customerJson);
-        } catch (IOException e) {
+        }catch (Exception e){
             e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询所有会员信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 }

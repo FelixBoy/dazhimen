@@ -1,26 +1,27 @@
 package dazhimen.bg.service;
 
 import dazhimen.bg.bean.CustomerBean;
-import db.DBConnUtil;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
+import dazhimen.bg.exception.BgException;
+import db.MyBatisUtil;
+import org.apache.ibatis.session.SqlSession;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/3/23.
  */
 public class CustomerService {
-    public List<CustomerBean> queryAllCustomers(){
+    public List<CustomerBean> queryAllCustomers() throws BgException {
         List<CustomerBean> customerBeans = null;
-        try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            customerBeans = runner.query("select cid,name,nickname,gender,mphone,email,education " +
-                            " from customer where isdel = '0' ",
-                    new BeanListHandler<CustomerBean>(CustomerBean.class));
-        } catch (SQLException e) {
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            customerBeans = sqlSession.selectList("dazhimen.bg.bean.Customer.listAllCustomer");
+        }catch (Exception e){
             e.printStackTrace();
+            throw new BgException("出现异常，查询所有会员信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
         return customerBeans;
     }

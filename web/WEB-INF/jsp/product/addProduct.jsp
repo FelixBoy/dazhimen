@@ -114,7 +114,7 @@
                 }
             });
         }else{
-            MsgBox.show("上传商品失败。"+resultObj.msg);
+            MsgBox.show(resultObj.msg);
         }
     }
     function clearForm(){
@@ -189,10 +189,10 @@
                 <td>余额支付减免:</td>
                 <td><input class="easyui-textbox" id="derateProportion" data-options="prompt:'请输入百分比'"  name="derateProportion"/>%</td>
                 <td>首页轮播:</td>
-                <td><input type="checkbox" id="indexplay" name="indexplay" /></td>
+                <td><input type="checkbox" id="indexplay" name="indexplay" value="1"/></td>
                 <td>热卖排序:</td>
                 <td><select class="easyui-combobox" name="indexsort" id="indexsort" style="width:140px;">
-                    <option value="0">按上架时间排序</option>
+                    <option value="999">按上架时间排序</option>
                     <option value="1">排序1</option>
                     <option value="2">排序2</option>
                     <option value="3">排序3</option>

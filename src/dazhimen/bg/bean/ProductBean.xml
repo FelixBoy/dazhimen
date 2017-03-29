@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.bg.bean.Product">
+    <select id="listAllProduct" resultType="dazhimen.bg.bean.ListViewProductBean">
+       select pid,pname,getcodetxt('producttype',a.type) type,
+               getcodetxt('productstatus',a.status) status,a.status statusnum,
+               date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createtime,b.name uname
+        from product a, user b
+       where a.uid = b.uid and a.isdel = '0'
+       order by indexsort,createdatetime desc
+    </select>
+
+    <select id="getProductInforById" resultType="dazhimen.bg.bean.ViewProductBean">
+        select pid,pname,getcodetxt('producttype',a.type) as type,price,derateProportion,
+                a.introduction,getcodetxt('indexsort',a.indexsort) as indexsort,getcodetxt('rightorwrong',indexplay) as indexplay,
+                listimage,b.uid,b.name as uname,b.mphone,b.loginname,getcodetxt('gender',b.gender) as gender
+          from product a,user b
+        where a.uid = b.uid
+          and pid = #{pid}
+          and a.isdel = '0'
+    </select>
+
+    <insert id="saveAddProduct" parameterType="dazhimen.bg.bean.UploadProductBean">
+        insert into product(pid,pname,type,price,derateProportion,introduction,
+                            indexplay,indexsort,uid,createdatetime,listimage,updatedatetime)
+              values(#{pid},  #{pname}  ,#{type},  #{price}, #{derateProportion},  #{introduction},
+                            #{indexPlay},#{indexSort},#{uid},now(),#{listimage},now())
+    </insert>
+
+    <insert id="saveAddProductImage" parameterType="dazhimen.bg.bean.AddProductImageBean">
+        insert into product_image(imageid,path,pid)
+                        values(#{imageid},    #{path},   #{pid})
+    </insert>
+
+    <select id="getCourseInforByCourseid" resultType="dazhimen.bg.bean.UploadCourseBean">
+        select pid,courseid,coursename,sort,istry
+          from course
+        where courseid = #{courseid}
+    </select>
+
+    <select id="queryAllCourseByPid" resultType="dazhimen.bg.bean.ListViewCourseBean">
+        select courseid,coursename,getcodetxt('indexsort',sort) as sort,
+                getcodetxt('rightorwrong',istry) as istry,audiopath as audiourl
+          from course where pid = #{pid}
+    </select>
+</mapper>

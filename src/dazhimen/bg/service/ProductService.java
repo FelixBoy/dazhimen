@@ -4,9 +4,11 @@ import com.alibaba.druid.pool.DruidPooledConnection;
 import dazhimen.bg.bean.*;
 import dazhimen.bg.exception.BgException;
 import db.DBConnUtil;
+import db.MyBatisUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -24,28 +26,31 @@ import java.util.List;
  * Created by Administrator on 2017/3/17.
  */
 public class ProductService {
-    public UploadCourseBean getCourseInforByCourseid(String courseid){
+    public UploadCourseBean getCourseInforByCourseid(String courseid) throws BgException {
         UploadCourseBean courseBean = null;
+        SqlSession sqlSession = null;
         try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            courseBean = runner.query(" select pid,courseid,coursename,sort,istry " +
-                            " from course where courseid = ? ",
-                    new BeanHandler<UploadCourseBean>(UploadCourseBean.class), courseid);
-        } catch (SQLException e) {
+            sqlSession = MyBatisUtil.createSession();
+            courseBean = sqlSession.selectOne("dazhimen.bg.bean.Product.getCourseInforByCourseid", courseid);
+        } catch (Exception e) {
             e.printStackTrace();
+            throw new BgException("出现异常，查询指定课程信息失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
         return courseBean;
     }
-    public List<ListViewCourseBean> queryAllCourseByPid(String pid){
+    public List<ListViewCourseBean> queryAllCourseByPid(String pid) throws BgException {
         List<ListViewCourseBean> courseBeans = null;
+        SqlSession sqlSession = null;
         try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            courseBeans = runner.query(" select courseid,coursename,getcodetxt('indexsort',sort) as sort " +
-                            " ,getcodetxt('rightorwrong',istry) as istry,audiopath as audiourl " +
-                            " from course where pid = ? ",
-                    new BeanListHandler<ListViewCourseBean>(ListViewCourseBean.class), pid);
-        } catch (SQLException e) {
+            sqlSession = MyBatisUtil.createSession();
+            courseBeans = sqlSession.selectList("dazhimen.bg.bean.Product.queryAllCourseByPid", pid);
+        } catch (Exception e) {
             e.printStackTrace();
+            throw new BgException("出现异常，查询产品的课程失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
         return courseBeans;
     }
@@ -186,7 +191,6 @@ public class ProductService {
         return pid;
     }
     public String saveAddProduct(UploadProductBean productBean) throws BgException{
-        DruidPooledConnection conn = null;
         //1 生成pid
         String pid = new IdUtils().getPid();
         //2 计算产品主目录路径
@@ -197,7 +201,7 @@ public class ProductService {
             fileService.createFolder(productMainFolderPath);
         }catch (BgException e){
             e.printStackTrace();
-            throw new BgException("创建产品主目录失败");
+            throw new BgException("出现异常,创建产品主目录失败");
         }
 
             CommonsMultipartFile listImageFile = productBean.getListImgFile();
@@ -215,22 +219,18 @@ public class ProductService {
                 productBean.getListImgFile().transferTo(new File(listImageTransferFilename));
             } catch (IOException e) {
                 e.printStackTrace();
-                throw new BgException("保存产品列表图片失败");
+                throw new BgException("出现异常,保存产品列表图片失败");
             }
             //计算列表图片在工程中的相对路径，用于记录到数据库
             String listImageFileRelPath = Constant.uploadDbPrefixPath + pid + "/" + listImageFileNewName;
-        try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            conn = DBConnUtil.getDataSource().getConnection();
 
-             conn.setAutoCommit(false);
-             runner.update(conn,"insert into product(pid,pname,type,price,derateProportion," +
-                    "introduction,indexplay,indexsort,uid,createdatetime,listimage,updatedatetime) " +
-                    "                       values(?,    ?,   ?,    ?,       ?,   " +
-                    "  ?,             ?,         ?,    ?,       ?,          ?,   ?) ",
-                    pid,productBean.getPname(),productBean.getType(),productBean.getPrice(),productBean.getDerateProportion(),
-                    productBean.getIntroduction(),productBean.getIndexPlay(),productBean.getIndexSort(),productBean.getUid(),new Date(),
-                    listImageFileRelPath,new Date());
+            SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            productBean.setListimage(listImageFileRelPath);
+            productBean.setPid(pid);
+            sqlSession.insert("dazhimen.bg.bean.Product.saveAddProduct", productBean);
+
             List<MultipartFile> mainImgFiles = productBean.getMainImgFiles();
 
             //处理产品主图
@@ -251,48 +251,40 @@ public class ProductService {
                     mainImgFile.transferTo(new File(mainImageTransferFilename));
                 } catch (IOException e) {
                     e.printStackTrace();
-                    conn.rollback();
-                    conn.setAutoCommit(true);
+                    sqlSession.rollback();
                     fileService.deleteFolder(productMainFolderPath);
-                    throw new BgException("保存产品主图-" + i + "失败");
+                    throw new BgException("出现异常,保存产品主图-" + i + "失败");
                 }
-                runner.update(conn,"insert into product_image(imageid,path,pid) "+
-                                "                           values(?,    ?,   ?) ",
-                              pid + "_" + i, mainImageFileRelPath, pid);
+                AddProductImageBean productImageBean = new AddProductImageBean();
+                productImageBean.setImageid(pid + "_" + i);
+                productImageBean.setPid(pid);
+                productImageBean.setPath(mainImageFileRelPath);
+               sqlSession.insert("dazhimen.bg.bean.Product.saveAddProductImage", productImageBean);
 
             }
-            conn.commit();
-            conn.setAutoCommit(true);
-        } catch (SQLException e) {
-            try {
-                conn.rollback();
-                conn.setAutoCommit(true);
+            sqlSession.commit();
+        } catch (Exception e) {
+                sqlSession.rollback();
                 fileService.deleteFolder(productMainFolderPath);
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-                throw new BgException("事务回滚出错");
-            }
-            e.printStackTrace();
-            throw new BgException("保存商品信息出错");
+                e.printStackTrace();
+            throw new BgException("出现异常,保存产品信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
         return pid;
     }
 
-    public ViewProductBean getProductInforById(String pid){
+    public ViewProductBean getProductInforById(String pid) throws BgException {
         ViewProductBean productBean = null;
+        SqlSession sqlSession = null;
         try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            StringBuffer sqlBF = new StringBuffer();
-            sqlBF.append("select pid,pname,getcodetxt('producttype',a.type) as type,price,derateProportion," +
-                    "a.introduction,getcodetxt('indexsort',indexsort) as indexsort,getcodetxt('rightorwrong',indexplay) as indexplay," +
-                    "listimage,b.uid,b.name as uname,b.mphone,b.loginname,getcodetxt('gender',b.gender) as gender ");
-            sqlBF.append("  from product a, ");
-            sqlBF.append("       user b ");
-            sqlBF.append(" where pid = ? and a.isdel = '0' ");
-            sqlBF.append("   and a.uid = b.uid ");
-            productBean = runner.query(sqlBF.toString(), new BeanHandler<ViewProductBean>(ViewProductBean.class),pid);
-        }catch (SQLException e){
+            sqlSession = MyBatisUtil.createSession();
+            productBean = sqlSession.selectOne("dazhimen.bg.bean.Product.getProductInforById", pid);
+        }catch (Exception e){
             e.printStackTrace();
+            throw new BgException("出现异常，查询指定产品信息失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
         return productBean;
     }
@@ -310,20 +302,17 @@ public class ProductService {
         return mainImageBeans;
     }
 
-    public List<ListViewProductBean> queryAllProducts(){
+    public List<ListViewProductBean> queryAllProducts() throws BgException {
         List<ListViewProductBean> productBeans = null;
+        SqlSession sqlSession = null;
         try {
-            QueryRunner runner = new QueryRunner(DBConnUtil.getDataSource());
-            productBeans = runner.query(" select pid,pname,getcodetxt('producttype',a.type) type," +
-                            " getcodetxt('productstatus',a.status) status,a.status statusnum," +
-                            " date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createtime," +
-                            " b.name uname " +
-                            " from product a, user b " +
-                            " where a.uid = b.uid and a.isdel = '0' " +
-                            " order by indexsort,createdatetime desc ",
-                    new BeanListHandler<ListViewProductBean>(ListViewProductBean.class));
-        } catch (SQLException e) {
+            sqlSession = MyBatisUtil.createSession();
+            productBeans = sqlSession.selectList("dazhimen.bg.bean.Product.listAllProduct");
+        } catch (Exception e) {
             e.printStackTrace();
+            throw new BgException("出现异常，查询所有产品信息失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
         return productBeans;
     }
