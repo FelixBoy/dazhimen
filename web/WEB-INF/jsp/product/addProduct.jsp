@@ -129,7 +129,7 @@
         MsgBox.show("功能正在开发，敬请期待");
     }
 </script>
-<div style="margin:0px auto;width: 810px;">
+<div style="margin:0px auto;width: 840px;">
     <form id="productForm" action="<%=request.getContextPath()%>/product/saveAddProduct"
           enctype="multipart/form-data" method="post">
         <table cellpadding="5">
@@ -182,13 +182,13 @@
                         <option value="2">经验包</option>
                     </select>
                 </td>
-                <td>价格/年:<span style="color:red">*</span></td>
+                <td nowrap="nowrap">价格/年:<span style="color:red">*</span></td>
                 <td><input class="easyui-textbox" id="price" name="price" data-options="prompt:'请输入金额，两位小数'" ></td>
             </tr>
             <tr>
                 <td>余额支付减免:</td>
                 <td><input class="easyui-textbox" id="derateProportion" data-options="prompt:'请输入百分比'"  name="derateProportion"/>%</td>
-                <td>首页轮播:</td>
+                <td nowrap="nowrap">首页轮播:</td>
                 <td><input type="checkbox" id="indexplay" name="indexplay" value="1"/></td>
                 <td>热卖排序:</td>
                 <td><select class="easyui-combobox" name="indexsort" id="indexsort" style="width:140px;">
@@ -215,21 +215,21 @@
                 </td>
             </tr>
             <tr>
-                <td>产品主图-1:<span style="color:red">*</span></td>
+                <td nowrap="nowrap">产品主图-1:<span style="color:red">*</span></td>
                 <td colspan="4">
                     <input class="easyui-filebox" id="mainimg1" name="mainimg" style="width:85%" accept="image/jpeg,image/png"
                             data-options="prompt:'请选择产品主图一，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>
             <tr>
-                <td>产品主图-2:<span style="color:red">*</span></td>
+                <td nowrap="nowrap">产品主图-2:<span style="color:red">*</span></td>
                 <td colspan="4">
                     <input class="easyui-filebox" id="mainimg2" name="mainimg" style="width:85%" accept="image/jpeg,image/png"
                            data-options="prompt:'请选择产品主图二，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>
             <tr>
-                <td>产品主图-3:<span style="color:red">*</span></td>
+                <td nowrap="nowrap">产品主图-3:<span style="color:red">*</span></td>
                 <td colspan="4">
                     <input class="easyui-filebox" id="mainimg3" name="mainimg" style="width:85%" accept="image/jpeg,image/png"
                            data-options="prompt:'请选择产品主图三，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">

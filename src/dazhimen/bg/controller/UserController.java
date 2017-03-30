@@ -50,36 +50,24 @@ public class UserController {
             }else{
                 resp.getWriter().write("添加失败");
             }
+        }catch (BgException e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write(e.getMessage());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }catch (Exception e){
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             try {
-                resp.getWriter().write("出现异常，添加掌门失败");
+                resp.getWriter().write("出现异常，新增掌门失败");
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
 
-    }
-    @RequestMapping("/checkLoginnameDuplicate")
-    public void checkLoginnameDuplicate(@RequestParam("loginname") String loginName, HttpServletResponse resp){
-        UserService userService = new UserService();
-        resp.setCharacterEncoding(Constant.CharSet);
-        try {
-            boolean result = userService.checkLoginnameDuplicate(loginName);
-            if (result) {
-                resp.setStatus(HttpServletResponse.SC_OK);
-                resp.getWriter().write("true");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，检测用户名重复失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
     }
 
     @RequestMapping("/queryAllMasters")
@@ -140,7 +128,15 @@ public class UserController {
                 resp.setStatus(HttpServletResponse.SC_OK);
                 resp.getWriter().write("修改失败");
             }
-        } catch (Exception e) {
+        } catch (BgException e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write(e.getMessage());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (Exception e){
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             try {
@@ -156,14 +152,154 @@ public class UserController {
         try{
             UserService userService = new UserService();
             if(userService.saveMasterDel(uid)){
-
                 resp.getWriter().write("删除成功");
+            }
+        }catch (BgException e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write(e.getMessage());
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
         }catch (Exception e){
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             try {
                 resp.getWriter().write("出现异常，删除掌门信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    @RequestMapping("/fwdManageAdminPage")
+    public String fwdManageAdminPage() {
+        return "user/admin/manageAdmin";
+    }
+    @RequestMapping("/queryAllAdmin")
+    public void queryAllAdmin(HttpServletResponse resp) {
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            UserService userService = new UserService();
+            List<UserBean> users = userService.queryAllAdmin();
+            Gson gson = new Gson();
+            String usersJson = gson.toJson(users);
+            resp.getWriter().write(usersJson);
+        } catch (BgException e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write(e.getMessage());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (Exception e){
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询所有掌门信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    @RequestMapping("/fwdAddAdminPage")
+    public String fwdAddAdminPage(){
+        return "user/admin/addAdmin";
+    }
+
+    @RequestMapping("/saveAddAdmin")
+    public void saveAddAdmin(HttpServletResponse resp, UserBean userBean) {
+        resp.setCharacterEncoding(Constant.CharSet);
+        try{
+            UserService userService = new UserService();
+            boolean result = userService.saveAddAdmin(userBean);
+            if(result){
+                resp.getWriter().write("添加成功");
+            }else{
+                resp.getWriter().write("添加失败");
+            }
+        }catch (BgException e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write(e.getMessage());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，新增管理员失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    @RequestMapping("/fwdModifyAdminPage")
+    public String fwdModifyAdminPage(@RequestParam("uid") String uid, HttpServletResponse resp, Map model){
+        model.put("uid", uid);
+        return "user/admin/modifyAdmin";
+    }
+
+    @RequestMapping("/saveModifyAdmin")
+    public void saveModifyAdmin(HttpServletResponse resp, UserBean user){
+        resp.setCharacterEncoding(Constant.CharSet);
+        UserService userService = new UserService();
+        boolean result = false;
+        try {
+            result = userService.saveModifyAdmin(user);
+
+            if(result){
+                resp.setStatus(HttpServletResponse.SC_OK);
+                resp.getWriter().write("修改成功");
+            }else{
+                resp.setStatus(HttpServletResponse.SC_OK);
+                resp.getWriter().write("修改失败");
+            }
+        } catch (BgException e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write(e.getMessage());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，修改管理员信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    @RequestMapping("/saveDeleteAdmin")
+    public void saveDeleteAdmin(@RequestParam("uid") String uid, HttpServletResponse resp){
+        resp.setCharacterEncoding(Constant.CharSet);
+        try{
+            UserService userService = new UserService();
+            if(userService.saveDeleteAdmin(uid)){
+
+                resp.getWriter().write("删除成功");
+            }
+        }catch (BgException e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write(e.getMessage());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，删除管理员信息失败");
             } catch (IOException e1) {
                 e1.printStackTrace();
             }

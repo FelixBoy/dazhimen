@@ -1,9 +1,9 @@
 <script type="text/javascript">
     function forwardMasterAddPage(){
         $('#masterAddDialog').dialog({
-            title: '填写掌门信息',
-            width: 600,
-            height: 400,
+            title: '新增掌门',
+            width: 500,
+            height: 420,
             closed: true,
             cache: false,
             href: "<%=request.getContextPath()%>/user/fwdMasterAddPage",
@@ -21,21 +21,21 @@
         if (row){
             $('#masterModifyDialog').dialog({
                 title: '修改掌门信息',
-                width: 600,
-                height: 400,
+                width: 500,
+                height: 420,
                 closed: true,
                 cache: false,
                 href: "<%=request.getContextPath()%>/user/fwdMasterModifyPage?uid="+row.uid,
                 modal: true
             });
-            $('#masterModifyDialog').dialog("open").dialog('setTitle','修改掌门信息');
+            $('#masterModifyDialog').dialog("open");
         }
     }
     function saveMasterDel(index){
         $('#masterList').datagrid('selectRow',index);// 关键在这里
         var row = $('#masterList').datagrid('getSelected');
         if(row){
-            $.messager.confirm('确认','您确认想要删除记录吗？',function(r){
+            $.messager.confirm('确认','您确认想要删除掌门【' + row.name + '】吗？',function(r){
                 if (r){
                     $.ajax({
                         url:"<%=request.getContextPath()%>/user/saveMasterDel?uid=" + row.uid+"&random_id="+Math.random(),
@@ -57,8 +57,8 @@
 
 
 <div style="padding:5px 0;">
-    <div id="masterAddDialog"></div>
-    <div id="masterModifyDialog"></div>
+    <div id="masterAddDialog" style="text-align: center;"></div>
+    <div id="masterModifyDialog" style="text-align: center;"></div>
     <table id="masterList" title="掌门列表" class="easyui-datagrid" style="width: auto;height: auto;"
            url="<%=request.getContextPath()%>/user/queryAllMasters?random_id="+Math.random()
            rownumbers="true" fitColumns="true" singleSelect="true" >

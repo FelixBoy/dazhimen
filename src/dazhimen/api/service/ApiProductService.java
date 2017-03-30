@@ -155,7 +155,7 @@ public class ApiProductService {
             if(value != null && value.getValueInfo()!= null && value.getValueInfo().equals("1")){
                 return true;
             }
-            sqlSession.insert("dazhimen.api.bean.ApiProduct.collectProduct", paramBean);
+            result = sqlSession.insert("dazhimen.api.bean.ApiProduct.collectProduct", paramBean);
             sqlSession.commit();
         }catch (Exception e) {
             e.printStackTrace();

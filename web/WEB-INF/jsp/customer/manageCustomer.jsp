@@ -38,13 +38,12 @@
         <thead>
         <tr>
             <th data-options="field:'cid'" width="15%">会员ID</th>
-            <th data-options="field:'nickname'" width="8%">昵称</th>
+            <th data-options="field:'nickname'" width="15%">昵称</th>
             <th data-options="field:'mphone'" width="10%">手机号码</th>
-            <th data-options="field:'name'" width="10%">姓名</th>
-            <th data-options="field:'gender'"  width="7%">性别</th>
-            <th data-options="field:'email'" width="15%">Email</th>
+            <th data-options="field:'name'" width="15%">姓名</th>
+            <th data-options="field:'gender'"  width="10%">性别</th>
+            <th data-options="field:'email'" width="20%">Email</th>
             <th data-options="field:'education'" width="15%">学历</th>
-            <th data-options="field:'operate',align:'center',formatter:formatOper" width="20%">操作</th>
         </tr>
         </thead>
     </table>

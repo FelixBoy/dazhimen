@@ -36,7 +36,14 @@
 
     <update id="saveMasterDel">
         update user
-           set isdel = '1'
+           set isdel = '1',loginname = null
         where uid = #{uid}
     </update>
+
+    <select id="listAllAdmin" resultType="dazhimen.bg.bean.UserBean">
+        select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,remarks
+        from user
+        where type = '2'
+        and isdel = '0'
+    </select>
 </mapper>

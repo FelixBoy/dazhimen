@@ -51,6 +51,13 @@
                         }
                     });
                     break;
+                case 'admin_manage':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/user/fwdManageAdminPage?random_id="+Math.random(),
+                        onLoad:function(){
+                        }
+                    });
+                    break;
                 case 'test_fileuploadcb':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/demo/fwdTestFileUploadCallBack?random_id="+Math.random()
@@ -87,23 +94,10 @@
                 </ul>
             </li>
             <li id="master_manage">掌门管理</li>
-            <li id="customer_manage">会员管理</li>
-            <li id="recharge_manage" data-options="state:'closed'">
-                <span>充值管理</span>
-                <ul>
-                    <li id="recharge_infor">充值详情</li>
-                    <li id="recharge_add">添加充值</li>
-                </ul>
-            </li>
-            <li id="order_manage" data-options="state:'closed'">
-                <span>订单管理</span>
-                <ul>
-                    <li id="order_infor">订单详情</li>
-                    <li id="order_add">添加订单</li>
-                    <li id="order_modify">修改订单</li>
-                    <li id="order_history">订单记录</li>
-                </ul>
-            </li>
+            <li id="customer_manage">会员查询</li>
+            <li id="admin_manage">管理员管理</li>
+            <li id="recharge_manage">充值查询</li>
+            <li id="order_manage">订单查询</li>
             <li id="content_manage" data-options="state:'closed'">
                 <span>内容管理</span>
                 <ul>
@@ -119,7 +113,6 @@
                     <li id="permisssion_modify">权限修改</li>
                 </ul>
             </li>
-            <li id="admin_manage">管理员管理</li>
             <%--<li id="test" data-options="state:'closed'">--%>
                 <%--<span>测试</span>--%>
                 <%--<ul>--%>

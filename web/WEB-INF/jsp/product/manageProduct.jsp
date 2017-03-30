@@ -43,26 +43,27 @@
         MsgBox.show("功能正在开发，敬请期待");
     }
     function saveProductDel(index){
-        $('#productList').datagrid('selectRow',index);
-        var row = $('#productList').datagrid('getSelected');
-        if (row){
-            $.messager.confirm('确认','您确认删除产品【'+ row.pname + '】吗？',function(r){
-                if (r){
-                    $.ajax({
-                        url:"<%=request.getContextPath()%>/product/saveProductDel?pid=" + row.pid+"&random_id="+Math.random(),
-                        type:'get',
-                        async:false,
-                        error:function(data){
-                            MsgBox.show(data.responseText);
-                        },
-                        success:function(data){
-                            MsgBox.show(data);
-                            $('#productList').datagrid('reload');
-                        }
-                    });
-                }
-            });
-        }
+        MsgBox.show("功能正在开发，敬请期待");
+        <%--$('#productList').datagrid('selectRow',index);--%>
+        <%--var row = $('#productList').datagrid('getSelected');--%>
+        <%--if (row){--%>
+            <%--$.messager.confirm('确认','您确认删除产品【'+ row.pname + '】吗？',function(r){--%>
+                <%--if (r){--%>
+                    <%--$.ajax({--%>
+                        <%--url:"<%=request.getContextPath()%>/product/saveProductDel?pid=" + row.pid+"&random_id="+Math.random(),--%>
+                        <%--type:'get',--%>
+                        <%--async:false,--%>
+                        <%--error:function(data){--%>
+                            <%--MsgBox.show(data.responseText);--%>
+                        <%--},--%>
+                        <%--success:function(data){--%>
+                            <%--MsgBox.show(data);--%>
+                            <%--$('#productList').datagrid('reload');--%>
+                        <%--}--%>
+                    <%--});--%>
+                <%--}--%>
+            <%--});--%>
+        <%--}--%>
     }
     function formatOper(val,row,index){
         return '<a href="javascript:void(0)" onclick="fwdViewProductPage('+index+')">查看</a>&nbsp&nbsp&nbsp' +
