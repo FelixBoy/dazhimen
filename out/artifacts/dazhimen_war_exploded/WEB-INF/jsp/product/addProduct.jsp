@@ -84,16 +84,40 @@
             MsgBox.show("请选择列表图片");
             return false;
         }
+        var imgFileName = $("#listimg").filebox("getValue");
+        var imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
+        if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+            MsgBox.show("列表图片文件，仅支持jpg、png");
+            return false;
+        }
         if(!$("#mainimg1").filebox("getValue")){
             MsgBox.show("请选择产品主图-1");
+            return false;
+        }
+        imgFileName = $("#mainimg1").filebox("getValue");
+        imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
+        if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+            MsgBox.show("产品主图-1文件，仅支持jpg、png");
             return false;
         }
         if(!$("#mainimg2").filebox("getValue")){
             MsgBox.show("请选择产品主图-2");
             return false;
         }
+        imgFileName = $("#mainimg2").filebox("getValue");
+        imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
+        if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+            MsgBox.show("产品主图-2文件，仅支持jpg、png");
+            return false;
+        }
         if(!$("#mainimg3").filebox("getValue")){
             MsgBox.show("请选择产品主图-3");
+            return false;
+        }
+        imgFileName = $("#mainimg3").filebox("getValue");
+        imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
+        if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+            MsgBox.show("产品主图-3文件，仅支持jpg、png");
             return false;
         }
         return true;
