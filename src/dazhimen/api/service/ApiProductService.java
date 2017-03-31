@@ -209,4 +209,36 @@ public class ApiProductService {
         }
         return courseBeans;
     }
+    public String getProductAudioUpdateCount(String pid){
+        SqlSession sqlSession = null;
+        String updateCount = "";
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            SingleValueBean value = sqlSession.selectOne("dazhimen.api.bean.ApiProduct.getProductAudioUpdateCount", pid);
+            if(value == null){
+                throw new ApiException("查询产品音频更新条数出错");
+            }
+            updateCount = value.getValueInfo();
+        }catch(ApiException e){
+            e.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return updateCount;
+    }
+    public List<ApiCustomerCollectProductBean> getCustomerCollectProduct(String cid) throws ApiException {
+        List<ApiCustomerCollectProductBean> productBeans = null;
+        SqlSession sqlSession = MyBatisUtil.createSession();
+        try{
+            productBeans = sqlSession.selectList("dazhimen.api.bean.ApiProduct.getCustomerCollectProduct", cid);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，查询会员收藏产品信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return productBeans;
+    }
 }

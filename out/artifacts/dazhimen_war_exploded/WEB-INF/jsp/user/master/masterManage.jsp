@@ -2,17 +2,34 @@
     function forwardMasterAddPage(){
         $('#masterAddDialog').dialog({
             title: '新增掌门',
-            width: 500,
-            height: 420,
+            width: 580,
+            height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/user/fwdMasterAddPage",
+            href: "<%=request.getContextPath()%>/user/fwdMasterAddPage?random_id=" + Math.random(),
             modal: true
         });
         $('#masterAddDialog').dialog("open");
     }
+    function fwdViewMasterPage(index){
+        $('#masterList').datagrid('selectRow',index);// 关键在这里
+        var row = $('#masterList').datagrid('getSelected');
+        if (row) {
+            $('#viewMasterDialog').dialog({
+                title: '查看掌门详情',
+                width: 580,
+                height: 500,
+                closed: true,
+                cache: false,
+                href: "<%=request.getContextPath()%>/user/fwdViewMasterPage?uid=" + row.uid + "&random_id=" + Math.random(),
+                modal: true
+            });
+            $('#viewMasterDialog').dialog("open");
+        }
+    }
     function formatOper(val,row,index){
-        return '<a href="javascript:void(0)" onclick="fwdMasterEditPage('+index+')">修改</a>&nbsp&nbsp' +
+        return '<a href="javascript:void(0)" onclick="fwdViewMasterPage('+index+')">查看</a>&nbsp&nbsp' +
+            '<a href="javascript:void(0)" onclick="fwdMasterEditPage('+index+')">修改</a>&nbsp&nbsp' +
             '<a href="javascript:void(0)" onclick="saveMasterDel('+index+')">删除</a>';
     }
     function fwdMasterEditPage(index){
@@ -21,11 +38,11 @@
         if (row){
             $('#masterModifyDialog').dialog({
                 title: '修改掌门信息',
-                width: 500,
-                height: 420,
+                width: 580,
+                height: 600,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/user/fwdMasterModifyPage?uid="+row.uid,
+                href: "<%=request.getContextPath()%>/user/fwdMasterModifyPage?uid=" + row.uid + "&random_id=" + Math.random(),
                 modal: true
             });
             $('#masterModifyDialog').dialog("open");
@@ -57,6 +74,7 @@
 
 
 <div style="padding:5px 0;">
+    <div id="viewMasterDialog" style="text-align: center;"></div>
     <div id="masterAddDialog" style="text-align: center;"></div>
     <div id="masterModifyDialog" style="text-align: center;"></div>
     <table id="masterList" title="掌门列表" class="easyui-datagrid" style="width: auto;height: auto;"

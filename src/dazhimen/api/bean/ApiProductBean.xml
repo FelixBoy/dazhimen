@@ -57,4 +57,16 @@
           from course a
          where pid = #{pid}
     </select>
+
+    <select id="getProductAudioUpdateCount" resultType="dazhimen.api.bean.SingleValueBean">
+        select count(a.courseid) as valueinfo
+          from course a
+         where a.pid = #{pid}
+    </select>
+
+    <select id="getCustomerCollectProduct" resultType="dazhimen.api.bean.ApiCustomerCollectProductBean">
+        select b.pid,b.pname,b.listimage as listimgurl,b.type
+          from ir_customer_product a,product b
+        where a.pid = b.pid and b.isdel = '0' and a.cid = #{cid}
+    </select>
 </mapper>

@@ -11,6 +11,12 @@
             MsgBox.show("请选择课程音频");
             return false;
         }
+        var audioFileName = $("#audioInAddCourse").filebox("getValue");
+        var audioSuffixName = audioFileName.substring(audioFileName.lastIndexOf("."));
+        if(audioSuffixName != ".mp3"){
+            MsgBox.show("音频文件格式错误，仅支持mp3");
+            return false;
+        }
         return true;
     }
     var checkCount = 10;
@@ -58,10 +64,10 @@
             var msg = resultObj.msg;
             var pid = resultObj.pid;
             MsgBox.show(msg);
-            $('#addCourseDialog').dialog('close');		// close the dialog
+            $('#addCourseDialog').dialog('close');
             $('#courseList').datagrid('reload');
         }else{
-            MsgBox.show("新增课程失败。"+resultObj.msg);
+            MsgBox.show("新增课程失败，"+resultObj.msg);
         }
     }
     function submitAddCourse(){

@@ -19,7 +19,7 @@
         });
     }
     $(function(){
-        $("#modifyAdminForm").form("load", "<%=request.getContextPath()%>/user/getMasterData" +
+        $("#modifyAdminForm").form("load", "<%=request.getContextPath()%>/user/getAdminData" +
             "?uid=<%=request.getAttribute("uid").toString()%>&randomid=" + Math.random());
     });
     function checkMoidfyAdminFormBeforeSubmit(){

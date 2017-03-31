@@ -16,21 +16,28 @@
          where loginname = #{loginname}
     </select>
 
-    <insert id="addMater" parameterType="dazhimen.bg.bean.UserBean">
-        insert into user(uid,    name,  mphone,   password,   gender,   type,  loginname,remarks,createdate)
-                  values(#{uid}, #{name}, #{mphone},#{password},#{gender},#{type},#{loginname},#{remarks}, now())
+    <insert id="saveAddMater" parameterType="dazhimen.bg.bean.UserBean">
+        insert into user(uid,    name,  mphone,   password,   gender,   type,  loginname,identity,introduction,headerimg,createdate)
+                  values(#{uid}, #{name}, #{mphone},#{password},#{gender},#{type},#{loginname},#{identity},#{introduction}, #{headerimg},now())
     </insert>
 
     <select id="getMasterById" resultType="dazhimen.bg.bean.UserBean">
-        select uid,name,mphone,gender,loginname,loginname as loginnameorginal,remarks
+        select uid,name,mphone,gender,loginname,loginname as loginnameorginal,introduction,headerimg,identity
           from user
          where uid = #{uid}
+    </select>
+
+    <select id="getAdminById" resultType="dazhimen.bg.bean.UserBean">
+        select uid,name,mphone,gender,loginname,loginname as loginnameorginal,remarks
+        from user
+        where uid = #{uid}
     </select>
 
     <update id="saveMasterModify" parameterType="dazhimen.bg.bean.UserBean">
         update user
            set name = #{name},mphone = #{mphone},gender = #{gender},
-               loginname = #{loginname},remarks = #{remarks}
+               loginname = #{loginname},introduction = #{introduction},
+               identity = #{identity}
         where uid = #{uid}
     </update>
 
@@ -46,4 +53,23 @@
         where type = '2'
         and isdel = '0'
     </select>
+
+    <insert id="saveAddAdmin" parameterType="dazhimen.bg.bean.UserBean">
+        insert into user(uid,    name,  mphone,   password,   gender,   type,  loginname,remarks,createdate)
+        values(#{uid}, #{name}, #{mphone},#{password},#{gender},#{type},#{loginname},#{remarks}, now())
+    </insert>
+
+    <update id="saveModifyAdmin" parameterType="dazhimen.bg.bean.UserBean">
+        update user
+        set name = #{name},mphone = #{mphone},gender = #{gender},
+        loginname = #{loginname},remarks = #{remarks}
+        where uid = #{uid}
+    </update>
+
+    <update id="saveDelAdmin">
+        update user
+        set isdel = '1',loginname = null
+        where uid = #{uid}
+    </update>
+
 </mapper>

@@ -9,6 +9,8 @@ public class CustomerBean {
     private String email = "";
     private String education = "";
     private String gender = "";
+    private String qquid = "";
+    private String weixinuid = "";
 
     @Override
     public String toString() {
@@ -87,5 +89,21 @@ public class CustomerBean {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getQquid() {
+        return qquid;
+    }
+
+    public void setQquid(String qquid) {
+        this.qquid = qquid;
+    }
+
+    public String getWeixinuid() {
+        return weixinuid;
+    }
+
+    public void setWeixinuid(String weixinuid) {
+        this.weixinuid = weixinuid;
     }
 }

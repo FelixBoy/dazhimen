@@ -9,6 +9,15 @@
             MsgBox.show("请填写课程名称");
             return false;
         }
+        if($("#audioInModifyCourse").filebox("getValue")){
+            var audioFileName = $("#audioInModifyCourse").filebox("getValue");
+            var audioSuffixName = audioFileName.substring(audioFileName.lastIndexOf("."));
+            if(audioSuffixName != ".mp3"){
+                MsgBox.show("音频文件格式错误，仅支持mp3");
+                return false;
+            }
+        }
+
         return true;
     }
     var checkCount = 10;
@@ -56,7 +65,7 @@
             var msg = resultObj.msg;
             var pid = resultObj.pid;
             MsgBox.show(msg);
-            $('#modifyCourseDialog').dialog('close');		// close the dialog
+            $('#modifyCourseDialog').dialog('close');
             $('#courseList').datagrid('reload');
         }else{
             MsgBox.show("修改课程信息失败。"+resultObj.msg);

@@ -161,6 +161,9 @@ public class ApiLoginController {
         if(mphone == null){
             throw new ParameterCheckException("未取到参数[mphone]");
         }
+        if(mphone.equals("")){
+            throw new ParameterCheckException("参数[mphone]的值为空");
+        }
     }
     private void checkThirdPartLoginParam(HttpServletRequest resq) throws ParameterCheckException{
         String loginType = resq.getParameter("loginType");
@@ -171,23 +174,21 @@ public class ApiLoginController {
             throw new ParameterCheckException("参数[loginType]的值不符合规则");
         }
         if(loginType.equals("1")){
-//            String qq = resq.getParameter("qq");
-//            if(qq == null){
-//                throw new ParameterCheckException("未取到参数[qq]");
-//            }
             String qqUid = resq.getParameter("qqUid");
             if(qqUid == null){
                 throw new ParameterCheckException("未取到参数[qqUid]");
             }
+            if(qqUid.equals("")){
+                throw new ParameterCheckException("参数[qqUid]的值为空");
+            }
         }
         if(loginType.equals("2")){
-//            String weixin = resq.getParameter("weixin");
-//            if(weixin == null){
-//                throw new ParameterCheckException("未取到参数[weixin]");
-//            }
             String weixinUid = resq.getParameter("weixinUid");
             if(weixinUid == null){
                 throw new ParameterCheckException("未取到参数[weixinUid]");
+            }
+            if(weixinUid.equals("")){
+                throw new ParameterCheckException("参数[weixinUid]的值为空");
             }
         }
     }
@@ -196,24 +197,14 @@ public class ApiLoginController {
         String loginType = resq.getParameter("loginType");
         loginBean.setLoginType(loginType);
         if("1".equals(loginType)){
-//            loginBean.setQq(resq.getParameter("qq"));
             loginBean.setQqUid(resq.getParameter("qqUid"));
         }
         if("2".equals(loginType)){
-//            loginBean.setWeixin(resq.getParameter("weixin"));
-            loginBean.setWeixin(resq.getParameter("weixinUid"));
+            loginBean.setWeixinUid(resq.getParameter("weixinUid"));
         }
         loginBean.setNickname(resq.getParameter("nickname"));
         loginBean.setHeaderurl(resq.getParameter("headerurl"));
         loginBean.setGender(resq.getParameter("gender"));
-//        Integer age = null;
-//        try{
-//            age = Integer.valueOf(resq.getParameter("age"));
-//        }catch (NumberFormatException e){
-//            e.printStackTrace();
-//            throw new ParameterCheckException("参数[age]的值不符合规则");
-//        }
-//        loginBean.setAge(age);
         return loginBean;
     }
     private void checkMphoneLoginParam(HttpServletRequest resq) throws ParameterCheckException {
@@ -221,9 +212,15 @@ public class ApiLoginController {
         if(mphone == null){
             throw new ParameterCheckException("未取到参数[mphone]");
         }
+        if(mphone.equals("")){
+            throw new ParameterCheckException("参数[mphone]的值为空");
+        }
         String verifycode = resq.getParameter("verifycode");
         if(verifycode == null){
             throw new ParameterCheckException("未取到参数[verifycode]");
+        }
+        if(verifycode.equals("")){
+            throw new ParameterCheckException("参数[verifycode]的值为空");
         }
     }
     private MphoneLoginBean getMphoneLoginBean(HttpServletRequest resq){

@@ -15,4 +15,12 @@
         where cid = #{cid}
           and isdel = '0'
     </select>
+
+    <select id="checkMphoneIsOccupy" resultType="dazhimen.api.bean.SingleValueBean"
+        parameterType="dazhimen.api.bean.ApiQueryCustomerExistsParamBean">
+        select 1 as valueinfo
+          from customer
+         where cid != #{cid}
+           and mphone = #{mphone}
+    </select>
 </mapper>

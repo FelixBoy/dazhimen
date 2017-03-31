@@ -27,11 +27,17 @@ public class Constant {
 
     //加密签名Key
     public static final String signKey = "dazhimen666";
-    //产品上传文件 前缀路径
-    public static final String proPrefixPath = "upload\\product\\";
+    //产品上传产品文件 前缀路径
+    public static final String productPrefixPath = "upload\\product\\";
 
-    //数据库中存储 上传文件的目录 前缀
-    public static final String uploadDbPrefixPath = "upload/product/";
+    //数据库中存储 上传产品文件的目录 前缀
+    public static final String uploadProductDbPrefixPath = "upload/product/";
+
+    //掌门新增上传掌门头像文件 前缀路径
+    public static final String masterPrefixPath = "upload\\master\\";
+
+    //数据库中存储 上传掌门头像文件的目录 前缀
+    public static final String uploadMasterDbPrefixPath = "upload/master/";
 
     //技能包的code值
     public static final String SkillPack = "1";

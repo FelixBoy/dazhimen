@@ -1,5 +1,7 @@
 package dazhimen.bg.bean;
 
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
 import java.util.Date;
 
 /**
@@ -18,6 +20,51 @@ public class UserBean {
     private String loginnameorginal = null;//用户判定修改登录名时的重复
     private Date createDate = null; //用户创建时间
     private String createDatestr = null;//用户创建时间,对应的string
+    private String introduction = null;
+    private String identity = null;
+    private String headerimg = null;
+    private CommonsMultipartFile headerimgFile = null;
+    private String basepath = null;
+
+    public String getBasepath() {
+        return basepath;
+    }
+
+    public void setBasepath(String basepath) {
+        this.basepath = basepath;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
+    }
+
+    public String getHeaderimg() {
+        return headerimg;
+    }
+
+    public void setHeaderimg(String headerimg) {
+        this.headerimg = headerimg;
+    }
+
+    public CommonsMultipartFile getHeaderimgFile() {
+        return headerimgFile;
+    }
+
+    public void setHeaderimgFile(CommonsMultipartFile headerimgFile) {
+        this.headerimgFile = headerimgFile;
+    }
 
     public String getCreateDatestr() {
         return createDatestr;

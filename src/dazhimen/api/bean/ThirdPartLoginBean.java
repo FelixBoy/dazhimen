@@ -7,9 +7,7 @@ import java.util.Date;
  */
 public class ThirdPartLoginBean {
     private String loginType = null;
-    private String qq = null;
     private String qqUid = null;
-    private String weixin = null;
     private String weixinUid = null;
     private String nickname = null;
     private String headerurl = null;
@@ -30,9 +28,7 @@ public class ThirdPartLoginBean {
     public String toString() {
         return "ThirdPartLoginBean{" +
                 "loginType='" + loginType + '\'' +
-                ", qq='" + qq + '\'' +
                 ", qqUid='" + qqUid + '\'' +
-                ", weixin='" + weixin + '\'' +
                 ", weixinUid='" + weixinUid + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", headerurl='" + headerurl + '\'' +
@@ -59,28 +55,12 @@ public class ThirdPartLoginBean {
         this.loginType = loginType;
     }
 
-    public String getQq() {
-        return qq;
-    }
-
-    public void setQq(String qq) {
-        this.qq = qq;
-    }
-
     public String getQqUid() {
         return qqUid;
     }
 
     public void setQqUid(String qqUid) {
         this.qqUid = qqUid;
-    }
-
-    public String getWeixin() {
-        return weixin;
-    }
-
-    public void setWeixin(String weixin) {
-        this.weixin = weixin;
     }
 
     public String getWeixinUid() {

@@ -1,5 +1,3 @@
-<%@ page import="dazhimen.bg.bean.ViewMainImageBean" %>
-<%@ page import="java.util.List" %>
 <script type="text/javascript">
     $(function(){
         $('#viewProductForm').form({onLoadSuccess:function(){
@@ -60,61 +58,6 @@
             }
         });
     }
-    function uploadCourse(index){
-        alert(index);
-    }
-//    function addCourseElement(){
-//        if($("#courseCount").val() == '0'){
-//            var courseCount = 1;
-//            var htmlArr = [];
-//            htmlArr.push("<form id=\"courseForm"+ courseCount +"\">")
-//            htmlArr.push("<tr id=\"course1\">");
-//            htmlArr.push("  <td>1.名称:</td>");
-//            htmlArr.push("  <td colspan='2'><input class=\"easyui-textbox\" id=\"coursename"+ courseCount +"\" name=\"coursename\"></input></td> ");
-//            htmlArr.push("  <td>");
-//            htmlArr.push("      <select class=\"easyui-combobox\" name=\"sort\" id=\"sort"+ courseCount +"\" >");
-//            htmlArr.push("          <option value='0'>按上架时间排序</option>");
-//            htmlArr.push("          <option value='1'>排序1</option>");
-//            htmlArr.push("          <option value='2'>排序2</option>");
-//            htmlArr.push("          <option value='3'>排序3</option>");
-//            htmlArr.push("          <option value='4'>排序4</option>");
-//            htmlArr.push("         <option value='5'>排序5</option>");
-//            htmlArr.push("      </select>");
-//            htmlArr.push("</td>");
-//            htmlArr.push("  <td>试学:<input type=\"checkbox\" id=\"istry"+ courseCount +"\" name=\"istry\" width=\"60px\" /></td>")
-//            htmlArr.push("  <td>音频:<input type=\"file\" accept=\"audio/mpeg\" id=\"mp3file"+ courseCount +"\" name=\"mp3file\"></td>");
-//            htmlArr.push("  <td><input type=\"button\" value=\"上传\" onclick=\"uploadCourse('1')\"/></td>");
-//            htmlArr.push("</tr>");
-//            htmlArr.push("</form>");
-//            $(htmlArr.join("")).insertAfter("#courseTitle");
-//            $("#courseCount").val(courseCount);
-//        }else{
-//            var couseCount = $("#courseCount").val() + 1;
-//            var htmlArr = [];
-//            htmlArr.push("<form id=\"courseForm"+ courseCount +"\">")
-//            htmlArr.push("<tr id=\"course1\">");
-//            htmlArr.push("  <td>1.名称:</td>");
-//            htmlArr.push("  <td colspan='2'><input class=\"easyui-textbox\" id=\"coursename"+ courseCount +"\" name=\"coursename\"></input></td> ");
-//            htmlArr.push("  <td>");
-//            htmlArr.push("      <select class=\"easyui-combobox\" name=\"sort\" id=\"sort"+ courseCount +"\" >");
-//            htmlArr.push("          <option value='0'>按上架时间排序</option>");
-//            htmlArr.push("          <option value='1'>排序1</option>");
-//            htmlArr.push("          <option value='2'>排序2</option>");
-//            htmlArr.push("          <option value='3'>排序3</option>");
-//            htmlArr.push("          <option value='4'>排序4</option>");
-//            htmlArr.push("         <option value='5'>排序5</option>");
-//            htmlArr.push("      </select>");
-//            htmlArr.push("</td>");
-//            htmlArr.push("  <td>试学:<input type=\"checkbox\" id=\"istry"+ courseCount +"\" name=\"istry\" width=\"60px\" /></td>")
-//            htmlArr.push("  <td>音频:<input type=\"file\" accept=\"audio/mpeg\" id=\"mp3file"+ courseCount +"\" name=\"mp3file\"></td>");
-//            htmlArr.push("  <td><input type=\"button\" value=\"上传\" onclick=\"uploadCourse('1')\"/></td>");
-//            htmlArr.push("</tr>");
-//            htmlArr.push("</form>");
-//            $(htmlArr.join("")).insertAfter("#courseTitle");
-//            $("#courseCount").val(courseCount);
-//        }
-//
-//    }
 </script>
 <div style="text-align: left;">
 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="returnManageProduct()">返回</a>
@@ -189,20 +132,4 @@
         </table>
         <div id="viewMasterDialog"></div>
     </form>
-        <%--<br/>--%>
-
-        <%--<table cellpadding="5">--%>
-            <%--<tr id="courseTitle">--%>
-                <%--<td colspan="7" >--%>
-                    <%--<div class="formTitle" style="background-color:#f2f2f2;">--%>
-                        <%--<div class="formTitle-icon">--%>
-                        <%--</div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">编辑课程信息(正在开发，敬请期待)</div>--%>
-                    <%--</div>--%>
-                    <%--<div style="text-align: left;">--%>
-                        <%--<input type="hidden" name="coursecount" id="courseCount" value="0"/>--%>
-                        <%--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="addCourseElement()">添加课程</a>--%>
-                    <%--</div>--%>
-                <%--</td>--%>
-            <%--</tr>--%>
-        <%--</table>--%>
 </div>

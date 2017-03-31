@@ -1,6 +1,5 @@
 package dazhimen.bg.service;
 
-import com.alibaba.druid.pool.DruidPooledConnection;
 import dazhimen.bg.bean.*;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
@@ -89,7 +88,7 @@ public class ProductService {
         try {
             sqlSession = MyBatisUtil.createSession();
             sqlSession.delete("dazhimen.bg.bean.Product.saveCourseDel", courseid);
-            String audioFolderPath = resq.getSession().getServletContext().getRealPath("/") + Constant.proPrefixPath  + pid + "\\course\\";
+            String audioFolderPath = resq.getSession().getServletContext().getRealPath("/") + Constant.productPrefixPath  + pid + "\\course\\";
             String audioFileName = audioFolderPath + courseid+ ".mp3";
             FileManageService fileService = new FileManageService();
             fileService.deleteFile(audioFileName);
@@ -112,7 +111,7 @@ public class ProductService {
             sqlSession.update("dazhimen.bg.bean.Product.saveModifyCourse", courseBean);
             CommonsMultipartFile audioFile = courseBean.getAudio();
             if(audioFile != null && !audioFile.isEmpty()){
-                String cousreMainFolderPath = courseBean.getBasePath() + Constant.proPrefixPath  + courseBean.getPid() + "\\course\\";
+                String cousreMainFolderPath = courseBean.getBasePath() + Constant.productPrefixPath  + courseBean.getPid() + "\\course\\";
                 //获得文件的原始名称
                 String audioOrginalName = audioFile.getOriginalFilename();
                 //获得原始文件的后缀
@@ -145,7 +144,7 @@ public class ProductService {
         String pid = courseBean.getPid();
         //2 计算课程主目录路径
         //工程所在路径+ proPrefixPath + pid + course
-        String cousreMainFolderPath = courseBean.getBasePath() + Constant.proPrefixPath  + pid + "\\course\\";
+        String cousreMainFolderPath = courseBean.getBasePath() + Constant.productPrefixPath  + pid + "\\course\\";
         FileManageService fileService = new FileManageService();
         try {
             fileService.createFolder(cousreMainFolderPath);
@@ -170,14 +169,13 @@ public class ProductService {
                 throw new BgException("出现异常，保存课程音频失败");
             }
             //计算列表图片在工程中的相对路径，用于记录到数据库
-            String audioFileRelPath = Constant.uploadDbPrefixPath + pid + "/course/" + audioFileNewName;
-            DruidPooledConnection conn = null;
+            String audioFileRelPath = Constant.uploadProductDbPrefixPath + pid + "/course/" + audioFileNewName;
             SqlSession sqlSession = null;
             try {
                 sqlSession = MyBatisUtil.createSession();
                 courseBean.setAudiopath(audioFileRelPath);
                 courseBean.setCourseid(courseid);
-                sqlSession.update("dazhimen.bg.bean.Product.saveAddCourse", courseBean);
+                sqlSession.insert("dazhimen.bg.bean.Product.saveAddCourse", courseBean);
                 sqlSession.commit();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -194,7 +192,7 @@ public class ProductService {
         String pid = new IdUtils().getPid();
         //2 计算产品主目录路径
         //工程所在路径+ proPrefixPath + pid_pname
-        String productMainFolderPath = productBean.getBasePath() + Constant.proPrefixPath  + pid + "\\";
+        String productMainFolderPath = productBean.getBasePath() + Constant.productPrefixPath  + pid + "\\";
         FileManageService fileService = new FileManageService();
         try{
             fileService.createFolder(productMainFolderPath);
@@ -221,7 +219,7 @@ public class ProductService {
                 throw new BgException("出现异常,保存产品列表图片失败");
             }
             //计算列表图片在工程中的相对路径，用于记录到数据库
-            String listImageFileRelPath = Constant.uploadDbPrefixPath + pid + "/" + listImageFileNewName;
+            String listImageFileRelPath = Constant.uploadProductDbPrefixPath + pid + "/" + listImageFileNewName;
 
             SqlSession sqlSession = null;
         try {
@@ -243,7 +241,7 @@ public class ProductService {
                 //重新编号之后的 新文件名
                 String mainImageFileNewName = pid + "_mainimg_"+ i + mainImageSuffixName;
                 //存储到数据库中的相对路径+新文件名
-                String mainImageFileRelPath = Constant.uploadDbPrefixPath +  pid +  "/" + mainImageFileNewName;
+                String mainImageFileRelPath = Constant.uploadProductDbPrefixPath +  pid +  "/" + mainImageFileNewName;
 
                 String mainImageTransferFilename = productMainFolderPath + mainImageFileNewName;
                 try {
@@ -345,7 +343,7 @@ public class ProductService {
             sqlSession.delete("dazhimen.bg.bean.Product.saveProductImageDel", pid);
             sqlSession.delete("dazhimen.bg.bean.Product.saveCourseDelByPid", pid);
             sqlSession.update("dazhimen.bg.bean.Product.saveProductDel", pid);
-            String productMainFolderPath = resq.getSession().getServletContext().getRealPath("/") + Constant.proPrefixPath  + pid + "\\";
+            String productMainFolderPath = resq.getSession().getServletContext().getRealPath("/") + Constant.productPrefixPath  + pid + "\\";
             FileManageService fileService = new FileManageService();
             fileService.deleteFolder(productMainFolderPath);
             sqlSession.commit();
