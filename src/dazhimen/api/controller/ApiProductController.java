@@ -45,13 +45,13 @@ public class ApiProductController {
             ApiUtils.checkSignature(resq);
             ApiProductService productService = new ApiProductService();
             List<ApiProductBean> productBeans = productService.getHomePageSkillPack(resq.getParameter("getcount"));
-            productBeans = dealApiHomePageProductBean(resq, productBeans);
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             if(productBeans != null && productBeans.size() == 0){
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
+                productBeans = dealApiHomePageProductBean(resq, productBeans);
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
             try {
@@ -95,13 +95,13 @@ public class ApiProductController {
             ApiUtils.checkSignature(resq);
             ApiProductService productService = new ApiProductService();
             List<ApiProductBean> productBeans = productService.getHomePageExperiencePack(resq.getParameter("getcount"));
-            productBeans = dealApiHomePageProductBean(resq, productBeans);
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             if(productBeans != null && productBeans.size() == 0){
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
+                productBeans = dealApiHomePageProductBean(resq, productBeans);
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
             try {
@@ -155,6 +155,7 @@ public class ApiProductController {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+            return;
         }
         ApiProductService productService = new ApiProductService();
         String pid = resq.getParameter("pid");
@@ -184,6 +185,15 @@ public class ApiProductController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             jsonObj.put("data", new Gson().toJson(productBean));
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }else{
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg","无法获取指定pid的产品信息");
             try {
                 resp.getWriter().write(jsonObj.toString());
             } catch (IOException e1) {
@@ -442,15 +452,24 @@ public class ApiProductController {
         if(pid == null){
             throw new ParameterCheckException("未取到参数[pid]");
         }
+        if(pid.equals("")){
+            throw new ParameterCheckException("参数[pid]的值为空");
+        }
     }
     private void checkCollectProductPara(HttpServletRequest resq) throws ParameterCheckException {
         String pid = resq.getParameter("pid");
         if(pid == null){
             throw new ParameterCheckException("未取到参数[pid]");
         }
+        if(pid.equals("")){
+            throw new ParameterCheckException("参数[pid]的值为空");
+        }
         String cid = resq.getParameter("cid");
         if(cid == null){
             throw new ParameterCheckException("未取到参数[cid]");
+        }
+        if(cid.equals("")){
+            throw new ParameterCheckException("参数[cid]的值为空");
         }
     }
     private List<ApiCustomerCollectProductBean> dealCollectProductBean(HttpServletRequest resq,

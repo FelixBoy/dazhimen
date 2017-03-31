@@ -79,6 +79,13 @@ public class ApiProductService {
     public ApiSpecifyProductBean getProductInforById(String pid, String cid) throws ApiException {
         SqlSession sqlSession = null;
         ApiSpecifyProductBean productBean = null;
+        CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();
+        if(!checkUtil.checkCidIsExists(cid)){
+            throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
+        }
+        if(!checkUtil.checkPidIsExists(pid)){
+            throw new ApiException("传入的[pid]值，无效。在数据库中不存在，或者产品已经下架。");
+        }
         try {
             sqlSession = MyBatisUtil.createSession();
             productBean = sqlSession.selectOne("dazhimen.api.bean.ApiProduct.getProductInforById", pid);

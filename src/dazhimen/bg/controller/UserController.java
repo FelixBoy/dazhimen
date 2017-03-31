@@ -205,11 +205,11 @@ public class UserController {
         }
     }
     @RequestMapping("/saveMasterDel")
-    public void saveMasterDel(@RequestParam("uid") String uid, HttpServletResponse resp){
+    public void saveMasterDel(@RequestParam("uid") String uid,HttpServletRequest resq, HttpServletResponse resp){
         resp.setCharacterEncoding(Constant.CharSet);
         try{
             UserService userService = new UserService();
-            if(userService.saveMasterDel(uid)){
+            if(userService.saveMasterDel(resq, uid)){
                 resp.getWriter().write("删除成功");
             }
         }catch (BgException e){
@@ -386,6 +386,7 @@ public class UserController {
         UserBean user = new UserBean();
         user.setUid(resq.getParameter("uid"));
         user.setLoginname(resq.getParameter("loginname"));
+        user.setLoginnameorginal(resq.getParameter("loginnameorginal"));
         user.setName(resq.getParameter("name"));
         user.setMphone(resq.getParameter("mphone"));
         user.setIdentity(resq.getParameter("identity"));

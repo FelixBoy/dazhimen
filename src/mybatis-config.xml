@@ -11,5 +11,6 @@
         <mapper resource="dazhimen/api/bean/ApiCustomerBean.xml"/>
         <mapper resource="dazhimen/api/bean/ApiLoginBean.xml"/>
         <mapper resource="dazhimen/api/bean/ApiProductBean.xml"/>
+        <mapper resource="dazhimen/api/bean/ApiMasterBean.xml"/>
     </mappers>
 </configuration>

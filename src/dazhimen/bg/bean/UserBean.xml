@@ -4,7 +4,7 @@
 <mapper namespace="dazhimen.bg.bean.User">
 
     <select id="listAllMaster" resultType="dazhimen.bg.bean.UserBean">
-        select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,remarks
+        select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,introduction
           from user
         where type = '1'
           and isdel = '0'
@@ -43,7 +43,7 @@
 
     <update id="saveMasterDel">
         update user
-           set isdel = '1',loginname = null
+           set isdel = '1',loginname = null,mphone = null
         where uid = #{uid}
     </update>
 
@@ -68,7 +68,7 @@
 
     <update id="saveDelAdmin">
         update user
-        set isdel = '1',loginname = null
+        set isdel = '1',loginname = null,mphone = null
         where uid = #{uid}
     </update>
 

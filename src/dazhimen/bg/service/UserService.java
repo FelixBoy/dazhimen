@@ -10,6 +10,7 @@ import util.Constant;
 import util.GlobalUtils;
 import util.IdUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -220,12 +221,15 @@ public class UserService {
         return result == 1;
     }
 
-    public boolean saveMasterDel(String uid) throws BgException {
+    public boolean saveMasterDel(HttpServletRequest resq, String uid) throws BgException {
         int result = 0;
         SqlSession sqlSession = null;
         try{
             sqlSession = MyBatisUtil.createSession();
             result = sqlSession.update("dazhimen.bg.bean.User.saveMasterDel", uid);
+            String masterFolderPath = resq.getSession().getServletContext().getRealPath("/") + Constant.masterPrefixPath  + uid + "\\";
+            FileManageService fileService = new FileManageService();
+            fileService.deleteFolder(masterFolderPath);
             sqlSession.commit();
         }catch (Exception e){
             e.printStackTrace();
