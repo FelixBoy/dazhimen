@@ -87,7 +87,7 @@
             <th data-options="field:'mphone'" width="10%">手机号码</th>
             <th data-options="field:'loginname'"  width="10%">登录名</th>
             <th data-options="field:'gender'"  width="10%">性别</th>
-            <th data-options="field:'remarks'" width="20%">备注</th>
+            <th data-options="field:'introduction'" width="20%">介绍</th>
             <th data-options="field:'operate',align:'center',formatter:formatOper" width="20%">操作</th>
         </tr>
         </thead>

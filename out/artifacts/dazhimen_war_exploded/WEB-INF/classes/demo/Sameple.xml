@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--                 命名空间用于查找 -->
+<mapper namespace="user.User">
+    
+<!--     替代，语句中的内容,简写 -->
+    <sql id="cols">
+         id,name,age,address       
+    </sql>
+<!--     查询所有记录 -->
+    <select id="listAll" resultType="user.User">
+        select <include refid="cols"/> from   user_c      
+    </select>
+
+<!--     查询一个用户 -->                            <!--  别名替代，简写-->
+    <select id="getOne" parameterType="string" resultType="user.User">
+        select <include refid="cols"/> from   user_c  where id= #{id}    
+    </select>
+    
+<!--     插入一个用户 -->
+    <insert id="insertOne" parameterType="user.User" >
+        insert into user_c( <include refid="cols"/> ) values (#{id},#{name},#{age},#{address})    
+    </insert>
+    
+<!--     更新一个用户 -->
+    <insert id="updateOne" parameterType="user.User" >
+        update user_c set name=#{name},age=#{age},address=#{address} where id=#{id}    
+    </insert>
+    
+    <!--     删除一个用户 -->
+    <update id="deleteOne" parameterType="user.User" >
+        delete from user_c where id= #{id}   
+    </update>
+</mapper>

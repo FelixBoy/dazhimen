@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.api.bean.ApiLogin">
+    <select id="checkCustomerIsExistsByQQuid" resultType="dazhimen.api.bean.ApiCustomerBean">
+         select cid,headerurl,mphone,nickname,
+                 name,gender,email,education
+          from customer
+        where qquid = #{qquid}
+    </select>
+    <select id="checkCustomerIsExistsByWeixinuid" resultType="dazhimen.api.bean.ApiCustomerBean">
+        select cid,headerurl,mphone,nickname,
+        name,gender,email,education
+        from customer
+        where weixinuid = #{weixinuid}
+    </select>
+    <insert id="saveThirdPartLogin" parameterType="dazhimen.api.bean.ThirdPartLoginBean">
+        insert into customer(cid,nickname,headerurl,gender,qquid,weixinuid,createdate)
+                    values(#{cid},#{nickname},#{headerurl},#{gender},#{qqUid},#{weixinUid},now())
+    </insert>
+
+    <select id="getCustomerInfoByCid" resultType="dazhimen.api.bean.ApiCustomerBean">
+         select cid,headerurl,mphone,nickname, name,gender,email,education
+           from customer
+          where cid = #{cid}
+    </select>
+
+    <select id="checkCustomerIsExistsByMphone" resultType="dazhimen.api.bean.ApiCustomerBean">
+        select cid,headerurl,mphone,nickname,
+        name,gender,email,education
+        from customer
+        where mphone = #{mphone}
+    </select>
+    <insert id="saveMphoneLogin" parameterType="dazhimen.api.bean.MphoneLoginBean">
+        insert into customer(cid,mphone,createdate)
+              values(#{cid},#{mphone},now())
+    </insert>
+</mapper>

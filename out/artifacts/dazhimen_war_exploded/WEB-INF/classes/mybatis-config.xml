@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC
+        "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <mappers>
+        <mapper resource="dazhimen/bg/bean/UserBean.xml"/>
+        <mapper resource="dazhimen/bg/bean/CustomerBean.xml"/>
+        <mapper resource="dazhimen/bg/bean/ProductBean.xml"/>
+        <mapper resource="dazhimen/bg/bean/LoginBean.xml"/>
+        <mapper resource="dazhimen/api/bean/ApiCustomerBean.xml"/>
+        <mapper resource="dazhimen/api/bean/ApiLoginBean.xml"/>
+        <mapper resource="dazhimen/api/bean/ApiProductBean.xml"/>
+        <mapper resource="dazhimen/api/bean/ApiMasterBean.xml"/>
+    </mappers>
+</configuration>

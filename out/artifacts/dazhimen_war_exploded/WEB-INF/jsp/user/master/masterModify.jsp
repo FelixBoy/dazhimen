@@ -81,6 +81,10 @@
             MsgBox.show("手机号码格式有误");
             return false;
         }
+        if($("#identityInModifyMaseter").val().length == 0){
+            MsgBox.show("请输入掌门身份");
+            return fasle;
+        }
         return true;
     }
 </script>
@@ -121,7 +125,7 @@
             </tr>
             <tr>
                 <td style="text-align: right" nowrap="nowrap">身份:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" type="text" id="identityInAddMaseter" name="identity" style="width:300px" data-options="prompt:'请输入掌门'" /></td>
+                <td><input class="easyui-textbox" type="text" id="identityInModifyMaseter" name="identity" style="width:300px" data-options="prompt:'请输入掌门'" /></td>
             </tr>
             <tr>
                 <td style="text-align: right" nowrap="nowrap">头像文件:</td>

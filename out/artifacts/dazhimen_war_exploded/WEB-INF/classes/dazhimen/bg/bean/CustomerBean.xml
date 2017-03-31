@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.bg.bean.Customer">
+    <select id="listAllCustomer" resultType="dazhimen.bg.bean.CustomerBean">
+       select cid,name,nickname,gender,mphone,email,education,qquid,weixinuid
+         from customer
+        where isdel = '0'
+    </select>
+
+    <update id="saveCustomerDel">
+        update customer set isdel = '1',mphone = null,qquid = null,weixinuid = null
+          where cid = #{cid}
+    </update>
+</mapper>

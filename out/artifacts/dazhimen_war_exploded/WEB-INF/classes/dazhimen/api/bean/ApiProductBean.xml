@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.api.bean.ApiProduct">
+    <select id="getProductByCountAndType" parameterType="dazhimen.api.bean.ApiQueryProductParamBean"
+            resultType="dazhimen.api.bean.ApiProductBean">
+        select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price
+          from product
+        where isdel = '0' and type = #{type} and status !='3'
+        order by indexsort,createdatetime
+        limit #{getcount}
+    </select>
+
+    <select id="getProductInforById" resultType="dazhimen.api.bean.ApiSpecifyProductBean">
+        select pid,pname,price,listimage as listimgurl,introduction,
+                buycount,istry,introduction,'0' as iscollection, '0' as isbuy
+          from product a
+        where a.pid = #{pid}
+    </select>
+
+    <select id="getProductIsCollection" parameterType="dazhimen.api.bean.ApiQueryProductCollectionParamBean"
+            resultType="dazhimen.api.bean.SingleValueBean">
+        select 1 as valueinfo
+          from ir_customer_product
+         where cid = #{cid} and pid = #{pid}
+    </select>
+
+    <select id="getProductIsBuy" parameterType="dazhimen.api.bean.ApiQueryProductCollectionParamBean"
+            resultType="dazhimen.api.bean.SingleValueBean">
+        select 1 as valueinfo
+          from orders a,
+                ir_order_product b
+         where a.orid = b.orid
+           and a.cid = #{cid}
+           and b.pid = #{pid}
+    </select>
+
+    <select id="checkPidIsExists" resultType="dazhimen.api.bean.SingleValueBean">
+        select 1 as valueinfo
+          from product
+         where pid = #{pid}
+           and status != '3'
+           and isdel = '0'
+    </select>
+
+    <insert id="collectProduct" parameterType="dazhimen.api.bean.ApiQueryProductCollectionParamBean">
+         insert into ir_customer_product(cid,pid)
+             values(#{cid}, #{pid})
+    </insert>
+
+    <delete id="cancelCollectProduct" parameterType="dazhimen.api.bean.ApiQueryProductCollectionParamBean">
+        delete from ir_customer_product where cid = #{cid} and pid = #{pid}
+    </delete>
+
+    <select id="getProductCourseList" resultType="dazhimen.api.bean.ApiListViewCourseBean">
+        select courseid,coursename,istry,audiopath as audiourl,createdate as createdateo,viewcount
+          from course a
+         where pid = #{pid}
+    </select>
+
+    <select id="getProductAudioUpdateCount" resultType="dazhimen.api.bean.SingleValueBean">
+        select count(a.courseid) as valueinfo
+          from course a
+         where a.pid = #{pid}
+    </select>
+
+    <select id="getCustomerCollectProduct" resultType="dazhimen.api.bean.ApiCustomerCollectProductBean">
+        select b.pid,b.pname,b.listimage as listimgurl,b.type
+          from ir_customer_product a,product b
+        where a.pid = b.pid and b.isdel = '0' and a.cid = #{cid}
+    </select>
+</mapper>
