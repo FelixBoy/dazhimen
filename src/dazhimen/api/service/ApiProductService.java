@@ -1,9 +1,9 @@
 package dazhimen.api.service;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import dazhimen.api.bean.*;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
-import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import util.CheckIsExistsUtils;
@@ -58,7 +58,7 @@ public class ApiProductService {
         }
         return productBeans;
     }
-    private List<ApiProductBean> getProductByCountAndType(int getCount, String type) throws BgException {
+    private List<ApiProductBean> getProductByCountAndType(int getCount, String type) throws Exception {
         List<ApiProductBean> productBeans = null;
         SqlSession sqlSession = null;
         try{
@@ -69,7 +69,121 @@ public class ApiProductService {
             productBeans = sqlSession.selectList("dazhimen.api.bean.ApiProduct.getProductByCountAndType",paramBean);
         }catch (Exception e){
             e.printStackTrace();
-            throw new BgException("出现异常，查询产品信息出错");
+            throw new Exception(e);
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+
+        return productBeans;
+    }
+    public List<ApiProductBean> getMoreSkillPack(String getCount) throws ParameterCheckException, ApiException {
+        if(getCount != null && !getCount.equals("")){
+            try{
+                Integer.parseInt(getCount);
+            }catch (Exception e){
+                throw new ParameterCheckException("传入的参数[getCount]不是有效的数字");
+            }
+        }
+        List<ApiProductBean> productBeans = null;
+        try{
+            if(getCount == null || getCount.equals("")){
+                productBeans = getMoreProductByType(Constant.SkillPack);
+            }else{
+                productBeans =getMoreProdcutByCountAndType(Integer.parseInt(getCount), Constant.SkillPack);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，获取更多技能包出错");
+        }
+
+        return productBeans;
+    }
+    public List<ApiProductBean> getMoreExperiencePack(String getCount) throws ParameterCheckException, ApiException {
+        if(getCount != null && !getCount.equals("")){
+            try{
+                Integer.parseInt(getCount);
+            }catch (Exception e){
+                throw new ParameterCheckException("传入的参数[getCount]不是有效的数字");
+            }
+        }
+        List<ApiProductBean> productBeans = null;
+        try{
+            if(getCount == null || getCount.equals("")){
+                productBeans = getMoreProductByType(Constant.ExperiencePack);
+            }else{
+                productBeans =getMoreProdcutByCountAndType(Integer.parseInt(getCount), Constant.ExperiencePack);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，获取更多经验包出错");
+        }
+
+        return productBeans;
+    }
+    public List<ApiProductBean> searchExperiencePack(String keyword) throws ApiException {
+        List<ApiProductBean> productBeans = null;
+        try {
+            productBeans = searchProductByTypeAndKeyword(Constant.ExperiencePack, keyword);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApiException("检索经验包出错");
+        }
+        return productBeans;
+    }
+    public List<ApiProductBean> searchSkillPack(String keyword) throws ApiException {
+        List<ApiProductBean> productBeans = null;
+        try {
+            productBeans = searchProductByTypeAndKeyword(Constant.SkillPack, keyword);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApiException("检索技能包出错");
+        }
+        return productBeans;
+    }
+    private List<ApiProductBean> searchProductByTypeAndKeyword(String type, String keyword) throws Exception {
+        List<ApiProductBean> productBeans = null;
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            ApiQueryProductByTypeAndKeyword paramBean = new ApiQueryProductByTypeAndKeyword();
+            paramBean.setType(type);
+            paramBean.setKeyword("%" + keyword + "%");
+            productBeans = sqlSession.selectList("dazhimen.api.bean.ApiProduct.searchProductByTypeAndKeyword",paramBean);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new Exception(e);
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+
+        return productBeans;
+    }
+    private List<ApiProductBean> getMoreProductByType(String type) throws Exception {
+        SqlSession sqlSession = null;
+        List<ApiProductBean> productBeans;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            productBeans = sqlSession.selectList("dazhimen.api.bean.ApiProduct.getMoreProductByType", type);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new Exception(e);
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return productBeans;
+    }
+    private List<ApiProductBean> getMoreProdcutByCountAndType(int getCount, String type) throws Exception {
+        List<ApiProductBean> productBeans = null;
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            ApiQueryProductParamBean paramBean = new ApiQueryProductParamBean();
+            paramBean.setGetcount(getCount);
+            paramBean.setType(type);
+            productBeans = sqlSession.selectList("dazhimen.api.bean.ApiProduct.getMoreProductByCountAndType",paramBean);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new Exception(e);
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }
@@ -80,9 +194,6 @@ public class ApiProductService {
         SqlSession sqlSession = null;
         ApiSpecifyProductBean productBean = null;
         CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();
-        if(!checkUtil.checkCidIsExists(cid)){
-            throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
-        }
         if(!checkUtil.checkPidIsExists(pid)){
             throw new ApiException("传入的[pid]值，无效。在数据库中不存在，或者产品已经下架。");
         }

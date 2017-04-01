@@ -48,7 +48,7 @@ public class ApiProductController {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
-            if(productBeans != null && productBeans.size() == 0){
+            if(productBeans == null || productBeans.size() == 0){
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
@@ -98,7 +98,7 @@ public class ApiProductController {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
-            if(productBeans != null && productBeans.size() == 0){
+            if(productBeans == null || productBeans.size() == 0){
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
@@ -131,7 +131,206 @@ public class ApiProductController {
             }
         }
     }
-
+    @RequestMapping(value = "/getMoreSkillPack",method = RequestMethod.POST)
+    public void getMoreSkillPack(HttpServletRequest resq, HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            ApiProductService productService = new ApiProductService();
+            List<ApiProductBean> productBeans = productService.getMoreSkillPack(resq.getParameter("getcount"));
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","成功");
+            if(productBeans == null || productBeans.size() == 0){
+                jsonObj.put("data",new Gson().toJson(null));
+            }else{
+                productBeans = dealApiHomePageProductBean(resq, productBeans);
+                jsonObj.put("data",new Gson().toJson(productBeans));
+            }
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (ParameterCheckException e){
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    @RequestMapping(value = "/getExperienceSkillPack",method = RequestMethod.POST)
+    public void getExperienceSkillPack(HttpServletRequest resq, HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            ApiProductService productService = new ApiProductService();
+            List<ApiProductBean> productBeans = productService.getMoreExperiencePack(resq.getParameter("getcount"));
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","成功");
+            if(productBeans == null || productBeans.size() == 0){
+                jsonObj.put("data",new Gson().toJson(null));
+            }else{
+                productBeans = dealApiHomePageProductBean(resq, productBeans);
+                jsonObj.put("data",new Gson().toJson(productBeans));
+            }
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (ParameterCheckException e){
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    @RequestMapping(value = "/searchSkillPack",method = RequestMethod.POST)
+    public void searchSkillPack(HttpServletRequest resq,
+                                 HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            checkSearhProductPara(resq);
+            ApiProductService productService = new ApiProductService();
+            List<ApiProductBean> productBeans = productService.searchSkillPack(resq.getParameter("keyword"));
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","成功");
+            if(productBeans == null || productBeans.size() == 0){
+                jsonObj.put("data",new Gson().toJson(null));
+            }else{
+                productBeans = dealApiHomePageProductBean(resq, productBeans);
+                jsonObj.put("data",new Gson().toJson(productBeans));
+            }
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (ParameterCheckException e){
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    @RequestMapping(value = "/searchExperiencePack",method = RequestMethod.POST)
+    public void searchExperiencePack(HttpServletRequest resq,
+                                HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            checkSearhProductPara(resq);
+            ApiProductService productService = new ApiProductService();
+            List<ApiProductBean> productBeans = productService.searchExperiencePack(resq.getParameter("keyword"));
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","成功");
+            if(productBeans == null || productBeans.size() == 0){
+                jsonObj.put("data",new Gson().toJson(null));
+            }else{
+                productBeans = dealApiHomePageProductBean(resq, productBeans);
+                jsonObj.put("data",new Gson().toJson(productBeans));
+            }
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (ParameterCheckException e){
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
     @RequestMapping(value = "/getProductInforById",method = RequestMethod.POST)
     public void getProductInforById(HttpServletRequest resq,
                                           HttpServletResponse resp){
@@ -525,5 +724,14 @@ public class ApiProductController {
             productBean.setListimgurl(listImgUrl);
         }
         return productBeans;
+    }
+    private void checkSearhProductPara(HttpServletRequest resq) throws ParameterCheckException {
+        String keyword = resq.getParameter("keyword");
+        if(keyword == null){
+            throw new ParameterCheckException("未取到参数[keyword]");
+        }
+        if(keyword.equals("")){
+            throw new ParameterCheckException("参数[keyword]的值为空");
+        }
     }
 }

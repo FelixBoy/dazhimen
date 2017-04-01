@@ -52,4 +52,45 @@ public class ApiMasterService {
         }
         return masterBean;
     }
+
+    public List<ApiMasterBean> getMoreMasterInfo(String getCount) throws ParameterCheckException, ApiException {
+        if(getCount != null && !getCount.equals("")){
+            try{
+                Integer.parseInt(getCount);
+            }catch (Exception e){
+                throw new ParameterCheckException("传入的参数[getCount]不是有效的数字");
+            }
+        }
+        List<ApiMasterBean> masterBeans = null;
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            if(getCount == null || getCount.equals("")){
+                masterBeans = sqlSession.selectList("dazhimen.api.bean.ApiMaster.getMoreMasterInfo");
+            }else{
+                masterBeans = sqlSession.selectList("dazhimen.api.bean.ApiMaster.getMoreMasterInfoByCount", Integer.parseInt(getCount));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，获取更多掌门信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return masterBeans;
+    }
+
+    public List<ApiMasterBean> searchMasterInfo(String keyword) throws ParameterCheckException, ApiException {
+        List<ApiMasterBean> masterBeans = null;
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            masterBeans = sqlSession.selectList("dazhimen.api.bean.ApiMaster.searchMasterInfo", "%" + keyword + "%");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，检索掌门信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return masterBeans;
+    }
 }

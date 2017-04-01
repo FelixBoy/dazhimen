@@ -76,6 +76,108 @@ public class ApiMasterController {
         }
     }
 
+    @RequestMapping(value = "/getMoreMasterInfo",method = RequestMethod.POST)
+    public void getMoreMasterInfo(HttpServletRequest resq,
+                                      HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            ApiMasterService masterService = new ApiMasterService();
+            List<ApiMasterBean> masterBeans = masterService.getMoreMasterInfo(resq.getParameter("getcount"));
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","成功");
+            if(masterBeans != null && masterBeans.size() == 0){
+                jsonObj.put("data",new Gson().toJson(null));
+            }else{
+                masterBeans = dealApiHomePageMasterBean(resq, masterBeans);
+                jsonObj.put("data",new Gson().toJson(masterBeans));
+            }
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (ParameterCheckException e){
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    @RequestMapping(value = "/searchMasterInfo",method = RequestMethod.POST)
+    public void searchMasterInfo(HttpServletRequest resq,
+                                  HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            checkSearchMasterInfo(resq);
+            ApiMasterService masterService = new ApiMasterService();
+            List<ApiMasterBean> masterBeans = masterService.searchMasterInfo(resq.getParameter("keyword"));
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","成功");
+            if(masterBeans != null && masterBeans.size() == 0){
+                jsonObj.put("data",new Gson().toJson(null));
+            }else{
+                masterBeans = dealApiHomePageMasterBean(resq, masterBeans);
+                jsonObj.put("data",new Gson().toJson(masterBeans));
+            }
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (ParameterCheckException e){
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
     @RequestMapping(value = "/getMasterInfoById",method = RequestMethod.POST)
     public void getMasterInfoById(HttpServletRequest resq,
                                       HttpServletResponse resp){
@@ -165,4 +267,14 @@ public class ApiMasterController {
             throw new ParameterCheckException("参数[masterid]的值为空");
         }
     }
+    private void checkSearchMasterInfo(HttpServletRequest resq) throws ParameterCheckException {
+        String keyword = resq.getParameter("keyword");
+        if(keyword == null){
+            throw new ParameterCheckException("未取到参数[keyword]");
+        }
+        if(keyword.equals("")){
+            throw new ParameterCheckException("参数[keyword]的值为空");
+        }
+    }
+
 }
