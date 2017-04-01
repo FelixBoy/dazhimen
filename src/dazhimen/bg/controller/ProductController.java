@@ -166,6 +166,7 @@ public class ProductController {
             List<ListViewProductBean> productBeans = productService.queryAllProducts();
             resp.getWriter().write(new Gson().toJson(productBeans));
         }catch (Exception e){
+            e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             try {
                 resp.getWriter().write("出现异常，查询所有产品信息失败");

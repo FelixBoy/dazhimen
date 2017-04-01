@@ -5,7 +5,6 @@
                 $('#selectMasterList').datagrid('selectRow',0);
             }
         });
-
     });
     $(function(){
        $("#selectMasterList").datagrid({

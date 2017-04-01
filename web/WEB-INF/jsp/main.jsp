@@ -51,6 +51,11 @@
                         }
                     });
                     break;
+                case 'indexplay_manage':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/playsort/fwdIndexPlayManagePage?random_id="+Math.random()
+                    });
+                    break;
                 case 'admin_manage':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/user/fwdManageAdminPage?random_id="+Math.random(),
@@ -89,23 +94,21 @@
                 <span>产品管理</span>
                 <ul>
                     <li id="product_upload">上传商品</li>
-                    <%--<li id="product_info">产品详情</li>--%>
-                    <%--<li id="product_modify">修改商品</li>--%>
                 </ul>
             </li>
             <li id="master_manage">掌门管理</li>
             <li id="customer_manage">会员查询</li>
-            <li id="admin_manage">管理员管理</li>
+            <li id="indexplay_manage">首页轮播</li>
+            <li id="indexsort_manange">首页排序</li>
             <li id="recharge_manage">充值查询</li>
             <li id="order_manage">订单查询</li>
-            <li id="content_manage" data-options="state:'closed'">
-                <span>内容管理</span>
+            <li id="news_manage" data-options="state:'closed'">
+                <span>新闻管理</span>
                 <ul>
-                    <li id="content_info" >内容详情</li>
-                    <li id="content_add">新增内容</li>
-                    <li id="content_modify">修改内容</li>
+                    <li id="news_add">新增新闻</li>
                 </ul>
             </li>
+            <li id="admin_manage">管理员管理</li>
             <li id="permission_manage" data-options="state:'closed'">
                 <span>权限管理</span>
                 <ul>
