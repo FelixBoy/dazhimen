@@ -376,6 +376,9 @@ public class ApiProductController {
         }
         if(productBean != null){
             String localIp = resq.getLocalAddr();//获取本地ip
+            if(Constant.isDeployInAliyun){
+                localIp = Constant.AliyunIP;
+            }
             int localPort = resq.getLocalPort();//获取本地的端口
             String appName = resq.getContextPath();
             String listImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + productBean.getListimgurl();
@@ -674,6 +677,9 @@ public class ApiProductController {
     private List<ApiCustomerCollectProductBean> dealCollectProductBean(HttpServletRequest resq,
                                                     List<ApiCustomerCollectProductBean> productBeans){
         String localIp = resq.getLocalAddr();//获取本地ip
+        if(Constant.isDeployInAliyun){
+            localIp = Constant.AliyunIP;
+        }
         int localPort = resq.getLocalPort();//获取本地的端口
         String appName = resq.getContextPath();
         for(int i = 0; i < productBeans.size(); i++){
@@ -687,6 +693,9 @@ public class ApiProductController {
     private List<ApiListViewCourseBean> dealApiListViewCourseBean(HttpServletRequest resq,
                                                             List<ApiListViewCourseBean> courseBeans){
         String localIp = resq.getLocalAddr();//获取本地ip
+        if(Constant.isDeployInAliyun){
+            localIp = Constant.AliyunIP;
+        }
         int localPort = resq.getLocalPort();//获取本地的端口
         String appName = resq.getContextPath();
         for(int i = 0; i < courseBeans.size(); i++){
@@ -707,6 +716,9 @@ public class ApiProductController {
     private List<ApiProductBean> dealApiHomePageProductBean(HttpServletRequest resq,
                                                     List<ApiProductBean> productBeans){
         String localIp = resq.getLocalAddr();//获取本地ip
+        if(Constant.isDeployInAliyun){
+            localIp = Constant.AliyunIP;
+        }
         int localPort = resq.getLocalPort();//获取本地的端口
         String appName = resq.getContextPath();
         for(int i = 0; i < productBeans.size(); i++){

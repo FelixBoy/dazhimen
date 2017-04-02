@@ -232,6 +232,9 @@ public class ProductController {
             ProductService productService = new ProductService();
             List<ListViewCourseBean> courseBeans = productService.queryAllCourseByPid(pid);
             String localIp = resq.getLocalAddr();//获取本地ip
+            if(Constant.isDeployInAliyun){
+                localIp = Constant.AliyunIP;
+            }
             int localPort = resq.getLocalPort();//获取本地的端口
             String appName = resq.getContextPath();
             if(courseBeans != null){

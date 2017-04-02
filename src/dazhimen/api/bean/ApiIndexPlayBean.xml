@@ -2,10 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.api.bean.ApiIndexPlay">
-    <select id="checkCustomerIsExistsByQQuid" resultType="dazhimen.api.bean.ApiCustomerBean">
-         select cid,headerurl,mphone,nickname,
-                 name,gender,email,education
-          from customer
-        where qquid = #{qquid}
+    <select id="getIndexPlay" resultType="dazhimen.api.bean.ApiIndexPlayBean">
+       select a.pid as id,listimage as imgurl, '1' as contenttype, type as producttype
+          from product a
+        where a.status != '3' and a.isdel = '0' and a.indexplay = '1'
+        limit 6
+        <!--将来要补上，关于新闻的-->
     </select>
 </mapper>

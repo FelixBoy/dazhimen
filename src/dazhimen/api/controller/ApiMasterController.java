@@ -221,6 +221,9 @@ public class ApiMasterController {
         }
         if(masterBean != null){
             String localIp = resq.getLocalAddr();//获取本地ip
+            if(Constant.isDeployInAliyun){
+                localIp = Constant.AliyunIP;
+            }
             int localPort = resq.getLocalPort();//获取本地的端口
             String appName = resq.getContextPath();
             String headerImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + masterBean.getHeaderimgurl();
@@ -248,6 +251,9 @@ public class ApiMasterController {
     private List<ApiMasterBean> dealApiHomePageMasterBean(HttpServletRequest resq,
                                                             List<ApiMasterBean> masterBeans){
         String localIp = resq.getLocalAddr();//获取本地ip
+        if(Constant.isDeployInAliyun){
+            localIp = Constant.AliyunIP;
+        }
         int localPort = resq.getLocalPort();//获取本地的端口
         String appName = resq.getContextPath();
         for(int i = 0; i < masterBeans.size(); i++){

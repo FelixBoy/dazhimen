@@ -45,4 +45,9 @@ public class Constant {
     public static final String ExperiencePack = "2";
     //验证码长度
     public static final int verifyCodeLength = 4;
+
+    //是否部署在阿里云
+    public static final boolean isDeployInAliyun = true;
+    //阿里云Ip
+    public static final String AliyunIP= "47.92.73.149";
 }
