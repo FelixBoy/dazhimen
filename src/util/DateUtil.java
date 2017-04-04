@@ -1,25 +1,28 @@
 package util;
 
 import dazhimen.bg.bean.DBDateTimeBean;
-import db.DBUtils;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
+import dazhimen.bg.exception.BgException;
+import db.MyBatisUtil;
+import org.apache.ibatis.session.SqlSession;
 
-import java.sql.SQLException;
 import java.util.Date;
 
 /**
  * Created by Administrator on 2017/3/25.
  */
 public class DateUtil {
-    public Date getDBDate(){
+    public Date getDBDate() throws BgException {
         Date dbDate = null;
+        SqlSession sqlSession = null;
         try {
-            QueryRunner runner = new QueryRunner(DBUtils.getDataSource());
-            DBDateTimeBean dateTimeBean = runner.query(" select now() as dbdate ", new BeanHandler<DBDateTimeBean>(DBDateTimeBean.class));
+            sqlSession = MyBatisUtil.createSession();
+            DBDateTimeBean dateTimeBean = sqlSession.selectOne("dazhimen.bg.bean.Util.getDBDate");
             dbDate = dateTimeBean.getDbdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            throw new BgException(e.getMessage());
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
         return dbDate;
     }

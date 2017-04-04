@@ -1,11 +1,9 @@
 package demo;
 
-import db.DBUtils;
-import org.apache.commons.dbutils.QueryRunner;
 
 public class DBUtilsSampleCode {
 	  public static void main(String[] args) throws  Exception{
-	            QueryRunner qr = new QueryRunner(DBUtils.getDataSource());
+//	            QueryRunner qr = new QueryRunner(DBUtilsUtil.getDataSource());
 		  /**
 	             * insert delete update 采取如下方法
 	             */

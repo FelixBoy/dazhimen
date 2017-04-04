@@ -1,5 +1,7 @@
 package util;
 
+import dazhimen.bg.exception.BgException;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -9,11 +11,17 @@ import java.util.TimeZone;
  * 各数据库表的 主键ID的生成类
  */
 public class IdUtils {
+    public String getRECId() throws BgException {
+        String curDateStr = getCurrentDate();
+        String user_seq = SeqUtils.getSeqNextVal(Constant.recSeqName);
+        user_seq = SeqUtils.autoAttachZeroFromStart(user_seq, Constant.recSeqLength);
+        return "r" + curDateStr + user_seq;
+    }
     /**
      * 自动生成uid的方法
      * @return 生成的uid
      */
-    public String getUid(){
+    public String getUid() throws BgException {
         String curDateStr = getCurrentDate();
         String user_seq = SeqUtils.getSeqNextVal(Constant.userSeqName);
         user_seq = SeqUtils.autoAttachZeroFromStart(user_seq, Constant.userSeqLength);
@@ -31,20 +39,20 @@ public class IdUtils {
         return curDate;
     }
 
-    public String getCid(){
+    public String getCid() throws BgException {
         String curDateStr = getCurrentDate();
         String customer_seq = SeqUtils.getSeqNextVal(Constant.customerSeqName);
         customer_seq = SeqUtils.autoAttachZeroFromStart(customer_seq, Constant.customerSeqLength);
         return "c" + curDateStr + customer_seq;
     }
 
-    public String getPid(){
+    public String getPid() throws BgException {
         String curDateStr = getCurrentDate();
         String product_seq = SeqUtils.getSeqNextVal(Constant.productSeqName);
         product_seq = SeqUtils.autoAttachZeroFromStart(product_seq, Constant.productSeqLength);
         return "p" + curDateStr + product_seq;
     }
-    public String getCourseid(){
+    public String getCourseid() throws BgException {
         String curDateStr = getCurrentDate();
         String course_seq = SeqUtils.getSeqNextVal(Constant.courseSeqName);
         course_seq = SeqUtils.autoAttachZeroFromStart(course_seq, Constant.courseSeqLength);

@@ -7,6 +7,9 @@ package util;
 public class Constant {
     //字符集
     public static final String CharSet = "utf-8";
+    public static final String recSeqName = "recharge_seq";
+    //uid中编码中，最后面部分的，数字序列的长度
+    public static final int recSeqLength = 5;
     //数据库中 uid编码序列的名称
     public static final String userSeqName = "user_seq";
     //uid中编码中，最后面部分的，数字序列的长度
@@ -49,5 +52,5 @@ public class Constant {
     //是否部署在阿里云
     public static final boolean isDeployInAliyun = true;
     //阿里云Ip
-    public static final String AliyunIP= "47.92.73.149";
+    public static final String AliyunIP = "47.92.73.149";
 }

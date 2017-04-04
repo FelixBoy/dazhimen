@@ -1,8 +1,9 @@
 package util;
 
-import db.DBUtils;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.ArrayHandler;
+import dazhimen.bg.bean.SingleValueBean;
+import dazhimen.bg.exception.BgException;
+import db.MyBatisUtil;
+import org.apache.ibatis.session.SqlSession;
 
 import java.sql.SQLException;
 
@@ -16,23 +17,23 @@ public class SeqUtils {
      * @param seqName 序列名称
      * @return 序列的下一个值
      */
-    public static synchronized String getSeqNextVal(String seqName){
-        QueryRunner runner = null;
+    public static synchronized String getSeqNextVal(String seqName) throws BgException {
+        SqlSession sqlSession = null;
+        String nextVal = "";
         try {
-            runner = new QueryRunner(DBUtils.getDataSource());
-        } catch (SQLException e) {
+            sqlSession = MyBatisUtil.createSession();
+            SingleValueBean valueBean = sqlSession.selectOne("dazhimen.bg.bean.Util.getSeqNextVal", seqName);
+            if(valueBean == null || valueBean.getValueInfo() == null || valueBean.getValueInfo().equals("")){
+                throw new Exception("获取[" + seqName + "]序列值出错");
+            }
+            nextVal = valueBean.getValueInfo();
+        } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("获取数据库连接，创建runner出现错误");
+            throw new BgException(e.getMessage());
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
-        Object[] results = null;
-        try {
-            results = runner.query("select nextval('" + seqName + "')", new ArrayHandler());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("查询用户的下一个序列ID的方法");
-        }
-        Integer nextVal = Integer.valueOf(results[0].toString());
-        return nextVal+"";
+        return nextVal;
     }
 
     /**

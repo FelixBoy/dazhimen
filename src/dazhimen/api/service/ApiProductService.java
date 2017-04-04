@@ -348,8 +348,9 @@ public class ApiProductService {
     }
     public List<ApiCustomerCollectProductBean> getCustomerCollectProduct(String cid) throws ApiException {
         List<ApiCustomerCollectProductBean> productBeans = null;
-        SqlSession sqlSession = MyBatisUtil.createSession();
+        SqlSession sqlSession = null;
         try{
+            sqlSession = MyBatisUtil.createSession();
             productBeans = sqlSession.selectList("dazhimen.api.bean.ApiProduct.getCustomerCollectProduct", cid);
         }catch (Exception e){
             e.printStackTrace();
