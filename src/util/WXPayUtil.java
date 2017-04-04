@@ -182,35 +182,28 @@ public class WXPayUtil{
 
         return sb.toString();
     }
-    public static Map<String, String> weixinPrePay(String sn,BigDecimal totalAmount,
-                                                   String description, HttpServletRequest request) {
+    public static Map<String, String> weixinPrePay(String sn,BigDecimal totalAmount, String description,
+                                                   String remoteIp,String notify_url) {
         SortedMap<String, Object> parameterMap = new TreeMap<String, Object>();
         parameterMap.put("appid", WXPayUtil.APPID);
         parameterMap.put("mch_id", WXPayUtil.MCH_ID);
         parameterMap.put("nonce_str", WXPayUtil.getRandomString(32));
-        parameterMap.put("body",
-                StringUtils.abbreviate(description.replaceAll(
-                        "[^0-9a-zA-Z\\u4e00-\\u9fa5 ]", ""), 600));
+        parameterMap.put("body", StringUtils.abbreviate(description.replaceAll("[^0-9a-zA-Z\\u4e00-\\u9fa5 ]", ""), 600));
         parameterMap.put("out_trade_no", sn);
         parameterMap.put("fee_type", "CNY");
-        System.out.println("jiner");
         BigDecimal total = totalAmount.multiply(new BigDecimal(100));
         java.text.DecimalFormat df=new java.text.DecimalFormat("0");
         parameterMap.put("total_fee", df.format(total));
-        System.out.println("jiner2");
-        parameterMap.put("spbill_create_ip", "123.12.12.123");
-        parameterMap.put("notify_url", "http://xxx.com");
+        parameterMap.put("spbill_create_ip", remoteIp);
+        parameterMap.put("notify_url", notify_url);
         parameterMap.put("trade_type", "APP");
-        System.out.println("");
         String sign = WXPayUtil.createSign("UTF-8", parameterMap);
-        System.out.println("jiner2");
         parameterMap.put("sign", sign);
         String requestXML = WXPayUtil.getRequestXml(parameterMap);
         System.out.println(requestXML);
         String result = WXPayUtil.httpsRequest(
                 "https://api.mch.weixin.qq.com/pay/unifiedorder", "POST",
                 requestXML);
-        System.out.println("result ===" + result);
         Map<String, String> map = null;
         try {
             map = WXPayUtil.doXMLParse(result);
@@ -222,8 +215,8 @@ public class WXPayUtil{
         return map;
     }
     public static void main(String[] args) throws BgException {
-       Map<String, String> map = weixinPrePay(new IdUtils().getRECId(),new BigDecimal("0.01"),"测试", null);
-        System.out.println(map);
+       Map<String, String> map = weixinPrePay(new IdUtils().getRECId(),new BigDecimal("0.01"),"测试", "123.12.12.123", "http://xxx.com");
+        System.out.println(createSignAgain(map));
         System.out.println(verifyWeixinNotify(map));
     }
     public static boolean verifyWeixinNotify(Map<String, String> map) {
@@ -243,8 +236,7 @@ public class WXPayUtil{
         }
 
     }
-    public static String createSignAgain(Map<String, String> map){
-        JSONObject jsonObject = new JSONObject();
+    public static SortedMap<String, Object> createSignAgain(Map<String, String> map){
         SortedMap<String, Object> parameterMap = new TreeMap<String, Object>();
         parameterMap.put("appid", WXPayUtil.APPID);
         parameterMap.put("partnerid", WXPayUtil.MCH_ID);
@@ -254,7 +246,6 @@ public class WXPayUtil{
         parameterMap.put("timestamp", System.currentTimeMillis());
         String sign = WXPayUtil.createSign("UTF-8", parameterMap);
         parameterMap.put("sign", sign);
-        jsonObject.put("parameterMap",parameterMap);
-        return jsonObject.toString();
+        return parameterMap;
 }
 }

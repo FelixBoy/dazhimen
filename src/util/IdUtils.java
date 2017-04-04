@@ -13,9 +13,9 @@ import java.util.TimeZone;
 public class IdUtils {
     public String getRECId() throws BgException {
         String curDateStr = getCurrentDate();
-        String user_seq = SeqUtils.getSeqNextVal(Constant.recSeqName);
-        user_seq = SeqUtils.autoAttachZeroFromStart(user_seq, Constant.recSeqLength);
-        return "r" + curDateStr + user_seq;
+        String rec_seq = new SeqUtils().getSeqNextVal(Constant.recSeqName);
+        rec_seq = SeqUtils.autoAttachZeroFromStart(rec_seq, Constant.recSeqLength);
+        return "r" + curDateStr + rec_seq;
     }
     /**
      * 自动生成uid的方法
@@ -23,7 +23,7 @@ public class IdUtils {
      */
     public String getUid() throws BgException {
         String curDateStr = getCurrentDate();
-        String user_seq = SeqUtils.getSeqNextVal(Constant.userSeqName);
+        String user_seq = new SeqUtils().getSeqNextVal(Constant.userSeqName);
         user_seq = SeqUtils.autoAttachZeroFromStart(user_seq, Constant.userSeqLength);
         return "u" + curDateStr + user_seq;
     }
@@ -41,20 +41,20 @@ public class IdUtils {
 
     public String getCid() throws BgException {
         String curDateStr = getCurrentDate();
-        String customer_seq = SeqUtils.getSeqNextVal(Constant.customerSeqName);
+        String customer_seq = new SeqUtils().getSeqNextVal(Constant.customerSeqName);
         customer_seq = SeqUtils.autoAttachZeroFromStart(customer_seq, Constant.customerSeqLength);
         return "c" + curDateStr + customer_seq;
     }
 
     public String getPid() throws BgException {
         String curDateStr = getCurrentDate();
-        String product_seq = SeqUtils.getSeqNextVal(Constant.productSeqName);
+        String product_seq = new SeqUtils().getSeqNextVal(Constant.productSeqName);
         product_seq = SeqUtils.autoAttachZeroFromStart(product_seq, Constant.productSeqLength);
         return "p" + curDateStr + product_seq;
     }
     public String getCourseid() throws BgException {
         String curDateStr = getCurrentDate();
-        String course_seq = SeqUtils.getSeqNextVal(Constant.courseSeqName);
+        String course_seq = new SeqUtils().getSeqNextVal(Constant.courseSeqName);
         course_seq = SeqUtils.autoAttachZeroFromStart(course_seq, Constant.courseSeqLength);
         return "cou" + curDateStr + course_seq;
     }

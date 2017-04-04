@@ -6,8 +6,11 @@ import dazhimen.api.bean.ApiCustomerBean;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiCustomerService;
 import dazhimen.api.service.ApiLoginService;
+import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.CustomerService;
+import db.MyBatisUtil;
 import net.sf.json.JSONObject;
+import org.apache.ibatis.session.SqlSession;
 import util.*;
 
 import java.sql.SQLException;
@@ -19,7 +22,10 @@ import java.util.Random;
  * Created by Administrator on 2017/3/15.
  */
 public class TempTest {
-    public static void main(String[] args) throws SQLException, ParameterCheckException {
+    public static void main(String[] args) throws SQLException, ParameterCheckException, BgException {
+//        System.out.println(new DateUtil().getDBDate());
+        System.out.println(new SeqUtils().getSeqNextVal(null));
+//        System.out.println(Math.random());
 //        System.out.println(GlobalUtils.hex_md5("abc1231.1com.dazhimen.product20170318153922"+ Constant.signKey));
 //        System.out.println(GlobalUtils.hex_md5("AB0027144").toUpperCase());
 //    for(int i = 1; i < 300; i++)
@@ -39,7 +45,6 @@ public class TempTest {
 //        System.out.println(new Gson().toJson(customerBean));
 //        jsonObject.put("data",new Gson().toJson(customerBean));
 //        System.out.println(jsonObject.toString());
-        System.out.println(new Gson().toJson(null));
 
     }
 //    public static String getRandNum(int charCount) {

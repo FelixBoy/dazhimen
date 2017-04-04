@@ -1,10 +1,15 @@
 package util;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import dazhimen.bg.bean.SingleValueBean;
 import dazhimen.bg.exception.BgException;
+import db.DBUtilsUtil;
 import db.MyBatisUtil;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.ArrayHandler;
 import org.apache.ibatis.session.SqlSession;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
 /**
@@ -17,23 +22,43 @@ public class SeqUtils {
      * @param seqName 序列名称
      * @return 序列的下一个值
      */
-    public static synchronized String getSeqNextVal(String seqName) throws BgException {
-        SqlSession sqlSession = null;
-        String nextVal = "";
+//    public String getSeqNextVal(String seqName) throws BgException {
+//        SqlSession sqlSession = null;
+//        String nextVal = "";
+//        try {
+//            sqlSession = MyBatisUtil.createSession();
+////            SeqBean seqBean = new SeqBean();
+////            seqBean.setSeqname(seqName);
+////            seqBean.setRandomstr(Math.random() + "");
+//            sqlSession.clearCache();
+//            SingleValueBean valueBean = sqlSession.selectOne("dazhimen.bg.bean.Util.getSeqNextVal", Math.random() + "");
+//            if(valueBean == null || valueBean.getValueInfo() == null || valueBean.getValueInfo().equals("")){
+//                throw new Exception("获取[" + seqName + "]序列值出错");
+//            }
+//            nextVal = valueBean.getValueInfo();
+//            sqlSession.clearCache();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new BgException(e.getMessage());
+//        }finally {
+//            MyBatisUtil.closeSession(sqlSession);
+//        }
+//        return nextVal;
+//    }
+    public static String getSeqNextVal(String seqName){
+        DruidDataSource dataSource = null;
+        QueryRunner runner = null;
+        Integer nextVal = null;
         try {
-            sqlSession = MyBatisUtil.createSession();
-            SingleValueBean valueBean = sqlSession.selectOne("dazhimen.bg.bean.Util.getSeqNextVal", seqName);
-            if(valueBean == null || valueBean.getValueInfo() == null || valueBean.getValueInfo().equals("")){
-                throw new Exception("获取[" + seqName + "]序列值出错");
-            }
-            nextVal = valueBean.getValueInfo();
-        } catch (Exception e) {
+            dataSource = DBUtilsUtil.getDataSource();
+            runner = new QueryRunner(dataSource);
+            Object[] results = null;
+            results = runner.query("select nextval('" + seqName + "')", new ArrayHandler());
+            nextVal = Integer.valueOf(results[0].toString());
+        } catch (SQLException e) {
             e.printStackTrace();
-            throw new BgException(e.getMessage());
-        }finally {
-            MyBatisUtil.closeSession(sqlSession);
         }
-        return nextVal;
+        return nextVal+"";
     }
 
     /**

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by Administrator on 2017/3/18.
  */
 public class ApiUtils {
-    public static synchronized void checkSignature(HttpServletRequest resq) throws ParameterCheckException {
+    public static void checkSignature(HttpServletRequest resq) throws ParameterCheckException {
         String deviceID = resq.getParameter("deviceID");
         if(deviceID == null){
             throw new ParameterCheckException("未取到参数[deviceID]");
