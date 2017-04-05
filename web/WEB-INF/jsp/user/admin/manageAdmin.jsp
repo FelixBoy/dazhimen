@@ -53,25 +53,45 @@
         return '<a href="javascript:void(0)" onclick="fwdModifyAdminPage('+index+')">修改</a>&nbsp&nbsp' +
             '<a href="javascript:void(0)" onclick="saveDeleteAdmin('+index+')">删除</a>';
     }
+    $(function () {
+        $("#adminList").datagrid({
+            title:"管理员列表",
+            url:"<%=request.getContextPath()%>/user/queryAllAdmin?random_id="+Math.random(),
+            rownumbers:true,
+            singleSelect:true,
+            fitColumns:true,
+            loadMsg:"正在加载管理员数据...",
+            columns: [[
+                { field: 'uid', title: '管理员Id', width: '20%'},
+                { field: 'name', title: '姓名', width: '10%'},
+                { field: 'mphone', title: '手机号码', width: '10%'},
+                { field: 'loginname', title: '登录名', width: '10%'},
+                { field: 'gender', title: '性别', width: '10%'},
+                { field: 'remarks', title: '介绍', width: '20%' },
+                {
+                    field: "operateID", title: '操作',width:'20%', align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return '<a href="javascript:void(0)" onclick="fwdModifyAdminPage('+rowIndex+')">修改</a>&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="saveDeleteAdmin('+rowIndex+')">删除</a>';
+                    }
+                }
+            ]],
+            pagination: true
+        });
+        $('#adminList').datagrid('getPager').pagination({
+            pageSize: 10,
+            pageNumber: 1,
+            pageList: [10,20,30],
+            beforePageText: '第',
+            afterPageText: '页    共 {pages} 页',
+            displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
+        });
+    });
 </script>
 <div style="padding:5px 0;">
     <div id="addAdminDialog" style="text-align: center;"></div>
     <div id="modifyAdminDialog" style="text-align: center;"></div>
-    <table id="adminList" title="管理员列表" class="easyui-datagrid" style="width: auto;height: auto;"
-           url="<%=request.getContextPath()%>/user/queryAllAdmin?random_id="+Math.random()
-           rownumbers="true" fitColumns="true" singleSelect="true" >
-        <thead>
-        <tr>
-            <th data-options="field:'uid'" width="20%">Id</th>
-            <th data-options="field:'name'" width="10%">姓名</th>
-            <th data-options="field:'mphone'" width="10%">手机号码</th>
-            <th data-options="field:'loginname'"  width="10%">登录名</th>
-            <th data-options="field:'gender'"  width="10%">性别</th>
-            <th data-options="field:'remarks'" width="20%">备注</th>
-            <th data-options="field:'operate',align:'center',formatter:formatOper" width="20%">操作</th>
-        </tr>
-        </thead>
-    </table>
+    <table id="adminList" style="width: auto;height: auto;"></table>
     <br/>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddAdminPage()">新增管理员</a>
 </div>

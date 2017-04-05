@@ -65,30 +65,47 @@
             <%--});--%>
         <%--}--%>
     }
-    function formatOper(val,row,index){
-        return '<a href="javascript:void(0)" onclick="fwdViewProductPage('+index+')">查看</a>&nbsp&nbsp&nbsp' +
-                '<a href="javascript:void(0)" onclick="fwdManageCoursePage('+index+')">管理课程</a>&nbsp&nbsp&nbsp'+
-                '<a href="javascript:void(0)" onclick="fwdModifyProductStatusPage('+index+')">修改状态</a>&nbsp&nbsp&nbsp'+
-                '<a href="javascript:void(0)" onclick="fwdEditProductPage('+index+')">编辑信息</a>&nbsp&nbsp&nbsp' +
-                '<a href="javascript:void(0)" onclick="saveProductDel('+index+')">删除</a>';
-    }
+    $(function () {
+        $("#productList").datagrid({
+            title:"产品列表",
+            url:"<%=request.getContextPath()%>/product/queryAllProducts?random_id="+Math.random(),
+            rownumbers:true,
+            singleSelect:true,
+            fitColumns:true,
+            loadMsg:"正在加载产品数据...",
+            columns: [[
+                { field: 'pid', title: '产品Id', width: '10%'},
+                { field: 'pname', title: '名称', width: '15%'},
+                { field: 'type', title: '类型', width: '10%'},
+                { field: 'createtime', title: '上传时间', width: '15%'},
+                { field: 'uname', title: '掌门', width: '10%'},
+                { field: 'status', title: '状态', width: '10%' },
+                { field: 'statusnum', hidden:'true',title: '状态' },
+                {
+                    field: "operateID", title: '操作',width:'30%', align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return '<a href="javascript:void(0)" onclick="fwdViewProductPage('+rowIndex+')">查看</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdManageCoursePage('+rowIndex+')">管理课程</a>&nbsp&nbsp&nbsp'+
+                            '<a href="javascript:void(0)" onclick="fwdModifyProductStatusPage('+rowIndex+')">修改状态</a>&nbsp&nbsp&nbsp'+
+                            '<a href="javascript:void(0)" onclick="fwdEditProductPage('+rowIndex+')">编辑信息</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="saveProductDel('+rowIndex+')">删除</a>';
+                    }
+                }
+            ]],
+            pagination: true
+        });
+        $('#productList').datagrid('getPager').pagination({
+            pageSize: 10,
+            pageNumber: 1,
+            pageList: [10,20,30],
+            beforePageText: '第',
+            afterPageText: '页    共 {pages} 页',
+            displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
+        });
+    });
 </script>
 <div style="padding:5px 0;">
     <div id="modifyProductStatusDialog"></div>
-    <table id="productList" title="产品列表" class="easyui-datagrid" style="width: auto;height: auto;"
-           url="<%=request.getContextPath()%>/product/queryAllProducts?random_id="+Math.random()
-           rownumbers="true" fitColumns="true" singleSelect="true" >
-        <thead>
-        <tr>
-            <th data-options="field:'pid'" width="10%">Id</th>
-            <th data-options="field:'pname'" width="15%">名称</th>
-            <th data-options="field:'type'" width="10%">类型</th>
-            <th data-options="field:'createtime'"  width="15%">上传时间</th>
-            <th data-options="field:'uname'"  width="10%">掌门</th>
-            <th data-options="field:'status'" width="10%">状态</th>
-            <th data-options="field:'statusnum',hidden:'true'">状态</th>
-            <th data-options="field:'operate',align:'center',formatter:formatOper" width="30%">操作</th>
-        </tr>
-        </thead>
+    <table id="productList" style="width: auto;height: auto;">
     </table>
 </div>

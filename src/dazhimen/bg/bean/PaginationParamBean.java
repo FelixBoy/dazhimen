@@ -6,7 +6,7 @@ package dazhimen.bg.bean;
 public class PaginationParamBean {
     private Integer startnum = null;
     private Integer getrows = null;
-
+    private String pid = null;
     public Integer getStartnum() {
         return startnum;
     }
@@ -21,5 +21,13 @@ public class PaginationParamBean {
 
     public void setGetrows(Integer getrows) {
         this.getrows = getrows;
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
     }
 }

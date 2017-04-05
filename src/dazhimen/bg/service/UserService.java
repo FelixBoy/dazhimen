@@ -1,14 +1,18 @@
 package dazhimen.bg.service;
 
+import dazhimen.api.exception.ApiException;
+import dazhimen.bg.bean.PaginationParamBean;
 import dazhimen.bg.bean.SingleValueBean;
 import dazhimen.bg.bean.UserBean;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
+import net.sf.json.JSONObject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import util.Constant;
 import util.GlobalUtils;
 import util.IdUtils;
+import util.PaginationUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -95,37 +99,57 @@ public class UserService {
      * 查询所有掌门的信息
      * @return 包含所有掌门信息的 list
      */
-    public List<UserBean> queryAllMasters() throws BgException {
+    public String queryAllMasters(String page, String rows) throws BgException {
         SqlSession sqlSession = null;
         List<UserBean> userBeans = null;
+        Integer totalCount = 0;
         try{
             sqlSession = MyBatisUtil.createSession();
-            userBeans = sqlSession.selectList("dazhimen.bg.bean.User.listAllMaster");
+            SingleValueBean allMasterCountValue = sqlSession.selectOne("dazhimen.bg.bean.User.getAllMasterCount");
+            if(allMasterCountValue == null || allMasterCountValue.getValueInfo() == null){
+                throw new ApiException("获取掌门数据总条数出错");
+            }
+            totalCount = Integer.parseInt(allMasterCountValue.getValueInfo());
+            PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);
+            userBeans = sqlSession.selectList("dazhimen.bg.bean.User.listAllMaster", paramBean);
         }catch (Exception e){
             e.printStackTrace();
             throw new BgException("出现异常，查询所有掌门信息失败");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }
-        return userBeans;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("total", totalCount);
+        jsonObject.put("rows", userBeans);
+        return jsonObject.toString();
     }
     /**
      * 查询所有管理员的信息
      * @return 包含所有掌门信息的 list
      */
-    public List<UserBean> queryAllAdmin() throws BgException {
+    public String queryAllAdmin(String page, String rows) throws BgException {
         SqlSession sqlSession = null;
         List<UserBean> userBeans = null;
+        Integer totalCount = 0;
         try{
             sqlSession = MyBatisUtil.createSession();
-            userBeans = sqlSession.selectList("dazhimen.bg.bean.User.listAllAdmin");
+            SingleValueBean allAdminCountValue = sqlSession.selectOne("dazhimen.bg.bean.User.getAllAdminCount");
+            if(allAdminCountValue == null || allAdminCountValue.getValueInfo() == null){
+                throw new ApiException("获取管理员数据总条数出错");
+            }
+            totalCount = Integer.parseInt(allAdminCountValue.getValueInfo());
+            PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);
+            userBeans = sqlSession.selectList("dazhimen.bg.bean.User.listAllAdmin", paramBean);
         }catch (Exception e){
             e.printStackTrace();
             throw new BgException("出现异常，查询所有管理员信息失败");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }
-        return userBeans;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("total", totalCount);
+        jsonObject.put("rows", userBeans);
+        return jsonObject.toString();
     }
     /**
      * 通过uid获取 制定掌门的信息

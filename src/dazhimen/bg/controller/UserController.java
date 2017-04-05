@@ -89,14 +89,14 @@ public class UserController {
         return "/user/master/masterView";
     }
     @RequestMapping("/queryAllMasters")
-    public void queryAllMasters(HttpServletResponse resp) {
+    public void queryAllMasters(HttpServletRequest resq, HttpServletResponse resp) {
         resp.setCharacterEncoding(Constant.CharSet);
         try {
             UserService userService = new UserService();
-            List<UserBean> users = userService.queryAllMasters();
-            Gson gson = new Gson();
-            String usersJson = gson.toJson(users);
-            resp.getWriter().write(usersJson);
+            String page = resq.getParameter("page");
+            String rows = resq.getParameter("rows");
+            String result = userService.queryAllMasters(page, rows);;
+            resp.getWriter().write(result);
         } catch (Exception e) {
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -236,14 +236,14 @@ public class UserController {
         return "user/admin/manageAdmin";
     }
     @RequestMapping("/queryAllAdmin")
-    public void queryAllAdmin(HttpServletResponse resp) {
+    public void queryAllAdmin(HttpServletRequest resq, HttpServletResponse resp) {
         resp.setCharacterEncoding(Constant.CharSet);
         try {
             UserService userService = new UserService();
-            List<UserBean> users = userService.queryAllAdmin();
-            Gson gson = new Gson();
-            String usersJson = gson.toJson(users);
-            resp.getWriter().write(usersJson);
+            String page = resq.getParameter("page");
+            String rows = resq.getParameter("rows");
+            String result = userService.queryAllAdmin(page, rows);
+            resp.getWriter().write(result);
         } catch (BgException e) {
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

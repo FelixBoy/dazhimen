@@ -27,11 +27,6 @@
             $('#viewMasterDialog').dialog("open");
         }
     }
-    function formatOper(val,row,index){
-        return '<a href="javascript:void(0)" onclick="fwdViewMasterPage('+index+')">查看</a>&nbsp&nbsp' +
-            '<a href="javascript:void(0)" onclick="fwdMasterEditPage('+index+')">修改</a>&nbsp&nbsp' +
-            '<a href="javascript:void(0)" onclick="saveMasterDel('+index+')">删除</a>';
-    }
     function fwdMasterEditPage(index){
         $('#masterList').datagrid('selectRow',index);// 关键在这里
         var row = $('#masterList').datagrid('getSelected');
@@ -70,6 +65,42 @@
             });
         }
     }
+    $(function () {
+        $("#masterList").datagrid({
+            title:"掌门列表",
+            url:"<%=request.getContextPath()%>/user/queryAllMasters?random_id="+Math.random(),
+            rownumbers:true,
+            singleSelect:true,
+            fitColumns:true,
+            loadMsg:"正在加载掌门数据...",
+            columns: [[
+                { field: 'uid', title: '掌门Id', width: '10%'},
+                { field: 'name', title: '姓名', width: '15%'},
+                { field: 'mphone', title: '手机号码', width: '10%'},
+                { field: 'loginname', title: '登录名', width: '10%'},
+                { field: 'gender', title: '性别', width: '5%'},
+                { field: 'introduction', title: '介绍', width: '20%' },
+                { field: 'createDatestr', title: '状态',width: '15%' },
+                {
+                    field: "operateID", title: '操作',width:'15%', align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return '<a href="javascript:void(0)" onclick="fwdViewMasterPage('+rowIndex+')">查看</a>&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdMasterEditPage('+rowIndex+')">修改</a>&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="saveMasterDel('+rowIndex+')">删除</a>';
+                    }
+                }
+            ]],
+            pagination: true
+        });
+        $('#masterList').datagrid('getPager').pagination({
+            pageSize: 10,
+            pageNumber: 1,
+            pageList: [10,20,30],
+            beforePageText: '第',
+            afterPageText: '页    共 {pages} 页',
+            displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
+        });
+    });
 </script>
 
 
@@ -77,20 +108,7 @@
     <div id="viewMasterDialog" style="text-align: center;"></div>
     <div id="masterAddDialog" style="text-align: center;"></div>
     <div id="masterModifyDialog" style="text-align: center;"></div>
-    <table id="masterList" title="掌门列表" class="easyui-datagrid" style="width: auto;height: auto;"
-           url="<%=request.getContextPath()%>/user/queryAllMasters?random_id="+Math.random()
-           rownumbers="true" fitColumns="true" singleSelect="true" >
-        <thead>
-        <tr>
-            <th data-options="field:'uid'" width="20%">Id</th>
-            <th data-options="field:'name'" width="10%">姓名</th>
-            <th data-options="field:'mphone'" width="10%">手机号码</th>
-            <th data-options="field:'loginname'"  width="10%">登录名</th>
-            <th data-options="field:'gender'"  width="10%">性别</th>
-            <th data-options="field:'introduction'" width="20%">介绍</th>
-            <th data-options="field:'operate',align:'center',formatter:formatOper" width="20%">操作</th>
-        </tr>
-        </thead>
+    <table id="masterList" style="width: auto;height: auto;">
     </table>
     <br/>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardMasterAddPage()">新增掌门</a>

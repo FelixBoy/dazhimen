@@ -28,8 +28,8 @@ public class RechargeController {
         resp.setCharacterEncoding(Constant.CharSet);
 
         try {
-            String rows = resq.getParameter("rows");
             String page = resq.getParameter("page");
+            String rows = resq.getParameter("rows");
             RechargeService rechargeService = new RechargeService();
             String result = rechargeService.queryAllRecharge(page, rows);
             resp.getWriter().write(result);

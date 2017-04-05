@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import dazhimen.bg.bean.*;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.UserService;
+import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -36,14 +37,14 @@ public class ProductController {
         return "product/selectMaster";
     }
     @RequestMapping("/getSelectMasterData")
-    public void getSelectMasterData(HttpServletResponse resp){
+    public void getSelectMasterData(HttpServletRequest resq, HttpServletResponse resp){
         resp.setCharacterEncoding(Constant.CharSet);
         try {
             ProductService productService = new ProductService();
-            List<UserBean> users = productService.queryAllMasters();
-            Gson gson = new Gson();
-            String usersJson = gson.toJson(users);
-            resp.getWriter().write(usersJson);
+            String page = resq.getParameter("page");
+            String rows = resq.getParameter("rows");
+            String result = productService.queryAllMasters(page, rows);
+            resp.getWriter().write(result);
         } catch (Exception e) {
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -159,12 +160,14 @@ public class ProductController {
         return "/product/manageProduct";
     }
     @RequestMapping("/queryAllProducts")
-    public void queryAllProducts(HttpServletResponse resp){
+    public void queryAllProducts(HttpServletRequest resq, HttpServletResponse resp){
         resp.setCharacterEncoding(Constant.CharSet);
         try{
             ProductService productService = new ProductService();
-            List<ListViewProductBean> productBeans = productService.queryAllProducts();
-            resp.getWriter().write(new Gson().toJson(productBeans));
+            String page = resq.getParameter("page");
+            String rows = resq.getParameter("rows");
+            String result = productService.queryAllProducts(page, rows);
+            resp.getWriter().write(result);
         }catch (Exception e){
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -230,7 +233,10 @@ public class ProductController {
         try{
             String pid = resq.getParameter("pid");
             ProductService productService = new ProductService();
-            List<ListViewCourseBean> courseBeans = productService.queryAllCourseByPid(pid);
+            String page = resq.getParameter("page");
+            String rows = resq.getParameter("rows");
+            Integer totalCount = productService.getAllCourseCountByPid(pid);
+            List<ListViewCourseBean> courseBeans = productService.queryAllCourseByPid(pid, page, rows);
             String localIp = resq.getLocalAddr();//获取本地ip
             if(Constant.isDeployInAliyun){
                 localIp = Constant.AliyunIP;
@@ -244,7 +250,10 @@ public class ProductController {
                     courseBean.setAudiourl(audioUrl);
                 }
             }
-            resp.getWriter().write(new Gson().toJson(courseBeans));
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("total", totalCount);
+            jsonObject.put("rows", courseBeans);
+            resp.getWriter().write(jsonObject.toString());
         }catch (Exception e){
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

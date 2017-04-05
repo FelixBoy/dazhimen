@@ -1,12 +1,4 @@
 <script>
-    $(function(){
-        $("#viewProductFormInCoursePage").form("load", "<%=request.getContextPath()%>/product/getProductInforById" +
-            "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random());
-    });
-    function courseListFormatOper(val,row,index){
-        return  '<a href="javascript:void(0)" onclick="fwdEditCoursePage('+index+')">修改信息</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
-                '<a href="javascript:void(0)" onclick="saveCourseDel('+index+')">删除</a>';
-    }
     function returnManageProduct(){
         $('#content_panel').panel({
             href:"<%=request.getContextPath() %>/product/fwdManageProductPage?random_id="+Math.random(),
@@ -56,9 +48,6 @@
     function downloadCourseAudio(index){
         MsgBox.show("功能正在开发，敬请期待");
     }
-    function downloadAudioFormatOper(val,row,index){
-        return '<a href="#" class="easyui-linkbutton" onclick="downloadCourseAudio('+index+')">下载音频</a>';
-    }
     function forwardAddCoursePage(){
         $('#addCourseDialog').dialog({
             title: '新增课程',
@@ -71,6 +60,47 @@
         $("#addCourseDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdAddCoursePage?random_id=" + Math.random());
         $('#addCourseDialog').dialog("open");
     }
+    $(function(){
+        $("#viewProductFormInCoursePage").form("load", "<%=request.getContextPath()%>/product/getProductInforById" +
+            "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random());
+        $("#courseList").datagrid({
+            title:"课程列表",
+            url:"<%=request.getContextPath()%>/product/queryAllCourseByPid?pid=<%=request.getAttribute("pid").toString()%>&random_id="+Math.random(),
+            rownumbers:true,
+            singleSelect:true,
+            fitColumns:true,
+            loadMsg:"正在加载课程数据...",
+            columns: [[
+                { field: 'courseid', title: '课程Id', width: '15%'},
+                { field: 'coursename', title: '名称', width: '15%'},
+                { field: 'sort', title: '首页排名', width: '15%'},
+                { field: 'istry', title: '是否试学', width: '15%'},
+                { field: 'audiourl',hidden:'true', title: '音频url'},
+                {
+                    field: "downloadaudio", title: '音频',width:'15%', align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return '<a href="#" class="easyui-linkbutton" onclick="downloadCourseAudio('+rowIndex+')">下载音频</a>';
+                    }
+                },
+                {
+                    field: "operateID", title: '操作',width:'25%', align: 'center',
+                    formatter: function (value, rowData, rowIndex) {
+                        return  '<a href="javascript:void(0)" onclick="fwdEditCoursePage('+rowIndex+')">修改信息</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="saveCourseDel('+rowIndex+')">删除</a>';
+                    }
+                }
+            ]],
+            pagination: true
+        });
+        $('#courseList').datagrid('getPager').pagination({
+            pageSize: 10,
+            pageNumber: 1,
+            pageList: [10,20,30],
+            beforePageText: '第',
+            afterPageText: '页    共 {pages} 页',
+            displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
+        });
+    });
 </script>
 <div style="text-align: left;">
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="returnManageProduct()">返回</a>
@@ -104,21 +134,7 @@
 <div style="padding:5px 0;">
     <div id="modifyCourseDialog" style="text-align: center"></div>
     <div id="addCourseDialog" style="text-align: center"></div>
-    <table id="courseList" title="课程列表" class="easyui-datagrid" style="width: auto;height: auto;"
-           url="<%=request.getContextPath()%>/product/queryAllCourseByPid?pid=<%=request.getAttribute("pid").toString()%>&
-           random_id="+Math.random()
-           rownumbers="true" fitColumns="true" singleSelect="true" >
-        <thead>
-        <tr>
-            <th data-options="field:'courseid'" width="15%">ID</th>
-            <th data-options="field:'coursename'" width="15%">名称</th>
-            <th data-options="field:'sort'"  width="15%">首页排名</th>
-            <th data-options="field:'istry'"  width="15%">是否试学</th>
-            <th data-options="field:'audiourl',hidden:'true'" width="20%">音频url</th>
-            <th data-options="field:'downloadaudio',align:'center',formatter:downloadAudioFormatOper" width="15%">音频</th>
-            <th data-options="field:'operate',align:'center',formatter:courseListFormatOper" width="25%">操作</th>
-        </tr>
-        </thead>
+    <table id="courseList" style="width: auto;height: auto;">
     </table>
     <br/>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddCoursePage()">新增课程</a>

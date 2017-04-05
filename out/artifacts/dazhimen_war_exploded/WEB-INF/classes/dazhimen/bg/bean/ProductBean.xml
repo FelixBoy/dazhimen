@@ -2,13 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.Product">
-    <select id="listAllProduct" resultType="dazhimen.bg.bean.ListViewProductBean">
+    <select id="getAllProductCount" resultType="dazhimen.bg.bean.SingleValueBean">
+         select count(pid) as valueinfo
+        from product a
+       where a.isdel = '0'
+    </select>
+    <select id="listAllProduct" resultType="dazhimen.bg.bean.ListViewProductBean"
+            parameterType="dazhimen.bg.bean.PaginationParamBean">
        select pid,pname,getcodetxt('producttype',a.type) type,
                getcodetxt('productstatus',a.status) status,a.status statusnum,
                date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createtime,b.name uname
         from product a, user b
        where a.uid = b.uid and a.isdel = '0'
        order by a.indexsort,createdatetime desc
+       limit #{startnum},#{getrows}
     </select>
 
     <select id="getProductInforById" resultType="dazhimen.bg.bean.ViewProductBean">
@@ -39,10 +46,17 @@
         where courseid = #{courseid}
     </select>
 
-    <select id="queryAllCourseByPid" resultType="dazhimen.bg.bean.ListViewCourseBean">
+    <select id="getAllCourseCountByPid" resultType="dazhimen.bg.bean.SingleValueBean">
+       select count(courseid) as valueinfo
+          from course where pid = #{pid}
+    </select>
+
+    <select id="queryAllCourseByPid" resultType="dazhimen.bg.bean.ListViewCourseBean"
+            parameterType="dazhimen.bg.bean.PaginationParamBean">
         select courseid,coursename,getcodetxt('indexsort',sort) as sort,
                 getcodetxt('rightorwrong',istry) as istry,audiopath as audiourl
           from course where pid = #{pid}
+        limit #{startnum},#{getrows}
     </select>
 
     <select id="getMasterDataByUid" resultType="dazhimen.bg.bean.UserBean">
@@ -51,9 +65,16 @@
         where uid = #{uid}
     </select>
 
-    <select id="listAllMasters" resultType="dazhimen.bg.bean.UserBean">
-        select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,remarks
+    <select id="getAllMastersCount" resultType="dazhimen.bg.bean.SingleValueBean">
+        select count(uid) as valueinfo
+        from user where type = '1' and isdel = '0'
+    </select>
+
+    <select id="listAllMasters" resultType="dazhimen.bg.bean.UserBean"
+            parameterType="dazhimen.bg.bean.PaginationParamBean">
+        select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,introduction
           from user where type = '1' and isdel = '0'
+           limit #{startnum},#{getrows}
     </select>
 
     <delete id="saveCourseDel">

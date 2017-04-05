@@ -13,11 +13,11 @@ import java.util.List;
  */
 public class JsonDealTest {
     public static void main(String[] args) throws SQLException, IllegalAccessException, NoSuchMethodException, BgException {
-        UserService userService = new UserService();
-        List<UserBean> users = userService.queryAllMasters();
-        UserBean userBean = users.get(0);
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(users));
+//        UserService userService = new UserService();
+//        List<UserBean> users = userService.queryAllMasters();
+//        UserBean userBean = users.get(0);
+//        Gson gson = new Gson();
+//        System.out.println(gson.toJson(users));
 //      System.out.println(JsonUtil.toJson(users.toArray()));
     }
 }

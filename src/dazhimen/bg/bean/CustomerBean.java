@@ -12,7 +12,7 @@ public class CustomerBean {
     private String qquid = "";
     private String weixinuid = "";
     private Double accoutbalance = null;
-
+    private String createdate = null;
     @Override
     public String toString() {
         return "CustomerBean{" +
@@ -25,6 +25,14 @@ public class CustomerBean {
                 ", education='" + education + '\'' +
                 ", gender='" + gender + '\'' +
                 '}';
+    }
+
+    public String getCreatedate() {
+        return createdate;
+    }
+
+    public void setCreatedate(String createdate) {
+        this.createdate = createdate;
     }
 
     public Double getAccoutbalance() {

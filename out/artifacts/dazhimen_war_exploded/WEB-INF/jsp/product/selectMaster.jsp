@@ -23,21 +23,36 @@
             $('#selectMasterDialog').dialog('close');
         }
     }
+    $(function () {
+        $("#selectMasterList").datagrid({
+            title:"掌门列表",
+            url:"<%=request.getContextPath()%>/product/getSelectMasterData?random_id="+Math.random(),
+            rownumbers:true,
+            singleSelect:true,
+            fitColumns:true,
+            loadMsg:"正在加载掌门数据...",
+            columns: [[
+                { field: 'uid', title: '掌门Id', width: '20%'},
+                { field: 'name', title: '姓名', width: '10%'},
+                { field: 'mphone', title: '手机号码', width: '20%'},
+                { field: 'loginname', title: '登录名', width: '10%'},
+                { field: 'gender', title: '性别', width: '10%'},
+                { field: 'introduction', title: '介绍', width: '30%' }
+            ]],
+            pagination: true
+        });
+        $('#selectMasterList').datagrid('getPager').pagination({
+            pageSize: 10,
+            pageNumber: 1,
+            pageList: [10,20,30],
+            beforePageText: '第',
+            afterPageText: '页    共 {pages} 页',
+            displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
+        });
+    });
 </script>
 <div style="padding:5px 0;">
-    <table id="selectMasterList" title="掌门列表" class="easyui-datagrid"
-           url="<%=request.getContextPath()%>/product/getSelectMasterData?random_id="+Math.random()
-           rownumbers="true" fitColumns="true" singleSelect="true">
-        <thead>
-        <tr>
-            <th data-options="field:'uid'" width="20%">Id</th>
-            <th data-options="field:'name'" width="10%">姓名</th>
-            <th data-options="field:'mphone'" width="20%">手机号码</th>
-            <th data-options="field:'loginname'"  width="10%">登录名</th>
-            <th data-options="field:'gender'"  width="10%">性别</th>
-            <th data-options="field:'remarks'" width="30%">备注</th>
-        </tr>
-        </thead>
+    <table id="selectMasterList">
     </table>
 </div>
 <div style="text-align:right;padding-right:50px;padding-top:5px">

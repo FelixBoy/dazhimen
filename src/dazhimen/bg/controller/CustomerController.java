@@ -23,14 +23,14 @@ public class CustomerController {
         return "/customer/manageCustomer";
     }
     @RequestMapping("/queryAllCustomers")
-    public void queryAllCustomers(HttpServletResponse resp){
+    public void queryAllCustomers(HttpServletRequest resq, HttpServletResponse resp){
         resp.setCharacterEncoding(Constant.CharSet);
         try{
             CustomerService customerService = new CustomerService();
-            List<CustomerBean> customerBeans = customerService.queryAllCustomers();
-            Gson gson = new Gson();
-            String customerJson = gson.toJson(customerBeans);
-            resp.getWriter().write(customerJson);
+            String page = resq.getParameter("page");
+            String rows = resq.getParameter("rows");
+            String result = customerService.queryAllCustomers(page, rows);
+            resp.getWriter().write(result);
         }catch (Exception e){
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

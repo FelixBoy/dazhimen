@@ -1,13 +1,16 @@
 package dazhimen.bg.service;
 
+import dazhimen.api.exception.ApiException;
 import dazhimen.bg.bean.*;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
+import net.sf.json.JSONObject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import util.Constant;
 import util.IdUtils;
+import util.PaginationUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -32,12 +35,33 @@ public class ProductService {
         }
         return courseBean;
     }
-    public List<ListViewCourseBean> queryAllCourseByPid(String pid) throws BgException {
-        List<ListViewCourseBean> courseBeans = null;
+    public Integer getAllCourseCountByPid(String pid) throws BgException {
         SqlSession sqlSession = null;
+        Integer totalCount = 0;
         try {
             sqlSession = MyBatisUtil.createSession();
-            courseBeans = sqlSession.selectList("dazhimen.bg.bean.Product.queryAllCourseByPid", pid);
+            SingleValueBean allCourseCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllCourseCountByPid", pid);
+            if(allCourseCountValue == null || allCourseCountValue.getValueInfo() == null){
+                throw new ApiException("获取课程数据总条数出错");
+            }
+            totalCount = Integer.parseInt(allCourseCountValue.getValueInfo());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BgException("出现异常，获取课程数据总条数失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return totalCount;
+    }
+    public List<ListViewCourseBean> queryAllCourseByPid(String pid, String page, String rows) throws BgException {
+        List<ListViewCourseBean> courseBeans = null;
+        SqlSession sqlSession = null;
+        Integer totalCount = 0;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);
+            paramBean.setPid(pid);
+            courseBeans = sqlSession.selectList("dazhimen.bg.bean.Product.queryAllCourseByPid", paramBean);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BgException("出现异常，查询产品的课程失败");
@@ -69,19 +93,29 @@ public class ProductService {
      * 查询所有掌门的信息
      * @return 包含所有掌门信息的 list
      */
-    public List<UserBean> queryAllMasters() throws BgException {
+    public String queryAllMasters(String page, String rows) throws BgException {
         List<UserBean> userBeans = null;
         SqlSession sqlSession = null;
+        Integer totalCount = null;
         try {
             sqlSession = MyBatisUtil.createSession();
-            userBeans = sqlSession.selectList("dazhimen.bg.bean.Product.listAllMasters");
+            SingleValueBean allSelectMasterCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllMastersCount");
+            if(allSelectMasterCountValue == null || allSelectMasterCountValue.getValueInfo() == null){
+                throw new ApiException("获取选择掌门数据总条数出错");
+            }
+            totalCount = Integer.parseInt(allSelectMasterCountValue.getValueInfo());
+            PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);
+            userBeans = sqlSession.selectList("dazhimen.bg.bean.Product.listAllMasters", paramBean);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BgException("出现异常，查询所有掌门信息失败");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }
-        return userBeans;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("total", totalCount);
+        jsonObject.put("rows", userBeans);
+        return jsonObject.toString();
     }
     public void saveCourseDel(String courseid,String pid, HttpServletRequest resq) throws BgException {
         SqlSession sqlSession = null;
@@ -301,19 +335,30 @@ public class ProductService {
         return mainImageBeans;
     }
 
-    public List<ListViewProductBean> queryAllProducts() throws BgException {
+    public String queryAllProducts(String page, String rows) throws BgException {
         List<ListViewProductBean> productBeans = null;
         SqlSession sqlSession = null;
+        Integer totalCount = 0;
         try {
             sqlSession = MyBatisUtil.createSession();
-            productBeans = sqlSession.selectList("dazhimen.bg.bean.Product.listAllProduct");
+
+            SingleValueBean allProductCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllProductCount");
+            if(allProductCountValue == null || allProductCountValue.getValueInfo() == null){
+                throw new ApiException("获取产品数据总条数出错");
+            }
+            totalCount = Integer.parseInt(allProductCountValue.getValueInfo());
+            PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);
+            productBeans = sqlSession.selectList("dazhimen.bg.bean.Product.listAllProduct", paramBean);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BgException("出现异常，查询所有产品信息失败");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }
-        return productBeans;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("total", totalCount);
+        jsonObject.put("rows", productBeans);
+        return jsonObject.toString();
     }
     public void saveModifyProductStatus(String pid, String status) throws BgException {
         SqlSession sqlSession = null;

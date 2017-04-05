@@ -2,11 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.Customer">
-    <select id="listAllCustomer" resultType="dazhimen.bg.bean.CustomerBean">
+    <select id="getAllCustomerCount" resultType="dazhimen.bg.bean.SingleValueBean">
+        select count(cid) as valueinfo from customer where isdel = '0'
+    </select>
+
+    <select id="listAllCustomer" resultType="dazhimen.bg.bean.CustomerBean"
+            parameterType="dazhimen.bg.bean.PaginationParamBean">
        select cid,name,nickname,gender,mphone,email,getcodetxt('education', education) education,
-              qquid,weixinuid,accoutbalance
+              qquid,weixinuid,accoutbalance,date_format(createdate,'%Y-%m-%d %H:%i:%s') createdate
          from customer
         where isdel = '0'
+         limit #{startnum},#{getrows}
     </select>
 
     <update id="saveCustomerDel">
