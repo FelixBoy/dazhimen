@@ -3,7 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.Customer">
     <select id="listAllCustomer" resultType="dazhimen.bg.bean.CustomerBean">
-       select cid,name,nickname,gender,mphone,email,education,qquid,weixinuid
+       select cid,name,nickname,gender,mphone,email,getcodetxt('education', education) education,
+              qquid,weixinuid,accoutbalance
          from customer
         where isdel = '0'
     </select>

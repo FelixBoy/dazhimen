@@ -38,12 +38,13 @@
         <thead>
         <tr>
             <th data-options="field:'cid'" width="10%">会员ID</th>
-            <th data-options="field:'nickname'" width="10%">昵称</th>
+            <th data-options="field:'nickname'" width="8%">昵称</th>
             <th data-options="field:'mphone'" width="10%">手机号码</th>
-            <th data-options="field:'name'" width="10%">姓名</th>
-            <th data-options="field:'gender'"  width="10%">性别</th>
+            <th data-options="field:'name'" width="7%">姓名</th>
+            <th data-options="field:'gender'"  width="5%">性别</th>
             <th data-options="field:'email'" width="10%">Email</th>
             <th data-options="field:'education'" width="10%">学历</th>
+            <th data-options="field:'accoutbalance'" width="10%">余额</th>
             <th data-options="field:'qquid'" width="15%">QQUid</th>
             <th data-options="field:'weixinuid'" width="15%">微信Uid</th>
         </tr>

@@ -11,6 +11,7 @@ public class CustomerBean {
     private String gender = "";
     private String qquid = "";
     private String weixinuid = "";
+    private Double accoutbalance = null;
 
     @Override
     public String toString() {
@@ -26,6 +27,13 @@ public class CustomerBean {
                 '}';
     }
 
+    public Double getAccoutbalance() {
+        return accoutbalance;
+    }
+
+    public void setAccoutbalance(Double accoutbalance) {
+        this.accoutbalance = accoutbalance;
+    }
 
     public String getCid() {
         return cid;

@@ -12,7 +12,7 @@ public class ViewRechargeBean {
     private String mphone = null;
     private String issucc = null;
     private String transaction_id = null;
-    private String crecdatetime = null;
+    private String recdatetime = null;
 
     public String getCnickname() {
         return cnickname;
@@ -78,11 +78,11 @@ public class ViewRechargeBean {
         this.transaction_id = transaction_id;
     }
 
-    public String getCrecdatetime() {
-        return crecdatetime;
+    public String getRecdatetime() {
+        return recdatetime;
     }
 
-    public void setCrecdatetime(String crecdatetime) {
-        this.crecdatetime = crecdatetime;
+    public void setRecdatetime(String recdatetime) {
+        this.recdatetime = recdatetime;
     }
 }
