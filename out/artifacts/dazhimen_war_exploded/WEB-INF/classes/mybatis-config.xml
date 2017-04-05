@@ -10,6 +10,7 @@
         <mapper resource="dazhimen/bg/bean/LoginBean.xml"/>
         <mapper resource="dazhimen/bg/bean/PlaySortBean.xml"/>
         <mapper resource="dazhimen/bg/bean/UtilBean.xml"/>
+        <mapper resource="dazhimen/bg/bean/RechargeBean.xml"/>
         <mapper resource="dazhimen/api/bean/ApiCustomerBean.xml"/>
         <mapper resource="dazhimen/api/bean/ApiLoginBean.xml"/>
         <mapper resource="dazhimen/api/bean/ApiProductBean.xml"/>

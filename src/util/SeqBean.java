@@ -5,7 +5,8 @@ package util;
  */
 public class SeqBean {
     private String seqname = null;
-    private String randomstr = null;
+    private String randomstrkey = null;
+    private String randomstrvalue = null;
 
     public String getSeqname() {
         return seqname;
@@ -15,11 +16,19 @@ public class SeqBean {
         this.seqname = seqname;
     }
 
-    public String getRandomstr() {
-        return randomstr;
+    public String getRandomstrkey() {
+        return randomstrkey;
     }
 
-    public void setRandomstr(String randomstr) {
-        this.randomstr = randomstr;
+    public void setRandomstrkey(String randomstrkey) {
+        this.randomstrkey = randomstrkey;
+    }
+
+    public String getRandomstrvalue() {
+        return randomstrvalue;
+    }
+
+    public void setRandomstrvalue(String randomstrvalue) {
+        this.randomstrvalue = randomstrvalue;
     }
 }

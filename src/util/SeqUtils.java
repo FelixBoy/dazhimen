@@ -5,11 +5,13 @@ import dazhimen.bg.bean.SingleValueBean;
 import dazhimen.bg.exception.BgException;
 import db.DBUtilsUtil;
 import db.MyBatisUtil;
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ArrayHandler;
 import org.apache.ibatis.session.SqlSession;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -22,43 +24,39 @@ public class SeqUtils {
      * @param seqName 序列名称
      * @return 序列的下一个值
      */
-//    public String getSeqNextVal(String seqName) throws BgException {
-//        SqlSession sqlSession = null;
-//        String nextVal = "";
-//        try {
-//            sqlSession = MyBatisUtil.createSession();
-////            SeqBean seqBean = new SeqBean();
-////            seqBean.setSeqname(seqName);
-////            seqBean.setRandomstr(Math.random() + "");
-//            sqlSession.clearCache();
-//            SingleValueBean valueBean = sqlSession.selectOne("dazhimen.bg.bean.Util.getSeqNextVal", Math.random() + "");
-//            if(valueBean == null || valueBean.getValueInfo() == null || valueBean.getValueInfo().equals("")){
-//                throw new Exception("获取[" + seqName + "]序列值出错");
-//            }
-//            nextVal = valueBean.getValueInfo();
-//            sqlSession.clearCache();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw new BgException(e.getMessage());
-//        }finally {
-//            MyBatisUtil.closeSession(sqlSession);
-//        }
-//        return nextVal;
-//    }
-    public static String getSeqNextVal(String seqName){
-        DruidDataSource dataSource = null;
+    public String getSeqNextVal(String seqName) throws BgException {
+        SqlSession sqlSession = null;
+        String nextVal = "";
+        Connection conn = null;
         QueryRunner runner = null;
-        Integer nextVal = null;
         try {
-            dataSource = DBUtilsUtil.getDataSource();
-            runner = new QueryRunner(dataSource);
+            sqlSession = MyBatisUtil.createSession();
+            conn = sqlSession.getConnection();
+            conn.setAutoCommit(true);
+            runner = new QueryRunner();
             Object[] results = null;
-            results = runner.query("select nextval('" + seqName + "')", new ArrayHandler());
-            nextVal = Integer.valueOf(results[0].toString());
-        } catch (SQLException e) {
+            results = runner.query(conn,"select nextval('" + seqName + "')", new ArrayHandler());
+            nextVal = results[0].toString();
+            conn.setAutoCommit(false);
+        } catch (Exception e) {
             e.printStackTrace();
+            try {
+                conn.setAutoCommit(false);
+                conn.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            throw new BgException(e.getMessage());
+        }finally {
+            try {
+                conn.setAutoCommit(false);
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            MyBatisUtil.closeSession(sqlSession);
         }
-        return nextVal+"";
+        return nextVal;
     }
 
     /**

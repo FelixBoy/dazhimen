@@ -58,7 +58,6 @@ public class ApiRechargeController {
             }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            e.printStackTrace();
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","400");
             jsonObj.put("msg",e.getMessage());
@@ -68,7 +67,6 @@ public class ApiRechargeController {
                 e1.printStackTrace();
             }
         } catch (ApiException e) {
-            e.printStackTrace();
             e.printStackTrace();
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","400");

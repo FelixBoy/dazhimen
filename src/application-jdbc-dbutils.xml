@@ -15,7 +15,7 @@
 
 
         <!-- 默认关闭auto commit -->
-        <property name="defaultAutoCommit" value="true" />
+        <property name="defaultAutoCommit" value="false" />
 
         <!--密码需要加密的时候，请启用如下配置 -->
         <!--

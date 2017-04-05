@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.bg.bean.Recharge">
+    <select id="queryAllRecharge" resultType="dazhimen.bg.bean.ViewRechargeBean">
+      select a.recid,a.recamount,b.cid,b.name cname,b.nickname cnickname
+              date_format(a.recdatetime,'%Y-%m-%d %H:%i:%s') recdatetime
+        from recharge a,customer b
+       where a.cid = b.cid
+         and a.isdel = '0';
+    </select>
+</mapper>

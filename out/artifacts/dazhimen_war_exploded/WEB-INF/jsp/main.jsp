@@ -63,6 +63,13 @@
                         }
                     });
                     break;
+                case 'recharge_manage':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/recharge/fwdManageRechargePage?random_id="+Math.random(),
+                        onLoad:function(){
+                        }
+                    });
+                    break;
                 case 'test_fileuploadcb':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/demo/fwdTestFileUploadCallBack?random_id="+Math.random()

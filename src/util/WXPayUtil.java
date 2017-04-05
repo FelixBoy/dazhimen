@@ -243,7 +243,7 @@ public class WXPayUtil{
         parameterMap.put("prepayid", map.get("prepay_id"));
         parameterMap.put("package", "Sign=WXPay");
         parameterMap.put("noncestr", WXPayUtil.getRandomString(32));
-        parameterMap.put("timestamp", System.currentTimeMillis());
+        parameterMap.put("timestamp", 1412000000L);
         String sign = WXPayUtil.createSign("UTF-8", parameterMap);
         parameterMap.put("sign", sign);
         return parameterMap;

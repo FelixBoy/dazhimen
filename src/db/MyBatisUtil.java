@@ -18,11 +18,11 @@ public class MyBatisUtil {
     private static ApplicationContext ctx = null;
     static {
             if (ctx == null) {
+//                ctx = new ClassPathXmlApplicationContext("classpath:aliyun-mybatis.xml");
                 ctx = new ClassPathXmlApplicationContext("classpath:application-jdbc-mybatis.xml");
             }
             factory = (SqlSessionFactory)ctx.getBean("sqlSessionFactory");
     }
-
     public static SqlSession createSession() {
         return factory.openSession();
     }

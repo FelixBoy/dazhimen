@@ -6,6 +6,7 @@ import dazhimen.api.exception.ApiException;
 import db.MyBatisUtil;
 import net.sf.json.JSONObject;
 import org.apache.ibatis.session.SqlSession;
+import util.CheckIsExistsUtils;
 import util.Constant;
 import util.IdUtils;
 import util.WXPayUtil;
@@ -22,7 +23,12 @@ public class ApiRechargeService {
     public ApiBalanceBean getBalanceByCid(String cid) throws ApiException {
         SqlSession sqlSession = null;
         ApiBalanceBean balanceBean = null;
+        CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();
+        if(!checkUtil.checkCidIsExists(cid)){
+            throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
+        }
         try{
+
             sqlSession = MyBatisUtil.createSession();
             balanceBean = sqlSession.selectOne("dazhimen.api.bean.ApiRecharge.getBalanceByCid", cid);
             if(balanceBean == null || balanceBean.getAccoutbalance() == null){
@@ -41,10 +47,15 @@ public class ApiRechargeService {
         return balanceBean;
     }
     public SortedMap<String, Object> doRechargeByWeixin(HttpServletRequest resq) throws ApiException {
+        String cid = resq.getParameter("cid");
         SortedMap<String, Object> resultMap = null;
         SqlSession sqlSession = null;
+        CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();
+        if(!checkUtil.checkCidIsExists(cid)){
+            throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
+        }
         try {
-            String cid = resq.getParameter("cid");
+
             String rechargeAmount = resq.getParameter("rechargeamout");
             String remoteIp = resq.getRemoteAddr();
             if(remoteIp == null || remoteIp.equals("")){
@@ -69,8 +80,7 @@ public class ApiRechargeService {
                 sqlSession.insert("dazhimen.api.bean.ApiRecharge.doRechargeByWeixin", rechargeByWeixinBean);
                 sqlSession.commit();
             }else{
-                System.out.println("统一下单接口调用错误");
-                throw new ApiException("统一下单接口调用错误");
+                throw new ApiException("统一下单接口调用错误" + map.get("err_code_des"));
             }
 
         } catch (ApiException e){
@@ -78,8 +88,8 @@ public class ApiRechargeService {
             e.printStackTrace();
             throw new ApiException(e.getMessage());
         } catch (Exception e) {
-            sqlSession.rollback();
             e.printStackTrace();
+            sqlSession.rollback();
             throw new ApiException("出现异常，发起微信支付充值失败");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
