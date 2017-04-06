@@ -12,6 +12,7 @@ public class ApiProductBean {
     private Date updatetimeo = null;
     private String updatetime = "";
     private Double price = null;
+    private String isstart = "";
 
     @Override
     public String toString() {
@@ -80,5 +81,13 @@ public class ApiProductBean {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getIsstart() {
+        return isstart;
+    }
+
+    public void setIsstart(String isstart) {
+        this.isstart = dealNull(isstart);
     }
 }

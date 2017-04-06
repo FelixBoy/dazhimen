@@ -327,6 +327,25 @@ public class ApiProductService {
         }
         return courseBeans;
     }
+    public List<ApiListViewCourseBean> getReverseCourseList(String pid) throws ApiException{
+        CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();
+        if(!checkUtil.checkPidIsExists(pid)){
+            throw new ApiException("传入的[pid]值，无效。在数据库中不存在，或者产品已经下架。");
+        }
+        List<ApiListViewCourseBean> courseBeans = null;
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            courseBeans = sqlSession.selectList("dazhimen.api.bean.ApiProduct.getReverseCourseList", pid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApiException("出现异常，获取产品课程列表出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return courseBeans;
+    }
+
     public String getProductAudioUpdateCount(String pid){
         SqlSession sqlSession = null;
         String updateCount = "";

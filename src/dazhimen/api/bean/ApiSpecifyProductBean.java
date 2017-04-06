@@ -15,6 +15,7 @@ public class ApiSpecifyProductBean {
     private String iscollection = "";
     private String isbuy = "";
     private String introduction = "";
+    private String isstart = "";
 
     private String dealNull(String value){
         if(value == null){
@@ -108,5 +109,13 @@ public class ApiSpecifyProductBean {
 
     public void setIntroduction(String introduction) {
         this.introduction = dealNull(introduction);
+    }
+
+    public String getIsstart() {
+        return isstart;
+    }
+
+    public void setIsstart(String isstart) {
+        this.isstart = dealNull(isstart);
     }
 }

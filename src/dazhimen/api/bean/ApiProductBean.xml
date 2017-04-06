@@ -4,7 +4,7 @@
 <mapper namespace="dazhimen.api.bean.ApiProduct">
     <select id="searchProductByTypeAndKeyword" parameterType="dazhimen.api.bean.ApiQueryProductByTypeAndKeyword"
             resultType="dazhimen.api.bean.ApiProductBean">
-        select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price
+        select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price,status as isstart
         from product
         where isdel = '0'
           and type = #{type}
@@ -14,14 +14,14 @@
     </select>
     <select id="getMoreProductByType"
             resultType="dazhimen.api.bean.ApiProductBean">
-        select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price
+        select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price,status as isstart
         from product
         where isdel = '0' and type = #{type} and status !='3'
         order by createdatetime desc
     </select>
     <select id="getMoreProductByCountAndType" parameterType="dazhimen.api.bean.ApiQueryProductParamBean"
             resultType="dazhimen.api.bean.ApiProductBean">
-        select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price
+        select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price.status as isstart
         from product
         where isdel = '0' and type = #{type} and status !='3'
         order by createdatetime desc
@@ -29,7 +29,7 @@
     </select>
     <select id="getProductByCountAndType" parameterType="dazhimen.api.bean.ApiQueryProductParamBean"
             resultType="dazhimen.api.bean.ApiProductBean">
-        select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price
+        select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price,status as isstart
           from product
         where isdel = '0' and type = #{type} and status !='3'
         order by indexsort,createdatetime
@@ -38,7 +38,7 @@
 
     <select id="getProductInforById" resultType="dazhimen.api.bean.ApiSpecifyProductBean">
         select pid,pname,price,listimage as listimgurl,introduction,
-                buycount,istry,introduction,'0' as iscollection, '0' as isbuy
+                buycount,istry,introduction,'0' as iscollection, '0' as isbuy,status as isstart
           from product a
         where a.pid = #{pid}
     </select>
@@ -81,8 +81,14 @@
         select courseid,coursename,istry,audiopath as audiourl,createdate as createdateo,viewcount
           from course a
          where pid = #{pid}
+          order by createdate desc
     </select>
-
+    <select id="getReverseCourseList" resultType="dazhimen.api.bean.ApiListViewCourseBean">
+        select courseid,coursename,istry,audiopath as audiourl,createdate as createdateo,viewcount
+        from course a
+        where pid = #{pid}
+        order by createdate
+    </select>
     <select id="getProductAudioUpdateCount" resultType="dazhimen.api.bean.SingleValueBean">
         select count(a.courseid) as valueinfo
           from course a

@@ -586,6 +586,75 @@ public class ApiProductController {
         }
     }
 
+    @RequestMapping(value = "/getReverseCourseList", method = RequestMethod.POST)
+    public void getReverseCourseList(HttpServletRequest resq, HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            checkGetProductInforPara(resq);
+        }catch (ParameterCheckException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return;
+        }
+        String pid = resq.getParameter("pid");
+        String cid = resq.getParameter("cid");
+        ApiProductService productService = new ApiProductService();
+        List<ApiListViewCourseBean> courseBeans = null;
+        String isbuy = null;
+        String iscollection = null;
+        String updateCount = null;
+        try {
+            courseBeans = productService.getReverseCourseList(pid);
+            isbuy = productService.getProductIsBuy(cid, pid);
+            iscollection = productService.getProductIsCollection(cid, pid);
+            updateCount = productService.getProductAudioUpdateCount(pid);
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return;
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", "200");
+        jsonObject.put("msg", "获取成功");
+
+        JSONObject dataObject = new JSONObject();
+        dataObject.put("isbuy", isbuy);
+        dataObject.put("iscollection", iscollection);
+        dataObject.put("updatecount", updateCount);
+        if(courseBeans == null || courseBeans.size()==0){
+            dataObject.put("courselist", new Gson().toJson(null));
+        }else{
+            courseBeans = dealApiListViewCourseBean(resq,courseBeans);
+            dataObject.put("courselist", new Gson().toJson(courseBeans));
+        }
+        jsonObject.put("data", dataObject.toString());
+        try {
+            resp.getWriter().write(jsonObject.toString());
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
     @RequestMapping(value = "/getCustomerCollectProduct", method = RequestMethod.POST)
     public void getCustomerCollectProduct(HttpServletRequest resq, HttpServletResponse resp){
         try {
