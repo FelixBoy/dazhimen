@@ -8,6 +8,7 @@ public class ApiIndexPlayBean {
     private String imgurl = "";
     private String contenttype = "";
     private String producttype = "";
+    private String isstart = "";
 
     private String dealNull(String value){
         if(value == null){
@@ -47,5 +48,13 @@ public class ApiIndexPlayBean {
 
     public void setProducttype(String producttype) {
         this.producttype = dealNull(producttype);
+    }
+
+    public String getIsstart() {
+        return isstart;
+    }
+
+    public void setIsstart(String isstart) {
+        this.isstart = dealNull(isstart);
     }
 }
