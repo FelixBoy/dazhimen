@@ -28,6 +28,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/product")
 public class ProductController {
+    @RequestMapping("/fwdModifyProductPage")
+    public String fwdModifyProductPage(){
+         return "/product/modifyProduct";
+    }
     @RequestMapping("/fwdAddProductPage")
     public String forwardAddProductPage(){
         return "/product/addProduct";
@@ -401,8 +405,13 @@ public class ProductController {
         productBean.setType(type);
         Double price = Double.parseDouble(resq.getParameter("price"));
         productBean.setPrice(price);
-        Double derateProportion = Double.parseDouble(resq.getParameter("derateProportion"));
-        productBean.setDerateProportion(derateProportion);
+        String derateProportionStr = resq.getParameter("derateProportion");
+        if(derateProportionStr == null || derateProportionStr.equals("")){
+            productBean.setDerateProportion(0);
+        }else{
+            Integer derateProportion = Integer.parseInt(derateProportionStr);
+            productBean.setDerateProportion(derateProportion);
+        }
         String introduction = resq.getParameter("introduction");
         productBean.setIntroduction(introduction);
         String indexSort = resq.getParameter("indexsort");

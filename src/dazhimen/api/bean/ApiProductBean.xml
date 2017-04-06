@@ -21,7 +21,7 @@
     </select>
     <select id="getMoreProductByCountAndType" parameterType="dazhimen.api.bean.ApiQueryProductParamBean"
             resultType="dazhimen.api.bean.ApiProductBean">
-        select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price.status as isstart
+        select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price,status as isstart
         from product
         where isdel = '0' and type = #{type} and status !='3'
         order by createdatetime desc

@@ -183,7 +183,7 @@ public class WXPayUtil{
         return sb.toString();
     }
     public static Map<String, String> weixinPrePay(String sn,BigDecimal totalAmount, String description,
-                                                   String remoteIp,String notify_url) {
+                                                   String remoteIp,String notify_url, String attach) {
         SortedMap<String, Object> parameterMap = new TreeMap<String, Object>();
         parameterMap.put("appid", WXPayUtil.APPID);
         parameterMap.put("mch_id", WXPayUtil.MCH_ID);
@@ -197,6 +197,7 @@ public class WXPayUtil{
         parameterMap.put("spbill_create_ip", remoteIp);
         parameterMap.put("notify_url", notify_url);
         parameterMap.put("trade_type", "APP");
+        parameterMap.put("attach", attach);
         String sign = WXPayUtil.createSign("UTF-8", parameterMap);
         parameterMap.put("sign", sign);
         String requestXML = WXPayUtil.getRequestXml(parameterMap);
@@ -214,10 +215,27 @@ public class WXPayUtil{
         }
         return map;
     }
-    public static void main(String[] args) throws BgException {
-       Map<String, String> map = weixinPrePay(new IdUtils().getRECId(),new BigDecimal("0.01"),"测试", "123.12.12.123", "http://xxx.com");
-        System.out.println(createSignAgain(map));
-        System.out.println(verifyWeixinNotify(map));
+    public static Map<String, String> queryWXOrderInfo(String transaction_id){
+        SortedMap<String, Object> parameterMap = new TreeMap<String, Object>();
+        parameterMap.put("appid", WXPayUtil.APPID);
+        parameterMap.put("mch_id", WXPayUtil.MCH_ID);
+        parameterMap.put("nonce_str", WXPayUtil.getRandomString(32));
+        parameterMap.put("transaction_id", transaction_id);
+        String sign = WXPayUtil.createSign("UTF-8", parameterMap);
+        parameterMap.put("sign", sign);
+        String requestXML = WXPayUtil.getRequestXml(parameterMap);
+        String result = WXPayUtil.httpsRequest(
+                "https://api.mch.weixin.qq.com/pay/orderquery", "POST",
+                requestXML);
+        Map<String, String> map = null;
+        try {
+            map = WXPayUtil.doXMLParse(result);
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
     }
     public static boolean verifyWeixinNotify(Map<String, String> map) {
         SortedMap<String, Object> parameterMap = new TreeMap<String, Object>();

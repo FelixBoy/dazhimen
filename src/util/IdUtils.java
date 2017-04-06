@@ -11,6 +11,12 @@ import java.util.TimeZone;
  * 各数据库表的 主键ID的生成类
  */
 public class IdUtils {
+    public String getOrderId() throws BgException {
+        String curDateStr = getCurrentDate();
+        String rec_seq = new SeqUtils().getSeqNextVal(Constant.orderSeqName);
+        rec_seq = SeqUtils.autoAttachZeroFromStart(rec_seq, Constant.orderSeqLength);
+        return "or" + curDateStr + rec_seq;
+    }
     public String getRECId() throws BgException {
         String curDateStr = getCurrentDate();
         String rec_seq = new SeqUtils().getSeqNextVal(Constant.recSeqName);

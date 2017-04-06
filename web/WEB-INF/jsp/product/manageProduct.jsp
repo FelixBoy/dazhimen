@@ -39,8 +39,16 @@
             });
         }
     }
-    function fwdEditProductPage(inedx){
-        MsgBox.show("功能正在开发，敬请期待");
+    function fwdEditProductPage(index){
+        $('#productList').datagrid('selectRow',index);
+        var row = $('#productList').datagrid('getSelected');
+        if (row){
+            $('#content_panel').panel({
+                href:"<%=request.getContextPath() %>/product/fwdModifyProductPage?random_id=" + Math.random()+"&pid=" + row.pid,
+                onLoad:function(){
+                }
+            });
+        }
     }
     function saveProductDel(index){
         MsgBox.show("功能正在开发，敬请期待");

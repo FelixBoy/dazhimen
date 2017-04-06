@@ -13,7 +13,7 @@ public class UploadProductBean {
     private String pname = null;
     private String type = null;
     private Double price = null;
-    private Double derateProportion = null;
+    private Integer derateProportion = null;
     private String introduction = null;
     private String indexSort = null;
     private String indexPlay = null;
@@ -74,11 +74,11 @@ public class UploadProductBean {
         this.price = price;
     }
 
-    public Double getDerateProportion() {
+    public Integer getDerateProportion() {
         return derateProportion;
     }
 
-    public void setDerateProportion(Double derateProportion) {
+    public void setDerateProportion(Integer derateProportion) {
         this.derateProportion = derateProportion;
     }
 

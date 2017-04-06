@@ -7,6 +7,11 @@ package util;
 public class Constant {
     //字符集
     public static final String CharSet = "utf-8";
+
+    public static final String orderSeqName = "order_seq";
+    //uid中编码中，最后面部分的，数字序列的长度
+    public static final int orderSeqLength = 5;
+
     public static final String recSeqName = "recharge_seq";
     //uid中编码中，最后面部分的，数字序列的长度
     public static final int recSeqLength = 5;

@@ -6,7 +6,18 @@
        select accoutbalance from customer where cid = #{cid}
     </select>
     <insert id="doRechargeByWeixin" parameterType="dazhimen.api.bean.ApiRechargeByWeixinBean">
-      insert into recharge(recid,recamount,cid, recdatetime)
-        values(#{recid}, #{recamount}, #{cid}, now())
+        insert into recharge(recid,recamount,cid, transaction_id, recdatetime)
+        values(#{recid}, #{recamount}, #{cid},#{transaction_id}, now())
     </insert>
+
+    <select id="checkISTransactionExists" resultType="dazhimen.api.bean.SingleValueBean">
+       select count(recid) as valueinfo from recharge where transaction_id = #{transaction_id}
+    </select>
+
+    <update id="updateCustomerBalanceAfterWX" parameterType="dazhimen.api.bean.ApiUpdateCustomerBalanceBean">
+        update customer
+           set accoutbalance = accoutbalance + #{changeamount}
+         where cid = #{cid}
+    </update>
+
 </mapper>

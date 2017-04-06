@@ -13,4 +13,5 @@ public class ApiBalanceBean {
     public void setAccoutbalance(Double accoutbalance) {
         this.accoutbalance = accoutbalance;
     }
+
 }

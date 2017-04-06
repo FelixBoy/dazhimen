@@ -125,8 +125,8 @@ public class ApiRechargeController {
             }
         }
     }
-    @RequestMapping("/dealWXPayResult")
-    public void dealWXPayResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
+    @RequestMapping("/dealWXRechargeResult")
+    public void dealWXRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException, ApiException {
         InputStream inStream = null;
         inStream = resq.getInputStream();
         ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
@@ -135,7 +135,6 @@ public class ApiRechargeController {
         while ((len = inStream.read(buffer)) != -1){
             outSteam.write(buffer, 0, len);
         }
-        System.out.println("~~~~~~~~~~~~~~~~付款成功~~~~~~~~~");
         outSteam.close();
         inStream.close();
         String result = new String(outSteam.toByteArray(), "utf-8");// 获取微信调用我们notify_url的返回信息
@@ -143,10 +142,11 @@ public class ApiRechargeController {
 
 
         if (map.get("result_code").toString().equalsIgnoreCase("SUCCESS")) {
-            //验证签名,在网上看到很多人都不去验证签名，这种做法，一般情况下不会有问题，但是。。。。。，多的我就不说
             if (WXPayUtil.verifyWeixinNotify(map)) {
                 //订单处理
-                System.out.println(map);
+                ApiRechargeService rechargeService = new ApiRechargeService();
+                rechargeService.dealWXRechargeResult(map);
+                System.out.println("处理支付结果通知成功");
                 StringBuffer resultBF = new StringBuffer();
                 resultBF.append("<xml>");
                 resultBF.append("<return_code><![CDATA[SUCCESS]]></return_code>");
@@ -158,6 +158,72 @@ public class ApiRechargeController {
             System.out.println("订单结果为失败");
         }
 
+    }
+
+    @RequestMapping("/recheckWXPayResult")
+    public void recheckWXPayResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            checkUploadWXPayResultPara(resq);
+            ApiRechargeService rechargeService = new ApiRechargeService();
+            boolean result = rechargeService.recheckWXPayResult(resq.getParameter("transactionid"));
+            if(result){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("code", "200");
+                jsonObject.put("msg", "复核成功");
+                try {
+                    resp.getWriter().write(jsonObject.toString());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }else{
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("code", "400");
+                jsonObject.put("msg", "复核失败");
+                try {
+                    resp.getWriter().write(jsonObject.toString());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+    }
+    private void checkUploadWXPayResultPara(HttpServletRequest resq) throws ParameterCheckException {
+        String transactionid = resq.getParameter("transactionid");
+        if(transactionid == null){
+            throw new ParameterCheckException("未取到参数[transactionid]");
+        }
+        if(transactionid.equals("")){
+            throw new ParameterCheckException("参数[transactionid]的值为空");
+        }
     }
     private void checkGetBalanceByCidPara(HttpServletRequest resq) throws ParameterCheckException {
         String cid = resq.getParameter("cid");

@@ -7,6 +7,7 @@ public class ApiRechargeByWeixinBean {
     private String recid = null;
     private String cid = null;
     private Double recamount = null;
+    private String transaction_id = null;
 
     public String getRecid() {
         return recid;
@@ -30,5 +31,13 @@ public class ApiRechargeByWeixinBean {
 
     public void setRecamount(Double recamount) {
         this.recamount = recamount;
+    }
+
+    public String getTransaction_id() {
+        return transaction_id;
+    }
+
+    public void setTransaction_id(String transaction_id) {
+        this.transaction_id = transaction_id;
     }
 }

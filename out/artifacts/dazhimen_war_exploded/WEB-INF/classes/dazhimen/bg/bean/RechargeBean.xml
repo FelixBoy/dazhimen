@@ -7,7 +7,7 @@
     </select>
     <select id="queryAllRecharge" resultType="dazhimen.bg.bean.ViewRechargeBean"
             parameterType="dazhimen.bg.bean.PaginationParamBean">
-      select a.recid,a.recamount,b.cid,b.name cname,b.nickname cnickname,b.mphone,getcodetxt('yesorno',issucc) issucc,
+      select a.recid,a.recamount,b.cid,b.name cname,b.nickname cnickname,b.mphone,
               transaction_id,date_format(a.recdatetime,'%Y-%m-%d %H:%i:%s') recdatetime
         from recharge a,customer b
        where a.cid = b.cid

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.api.bean.ApiOrder">
+
+    <select id="checkProductIsBuy" parameterType="dazhimen.api.bean.ApiCheckProductIsBuyBean"
+            resultType="dazhimen.api.bean.SingleValueBean">
+        select 1 as valueinfo
+        from orders a,
+        ir_order_product b
+        where a.orid = b.orid
+        and a.cid = #{cid}
+        and b.pid = #{pid}
+    </select>
+
+    <select id="getBalanceByCid" resultType="dazhimen.api.bean.ApiBalanceBean">
+        select accoutbalance from customer where cid = #{cid}
+    </select>
+    <select id="getProductPriceByPid" resultType="dazhimen.api.bean.ApiProductPriceBean">
+        select price,derateProportion from product where pid = #{pid}
+    </select>
+
+    <update id="updateCustomerBalanceAfterBuy" parameterType="dazhimen.api.bean.ApiUpdateCustomerBalanceBean">
+        update customer
+           set accoutbalance = accoutbalance - #{changeamount}
+         where cid = #{cid}
+    </update>
+
+    <insert id="buyProductByBalance" parameterType="dazhimen.api.bean.ApiBuyProductByBalance">
+        insert into orders(orid,ordatetime,ordersum,paymenttype,cid)
+            value(#{orid},now(),#{ordersum},#{paymenttype},#{cid})
+    </insert>
+
+    <insert id="dealIrOrderProduct" parameterType="dazhimen.api.bean.ApiIROrderProductBean">
+        insert into ir_order_product(orid, pid)
+          values(#{orid}, #{pid})
+    </insert>
+</mapper>

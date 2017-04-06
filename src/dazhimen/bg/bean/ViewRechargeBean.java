@@ -10,7 +10,6 @@ public class ViewRechargeBean {
     private String cname = null;
     private String cnickname = null;
     private String mphone = null;
-    private String issucc = null;
     private String transaction_id = null;
     private String recdatetime = null;
 
@@ -60,14 +59,6 @@ public class ViewRechargeBean {
 
     public void setCid(String cid) {
         this.cid = cid;
-    }
-
-    public String getIssucc() {
-        return issucc;
-    }
-
-    public void setIssucc(String issucc) {
-        this.issucc = issucc;
     }
 
     public String getTransaction_id() {
