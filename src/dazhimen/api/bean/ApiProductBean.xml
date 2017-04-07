@@ -37,10 +37,12 @@
     </select>
 
     <select id="getProductInforById" resultType="dazhimen.api.bean.ApiSpecifyProductBean">
-        select pid,pname,price,listimage as listimgurl,introduction,
+        select a.pid,pname,price,b.path as mainimgurl,introduction,
                 buycount,istry,introduction,'0' as iscollection, '0' as isbuy,status as isstart
-          from product a
+          from product a,
+               product_image b
         where a.pid = #{pid}
+          and a.pid = b.pid
     </select>
 
     <select id="getProductIsCollection" parameterType="dazhimen.api.bean.ApiQueryProductCollectionParamBean"
@@ -78,15 +80,19 @@
     </delete>
 
     <select id="getProductCourseList" resultType="dazhimen.api.bean.ApiListViewCourseBean">
-        select courseid,coursename,istry,audiopath as audiourl,createdate as createdateo,viewcount
-          from course a
-         where pid = #{pid}
+        select courseid,coursename,a.istry,audiopath as audiourl,createdate as createdateo,viewcount,b.listimage as listimgurl
+          from course a,
+                product b
+         where a.pid = #{pid}
+           and a.pid = b.pid
           order by createdate desc
     </select>
     <select id="getReverseCourseList" resultType="dazhimen.api.bean.ApiListViewCourseBean">
-        select courseid,coursename,istry,audiopath as audiourl,createdate as createdateo,viewcount
-        from course a
-        where pid = #{pid}
+        select courseid,coursename,a.istry,audiopath as audiourl,createdate as createdateo,viewcount,b.listimage as listimgurl
+        from course a,
+            product b
+        where a.pid = #{pid}
+          and a.pid = b.pid
         order by createdate
     </select>
     <select id="getProductAudioUpdateCount" resultType="dazhimen.api.bean.SingleValueBean">

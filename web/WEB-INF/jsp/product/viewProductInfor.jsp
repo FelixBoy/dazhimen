@@ -27,7 +27,7 @@
                     var htmlArr = [];
                     htmlArr.push("<tr>");
                     for(var i = 0; i < arrLength; i++){
-                        htmlArr.push("<td>产品主图-" + (i+1) + "</td>");
+                        htmlArr.push("<td>产品主图</td>");
                         htmlArr.push("<td align='left'>");
                         htmlArr.push("       <input type='hidden' id='mainimg"+i+"' value="+ arr[i].imageId +"/> ");
                         htmlArr.push("       <img src='" + arr[i].mainImage + "' width='120px' height='60px'/>");

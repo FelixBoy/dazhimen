@@ -13,6 +13,7 @@ public class ApiListViewCourseBean {
     private Date createdateo = null;
     private String createdate = "";
     private String viewcount = "";
+    private String listimgurl = "";
     @Override
     public String toString() {
         return "ApiListViewCourseBean{" +
@@ -32,6 +33,14 @@ public class ApiListViewCourseBean {
         }else{
             return value;
         }
+    }
+
+    public String getListimgurl() {
+        return listimgurl;
+    }
+
+    public void setListimgurl(String listimgurl) {
+        this.listimgurl = dealNull(listimgurl);
     }
 
     public String getCourseid() {

@@ -95,6 +95,16 @@
             MsgBox.show("列表图片文件，仅支持jpg、png");
             return false;
         }
+        if(!$("#mainimg1").filebox("getValue")){
+            MsgBox.show("请选择产品主图");
+            return false;
+        }
+        imgFileName = $("#mainimg1").filebox("getValue");
+        imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
+        if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+            MsgBox.show("产品主图文件，仅支持jpg、png");
+            return false;
+        }
         return true;
     }
     function actionAfterSubmit(jsonObj){
@@ -186,21 +196,9 @@
                         <input class="easyui-filebox" id="listimg" name="listimg" style="width:100%" accept="image/jpeg,image/png"
                                data-options="prompt:'请选择列表图片(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
-                <td nowrap="nowrap" style="text-align: right">产品主图-1:</td>
+                <td nowrap="nowrap" style="text-align: right">产品主图:<span style="color:red">*</span></td>
                 <td colspan="2">
                     <input class="easyui-filebox" id="mainimg1" name="mainimg" style="width:100%" accept="image/jpeg,image/png"
-                           data-options="prompt:'请选择产品主图(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
-                </td>
-            </tr>
-            <tr>
-                <td nowrap="nowrap">产品主图-2:</td>
-                <td colspan="2">
-                    <input class="easyui-filebox" id="mainimg2" name="mainimg" style="width:100%" accept="image/jpeg,image/png"
-                           data-options="prompt:'请选择产品主图(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
-                </td>
-                <td nowrap="nowrap" style="text-align: right">产品主图-3:</td>
-                <td colspan="2">
-                    <input class="easyui-filebox" id="mainimg3" name="mainimg" style="width:100%" accept="image/jpeg,image/png"
                            data-options="prompt:'请选择产品主图(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>

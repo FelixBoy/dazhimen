@@ -381,8 +381,8 @@ public class ApiProductController {
             }
             int localPort = resq.getLocalPort();//获取本地的端口
             String appName = resq.getContextPath();
-            String listImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + productBean.getListimgurl();
-            productBean.setListimgurl(listImgUrl);
+            String mainImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + productBean.getMainimgurl();
+            productBean.setMainimgurl(mainImgUrl);
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
@@ -779,6 +779,8 @@ public class ApiProductController {
 
             String audioUrl = "http://" + localIp + ":" + localPort + appName + "/" + courseBean.getAudiourl();
             courseBean.setAudiourl(audioUrl);
+            String listimgurl = "http://" + localIp + ":" + localPort + appName + "/" + courseBean.getListimgurl();
+            courseBean.setListimgurl(listimgurl);
         }
         return courseBeans;
     }

@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class ApiSpecifyProductBean {
     private String pid = "";
-    private String listimgurl = "";
+    private String mainimgurl = "";
     private String pname = "";
     private Double price = null;
     private String buycount = "";
@@ -29,7 +29,7 @@ public class ApiSpecifyProductBean {
     public String toString() {
         return "ApiSpecifyProductBean{" +
                 "pid='" + pid + '\'' +
-                ", listimgurl='" + listimgurl + '\'' +
+                ", mainimgurl='" + mainimgurl + '\'' +
                 ", pname='" + pname + '\'' +
                 ", price='" + price + '\'' +
                 ", buycount='" + buycount + '\'' +
@@ -55,12 +55,12 @@ public class ApiSpecifyProductBean {
         this.pid = dealNull(pid);
     }
 
-    public String getListimgurl() {
-        return listimgurl;
+    public String getMainimgurl() {
+        return mainimgurl;
     }
 
-    public void setListimgurl(String listimgurl) {
-        this.listimgurl = dealNull(listimgurl);
+    public void setMainimgurl(String mainimgurl) {
+        this.mainimgurl = dealNull(mainimgurl);
     }
 
     public String getPname() {
