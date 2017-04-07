@@ -215,12 +215,12 @@ public class WXPayUtil{
         }
         return map;
     }
-    public static Map<String, String> queryWXOrderInfo(String transaction_id){
+    public static Map<String, String> queryWXOrderInfo(String recid){
         SortedMap<String, Object> parameterMap = new TreeMap<String, Object>();
         parameterMap.put("appid", WXPayUtil.APPID);
         parameterMap.put("mch_id", WXPayUtil.MCH_ID);
         parameterMap.put("nonce_str", WXPayUtil.getRandomString(32));
-        parameterMap.put("transaction_id", transaction_id);
+        parameterMap.put("out_trade_no", recid);
         String sign = WXPayUtil.createSign("UTF-8", parameterMap);
         parameterMap.put("sign", sign);
         String requestXML = WXPayUtil.getRequestXml(parameterMap);

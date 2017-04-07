@@ -160,8 +160,8 @@ public class ApiRechargeController {
 
     }
 
-    @RequestMapping("/recheckWXPayResult")
-    public void recheckWXPayResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
+    @RequestMapping("/recheckWXRechargeResult")
+    public void recheckWXRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
         try {
             if(resq.getCharacterEncoding() == null)
                 resq.setCharacterEncoding(Constant.CharSet);
@@ -171,9 +171,9 @@ public class ApiRechargeController {
         resp.setCharacterEncoding(Constant.CharSet);
         try {
             ApiUtils.checkSignature(resq);
-            checkUploadWXPayResultPara(resq);
+            checkWXRechargeResultPara(resq);
             ApiRechargeService rechargeService = new ApiRechargeService();
-            boolean result = rechargeService.recheckWXPayResult(resq.getParameter("transactionid"));
+            boolean result = rechargeService.recheckWXRechargeResult(resq.getParameter("recid"), resq.getParameter("cid"));
             if(result){
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("code", "200");
@@ -216,13 +216,20 @@ public class ApiRechargeController {
         }
 
     }
-    private void checkUploadWXPayResultPara(HttpServletRequest resq) throws ParameterCheckException {
-        String transactionid = resq.getParameter("transactionid");
-        if(transactionid == null){
-            throw new ParameterCheckException("未取到参数[transactionid]");
+    private void checkWXRechargeResultPara(HttpServletRequest resq) throws ParameterCheckException {
+        String recid = resq.getParameter("recid");
+        if(recid == null){
+            throw new ParameterCheckException("未取到参数[recid]");
         }
-        if(transactionid.equals("")){
-            throw new ParameterCheckException("参数[transactionid]的值为空");
+        if(recid.equals("")){
+            throw new ParameterCheckException("参数[recid]的值为空");
+        }
+        String cid = resq.getParameter("cid");
+        if(cid == null){
+            throw new ParameterCheckException("未取到参数[cid]");
+        }
+        if(cid.equals("")){
+            throw new ParameterCheckException("参数[cid]的值为空");
         }
     }
     private void checkGetBalanceByCidPara(HttpServletRequest resq) throws ParameterCheckException {

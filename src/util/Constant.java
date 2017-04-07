@@ -58,4 +58,6 @@ public class Constant {
     public static final boolean isDeployInAliyun = true;
     //阿里云Ip
     public static final String AliyunIP = "47.92.73.149";
+
+    public static final String FrontEndVersion = "v1.0";
 }

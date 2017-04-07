@@ -1,19 +1,20 @@
+<%@ page import="util.Constant" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/default/easyui.css?_=<%=Math.random()%>">
-  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/icon.css?_=<%=Math.random()%>">
-  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/demo/demo.css?_=<%=Math.random()%>">
-  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dazhimen.css?_=<%=Math.random()%>">
-  <link type="text/css" rel="stylesheet" href="css/login.css?_=<%=Math.random()%>">
-  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dazhimen.css?_=<%=Math.random()%>" >
-  <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.min.js?_=<%=Math.random()%>"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.easyui.min.js?_=<%=Math.random()%>"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/jquery.md5.js?_=<%=Math.random()%>"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/json2.js?_=<%=Math.random()%>"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/MsgBox.js?_=<%=Math.random()%>"></script>
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/default/easyui.css?_=<%=Constant.FrontEndVersion%>">
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/icon.css?_=<%=Constant.FrontEndVersion%>">
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/demo/demo.css?_=<%=Constant.FrontEndVersion%>">
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dazhimen.css?_=<%=Constant.FrontEndVersion%>">
+  <link type="text/css" rel="stylesheet" href="css/login.css?_=<%=Constant.FrontEndVersion%>">
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dazhimen.css?_=<%=Constant.FrontEndVersion%>" >
+  <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.min.js?_=<%=Constant.FrontEndVersion%>"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/easyui/jquery.easyui.min.js?_=<%=Constant.FrontEndVersion%>"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/jquery.md5.js?_=<%=Constant.FrontEndVersion%>"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/json2.js?_=<%=Constant.FrontEndVersion%>"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/MsgBox.js?_=<%=Constant.FrontEndVersion%>"></script>
   <title>系统登录</title>
   <script type="text/javascript">
     function onLogin(){

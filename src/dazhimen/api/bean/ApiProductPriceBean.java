@@ -5,6 +5,7 @@ package dazhimen.api.bean;
  */
 public class ApiProductPriceBean {
     private Double price = null;
+    private String pname = null;
     private Integer derateProportion = null;
     public Double getPrice() {
         return price;
@@ -20,5 +21,13 @@ public class ApiProductPriceBean {
 
     public void setDerateProportion(Integer derateProportion) {
         this.derateProportion = derateProportion;
+    }
+
+    public String getPname() {
+        return pname;
+    }
+
+    public void setPname(String pname) {
+        this.pname = pname;
     }
 }

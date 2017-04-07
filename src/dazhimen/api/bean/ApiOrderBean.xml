@@ -17,7 +17,7 @@
         select accoutbalance from customer where cid = #{cid}
     </select>
     <select id="getProductPriceByPid" resultType="dazhimen.api.bean.ApiProductPriceBean">
-        select price,derateProportion from product where pid = #{pid}
+        select price,derateProportion,pname from product where pid = #{pid}
     </select>
 
     <update id="updateCustomerBalanceAfterBuy" parameterType="dazhimen.api.bean.ApiUpdateCustomerBalanceBean">
@@ -35,4 +35,17 @@
         insert into ir_order_product(orid, pid)
           values(#{orid}, #{pid})
     </insert>
+
+    <select id="checkISTransactionExists" resultType="dazhimen.api.bean.SingleValueBean">
+        select count(orid) as valueinfo from orders where transaction_id = #{transaction_id}
+    </select>
+
+    <insert id="buyProductByWXPay" parameterType="dazhimen.api.bean.ApiBuyProductByWXPay">
+         insert into orders(orid,ordatetime,ordersum,paymenttype,transaction_id,cid)
+            value(#{orid},now(),#{ordersum},#{paymenttype},#{transaction_id},#{cid})
+    </insert>
+    
+    <update id="updateProductBuyCount">
+      update product set buycount = buycount + 1 where pid = #{pid}
+    </update>
 </mapper>

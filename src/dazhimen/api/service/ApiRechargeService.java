@@ -69,6 +69,8 @@ public class ApiRechargeService {
             Map<String, String> map = WXPayUtil.weixinPrePay(recid, new BigDecimal(rechargeAmount),"大职门余额充值", remoteIp, notify_url, cid);
             if(map.get("result_code").toString().equalsIgnoreCase("SUCCESS")){
                 resultMap = WXPayUtil.createSignAgain(map);
+                resultMap.put("recid", recid);
+                System.out.println("统一下单接口调用成功---[" + recid + "]");
             }else{
                 throw new ApiException("统一下单接口调用错误:" + map.get("err_code_des"));
             }
@@ -121,9 +123,13 @@ public class ApiRechargeService {
             MyBatisUtil.closeSession(sqlSession);
         }
     }
-    public boolean recheckWXPayResult(String transactionid) throws ApiException {
-        Map<String, String> map = WXPayUtil.queryWXOrderInfo(transactionid);
+    public boolean recheckWXRechargeResult(String recid, String cid) throws ApiException {
+        if(!new CheckIsExistsUtils().checkCidIsExists(cid)){
+            throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
+        }
+        Map<String, String> map = WXPayUtil.queryWXOrderInfo(recid);
         if (map.get("result_code").toString().equalsIgnoreCase("SUCCESS")) {
+            map.put("attach", cid);
             dealWXRechargeResult(map);
             return true;
         }else{
