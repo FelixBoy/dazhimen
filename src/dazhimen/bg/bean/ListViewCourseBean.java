@@ -9,7 +9,7 @@ public class ListViewCourseBean {
     private String sort = null;
     private String istry = null;
     private String audiourl = null;
-
+    private Integer viewcount = null;
     @Override
     public String toString() {
         return "ListViewCourseBean{" +
@@ -19,6 +19,14 @@ public class ListViewCourseBean {
                 ", istry='" + istry + '\'' +
                 ", audiourl='" + audiourl + '\'' +
                 '}';
+    }
+
+    public Integer getViewcount() {
+        return viewcount;
+    }
+
+    public void setViewcount(Integer viewcount) {
+        this.viewcount = viewcount;
     }
 
     public String getCourseid() {

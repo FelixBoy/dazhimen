@@ -6,6 +6,7 @@ import dazhimen.bg.bean.*;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.UserService;
 import net.sf.json.JSONObject;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -29,8 +30,10 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
     @RequestMapping("/fwdModifyProductPage")
-    public String fwdModifyProductPage(){
-         return "/product/modifyProduct";
+    public ModelAndView fwdModifyProductPage(@RequestParam("pid") String pid){
+        ModelAndView mav = new ModelAndView("/product/modifyProduct");
+        mav.addObject("pid", pid);
+        return mav;
     }
     @RequestMapping("/fwdAddProductPage")
     public String forwardAddProductPage(){
@@ -111,6 +114,37 @@ public class ProductController {
             }
         }
 
+    }
+    @RequestMapping("/getModifyProductInforById")
+    public void getModifyProductInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
+                                    HttpServletResponse resp){
+        resp.setCharacterEncoding(Constant.CharSet);
+        try{
+            ProductService productService = new ProductService();
+            ViewProductBean productBean = productService.getModifyProductInforById(pid);
+            productBean = dealListImgUrlPrefix(resq.getContextPath() , productBean);
+            Gson gson = new Gson();
+            String productJson = gson.toJson(productBean);
+            resp.getWriter().write(productJson);
+        }catch (Exception e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询指定产品信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+    }
+
+    @RequestMapping(value="/saveModifyProductBasicInfo",method = RequestMethod.POST)
+    public void saveModifyProductBasicInfo(HttpServletRequest resq,
+                                       HttpServletResponse resp){
+        resp.setCharacterEncoding(Constant.CharSet);
+        ModifyProductBasicInfoBean productBean = getSaveModifyProductionBasicInfoBean(resq);
+        ProductService productService = new ProductService();
+        productService.saveModifyProductBasicInfo(productBean);
     }
     @RequestMapping("/getMainImagesInforById")
     public void getMainImagesInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
@@ -396,7 +430,26 @@ public class ProductController {
         courseBean.setBasePath(basePath);
         return courseBean;
     }
+    private ModifyProductBasicInfoBean getSaveModifyProductionBasicInfoBean(HttpServletRequest resq){
+        ModifyProductBasicInfoBean productBean = new ModifyProductBasicInfoBean();
+        String pid = resq.getParameter("pid");
+        productBean.setPid(pid);
+        String pname = resq.getParameter("pname");
+        productBean.setPname(pname);
+        Double price = Double.parseDouble(resq.getParameter("price"));
+        productBean.setPrice(price);
+        String derateProportionStr = resq.getParameter("derateProportion");
+        if(derateProportionStr == null || derateProportionStr.equals("")){
+            productBean.setDerateProportion(0);
+        }else{
+            Integer derateProportion = Integer.parseInt(derateProportionStr);
+            productBean.setDerateProportion(derateProportion);
+        }
+        String introduction = resq.getParameter("introduction");
+        productBean.setIntoduction(introduction);
 
+        return productBean;
+    }
     private UploadProductBean getUploadProductBean(HttpServletRequest resq){
         UploadProductBean productBean = new UploadProductBean();
         String pname = resq.getParameter("pname");

@@ -80,7 +80,7 @@
             return false;
         }
         if($("#derateProportion").val().length > 0){
-            if($("#derateProportion").val() >99 || $("#derateProportion").val() < 1){
+            if($("#derateProportion").val() >99 || $("#derateProportion").val() < 0){
                 MsgBox.show("余额支付减免[" +$("#derateProportion").val() + "]超出范围");
                 return false;
             }

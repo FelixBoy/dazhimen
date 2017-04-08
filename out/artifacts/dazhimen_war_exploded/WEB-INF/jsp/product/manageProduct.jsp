@@ -20,7 +20,7 @@
                 height: 150,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/product/fwdModifyProductStatusPage?random_id=" + Math.random()
+                href: "<%=request.getContextPath()%>/product/fwdModifyProductStatusPage?random_id=" + Math.random()+"&pid=" + row.pid
                         + "&pid="+row.pid + "&status=" + row.statusnum,
                 modal: true
             });
@@ -91,10 +91,12 @@
             columns: [[
                 { field: 'pid', title: '产品Id', width: '10%'},
                 { field: 'pname', title: '名称', width: '15%'},
-                { field: 'type', title: '类型', width: '10%'},
+                { field: 'type', title: '类型', width: '5%'},
+                { field: 'price', title: '价格', width: '5%'},
+                { field: 'buycount', title: '已购人数', width: '5%'},
                 { field: 'createtime', title: '上传时间', width: '15%'},
                 { field: 'uname', title: '掌门', width: '10%'},
-                { field: 'status', title: '状态', width: '10%' },
+                { field: 'status', title: '状态', width: '5%' },
                 { field: 'statusnum', hidden:'true',title: '状态' },
                 {
                     field: "operateID", title: '操作',width:'30%', align: 'center',

@@ -73,8 +73,9 @@
             columns: [[
                 { field: 'courseid', title: '课程Id', width: '15%'},
                 { field: 'coursename', title: '名称', width: '15%'},
-                { field: 'sort', title: '首页排名', width: '15%'},
-                { field: 'istry', title: '是否试学', width: '15%'},
+                { field: 'sort', title: '排序', width: '10%'},
+                { field: 'istry', title: '是否试学', width: '10%'},
+                { field: 'viewcount', title: '已读人数', width: '10%'},
                 { field: 'audiourl',hidden:'true', title: '音频url'},
                 {
                     field: "downloadaudio", title: '音频',width:'15%', align: 'center',

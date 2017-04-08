@@ -13,6 +13,8 @@ public class ListViewProductBean {
     private String status = null;
     private String type = null;
     private String statusnum = null;
+    private String price = null;
+    private Integer buycount = null;
 
     @Override
     public String toString() {
@@ -25,6 +27,22 @@ public class ListViewProductBean {
                 ", type='" + type + '\'' +
                 ", statusnum='" + statusnum + '\'' +
                 '}';
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public Integer getBuycount() {
+        return buycount;
+    }
+
+    public void setBuycount(Integer buycount) {
+        this.buycount = buycount;
     }
 
     public String getStatusnum() {

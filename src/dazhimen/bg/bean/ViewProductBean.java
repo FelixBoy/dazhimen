@@ -82,7 +82,7 @@ public class ViewProductBean {
     }
 
     public void setPrice(String price) {
-        this.price = price + "/年";
+        this.price = price;
     }
 
     public String getDerateProportion() {
@@ -90,7 +90,7 @@ public class ViewProductBean {
     }
 
     public void setDerateProportion(String derateProportion) {
-        this.derateProportion = derateProportion + "%";
+        this.derateProportion = derateProportion;
     }
 
     public String getIntroduction() {

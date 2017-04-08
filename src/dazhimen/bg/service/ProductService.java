@@ -305,6 +305,20 @@ public class ProductService {
         return pid;
     }
 
+    public ViewProductBean getModifyProductInforById(String pid) throws BgException {
+        ViewProductBean productBean = null;
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            productBean = sqlSession.selectOne("dazhimen.bg.bean.Product.getModifyProductInforById", pid);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BgException("出现异常，查询指定产品信息失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return productBean;
+    }
     public ViewProductBean getProductInforById(String pid) throws BgException {
         ViewProductBean productBean = null;
         SqlSession sqlSession = null;
@@ -376,6 +390,9 @@ public class ProductService {
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }
+    }
+    public void saveModifyProductBasicInfo(ModifyProductBasicInfoBean productBean){
+
     }
     public void saveProductDel(String pid, HttpServletRequest resq) throws BgException {
         SqlSession sqlSession = null;

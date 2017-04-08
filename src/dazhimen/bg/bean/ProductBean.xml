@@ -11,15 +11,26 @@
             parameterType="dazhimen.bg.bean.PaginationParamBean">
        select pid,pname,getcodetxt('producttype',a.type) type,
                getcodetxt('productstatus',a.status) status,a.status statusnum,
-               date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createtime,b.name uname
+               date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createtime,b.name uname,
+               buycount,concat(a.price,'/年') as price
         from product a, user b
        where a.uid = b.uid and a.isdel = '0'
        order by a.indexsort,createdatetime desc
        limit #{startnum},#{getrows}
     </select>
 
+    <select id="getModifyProductInforById" resultType="dazhimen.bg.bean.ViewProductBean">
+        select pid,pname,getcodetxt('producttype',a.type) as type,derateProportion,a.price,
+        a.introduction,getcodetxt('indexsort',a.indexsort) as indexsort,getcodetxt('rightorwrong',indexplay) as indexplay,
+        listimage,b.uid,b.name as uname,b.mphone,b.loginname,getcodetxt('gender',b.gender) as gender
+        from product a,user b
+        where a.uid = b.uid
+        and pid = #{pid}
+        and a.isdel = '0'
+    </select>
+
     <select id="getProductInforById" resultType="dazhimen.bg.bean.ViewProductBean">
-        select pid,pname,getcodetxt('producttype',a.type) as type,price,derateProportion,
+        select pid,pname,getcodetxt('producttype',a.type) as type,concat(a.derateProportion,'%') as derateProportion,concat(a.price,'/年') as price,
                 a.introduction,getcodetxt('indexsort',a.indexsort) as indexsort,getcodetxt('rightorwrong',indexplay) as indexplay,
                 listimage,b.uid,b.name as uname,b.mphone,b.loginname,getcodetxt('gender',b.gender) as gender
           from product a,user b
@@ -53,7 +64,7 @@
 
     <select id="queryAllCourseByPid" resultType="dazhimen.bg.bean.ListViewCourseBean"
             parameterType="dazhimen.bg.bean.PaginationParamBean">
-        select courseid,coursename,getcodetxt('indexsort',sort) as sort,
+        select courseid,coursename,getcodetxt('indexsort',sort) as sort,viewcount,
                 getcodetxt('rightorwrong',istry) as istry,audiopath as audiourl
           from course where pid = #{pid}
         limit #{startnum},#{getrows}
