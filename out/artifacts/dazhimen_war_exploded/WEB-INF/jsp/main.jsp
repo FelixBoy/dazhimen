@@ -38,13 +38,6 @@
                         }
                     });
                     break;
-                case 'product_upload':
-                    $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/product/fwdAddProductPage?random_id="+Math.random(),
-                        onLoad:function(){
-                        }
-                    });
-                    break;
                 case 'customer_manage':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/customer/fwdCustomerManagePage?random_id="+Math.random(),
@@ -67,6 +60,13 @@
                 case 'recharge_manage':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/recharge/fwdManageRechargePage?random_id="+Math.random(),
+                        onLoad:function(){
+                        }
+                    });
+                    break;
+                case 'order_manage':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/order/fwdManageOrderPage?random_id="+Math.random(),
                         onLoad:function(){
                         }
                     });
@@ -98,32 +98,16 @@
     <div style="margin:20px 0;"></div>
     <div class="easyui-panel" style="padding:5px">
         <ul id="menu-tree" class="easyui-tree">
-            <li id="product_manage" data-options="state:'open'">
-                <span>产品管理</span>
-                <ul>
-                    <li id="product_upload">上传商品</li>
-                </ul>
-            </li>
+            <li id="product_manage">产品管理</li>
             <li id="master_manage">掌门管理</li>
-            <li id="customer_manage">会员查询</li>
+            <li id="admin_manage">管理员管理</li>
             <li id="indexplay_manage">首页轮播</li>
-            <li id="indexsort_manange">首页排序</li>
+            <li id="customer_manage">会员查询</li>
             <li id="recharge_manage">充值查询</li>
             <li id="order_manage">订单查询</li>
-            <li id="news_manage" data-options="state:'closed'">
-                <span>新闻管理</span>
-                <ul>
-                    <li id="news_add">新增新闻</li>
-                </ul>
-            </li>
-            <li id="admin_manage">管理员管理</li>
-            <li id="permission_manage" data-options="state:'closed'">
-                <span>权限管理</span>
-                <ul>
-                    <li id="role_add" >新增权限角色</li>
-                    <li id="permisssion_modify">权限修改</li>
-                </ul>
-            </li>
+            <li id="indexsort_manange">首页排序</li>
+            <li id="news_manage">新闻管理</li>
+            <li id="permission_manage">权限管理</li>
             <%--<li id="test" data-options="state:'closed'">--%>
                 <%--<span>测试</span>--%>
                 <%--<ul>--%>

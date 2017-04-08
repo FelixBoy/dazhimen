@@ -7,19 +7,72 @@ import db.MyBatisUtil;
 import net.sf.json.JSONObject;
 import org.apache.ibatis.session.SqlSession;
 import util.CheckIsExistsUtils;
+import util.Constant;
 import util.IdUtils;
 import util.WXPayUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by Administrator on 2017/4/6.
  */
 public class ApiOrderService {
+    public List<ApiCustomerPurchaseProductBean> getPurchaseProductByCid(HttpServletRequest resq) throws ApiException {
+        String cid = resq.getParameter("cid");
+        if(!new CheckIsExistsUtils().checkCidIsExists(cid)){
+            throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
+        }
+        SqlSession sqlSession = null;
+        List<ApiCustomerPurchaseProductBean> productBeans = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            productBeans = sqlSession.selectList("dazhimen.api.bean.ApiOrder.getPurchaseProductByCid", cid);
+            for(int i = 0 ; i < productBeans.size(); i++){
+                ApiCustomerPurchaseProductBean productBean = productBeans.get(i);
+                String pid = productBean.getPid();
+                List<ApiListViewCourseBean> courseBeans = sqlSession.selectList("dazhimen.api.bean.ApiProduct.getProductCourseList", pid);
+                if(courseBeans == null || courseBeans.size() == 0){
+                    productBean.setCourselist("");
+                }else{
+                    courseBeans = dealApiListViewCourseBean(resq,courseBeans);
+                    productBean.setCourselist(new Gson().toJson(courseBeans));
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return productBeans;
+    }
+    private List<ApiListViewCourseBean> dealApiListViewCourseBean(HttpServletRequest resq,
+                                                                  List<ApiListViewCourseBean> courseBeans){
+        String localIp = resq.getLocalAddr();//获取本地ip
+        if(Constant.isDeployInAliyun){
+            localIp = Constant.AliyunIP;
+        }
+        int localPort = resq.getLocalPort();//获取本地的端口
+        String appName = resq.getContextPath();
+        for(int i = 0; i < courseBeans.size(); i++){
+            ApiListViewCourseBean courseBean = courseBeans.get(i);
+            Date createDateO = courseBean.getCreatedateo();
+            SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(createDateO);
+            String createdate = cal.get(Calendar.MONTH) + 1 + "月" + cal.get(Calendar.DAY_OF_MONTH)+"日";
+            courseBean.setCreatedate(createdate);
+            courseBean.setCreatedateo(null);
+
+            String audioUrl = "http://" + localIp + ":" + localPort + appName + "/" + courseBean.getAudiourl();
+            courseBean.setAudiourl(audioUrl);
+            String listimgurl = "http://" + localIp + ":" + localPort + appName + "/" + courseBean.getListimgurl();
+            courseBean.setListimgurl(listimgurl);
+        }
+        return courseBeans;
+    }
     public void buyProductByBalance(String cid, String pid) throws ApiException {
         CheckIsExistsUtils isExistsUtils = new CheckIsExistsUtils();
         if(!isExistsUtils.checkCidIsExists(cid)){
@@ -58,7 +111,7 @@ public class ApiOrderService {
             buyProductByBalance.setOrid(orderid);
             buyProductByBalance.setCid(cid);
             buyProductByBalance.setOrdersum(realPayPrice);
-            buyProductByBalance.setPaymenttype("1");
+            buyProductByBalance.setPaymenttype(Constant.paymentType_Balance);
             sqlSession.insert("dazhimen.api.bean.ApiOrder.buyProductByBalance", buyProductByBalance);
 
             ApiIROrderProductBean irOrderProductBean = new ApiIROrderProductBean();
@@ -133,6 +186,8 @@ public class ApiOrderService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ApiException("出现异常，发起微信支付充值失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
         return resultMap;
     }
@@ -162,7 +217,7 @@ public class ApiOrderService {
             buyProductByWXPay.setOrid(orderid);
             buyProductByWXPay.setCid(cid);
             buyProductByWXPay.setOrdersum(orderamount);
-            buyProductByWXPay.setPaymenttype("1");
+            buyProductByWXPay.setPaymenttype(Constant.paymentType_WXPay);
             buyProductByWXPay.setTransaction_id(transaction_id);
             sqlSession.insert("dazhimen.api.bean.ApiOrder.buyProductByWXPay", buyProductByWXPay);
 
@@ -179,6 +234,8 @@ public class ApiOrderService {
         }catch (Exception e){
             sqlSession.rollback();
             throw new ApiException("处理微信支付结果失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
     }
     public boolean recheckWXPayBuyProductResult(String orderid, String pid, String cid) throws ApiException {
@@ -188,6 +245,19 @@ public class ApiOrderService {
         }
         if(!checkIsExistsUtils.checkPidIsExists(pid)){
             throw new ApiException("传入的[pid]值，无效。在数据库中不存在，或者产品已经下架。");
+        }
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            SingleValueBean valueBean = sqlSession.selectOne("dazhimen.api.bean.ApiOrder.checkProductIsBuyByOrid", orderid);
+            if(valueBean != null && valueBean.getValueInfo()!= null && valueBean.getValueInfo().equals("1")){
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
         }
         Map<String, String> map = WXPayUtil.queryWXOrderInfo(orderid);
         if (map.get("result_code").toString().equalsIgnoreCase("SUCCESS")) {

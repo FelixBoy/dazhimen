@@ -415,9 +415,14 @@ public class ProductController {
         String introduction = resq.getParameter("introduction");
         productBean.setIntroduction(introduction);
         String indexSort = resq.getParameter("indexsort");
-        productBean.setIndexSort(indexSort);
+        if(indexSort == null || indexSort.equals("")){
+            productBean.setIndexSort("99");
+        }else{
+            productBean.setIndexSort(indexSort);
+        }
+
         String indexPlay = resq.getParameter("indexplay");
-        if(indexPlay == null){
+        if(indexPlay == null || indexPlay.equals("")){
             productBean.setIndexPlay("0");
         }else{
             productBean.setIndexPlay(indexPlay);

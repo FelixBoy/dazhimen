@@ -50,6 +50,13 @@
             });
         }
     }
+    function forwardAddProductPage(){
+        $('#content_panel').panel({
+            href:"<%=request.getContextPath() %>/product/fwdAddProductPage?random_id="+Math.random(),
+            onLoad:function(){
+            }
+        });
+    }
     function saveProductDel(index){
         MsgBox.show("功能正在开发，敬请期待");
         <%--$('#productList').datagrid('selectRow',index);--%>
@@ -116,4 +123,6 @@
     <div id="modifyProductStatusDialog"></div>
     <table id="productList" style="width: auto;height: auto;">
     </table>
+    <br/>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddProductPage()">上传产品</a>
 </div>

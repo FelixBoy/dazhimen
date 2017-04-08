@@ -1,10 +1,7 @@
 package dazhimen.api.controller;
 
 import com.google.gson.Gson;
-import dazhimen.api.bean.ApiCustomerCollectProductBean;
-import dazhimen.api.bean.ApiListViewCourseBean;
-import dazhimen.api.bean.ApiProductBean;
-import dazhimen.api.bean.ApiSpecifyProductBean;
+import dazhimen.api.bean.*;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiProductService;
@@ -19,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,6 +27,53 @@ import java.util.List;
 @Controller
 @RequestMapping("/api/product/")
 public class ApiProductController {
+
+    @RequestMapping(value = "/updateCourseViewCount",method = RequestMethod.POST)
+    public void updateCourseViewCount(HttpServletRequest resq,
+                                      HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            checkUpdateCourseViewCountPara(resq);
+            ApiProductService productService = new ApiProductService();
+            productService.updateCourseViewCount(resq.getParameter("courseid"), resq.getParameter("cid"));
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","更新成功");
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+    }
     @RequestMapping(value = "/getHomePageSkillPack",method = RequestMethod.POST)
     public void getHomePageSkillPack(HttpServletRequest resq,
                                      HttpServletResponse resp){
@@ -815,6 +858,15 @@ public class ApiProductController {
         }
         if(keyword.equals("")){
             throw new ParameterCheckException("参数[keyword]的值为空");
+        }
+    }
+    private void checkUpdateCourseViewCountPara(HttpServletRequest resq) throws ParameterCheckException {
+        String courseid = resq.getParameter("courseid");
+        if(courseid == null){
+            throw new ParameterCheckException("未取到参数[courseid]");
+        }
+        if(courseid.equals("")){
+            throw new ParameterCheckException("参数[courseid]的值为空");
         }
     }
 }

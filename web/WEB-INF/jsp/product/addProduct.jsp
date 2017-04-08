@@ -57,6 +57,7 @@
         }
         dealProductFormBeforeSubmit();
         $("#productForm").submit();
+        $.messager.progress();
     }
     function checkProductForm(){
         if($("#uid").val().length == 0){
@@ -108,6 +109,7 @@
         return true;
     }
     function actionAfterSubmit(jsonObj){
+        $.messager.progress('close');
         var resultObj = JSON.parse(jsonObj);
         if(!resultObj){
             return;
@@ -126,7 +128,17 @@
             MsgBox.show(resultObj.msg);
         }
     }
+    function returnManageProductInAddProduct(){
+        $('#content_panel').panel({
+            href:"<%=request.getContextPath() %>/product/fwdManageProductPage?random_id="+Math.random(),
+            onLoad:function(){
+            }
+        });
+    }
 </script>
+<div style="text-align: left;">
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="returnManageProductInAddProduct()">返回</a>
+</div>
 <div style="margin:0px auto;width: 840px;">
     <form id="selectMasterForm">
         <table cellpadding="5">

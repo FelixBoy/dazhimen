@@ -1,20 +1,30 @@
 package dazhimen.api.bean;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/3/31.
  */
-public class ApiCustomerCollectProductBean {
+public class ApiCustomerPurchaseProductBean {
     private String pid = "";
     private String pname = "";
     private String listimgurl = "";
     private String type = "";
-    private String isstart = "";
+    private String courselist = "";
     private String dealNull(String value){
         if(value == null){
             return "";
         }else{
             return value;
         }
+    }
+
+    public String getCourselist() {
+        return dealNull(courselist);
+    }
+
+    public void setCourselist(String courselist) {
+        this.courselist = courselist;
     }
 
     public String getPid() {
@@ -49,11 +59,4 @@ public class ApiCustomerCollectProductBean {
         this.type = dealNull(type);
     }
 
-    public String getIsstart() {
-        return isstart;
-    }
-
-    public void setIsstart(String isstart) {
-        this.isstart = dealNull(isstart);
-    }
 }

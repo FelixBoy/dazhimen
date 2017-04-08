@@ -2,6 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.api.bean.ApiProduct">
+    <insert id="recordCustomerViewCourse" parameterType="dazhimen.api.bean.ApiIrCustomerCourseParaBean">
+        insert into ir_customer_view_course(cid, courseid)
+            values(#{cid}, #{courseid})
+    </insert>
+    <select id="checkISCustomerViewedCourse" resultType="dazhimen.api.bean.SingleValueBean"
+        parameterType="dazhimen.api.bean.ApiIrCustomerCourseParaBean">
+        select 1 as valueinfo from ir_customer_view_course
+        where cid = #{cid} and courseid = #{courseid}
+    </select>
+
+    <update id="updateCourseViewCount">
+        update course set viewcount = viewcount + 1
+         where courseid = #{courseid};
+    </update>
+    <select id="checkCourseidIsExists" resultType="dazhimen.api.bean.SingleValueBean">
+        select 1 as valueinfo
+          from course
+         where courseid = #{courseid}
+    </select>
+
     <select id="searchProductByTypeAndKeyword" parameterType="dazhimen.api.bean.ApiQueryProductByTypeAndKeyword"
             resultType="dazhimen.api.bean.ApiProductBean">
         select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price,status as isstart
@@ -56,7 +76,7 @@
             resultType="dazhimen.api.bean.SingleValueBean">
         select 1 as valueinfo
           from orders a,
-                ir_order_product b
+              ir_order_product b
          where a.orid = b.orid
            and a.cid = #{cid}
            and b.pid = #{pid}
@@ -102,7 +122,7 @@
     </select>
 
     <select id="getCustomerCollectProduct" resultType="dazhimen.api.bean.ApiCustomerCollectProductBean">
-        select b.pid,b.pname,b.listimage as listimgurl,b.type
+        select b.pid,b.pname,b.listimage as listimgurl,b.type,b.status as isstart
           from ir_customer_product a,product b
         where a.pid = b.pid and b.isdel = '0' and a.cid = #{cid}
     </select>

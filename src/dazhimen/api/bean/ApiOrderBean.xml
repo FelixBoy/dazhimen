@@ -2,6 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.api.bean.ApiOrder">
+    <select id="getPurchaseProductByCid" resultType="dazhimen.api.bean.ApiCustomerPurchaseProductBean">
+        select d.pid,d.pname,d.type,d.listimage as listimgurl
+        from orders a,ir_order_product c,product d
+        where a.orid = c.orid
+        and c.pid = d.pid
+        and a.cid = #{cid}
+        and d.isdel = '0'
+        and a.isdel = '0';
+    </select>
+    <select id="checkProductIsBuyByOrid" resultType="dazhimen.api.bean.SingleValueBean">
+      select 1 as valueinfo from orders where orid = #{orid}
+    </select>
 
     <select id="checkProductIsBuy" parameterType="dazhimen.api.bean.ApiCheckProductIsBuyBean"
             resultType="dazhimen.api.bean.SingleValueBean">
@@ -9,8 +21,8 @@
         from orders a,
         ir_order_product b
         where a.orid = b.orid
-        and a.cid = #{cid}
-        and b.pid = #{pid}
+          and a.cid = #{cid}
+          and b.pid = #{pid}
     </select>
 
     <select id="getBalanceByCid" resultType="dazhimen.api.bean.ApiBalanceBean">

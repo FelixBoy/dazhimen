@@ -25,15 +25,13 @@
                 var rowLength = Math.floor(arrLength / 3);
                 if(rowLength <= 1){
                     var htmlArr = [];
-                    htmlArr.push("<tr>");
                     for(var i = 0; i < arrLength; i++){
-                        htmlArr.push("<td>产品主图</td>");
-                        htmlArr.push("<td align='left'>");
+                        htmlArr.push("<td align='right'>产品主图:</td>");
+                        htmlArr.push("<td align='left' colspan='3'>");
                         htmlArr.push("       <input type='hidden' id='mainimg"+i+"' value="+ arr[i].imageId +"/> ");
-                        htmlArr.push("       <img src='" + arr[i].mainImage + "' width='120px' height='60px'/>");
+                        htmlArr.push("       <img align='left' src='" + arr[i].mainImage + "' width='200px' height='100px'/>");
                         htmlArr.push("</td>")
                     }
-                    htmlArr.push("</tr>");
                     $(htmlArr.join("")).insertAfter("#listimgtr");
                 }
             }
@@ -51,7 +49,7 @@
         });
         $('#viewMasterDialog').dialog("open").dialog('setTitle','查看掌门信息');
     }
-    function returnManageProduct(){
+    function returnManageProductInViewProduct(){
         $('#content_panel').panel({
             href:"<%=request.getContextPath() %>/product/fwdManageProductPage?random_id="+Math.random(),
             onLoad:function(){
@@ -60,7 +58,7 @@
     }
 </script>
 <div style="text-align: left;">
-<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="returnManageProduct()">返回</a>
+<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="returnManageProductInViewProduct()">返回</a>
 </div>
 <div style="margin:0px auto;width: 950px">
     <form id="viewProductForm">
@@ -76,30 +74,31 @@
             </tr>
             <tr>
                 <td>ID:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="pid" name="pid"></td>
+                <td><input class="dzm-noBorder-text" readonly id="pid" name="pid"></td>
                 <td>名称:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="pname" name="pname"></td>
+                <td><input class="dzm-noBorder-text" readonly id="pname" name="pname"></td>
                 <td>类型:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="type" name="type"></td>
-                <td width="50px">价格:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="price" name="price"></td>
+                <td><input class="dzm-noBorder-text" readonly id="type" name="type"></td>
+                <td width="50px" nowrap="nowrap">价格:</td>
+                <td><input class="dzm-noBorder-text" readonly id="price" name="price"></td>
             </tr>
             <tr>
                 <td class="form-label-cell">余额支付减免:</td>
-                <td><input class="dzm-noBorder-text" readonly="true"  id="derateProportion" name="derateProportion"/></td>
-                <td>首页轮播:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" style="font-size: large" id="indexplay" name="indexPlay"/></td>
-                <td>热卖排序:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="indexsort" name="indexSort"/></td>
+                <td><input class="dzm-noBorder-text" readonly  id="derateProportion" name="derateProportion"/></td>
+                <td nowrap="nowrap">首页轮播:</td>
+                <td><input class="dzm-noBorder-text" readonly style="font-size: large" id="indexplay" name="indexPlay"/></td>
+                <td nowrap="nowrap">首页排序:</td>
+                <td><input class="dzm-noBorder-text" readonly id="indexsort" name="indexSort"/></td>
                 <td colspan="2"></td>
             </tr>
-            <tr id="listimgtr">
-                <td>列表图片:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" type="hidden" id="listimage" name="listImage" />
-                    <img id="listImageReal" width="60px" height="60px"/></td>
+            <tr>
+                <td nowrap="nowrap">列表图片:</td>
+                <td id="listimgtr" colspan="2"><input class="dzm-noBorder-text" readonly="true" type="hidden" id="listimage" name="listImage" />
+                    <img id="listImageReal" width="100px" height="100px"/></td>
+            </tr>
+            <tr>
                 <td>介绍:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="introduction" name="introduction" /></td>
-                <td></td>
+                <td colspan="5"><textarea readonly style="width: 90%;overflow-y:auto;border: 1px solid #CCCCCC !important;" id="introduction" name="introduction" rows="5" /></td>
             </tr>
         </table>
         <br/>

@@ -1,6 +1,5 @@
 package dazhimen.api.service;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import dazhimen.api.bean.*;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
@@ -378,5 +377,44 @@ public class ApiProductService {
             MyBatisUtil.closeSession(sqlSession);
         }
         return productBeans;
+    }
+    public void updateCourseViewCount(String courseid, String cid) throws ApiException {
+        CheckIsExistsUtils checkIsExistsUtils = new CheckIsExistsUtils();
+        if(!checkIsExistsUtils.checkCourseidIsExists(courseid)){
+            throw new ApiException("传入的[courseid]值无效，在数据库中不存在");
+        }
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            //检查用户是否已经读过此音频
+            if(cid != null && !cid.equals("")){
+                if(!checkIsExistsUtils.checkCidIsExists(cid)){
+                    throw new ApiException("传入的[cid]值无效，在数据库中不存在");
+                }
+                ApiIrCustomerCourseParaBean checkBean = new ApiIrCustomerCourseParaBean();
+                checkBean.setCid(cid);
+                checkBean.setCourseid(courseid);
+                SingleValueBean singleValueBean = sqlSession.selectOne("dazhimen.api.bean.ApiProduct.checkISCustomerViewedCourse", checkBean);
+                if(singleValueBean != null && singleValueBean.getValueInfo() != null && singleValueBean.getValueInfo().equals("1")){
+                    return;
+                }
+                sqlSession.insert("dazhimen.api.bean.ApiProduct.recordCustomerViewCourse",checkBean);
+                sqlSession.update("dazhimen.api.bean.ApiProduct.updateCourseViewCount", courseid);
+                sqlSession.commit();
+            }else{
+                sqlSession.update("dazhimen.api.bean.ApiProduct.updateCourseViewCount", courseid);
+                sqlSession.commit();
+            }
+        }catch (ApiException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new ApiException(e.getMessage());
+        } catch(Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new ApiException("出现异常，更新音频viewCount出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
     }
 }

@@ -20,7 +20,7 @@
     width: 151px;
     font-size: 12px;
     line-height: 23px;
-    border: 1px solid ghostwhite !important;
+    border: 1px solid #CCCCCC !important;
 }
 .form-label-cell{
     width: 70px;

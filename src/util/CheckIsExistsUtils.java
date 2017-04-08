@@ -11,6 +11,23 @@ import org.apache.ibatis.session.SqlSession;
  */
 public class CheckIsExistsUtils {
 
+    public boolean checkCourseidIsExists(String courseid) throws ApiException {
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            SingleValueBean value = sqlSession.selectOne("dazhimen.api.bean.ApiProduct.checkCourseidIsExists", courseid);
+            if(value != null && value.getValueInfo()!= null && value.getValueInfo().equals("1")){
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，检验Courseid是否存在失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return false;
+    }
+
     public boolean checkCidIsExists(String cid) throws ApiException {
         SqlSession sqlSession = null;
         try{

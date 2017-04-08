@@ -2,7 +2,7 @@ package dazhimen.bg.service;
 
 import dazhimen.bg.bean.PaginationParamBean;
 import dazhimen.bg.bean.SingleValueBean;
-import dazhimen.bg.bean.ViewRechargeBean;
+import dazhimen.bg.bean.ViewOrderBean;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import net.sf.json.JSONObject;
@@ -12,34 +12,34 @@ import util.PaginationUtil;
 import java.util.List;
 
 /**
- * Created by Administrator on 2017/4/5.
+ * Created by Administrator on 2017/4/7.
  */
-public class RechargeService {
-    public String queryAllRecharge(String page, String rows) throws BgException {
-        List<ViewRechargeBean> rechargeBeans = null;
+public class OrderService {
+    public String queryAllOrder(String page, String rows) throws BgException {
         SqlSession sqlSession = null;
         Integer totalCount = 0;
+        List<ViewOrderBean> orderBeans = null;
         try{
             sqlSession = MyBatisUtil.createSession();
-            SingleValueBean allRechargeCountValue = sqlSession.selectOne("dazhimen.bg.bean.Recharge.getAllRechargeCount");
-            if(allRechargeCountValue == null || allRechargeCountValue.getValueInfo() == null){
-                throw new BgException("获取充值数据总条数出错");
+            SingleValueBean allOrderCountValue = sqlSession.selectOne("dazhimen.bg.bean.Order.getAllOrderCount");
+            if(allOrderCountValue == null || allOrderCountValue.getValueInfo() == null){
+                throw new BgException("获取订单数据总条数出错");
             }
-            totalCount = Integer.parseInt(allRechargeCountValue.getValueInfo());
+            totalCount = Integer.parseInt(allOrderCountValue.getValueInfo());
             PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);
-            rechargeBeans = sqlSession.selectList("dazhimen.bg.bean.Recharge.queryAllRecharge", paramBean);
+            orderBeans = sqlSession.selectList("dazhimen.bg.bean.Order.queryAllOrder", paramBean);
         }catch (BgException e){
             e.printStackTrace();
             throw new BgException(e.getMessage());
-        }catch (Exception e){
+        }catch(Exception e){
             e.printStackTrace();
-            throw new BgException("出现异常，查询所有充值信息出错");
+            throw new BgException("出现异常，查询所有订单信息出错");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("total", totalCount);
-        jsonObject.put("rows", rechargeBeans);
+        jsonObject.put("rows", orderBeans);
         return jsonObject.toString();
     }
 }

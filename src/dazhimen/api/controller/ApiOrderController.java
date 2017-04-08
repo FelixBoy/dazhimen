@@ -1,5 +1,7 @@
 package dazhimen.api.controller;
 
+import com.google.gson.Gson;
+import dazhimen.api.bean.ApiCustomerPurchaseProductBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiOrderService;
@@ -18,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 
@@ -27,6 +30,57 @@ import java.util.SortedMap;
 @Controller
 @RequestMapping("/api/order")
 public class ApiOrderController {
+    @RequestMapping(value = "/getPurchaseProductByCid",method = RequestMethod.POST)
+    public void getPurchaseProductByCid(HttpServletRequest resq,
+                                        HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            checkGetPurchaseProductByCidPara(resq);
+            ApiOrderService orderService = new ApiOrderService();
+            List<ApiCustomerPurchaseProductBean> productBeans = orderService.getPurchaseProductByCid(resq);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", "200");
+            jsonObject.put("msg", "获取成功");
+            if(productBeans == null || productBeans.size()==0){
+                jsonObject.put("data", new Gson().toJson(null));
+            }else{
+                productBeans = dealPurchaseProductBean(resq,productBeans);
+                jsonObject.put("data", new Gson().toJson(productBeans));
+            }
+            try {
+                resp.getWriter().write(jsonObject.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
     @RequestMapping(value="/buyProductByBalance", method = RequestMethod.POST)
     public void buyProductByBalance(HttpServletRequest resq, HttpServletResponse resp){
         try {
@@ -137,17 +191,24 @@ public class ApiOrderController {
 
     @RequestMapping("/dealWXPayBuyProductResult")
     public void dealWXPayBuyProductResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException, ApiException {
-        System.out.println("=======Start  微信知否购买产品，支付结果处理========");
+        System.out.println("=======Start   微信知否购买产品，支付结果处理========");
         InputStream inStream = null;
-        inStream = resq.getInputStream();
-        ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int len = 0;
-        while ((len = inStream.read(buffer)) != -1){
-            outSteam.write(buffer, 0, len);
+        ByteArrayOutputStream outSteam = null;
+        try {
+            inStream = resq.getInputStream();
+            outSteam = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = inStream.read(buffer)) != -1){
+                outSteam.write(buffer, 0, len);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            outSteam.close();
+            inStream.close();
         }
-        outSteam.close();
-        inStream.close();
+
         String result = new String(outSteam.toByteArray(), "utf-8");
         Map<String, String> map = WXPayUtil.doXMLParse(result);
         System.out.println("====接口返回值为=====");
@@ -226,6 +287,22 @@ public class ApiOrderController {
             }
         }
     }
+    private List<ApiCustomerPurchaseProductBean> dealPurchaseProductBean(HttpServletRequest resq,
+                                                                       List<ApiCustomerPurchaseProductBean> productBeans){
+        String localIp = resq.getLocalAddr();//获取本地ip
+        if(Constant.isDeployInAliyun){
+            localIp = Constant.AliyunIP;
+        }
+        int localPort = resq.getLocalPort();//获取本地的端口
+        String appName = resq.getContextPath();
+        for(int i = 0; i < productBeans.size(); i++){
+            ApiCustomerPurchaseProductBean productBean = productBeans.get(i);
+
+            String listImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + productBean.getListimgurl();
+            productBean.setListimgurl(listImgUrl);
+        }
+        return productBeans;
+    }
     private void checkWXPayBuyProductResultPara(HttpServletRequest resq) throws ParameterCheckException {
         String orderid = resq.getParameter("orderid");
         if(orderid == null){
@@ -258,6 +335,15 @@ public class ApiOrderController {
         if(pid.equals("")){
             throw new ParameterCheckException("参数[pid]的值为空");
         }
+        String cid = resq.getParameter("cid");
+        if(cid == null){
+            throw new ParameterCheckException("未取到参数[cid]");
+        }
+        if(cid.equals("")){
+            throw new ParameterCheckException("参数[cid]的值为空");
+        }
+    }
+    private void checkGetPurchaseProductByCidPara(HttpServletRequest resq) throws ParameterCheckException {
         String cid = resq.getParameter("cid");
         if(cid == null){
             throw new ParameterCheckException("未取到参数[cid]");

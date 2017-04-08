@@ -54,10 +54,15 @@ public class Constant {
     //验证码长度
     public static final int verifyCodeLength = 4;
 
+    //
+    public static final String paymentType_Balance = "1";
+    public static final String paymentType_WXPay = "2";
+    public static final String paymentType_AliPay = "3";
+
     //是否部署在阿里云
     public static final boolean isDeployInAliyun = true;
     //阿里云Ip
     public static final String AliyunIP = "47.92.73.149";
 
-    public static final String FrontEndVersion = "v1.0";
+    public static final String FrontEndVersion = "v1.1";
 }
