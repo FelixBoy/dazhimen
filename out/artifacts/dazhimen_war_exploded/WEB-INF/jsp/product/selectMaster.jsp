@@ -33,18 +33,18 @@
             loadMsg:"正在加载掌门数据...",
             columns: [[
                 { field: 'uid', title: '掌门Id', width: '20%'},
-                { field: 'name', title: '姓名', width: '10%'},
+                { field: 'name', title: '姓名', width: '20%'},
                 { field: 'mphone', title: '手机号码', width: '20%'},
                 { field: 'loginname', title: '登录名', width: '10%'},
                 { field: 'gender', title: '性别', width: '10%'},
-                { field: 'introduction', title: '介绍', width: '30%' }
+                { field: 'introduction', title: '介绍', width: '20%' }
             ]],
             pagination: true
         });
         $('#selectMasterList').datagrid('getPager').pagination({
             pageSize: 10,
             pageNumber: 1,
-            pageList: [10,20,30],
+            pageList: [10],
             beforePageText: '第',
             afterPageText: '页    共 {pages} 页',
             displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'

@@ -13,6 +13,23 @@ import java.util.List;
  * Created by Administrator on 2017/3/24.
  */
 public class ApiProductService {
+    public String getMainImgPath(String pid) throws ApiException {
+        SqlSession sqlSession = null;
+        String mainImgPath = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            mainImgPath = sqlSession.selectOne("dazhimen.api.bean.ApiProduct.getMainImgPath", pid);
+            if(mainImgPath == null || mainImgPath.equals("")){
+                throw new ApiException("出现异常，查询产品主图出错");
+            }
+        }catch (ApiException e){
+            e.printStackTrace();
+            throw new ApiException(e.getMessage());
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return mainImgPath;
+    }
     public List<ApiProductBean> getHomePageSkillPack(String getCount) throws ParameterCheckException, ApiException {
         int getCountInt = 0;
         if(getCount == null || getCount.equals("")){

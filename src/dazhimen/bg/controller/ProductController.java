@@ -192,8 +192,7 @@ public class ProductController {
             CommonsMultipartFile listImgFile = (CommonsMultipartFile) multipartRequest.getFile("listimgmodify");
             String basePath = resq.getSession().getServletContext().getRealPath("/");
             productService.saveModifyProductListImg(pid,listImgFile,basePath);
-
-        } catch (Exception e) {
+        } catch (BgException e) {
             e.printStackTrace();
             JsonObject jsonObj = new JsonObject();
             jsonObj.addProperty("code", "400");
@@ -218,7 +217,7 @@ public class ProductController {
             CommonsMultipartFile mainImgFile = (CommonsMultipartFile) multipartRequest.getFile("mainimgmodify");
             String basePath = resq.getSession().getServletContext().getRealPath("/");
             productService.saveModifyProductMainImg(pid,mainImgFile,basePath);
-        } catch (Exception e) {
+        } catch (BgException e) {
             e.printStackTrace();
             JsonObject jsonObj = new JsonObject();
             jsonObj.addProperty("code", "400");
@@ -290,7 +289,18 @@ public class ProductController {
             ProductService productService = new ProductService();
             String page = resq.getParameter("page");
             String rows = resq.getParameter("rows");
-            String result = productService.queryAllProducts(page, rows);
+            String randomStr = resq.getParameter("randomStr");
+            String result = null;
+            if(randomStr == null || randomStr.equals("")){
+                result = productService.queryAllProducts(page, rows);
+            }else{
+                String pidCondition = resq.getParameter("pidCondition");
+                String pnameCondition = resq.getParameter("pnameCondition");
+                String typeCondition = resq.getParameter("typeCondition");
+                String starttimeCondition = resq.getParameter("starttimeCondition");
+                String endtimeCondition = resq.getParameter("endtimeCondition");
+                String statusCondition = resq.getParameter("statusCondition");
+            }
             resp.getWriter().write(result);
         }catch (Exception e){
             e.printStackTrace();

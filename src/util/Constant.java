@@ -64,5 +64,5 @@ public class Constant {
     //阿里云Ip
     public static final String AliyunIP = "47.92.73.149";
 
-    public static final String FrontEndVersion = "v1.1";
+    public static final String FrontEndVersion = "v1.2";
 }

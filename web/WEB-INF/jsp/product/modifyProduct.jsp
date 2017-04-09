@@ -40,10 +40,10 @@
             height: 230,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/product/fwdModifyProductMainImgPage?random_id=" + Math.random()
-            + "&pid=<%=request.getAttribute("pid").toString()%>",
             modal: true
         });
+        $("#modifyProductMainImgDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyProductMainImgPage?pid=" + $("#pid").val()
+            + "&random_id=" + Math.random());
         $('#modifyProductMainImgDialog').dialog("open");
     }
     function openModifyListImgDialog(){
@@ -53,10 +53,10 @@
             height: 230,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/product/fwdModifyProductListImgPage?random_id=" + Math.random()
-                + "&pid=<%=request.getAttribute("pid").toString()%>",
             modal: true
         });
+        $("#modifyProductListImgDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyProductListImgPage?pid=" + $("#pid").val()
+            + "&random_id=" + Math.random());
         $('#modifyProductListImgDialog').dialog("open");
     }
 

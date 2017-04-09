@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.api.bean.ApiProduct">
+    <select id="getMainImgPath" resultType="java.lang.String">
+        select path
+        from product_image a
+        where a.pid = #{pid}
+    </select>
     <insert id="recordCustomerViewCourse" parameterType="dazhimen.api.bean.ApiIrCustomerCourseParaBean">
         insert into ir_customer_view_course(cid, courseid)
             values(#{cid}, #{courseid})

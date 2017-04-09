@@ -300,6 +300,9 @@ public class ApiOrderController {
 
             String listImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + productBean.getListimgurl();
             productBean.setListimgurl(listImgUrl);
+
+            String mainImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + productBean.getMainimgurl();
+            productBean.setMainimgurl(mainImgUrl);
         }
         return productBeans;
     }

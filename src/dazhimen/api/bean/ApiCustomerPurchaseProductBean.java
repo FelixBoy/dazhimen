@@ -10,6 +10,8 @@ public class ApiCustomerPurchaseProductBean {
     private String pname = "";
     private String listimgurl = "";
     private String type = "";
+    private String mainimgurl = "";
+    private String introduction = "";
     private String courselist = "";
     private String dealNull(String value){
         if(value == null){
@@ -17,6 +19,22 @@ public class ApiCustomerPurchaseProductBean {
         }else{
             return value;
         }
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public String getMainimgurl() {
+        return mainimgurl;
+    }
+
+    public void setMainimgurl(String mainimgurl) {
+        this.mainimgurl = dealNull(mainimgurl);
     }
 
     public String getCourselist() {

@@ -7,8 +7,8 @@
     function selectMaster(){
         $('#selectMasterDialog').dialog({
             title: '选择掌门',
-            width: 600,
-            height: 400,
+            width: 700,
+            height: 500,
             closed: true,
             cache: false,
             href: "<%=request.getContextPath()%>/product/fwdSelectMasterPage?random_id=" + Math.random(),
@@ -190,7 +190,7 @@
                     <input type="hidden" id="uidInProductForm" name="uid"></td>
                 <td>类型:<span style="color:red">*</span></td>
                 <td>
-                    <select class="easyui-combobox" name="type" id="type" style="width:98%">
+                    <select class="easyui-combobox" name="type" id="type" editable="false" style="width:98%">
                         <option value="1">技能包</option>
                         <option value="2">经验包</option>
                     </select>

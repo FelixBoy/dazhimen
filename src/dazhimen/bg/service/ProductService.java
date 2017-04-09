@@ -351,7 +351,31 @@ public class ProductService {
         }
         return mainImageBeans;
     }
+    public String queryAllProductsByParams(String page, String rows) throws BgException {
+        List<ListViewProductBean> productBeans = null;
+        SqlSession sqlSession = null;
+        Integer totalCount = 0;
+        try {
+            sqlSession = MyBatisUtil.createSession();
 
+            SingleValueBean allProductCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllProductCount");
+            if(allProductCountValue == null || allProductCountValue.getValueInfo() == null){
+                throw new ApiException("获取产品数据总条数出错");
+            }
+            totalCount = Integer.parseInt(allProductCountValue.getValueInfo());
+            PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);
+            productBeans = sqlSession.selectList("dazhimen.bg.bean.Product.listAllProduct", paramBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BgException("出现异常，查询所有产品信息失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("total", totalCount);
+        jsonObject.put("rows", productBeans);
+        return jsonObject.toString();
+    }
     public String queryAllProducts(String page, String rows) throws BgException {
         List<ListViewProductBean> productBeans = null;
         SqlSession sqlSession = null;
@@ -437,6 +461,9 @@ public class ProductService {
             if(listImgFile != null && !listImgFile.isEmpty()){
                 sqlSession = MyBatisUtil.createSession();
                 String listImgPath = sqlSession.selectOne("dazhimen.bg.bean.Product.getListImgPath", pid);
+                if(listImgPath == null || listImgPath.equals("")){
+                    throw new BgException("出现异常，查询原产品列表图片路径时出错");
+                }
                 String listImgFileOldName = listImgPath.substring(listImgPath.lastIndexOf("/") + 1);
                 String productMainFolderPath = bashPath + Constant.productPrefixPath  + pid + "\\";
                 //获得文件的原始名称
@@ -467,7 +494,11 @@ public class ProductService {
                     sqlSession.commit();
                 }
             }
-        } catch (Exception e) {
+        } catch (BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException(e.getMessage());
+        } catch(Exception e) {
             e.printStackTrace();
             sqlSession.rollback();
             throw new BgException("出现异常，修改产品列表图片失败");
@@ -482,6 +513,9 @@ public class ProductService {
             if(mainImgFile != null && !mainImgFile.isEmpty()){
                 sqlSession = MyBatisUtil.createSession();
                 String mainImgPath = sqlSession.selectOne("dazhimen.bg.bean.Product.getMainImgPath", pid);
+                if(mainImgPath == null || mainImgPath.equals("")){
+                    throw new BgException("出现异常，查询原产品主图路径时出错");
+                }
                 String mainImgFileOldName = mainImgPath.substring(mainImgPath.lastIndexOf("/") + 1);
                 String productMainFolderPath = bashPath + Constant.productPrefixPath  + pid + "\\";
                 //获得文件的原始名称
@@ -510,7 +544,11 @@ public class ProductService {
                     sqlSession.commit();
                 }
             }
-        } catch (Exception e) {
+        } catch (BgException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException(e.getMessage());
+        }catch (Exception e){
             e.printStackTrace();
             sqlSession.rollback();
             throw new BgException("出现异常，修改产品主图失败");

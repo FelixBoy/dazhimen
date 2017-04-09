@@ -148,9 +148,84 @@
             displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
         });
     });
+
+    function SearchProductByParams() {
+        var pidCondition = $("#pidCondition").val();
+        var pnameCondition = $("#pnameCondition").val();
+        var typeCondition = $("#typeCondition").val();
+        var starttimeCondition = $('#starttimeCondition').datetimebox('getValue');
+        var endtimeCondition = $("#endtimeCondition").datetimebox('getValue');
+        var statusCondition = $("#statusCondition").val();
+        if(pidCondition.length == '0' && pnameCondition.length == '0' && typeCondition == '0'
+            && !starttimeCondition && !endtimeCondition && statusCondition == '0'){
+            MsgBox.show("请指定筛选条件");
+            return;
+        }
+
+        var queryParameter = $('#productList').datagrid("options").queryParams;
+        queryParameter.pidCondition = pidCondition;
+        queryParameter.pnameCondition = pnameCondition;
+        queryParameter.typeCondition = typeCondition;
+        queryParameter.starttimeCondition = starttimeCondition;
+        queryParameter.endtimeCondition = endtimeCondition;
+        queryParameter.statusCondition = statusCondition;
+        queryParameter.randomStr = Math.random();
+        $("#productList").datagrid("reload");
+    }
 </script>
-<div style="padding:5px 0;">
+<div style="padding:2px 0;">
     <div id="modifyProductStatusDialog"></div>
+    <div style="margin:0px auto;width: 800px;">
+        <form id="selectMasterForm">
+            <table cellpadding="5">
+                <tr>
+                    <td colspan="6" >
+                        <div class="formTitle" style="background-color:#f2f2f2;">
+                            <div class="formTitle-icon">
+                            </div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">条件筛选</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Id:</td>
+                    <td><input class="easyui-textbox"  id="pidCondition" data-options="prompt:'产品Id'" name="pidCondition"/></td>
+                    <td>名称:</td>
+                    <td><input class="easyui-textbox" data-options="prompt:'产品名称'" id="pnameCondition" name="pnameCondition"/></td>
+                    <td>类型:</td>
+                    <td>
+                        <select name="typeCondition" id="typeCondition" class="easyui-combobox"
+                                editable="false"  style="width:100%">
+                            <option value="0" selected>全部</option>
+                            <option value="1">技能包</option>
+                            <option value="2">经验包</option>
+                        </select>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>创建时间:</td>
+                    <td><input id="starttimeCondition" name="starttimeCondition" class="easyui-datetimebox" style="width:100%" value=""
+                               data-options="prompt:'起始时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false"></td>
+                    <td>至:</td>
+                    <td><input id="endtimeCondition" name="endtimeCondition" class="easyui-datetimebox" style="width:100%" value=""
+                               data-options="prompt:'结束时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false" ></td>
+                    <td>状态:</td>
+                    <td>
+                        <select name="statusCondition" id="statusCondition" class="easyui-combobox"
+                                editable="false" style="width:100%">
+                            <option value="0" selected>全部</option>
+                            <option value="1">上架</option>
+                            <option value="2">预告</option>
+                            <option value="3">下架</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr align="right">
+                    <td colspan="6"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="SearchProductByParams()">检索</a></td>
+                </tr>
+            </table>
+        </form>
+    </div>
     <table id="productList" style="width: auto;height: auto;">
     </table>
     <br/>

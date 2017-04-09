@@ -103,8 +103,8 @@
             <tr>
                 <td>排序:</td>
                 <td>
-                    <select class="easyui-combobox" name="sort" id="sort" style="width:140px;" style="width:350px">
-                        <option value="999">按上架时间排序</option>
+                    <select class="easyui-combobox" name="sort" id="sort" editable="false" style="width:140px;" style="width:350px">
+                        <option value="99">按上架时间排序</option>
                         <option value="1">排序1</option>
                         <option value="2">排序2</option>
                         <option value="3">排序3</option>

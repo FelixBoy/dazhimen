@@ -590,11 +590,21 @@ public class ApiProductController {
         String isbuy = null;
         String iscollection = null;
         String updateCount = null;
+        String mainImgPath = null;
+        String mainImgUrl = null;
         try {
             courseBeans = productService.getProductCourseList(pid);
             isbuy = productService.getProductIsBuy(cid, pid);
             iscollection = productService.getProductIsCollection(cid, pid);
             updateCount = productService.getProductAudioUpdateCount(pid);
+            mainImgPath = productService.getMainImgPath(pid);
+            String localIp = resq.getLocalAddr();//获取本地ip
+            if(Constant.isDeployInAliyun){
+                localIp = Constant.AliyunIP;
+            }
+            int localPort = resq.getLocalPort();//获取本地的端口
+            String appName = resq.getContextPath();
+            mainImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + mainImgPath;
         } catch (ApiException e) {
             e.printStackTrace();
             JSONObject jsonObj = new JSONObject();
@@ -615,6 +625,7 @@ public class ApiProductController {
         dataObject.put("isbuy", isbuy);
         dataObject.put("iscollection", iscollection);
         dataObject.put("updatecount", updateCount);
+        dataObject.put("mainimgurl", mainImgUrl);
         if(courseBeans == null || courseBeans.size()==0){
             dataObject.put("courselist", new Gson().toJson(null));
         }else{
@@ -660,11 +671,21 @@ public class ApiProductController {
         String isbuy = null;
         String iscollection = null;
         String updateCount = null;
+        String mainImgPath = null;
+        String mainImgUrl = null;
         try {
             courseBeans = productService.getReverseCourseList(pid);
             isbuy = productService.getProductIsBuy(cid, pid);
             iscollection = productService.getProductIsCollection(cid, pid);
             updateCount = productService.getProductAudioUpdateCount(pid);
+            mainImgPath = productService.getMainImgPath(pid);
+            String localIp = resq.getLocalAddr();//获取本地ip
+            if(Constant.isDeployInAliyun){
+                localIp = Constant.AliyunIP;
+            }
+            int localPort = resq.getLocalPort();//获取本地的端口
+            String appName = resq.getContextPath();
+            mainImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + mainImgPath;
         } catch (ApiException e) {
             e.printStackTrace();
             JSONObject jsonObj = new JSONObject();
@@ -685,6 +706,7 @@ public class ApiProductController {
         dataObject.put("isbuy", isbuy);
         dataObject.put("iscollection", iscollection);
         dataObject.put("updatecount", updateCount);
+        dataObject.put("mainimgurl", mainImgUrl);
         if(courseBeans == null || courseBeans.size()==0){
             dataObject.put("courselist", new Gson().toJson(null));
         }else{
