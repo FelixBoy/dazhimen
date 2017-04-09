@@ -430,37 +430,48 @@ public class ProductService {
             MyBatisUtil.closeSession(sqlSession);
         }
     }
-    public void saveModifyProductListImg(String pid, CommonsMultipartFile listImgFile){
+    public void saveModifyProductListImg(String pid, CommonsMultipartFile listImgFile, String bashPath) throws BgException {
         SqlSession sqlSession = null;
-//        try {
-//            sqlSession = MyBatisUtil.createSession();
-//            sqlSession.update("dazhimen.bg.bean.Product.saveModifyCourse", courseBean);
-//            CommonsMultipartFile audioFile = courseBean.getAudio();
-//            if(audioFile != null && !audioFile.isEmpty()){
-//                String cousreMainFolderPath = courseBean.getBasePath() + Constant.productPrefixPath  + courseBean.getPid() + "\\course\\";
-//                //获得文件的原始名称
-//                String audioOrginalName = audioFile.getOriginalFilename();
-//                //获得原始文件的后缀
-//                String audioSuffixName = audioOrginalName.substring(audioOrginalName.lastIndexOf("."));
-//                //新文件名
-//                String audioFileNewName = courseBean.getCourseid() + audioSuffixName;
-//                //通过课程主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
-//                String audioFileTransferFilename = cousreMainFolderPath + audioFileNewName;
-//                try {
-//                    audioFile.transferTo(new File(audioFileTransferFilename));
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                    throw new BgException("出现异常，保存课程音频失败");
-//                }
-//            }
-//            sqlSession.commit();
-//        } catch (Exception e) {
-//            sqlSession.rollback();
-//            e.printStackTrace();
-//            throw new BgException("出现异常，修改课程信息失败");
-//        }finally {
-//            MyBatisUtil.closeSession(sqlSession);
-//        }
-//        return courseBean.getPid();
+        try {
+            if(listImgFile != null && !listImgFile.isEmpty()){
+                sqlSession = MyBatisUtil.createSession();
+                String listImgPath = sqlSession.selectOne("dazhimen.bg.bean.Product.getListImgPath", pid);
+                String listImgFileOldName = listImgPath.substring(listImgPath.lastIndexOf("/") + 1);
+                String productMainFolderPath = bashPath + Constant.productPrefixPath  + pid + "\\";
+                //获得文件的原始名称
+                String listImgFileOrginalName = listImgFile.getOriginalFilename();
+                //获得原始文件的后缀
+                String listImgFileSuffixName = listImgFileOrginalName.substring(listImgFileOrginalName.lastIndexOf("."));
+                //新文件名
+                //通过课程主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+                String listImageFileNewName = pid + "_listimg" + listImgFileSuffixName;
+                //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+                String listImageTransferFilename = productMainFolderPath + listImageFileNewName;
+                try {
+                    listImgFile.transferTo(new File(listImageTransferFilename));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new BgException("出现异常，修改产品列表图片失败");
+                }
+                if(!listImgFileOldName.equals(listImageFileNewName)){
+                    FileManageService fileManageService = new FileManageService();
+                    fileManageService.deleteFile(productMainFolderPath+listImgFileOldName);
+
+                    //计算列表图片在工程中的相对路径，用于记录到数据库
+                    String listImageNewFileRelPath = Constant.uploadProductDbPrefixPath + pid + "/" + listImageFileNewName;
+                    UpdateListImgFilePathBean filePathBean = new UpdateListImgFilePathBean();
+                    filePathBean.setPid(pid);
+                    filePathBean.setListimage(listImageNewFileRelPath);
+                    sqlSession.update("dazhimen.bg.bean.Product.updateListImgPath",filePathBean);
+                    sqlSession.commit();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，修改课程信息失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
     }
 }

@@ -47,11 +47,11 @@
         if(code == '200'){
             var msg = resultObj.msg;
             var pid = resultObj.pid;
+            $('#modifyProductListImgDialog').dialog('close');
             MsgBox.show(msg);
             $("#modifyProductForm").form("load", "<%=request.getContextPath()%>/product/getModifyProductInforById" +
                 "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random());
-            $
-            $('#listImgInModifyDialog').dialog('close');
+
         }else{
             MsgBox.show(resultObj.msg);
         }

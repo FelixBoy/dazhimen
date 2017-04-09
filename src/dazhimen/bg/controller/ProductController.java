@@ -184,7 +184,9 @@ public class ProductController {
             String pid = resq.getParameter("pid");
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
             CommonsMultipartFile listImgFile = (CommonsMultipartFile) multipartRequest.getFile("listimgmodify");
-//            productService.saveModifyProductListImg(pid,listImgFile);
+            String basePath = resq.getSession().getServletContext().getRealPath("/");
+            productService.saveModifyProductListImg(pid,listImgFile,basePath);
+
         } catch (Exception e) {
             e.printStackTrace();
             JsonObject jsonObj = new JsonObject();
@@ -193,10 +195,9 @@ public class ProductController {
             mav.addObject("parameters", jsonObj.toString());
             return mav;
         }
-
         JsonObject jsonObj = new JsonObject();
         jsonObj.addProperty("code", "200");
-        jsonObj.addProperty("msg","修改课程信息成功");
+        jsonObj.addProperty("msg","修改课程列表成功");
         mav.addObject("parameters", jsonObj.toString());
         return mav;
     }

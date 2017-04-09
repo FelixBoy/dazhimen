@@ -8,7 +8,7 @@
     }
     $(function(){
         $('#modifyProductForm').form({onLoadSuccess:function(){
-            $("#listImageInModify").attr("src",$("#listimage").val());
+            $("#listImageInModify").attr("src",$("#listimage").val()+"?random_id="+Math.random());
             dealMainImagesInModifyProduct();
         }});
         $("#modifyProductForm").form("load", "<%=request.getContextPath()%>/product/getModifyProductInforById" +
@@ -29,7 +29,7 @@
                 if(!arrLength){
                     return;
                 }
-                $("#mainImageRealInModify").attr("src",arr[0].mainImage);
+                $("#mainImageRealInModify").attr("src",arr[0].mainImage + "?random_id="+Math.random());
             }
         });
     }
