@@ -508,7 +508,12 @@ public class ProductController {
         String sort = resq.getParameter("sort");
         courseBean.setSort(sort);
         String istry = resq.getParameter("istry");
-        courseBean.setIstry(istry);
+        if(istry == null || istry.equals("")){
+            courseBean.setIstry("0");
+        }else{
+            courseBean.setIstry(istry);
+        }
+
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
         CommonsMultipartFile audioFile = (CommonsMultipartFile) multipartRequest.getFile("audio");
         courseBean.setAudio(audioFile);

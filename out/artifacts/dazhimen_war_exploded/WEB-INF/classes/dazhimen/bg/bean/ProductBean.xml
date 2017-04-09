@@ -2,7 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.Product">
-
+    <update id="dealProductIstry">
+        update product a
+        set a.istry = (select case count(b.courseid) when 0 then 0
+                                                      else 1 end as productistry
+	                    from course b where b.pid = #{pid} and b.istry = '1'
+	                  )
+        where a.pid = #{pid};
+    </update>
     <update id="updateMainImgPath" parameterType="dazhimen.bg.bean.UpdateMainImgFilePathBean">
         update product_image set path = #{mainimage} where pid = #{pid}
     </update>
@@ -147,6 +154,6 @@
     </delete>
 
     <update id="saveProductDel">
-        update product set isdel = '1' where pid = #{pid}
+        delete from product where pid = #{pid}
     </update>
 </mapper>

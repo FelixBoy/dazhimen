@@ -127,6 +127,7 @@ public class ProductService {
             FileManageService fileService = new FileManageService();
             fileService.deleteFile(audioFileName);
             sqlSession.commit();
+            dealProductIstry(pid);
         } catch (Exception e) {
             sqlSession.rollback();
             e.printStackTrace();
@@ -162,6 +163,7 @@ public class ProductService {
                 }
             }
             sqlSession.commit();
+            dealProductIstry(courseBean.getPid());
         } catch (Exception e) {
             sqlSession.rollback();
             e.printStackTrace();
@@ -211,6 +213,7 @@ public class ProductService {
                 courseBean.setCourseid(courseid);
                 sqlSession.insert("dazhimen.bg.bean.Product.saveAddCourse", courseBean);
                 sqlSession.commit();
+                dealProductIstry(pid);
             } catch (Exception e) {
                 e.printStackTrace();
                 sqlSession.rollback();
@@ -412,8 +415,6 @@ public class ProductService {
         try {
             //检查产品状态，前台也要检查，上架和预告状态的产品，不允许删除。
             //检查产品的 已购状态
-            //检查产品的 收藏状态
-            //检查产品下的 课程情况
             sqlSession = MyBatisUtil.createSession();
             sqlSession.delete("dazhimen.bg.bean.Product.saveProductImageDel", pid);
             sqlSession.delete("dazhimen.bg.bean.Product.saveCourseDelByPid", pid);
@@ -513,6 +514,19 @@ public class ProductService {
             e.printStackTrace();
             sqlSession.rollback();
             throw new BgException("出现异常，修改产品主图失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+    private void dealProductIstry(String pid){
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            sqlSession.update("dazhimen.bg.bean.Product.dealProductIstry", pid);
+            sqlSession.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }

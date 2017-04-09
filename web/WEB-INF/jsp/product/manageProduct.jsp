@@ -14,6 +14,10 @@
         $('#productList').datagrid('selectRow',index);
         var row = $('#productList').datagrid('getSelected');
         if (row){
+            if(row.buycount > '0'){
+                $.messager.alert('提示信息','产品已经有人购买，无法修改状态！','warning');
+                return;
+            }
             $('#modifyProductStatusDialog').dialog({
                 title: '修改产品【' + row.pname + '】的状态',
                 width: 330,
@@ -43,11 +47,24 @@
         $('#productList').datagrid('selectRow',index);
         var row = $('#productList').datagrid('getSelected');
         if (row){
-            $('#content_panel').panel({
-                href:"<%=request.getContextPath() %>/product/fwdModifyProductPage?random_id=" + Math.random()+"&pid=" + row.pid,
-                onLoad:function(){
-                }
-            });
+            if(row.statusnum == '1'){
+                $.messager.confirm('确认','产品【'+ row.pname + '】处于上架状态，修改【价格】等关键信息，可能造成异常，确定修改吗？',function(r){
+                    if (r){
+                        $('#content_panel').panel({
+                            href:"<%=request.getContextPath() %>/product/fwdModifyProductPage?random_id=" + Math.random()+"&pid=" + row.pid,
+                            onLoad:function(){
+                            }
+                        });
+                    }
+                });
+            }else{
+                $('#content_panel').panel({
+                    href:"<%=request.getContextPath() %>/product/fwdModifyProductPage?random_id=" + Math.random()+"&pid=" + row.pid,
+                    onLoad:function(){
+                    }
+                });
+            }
+
         }
     }
     function forwardAddProductPage(){
@@ -58,27 +75,38 @@
         });
     }
     function saveProductDel(index){
-        MsgBox.show("功能正在开发，敬请期待");
-        <%--$('#productList').datagrid('selectRow',index);--%>
-        <%--var row = $('#productList').datagrid('getSelected');--%>
-        <%--if (row){--%>
-            <%--$.messager.confirm('确认','您确认删除产品【'+ row.pname + '】吗？',function(r){--%>
-                <%--if (r){--%>
-                    <%--$.ajax({--%>
-                        <%--url:"<%=request.getContextPath()%>/product/saveProductDel?pid=" + row.pid+"&random_id="+Math.random(),--%>
-                        <%--type:'get',--%>
-                        <%--async:false,--%>
-                        <%--error:function(data){--%>
-                            <%--MsgBox.show(data.responseText);--%>
-                        <%--},--%>
-                        <%--success:function(data){--%>
-                            <%--MsgBox.show(data);--%>
-                            <%--$('#productList').datagrid('reload');--%>
-                        <%--}--%>
-                    <%--});--%>
-                <%--}--%>
-            <%--});--%>
-        <%--}--%>
+        $('#productList').datagrid('selectRow',index);
+        var row = $('#productList').datagrid('getSelected');
+        if (row){
+            if(row.buycount > '0'){
+                $.messager.alert('提示信息','产品已经有人购买，无法删除！','warning');
+                return;
+            }
+            if(row.statusnum == '1'){
+                $.messager.alert('提示信息','产品处于上架状态，无法删除！','warning');
+                return;
+            }
+            if(row.statusnum == '2'){
+                $.messager.alert('提示信息','产品处于预告状态，无法删除！','warning');
+                return;
+            }
+            $.messager.confirm('确认','您确认删除产品【'+ row.pname + '】吗？',function(r){
+                if (r){
+                    $.ajax({
+                        url:"<%=request.getContextPath()%>/product/saveProductDel?pid=" + row.pid+"&random_id="+Math.random(),
+                        type:'get',
+                        async:false,
+                        error:function(data){
+                            MsgBox.show(data.responseText);
+                        },
+                        success:function(data){
+                            MsgBox.show(data);
+                            $('#productList').datagrid('reload');
+                        }
+                    });
+                }
+            });
+        }
     }
     $(function () {
         $("#productList").datagrid({
