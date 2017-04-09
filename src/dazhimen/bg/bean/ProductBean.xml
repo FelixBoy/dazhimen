@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.Product">
+    <update id="saveModifyProductBasicInfo" parameterType="dazhimen.bg.bean.ModifyProductBasicInfoBean">
+        update product
+          set pname = #{pname},price = #{price},
+              derateProportion = #{derateProportion},
+              introduction = #{introduction}
+        where pid = #{pid}
+    </update>
+
     <select id="getAllProductCount" resultType="dazhimen.bg.bean.SingleValueBean">
          select count(pid) as valueinfo
         from product a

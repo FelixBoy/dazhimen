@@ -29,6 +29,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/product")
 public class ProductController {
+    @RequestMapping("/fwdModifyProductListImgPage")
+    public ModelAndView fwdModifyProductListImgPage(@RequestParam("pid") String pid){
+        ModelAndView mav = new ModelAndView("/product/modifyProductListImg");
+        mav.addObject("pid", pid);
+        return mav;
+    }
     @RequestMapping("/fwdModifyProductPage")
     public ModelAndView fwdModifyProductPage(@RequestParam("pid") String pid){
         ModelAndView mav = new ModelAndView("/product/modifyProduct");
@@ -144,7 +150,55 @@ public class ProductController {
         resp.setCharacterEncoding(Constant.CharSet);
         ModifyProductBasicInfoBean productBean = getSaveModifyProductionBasicInfoBean(resq);
         ProductService productService = new ProductService();
-        productService.saveModifyProductBasicInfo(productBean);
+        try {
+           boolean result = productService.saveModifyProductBasicInfo(productBean);
+           if(result){
+               resp.getWriter().write("修改产品基本信息成功");
+           }else{
+               resp.getWriter().write("修改产品基本信息失败");
+           }
+
+        } catch (BgException e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write(e.getMessage());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，修改产品基本信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    @RequestMapping("/saveModifyProductListImg")
+    public ModelAndView saveModifyProductListImg(HttpServletRequest resq, HttpServletResponse resp){
+        ProductService productService = new ProductService();
+        ModelAndView mav = new ModelAndView("fileUploadAfterAction");
+        try {
+            String pid = resq.getParameter("pid");
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
+            CommonsMultipartFile listImgFile = (CommonsMultipartFile) multipartRequest.getFile("listimgmodify");
+//            productService.saveModifyProductListImg(pid,listImgFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code", "400");
+            jsonObj.addProperty("msg",e.getMessage());
+            mav.addObject("parameters", jsonObj.toString());
+            return mav;
+        }
+
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("code", "200");
+        jsonObj.addProperty("msg","修改课程信息成功");
+        mav.addObject("parameters", jsonObj.toString());
+        return mav;
     }
     @RequestMapping("/getMainImagesInforById")
     public void getMainImagesInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
@@ -446,7 +500,7 @@ public class ProductController {
             productBean.setDerateProportion(derateProportion);
         }
         String introduction = resq.getParameter("introduction");
-        productBean.setIntoduction(introduction);
+        productBean.setIntroduction(introduction);
 
         return productBean;
     }

@@ -8,7 +8,7 @@ public class ModifyProductBasicInfoBean {
     private String pname = null;
     private Double price = null;
     private Integer derateProportion = null;
-    private String intoduction = null;
+    private String introduction = null;
 
     public String getPid() {
         return pid;
@@ -42,11 +42,11 @@ public class ModifyProductBasicInfoBean {
         this.derateProportion = derateProportion;
     }
 
-    public String getIntoduction() {
-        return intoduction;
+    public String getIntroduction() {
+        return introduction;
     }
 
-    public void setIntoduction(String intoduction) {
-        this.intoduction = intoduction;
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 }

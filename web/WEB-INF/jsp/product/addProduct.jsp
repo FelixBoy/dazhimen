@@ -57,7 +57,7 @@
         }
         dealProductFormBeforeSubmit();
         $("#productForm").submit();
-        $.messager.progress();
+        LoadingMaskLayer.show();
     }
     function checkProductForm(){
         if($("#uid").val().length == 0){
@@ -109,7 +109,7 @@
         return true;
     }
     function actionAfterSubmit(jsonObj){
-        $.messager.progress('close');
+        LoadingMaskLayer.hide();
         var resultObj = JSON.parse(jsonObj);
         if(!resultObj){
             return;
@@ -186,7 +186,7 @@
             </tr>
             <tr>
                 <td>名称:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox"  id="pname" name="pname">
+                <td><input class="easyui-textbox"  id="pname" name="pname"/>
                     <input type="hidden" id="uidInProductForm" name="uid"></td>
                 <td>类型:<span style="color:red">*</span></td>
                 <td>

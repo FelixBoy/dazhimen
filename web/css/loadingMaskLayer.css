@@ -1,0 +1,12 @@
+﻿.dw-loadingmasklayer {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 6666;
+
+	margin: -16px 0 0 -16px;
+	width: 32px;
+	height: 32px;
+
+	background: transparent url(../image/loadingmasklayer/loadingMaskLayer.gif) no-repeat center center;
+}

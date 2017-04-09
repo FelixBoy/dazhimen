@@ -391,8 +391,21 @@ public class ProductService {
             MyBatisUtil.closeSession(sqlSession);
         }
     }
-    public void saveModifyProductBasicInfo(ModifyProductBasicInfoBean productBean){
-
+    public boolean saveModifyProductBasicInfo(ModifyProductBasicInfoBean productBean) throws BgException {
+        SqlSession sqlSession = null;
+        int result = 0;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            result = sqlSession.update("dazhimen.bg.bean.Product.saveModifyProductBasicInfo", productBean);
+            sqlSession.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，修改产品基本信息出错!");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return result == 1;
     }
     public void saveProductDel(String pid, HttpServletRequest resq) throws BgException {
         SqlSession sqlSession = null;
@@ -416,5 +429,38 @@ public class ProductService {
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }
+    }
+    public void saveModifyProductListImg(String pid, CommonsMultipartFile listImgFile){
+        SqlSession sqlSession = null;
+//        try {
+//            sqlSession = MyBatisUtil.createSession();
+//            sqlSession.update("dazhimen.bg.bean.Product.saveModifyCourse", courseBean);
+//            CommonsMultipartFile audioFile = courseBean.getAudio();
+//            if(audioFile != null && !audioFile.isEmpty()){
+//                String cousreMainFolderPath = courseBean.getBasePath() + Constant.productPrefixPath  + courseBean.getPid() + "\\course\\";
+//                //获得文件的原始名称
+//                String audioOrginalName = audioFile.getOriginalFilename();
+//                //获得原始文件的后缀
+//                String audioSuffixName = audioOrginalName.substring(audioOrginalName.lastIndexOf("."));
+//                //新文件名
+//                String audioFileNewName = courseBean.getCourseid() + audioSuffixName;
+//                //通过课程主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+//                String audioFileTransferFilename = cousreMainFolderPath + audioFileNewName;
+//                try {
+//                    audioFile.transferTo(new File(audioFileTransferFilename));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    throw new BgException("出现异常，保存课程音频失败");
+//                }
+//            }
+//            sqlSession.commit();
+//        } catch (Exception e) {
+//            sqlSession.rollback();
+//            e.printStackTrace();
+//            throw new BgException("出现异常，修改课程信息失败");
+//        }finally {
+//            MyBatisUtil.closeSession(sqlSession);
+//        }
+//        return courseBean.getPid();
     }
 }
