@@ -38,7 +38,6 @@
         $("#modifyProductListimgForm").attr('target', frameId);
     }
     function actionAfterSubmit(jsonObj){
-        LoadingMaskLayer.hide();
         var resultObj = JSON.parse(jsonObj);
         if(!resultObj){
             return;
@@ -75,7 +74,6 @@
         }
         dealModifyProductListimgFormBeforeSubmit();
         $("#modifyProductListimgForm").submit();
-        LoadingMaskLayer.show();
     }
 </script>
 <div  style="width: 380px;margin: 0 auto;">
@@ -92,7 +90,7 @@
                 </td>
             </tr>
             <tr>
-                <td style="text-align: right" nowrap="nowrap">列表图片:</td>
+                <td style="text-align: right" nowrap="nowrap">列表图片:<span style="color:red">*</span></td>
                 <td>
                     <input type="hidden" id="pidInModifyProductListImg" name="pid"/>
                     <input class="easyui-filebox" id="listImgInModifyDialog" name="listimgmodify" style="width:280px" accept="image/jpeg,image/png"

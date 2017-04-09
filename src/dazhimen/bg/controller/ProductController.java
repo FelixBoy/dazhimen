@@ -29,6 +29,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/product")
 public class ProductController {
+    @RequestMapping("/fwdModifyProductMainImgPage")
+    public ModelAndView fwdModifyProductMainImgPage(@RequestParam("pid") String pid){
+        ModelAndView mav = new ModelAndView("/product/modifyProductMainImg");
+        mav.addObject("pid", pid);
+        return mav;
+    }
     @RequestMapping("/fwdModifyProductListImgPage")
     public ModelAndView fwdModifyProductListImgPage(@RequestParam("pid") String pid){
         ModelAndView mav = new ModelAndView("/product/modifyProductListImg");
@@ -197,7 +203,32 @@ public class ProductController {
         }
         JsonObject jsonObj = new JsonObject();
         jsonObj.addProperty("code", "200");
-        jsonObj.addProperty("msg","修改课程列表成功");
+        jsonObj.addProperty("msg","修改产品列表图片成功");
+        mav.addObject("parameters", jsonObj.toString());
+        return mav;
+    }
+
+    @RequestMapping("/saveModifyProductMainImg")
+    public ModelAndView saveModifyProductMainImg(HttpServletRequest resq, HttpServletResponse resp){
+        ProductService productService = new ProductService();
+        ModelAndView mav = new ModelAndView("fileUploadAfterAction");
+        try {
+            String pid = resq.getParameter("pid");
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
+            CommonsMultipartFile mainImgFile = (CommonsMultipartFile) multipartRequest.getFile("mainimgmodify");
+            String basePath = resq.getSession().getServletContext().getRealPath("/");
+            productService.saveModifyProductMainImg(pid,mainImgFile,basePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code", "400");
+            jsonObj.addProperty("msg",e.getMessage());
+            mav.addObject("parameters", jsonObj.toString());
+            return mav;
+        }
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("code", "200");
+        jsonObj.addProperty("msg","修改产品主图成功");
         mav.addObject("parameters", jsonObj.toString());
         return mav;
     }

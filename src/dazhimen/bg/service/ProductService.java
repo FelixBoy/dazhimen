@@ -469,7 +469,50 @@ public class ProductService {
         } catch (Exception e) {
             e.printStackTrace();
             sqlSession.rollback();
-            throw new BgException("出现异常，修改课程信息失败");
+            throw new BgException("出现异常，修改产品列表图片失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+
+    public void saveModifyProductMainImg(String pid, CommonsMultipartFile mainImgFile, String bashPath) throws BgException {
+        SqlSession sqlSession = null;
+        try {
+            if(mainImgFile != null && !mainImgFile.isEmpty()){
+                sqlSession = MyBatisUtil.createSession();
+                String mainImgPath = sqlSession.selectOne("dazhimen.bg.bean.Product.getMainImgPath", pid);
+                String mainImgFileOldName = mainImgPath.substring(mainImgPath.lastIndexOf("/") + 1);
+                String productMainFolderPath = bashPath + Constant.productPrefixPath  + pid + "\\";
+                //获得文件的原始名称
+                String mainImgFileOrginalName = mainImgFile.getOriginalFilename();
+                //获得原始文件的后缀
+                String mainImgFileSuffixName = mainImgFileOrginalName.substring(mainImgFileOrginalName.lastIndexOf("."));
+                //新文件名
+                //通过课程主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+                String mainImageFileNewName = pid + "_mainimg_1" + mainImgFileSuffixName;
+                //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+                String mainImageTransferFilename = productMainFolderPath + mainImageFileNewName;
+                try {
+                    mainImgFile.transferTo(new File(mainImageTransferFilename));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new BgException("出现异常，修改产品主图失败");
+                }
+                if(!mainImgFileOldName.equals(mainImageFileNewName)){
+                    FileManageService fileManageService = new FileManageService();
+                    fileManageService.deleteFile(productMainFolderPath+mainImgFileOldName);
+                    String mainImageNewFileRelPath = Constant.uploadProductDbPrefixPath + pid + "/" + mainImageFileNewName;
+                    UpdateMainImgFilePathBean filePathBean = new UpdateMainImgFilePathBean();
+                    filePathBean.setPid(pid);
+                    filePathBean.setMainimage(mainImageNewFileRelPath);
+                    sqlSession.update("dazhimen.bg.bean.Product.updateMainImgPath",filePathBean);
+                    sqlSession.commit();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，修改产品主图失败");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }

@@ -2,6 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.Product">
+
+    <update id="updateMainImgPath" parameterType="dazhimen.bg.bean.UpdateMainImgFilePathBean">
+        update product_image set path = #{mainimage} where pid = #{pid}
+    </update>
+    <select id="getMainImgPath" resultType="java.lang.String">
+        select path
+        from product_image a
+        where a.pid = #{pid}
+    </select>
     <update id="updateListImgPath" parameterType="dazhimen.bg.bean.UpdateListImgFilePathBean">
       update product set listimage = #{listimage} where pid = #{pid}
     </update>

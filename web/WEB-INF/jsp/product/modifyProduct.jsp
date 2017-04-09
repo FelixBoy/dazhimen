@@ -34,6 +34,17 @@
         });
     }
     function openModifyMainImgDialog(){
+        $('#modifyProductMainImgDialog').dialog({
+            title: '修改产品主图',
+            width: 430,
+            height: 230,
+            closed: true,
+            cache: false,
+            href: "<%=request.getContextPath()%>/product/fwdModifyProductMainImgPage?random_id=" + Math.random()
+            + "&pid=<%=request.getAttribute("pid").toString()%>",
+            modal: true
+        });
+        $('#modifyProductMainImgDialog').dialog("open");
     }
     function openModifyListImgDialog(){
         $('#modifyProductListImgDialog').dialog({
@@ -97,6 +108,7 @@
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="returnManageProductInModifyProduct()">返回</a>
 </div>
 <div id="modifyProductListImgDialog"></div>
+<div id="modifyProductMainImgDialog"></div>
 <div style="margin:0px auto;width: 950px">
     <form id="modifyProductForm">
         <br/>
