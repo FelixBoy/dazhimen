@@ -12,6 +12,8 @@ import dazhimen.bg.service.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import util.ApiUtils;
 import util.Constant;
 
@@ -26,6 +28,40 @@ import java.io.UnsupportedEncodingException;
 @Controller
 @RequestMapping("/api/customer")
 public class ApiCustomerController {
+
+    @RequestMapping(value="modifyHeader", method = RequestMethod.POST)
+    public void modifyHeader(HttpServletRequest resq, HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            String cid = resq.getParameter("cid");
+            if(cid == null){
+                throw new ParameterCheckException("未取到参数[cid]");
+            }
+            if(cid.equals("")){
+                throw new ParameterCheckException("参数[cid]的值为空");
+            }
+            MultipartRequest multipartRequest = (MultipartRequest)resq;
+            CommonsMultipartFile multipartFile = (CommonsMultipartFile)multipartRequest.getFile("headerfile");
+            if(multipartFile == null || multipartFile.isEmpty()){
+                throw new ParameterCheckException("获取用户上传的头像出错");
+            }
+            String basePath = resq.getSession().getServletContext().getRealPath("/");
+            ApiCustomerService customerService = new ApiCustomerService();
+            customerService.modifyHeader(cid, multipartFile, basePath);
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+
+    }
     @RequestMapping(value="getPersonalInfo", method = RequestMethod.POST)
     public void getPersonalInfo(HttpServletRequest resq, HttpServletResponse resp){
         try {

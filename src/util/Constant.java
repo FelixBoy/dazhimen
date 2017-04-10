@@ -47,6 +47,12 @@ public class Constant {
     //数据库中存储 上传掌门头像文件的目录 前缀
     public static final String uploadMasterDbPrefixPath = "upload/master/";
 
+    //掌门新增上传会员头像文件 前缀路径
+    public static final String customerPrefixPath = "upload\\customer\\";
+
+    //数据库中存储 上传掌门头像文件的目录 前缀
+    public static final String uploadCustomerDbPrefixPath = "upload/customer/";
+
     //技能包的code值
     public static final String SkillPack = "1";
     //经验包的code值
@@ -60,7 +66,7 @@ public class Constant {
     public static final String paymentType_AliPay = "3";
 
     //是否部署在阿里云
-    public static final boolean isDeployInAliyun = true;
+    public static final boolean isDeployInAliyun = false;
     //阿里云Ip
     public static final String AliyunIP = "47.92.73.149";
 

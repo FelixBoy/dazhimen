@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.api.bean.ApiCustomer">
+    <update id="updateHeaderFileUrl" parameterType="dazhimen.api.bean.ApiUpdateHeaderFilePathBean">
+        update customer set headerurl = #{headerurl} where cid = #{cid}
+    </update>
+    <select id="getCustomerHeaderUrl" resultType="java.lang.String">
+          select headerurl from customer where cid = #{cid}
+    </select>
     <update id="modifyPersonalInfo" parameterType="dazhimen.api.bean.ModifyCustomerInfoBean">
           update customer
              set nickname = #{nickname},mphone = #{mphone},name = #{name},
