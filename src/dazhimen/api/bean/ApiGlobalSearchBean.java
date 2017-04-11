@@ -7,6 +7,7 @@ public class ApiGlobalSearchBean {
     private String id = null;
     private String name = null;
     private String type = null;
+    private String isstart = null;
     private String dealNull(String value){
         if(value == null){
             return "";
@@ -22,6 +23,14 @@ public class ApiGlobalSearchBean {
                 ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
                 '}';
+    }
+
+    public String getIsstart() {
+        return isstart;
+    }
+
+    public void setIsstart(String isstart) {
+        this.isstart = dealNull(isstart);
     }
 
     public String getId() {

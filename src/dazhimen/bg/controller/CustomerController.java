@@ -2,6 +2,7 @@ package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
 import dazhimen.bg.bean.CustomerBean;
+import dazhimen.bg.bean.QueryCustomerParamBean;
 import dazhimen.bg.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,31 @@ public class CustomerController {
             CustomerService customerService = new CustomerService();
             String page = resq.getParameter("page");
             String rows = resq.getParameter("rows");
-            String result = customerService.queryAllCustomers(page, rows);
+            String queryByParamFlag = resq.getParameter("queryByParamFlag");
+            String result = null;
+            if(queryByParamFlag == null || queryByParamFlag.equals("")){
+                result = customerService.queryAllCustomers(page, rows);
+            }else{
+                String cidCondition = resq.getParameter("cidCondition");
+                String nicknameCondition = resq.getParameter("nicknameCondition");
+                String nameCondition = resq.getParameter("nameCondition");
+                String weixinCondition = resq.getParameter("weixinCondition");
+                String starttimeCondition = resq.getParameter("starttimeCondition");
+                String endtimeCondition = resq.getParameter("endtimeCondition");
+                String startBalanceCondition = resq.getParameter("startBalanceCondition");
+                String endBalanceCondition = resq.getParameter("endBalanceCondition");
+                QueryCustomerParamBean paramBean = new QueryCustomerParamBean();
+                paramBean.setCidCondition(cidCondition);
+                paramBean.setNicknameCondition(nicknameCondition);
+                paramBean.setNameCondition(nameCondition);
+                paramBean.setWeixinCondition(weixinCondition);
+                paramBean.setStarttimeCondition(starttimeCondition);
+                paramBean.setEndtimeCondition(endtimeCondition);
+                paramBean.setStartBalanceCondition(startBalanceCondition);
+                paramBean.setEndBalanceCondition(endBalanceCondition);
+                result = customerService.queryAllCustomersByParam(page, rows, paramBean);
+            }
+
             resp.getWriter().write(result);
         }catch (Exception e){
             e.printStackTrace();

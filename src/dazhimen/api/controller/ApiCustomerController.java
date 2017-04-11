@@ -38,6 +38,7 @@ public class ApiCustomerController {
             e.printStackTrace();
         }
         resp.setCharacterEncoding(Constant.CharSet);
+        resp.setContentType("text/html");
         try {
             ApiUtils.checkSignature(resq);
             String cid = resq.getParameter("cid");
@@ -55,10 +56,51 @@ public class ApiCustomerController {
             String basePath = resq.getSession().getServletContext().getRealPath("/");
             ApiCustomerService customerService = new ApiCustomerService();
             customerService.modifyHeader(cid, multipartFile, basePath);
+
+            ApiLoginService apiLoginService = new ApiLoginService();
+            ApiCustomerBean customerBean = apiLoginService.getCustomerInfoByCid(cid);
+            String headerUrl = customerBean.getHeaderurl();
+            if(headerUrl != null && !headerUrl.equals("")){
+                if(!headerUrl.contains("http")){
+                    String localIp = resq.getLocalAddr();//获取本地ip
+                    if(Constant.isDeployInAliyun){
+                        localIp = Constant.AliyunIP;
+                    }
+                    int localPort = resq.getLocalPort();//获取本地的端口
+                    String appName = resq.getContextPath();
+                    String newHeaderUrl = "http://" + localIp + ":" + localPort + appName + "/" + headerUrl;
+                    customerBean.setHeaderurl(newHeaderUrl);
+                }
+            }
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","成功");
+            jsonObj.put("data",new Gson().toJson(customerBean));
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         } catch (ApiException e) {
             e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
 
     }
@@ -77,7 +119,19 @@ public class ApiCustomerController {
             String cid = resq.getParameter("cid");
             ApiLoginService apiLoginService = new ApiLoginService();
             ApiCustomerBean customerBean = apiLoginService.getCustomerInfoByCid(cid);
-
+            String headerUrl = customerBean.getHeaderurl();
+            if(headerUrl != null && !headerUrl.equals("")){
+                if(!headerUrl.contains("http")){
+                    String localIp = resq.getLocalAddr();//获取本地ip
+                    if(Constant.isDeployInAliyun){
+                        localIp = Constant.AliyunIP;
+                    }
+                    int localPort = resq.getLocalPort();//获取本地的端口
+                    String appName = resq.getContextPath();
+                    String newHeaderUrl = "http://" + localIp + ":" + localPort + appName + "/" + headerUrl;
+                    customerBean.setHeaderurl(newHeaderUrl);
+                }
+            }
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");

@@ -2,6 +2,76 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.Customer">
+
+    <select id="getAllCustomerCountByParam" resultType="dazhimen.bg.bean.SingleValueBean"
+        parameterType="dazhimen.bg.bean.QueryCustomerParamBean">
+        select count(cid) as valueinfo from customer
+        where isdel = '0'
+        <if test="cidCondition != null and cidCondition != ''">
+            and  cid like concat('%', #{cidCondition}, '%')
+        </if>
+        <if test="nicknameCondition != null and nicknameCondition != ''">
+            and  nickname like concat('%', #{nicknameCondition}, '%')
+        </if>
+        <if test="nameCondition != null and nameCondition != ''">
+            and  name like concat('%', #{nameCondition}, '%')
+        </if>
+        <if test="weixinCondition != null and weixinCondition == 1">
+            and weixinuid is not null
+        </if>
+        <if test="weixinCondition != null and weixinCondition == 2">
+            and weixinuid is null
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and createdate <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and createdate <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+        <if test="startBalanceCondition != null and startBalanceCondition !=''">
+            and accoutbalance <![CDATA[>=]]> #{startBalanceCondition}
+        </if>
+        <if test="endBalanceCondition != null and endBalanceCondition !=''">
+            and accoutbalance <![CDATA[<=]]> #{endBalanceCondition}
+        </if>
+    </select>
+
+    <select id="listAllCustomerByParam" resultType="dazhimen.bg.bean.CustomerBean"
+            parameterType="dazhimen.bg.bean.QueryCustomerParamBean">
+        select cid,name,nickname,gender,mphone,email,getcodetxt('education', education) education,
+        qquid,weixinuid,accoutbalance,date_format(createdate,'%Y-%m-%d %H:%i:%s') createdate
+        from customer
+        where isdel = '0'
+        <if test="cidCondition != null and cidCondition != ''">
+            and  cid like concat('%', #{cidCondition}, '%')
+        </if>
+        <if test="nicknameCondition != null and nicknameCondition != ''">
+            and  nickname like concat('%', #{nicknameCondition}, '%')
+        </if>
+        <if test="nameCondition != null and nameCondition != ''">
+            and  name like concat('%', #{nameCondition}, '%')
+        </if>
+        <if test="weixinCondition != null and weixinCondition == 1">
+            and weixinuid is not null
+        </if>
+        <if test="weixinCondition != null and weixinCondition == 2">
+            and weixinuid is null
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and createdate <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and createdate <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+        <if test="startBalanceCondition != null and startBalanceCondition !=''">
+            and accoutbalance <![CDATA[>=]]> #{startBalanceCondition}
+        </if>
+        <if test="endBalanceCondition != null and endBalanceCondition !=''">
+            and accoutbalance <![CDATA[<=]]> #{endBalanceCondition}
+        </if>
+        limit #{startnum},#{getrows}
+    </select>
+
     <select id="getAllCustomerCount" resultType="dazhimen.bg.bean.SingleValueBean">
         select count(cid) as valueinfo from customer where isdel = '0'
     </select>

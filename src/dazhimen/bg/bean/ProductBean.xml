@@ -34,6 +34,61 @@
         where pid = #{pid}
     </update>
 
+    <select id="getAllProductCountByParam" resultType="dazhimen.bg.bean.SingleValueBean"
+            parameterType="dazhimen.bg.bean.QueryProductParamBean">
+        select count(pid) as valueinfo
+        from product a
+        where a.isdel = '0'
+         <if test="pidCondition != null and pidCondition != ''">
+             and  pid like concat('%', #{pidCondition}, '%')
+         </if>
+        <if test="pnameCondition != null and pnameCondition != ''">
+            and pname like concat('%', #{pnameCondition}, '%')
+        </if>
+        <if test="typeCondition != null and typeCondition != 0">
+            and a.type = #{typeCondition}
+        </if>
+        <if test="statusCondition != null and statusCondition != 0">
+            and status = #{statusCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and createdatetime <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and createdatetime <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+    </select>
+
+    <select id="listAllProductByParam" resultType="dazhimen.bg.bean.ListViewProductBean"
+            parameterType="dazhimen.bg.bean.QueryProductParamBean">
+        select pid,pname,getcodetxt('producttype',a.type) type,
+        getcodetxt('productstatus',a.status) status,a.status statusnum,
+        date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createtime,b.name uname,
+        buycount,concat(a.price,'/年') as price
+        from product a, user b
+        where a.uid = b.uid and a.isdel = '0'
+        <if test="pidCondition != null and pidCondition != ''">
+           and pid like concat('%', #{pidCondition}, '%')
+        </if>
+        <if test="pnameCondition != null and pnameCondition != ''">
+            and pname like concat('%', #{pnameCondition}, '%')
+        </if>
+        <if test="typeCondition !=null and typeCondition!= 0">
+            and a.type = #{typeCondition}
+        </if>
+        <if test="statusCondition != null and statusCondition != 0">
+            and status = #{statusCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and createdatetime <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and createdatetime <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+        order by a.indexsort,createdatetime desc
+        limit #{startnum},#{getrows}
+    </select>
+
     <select id="getAllProductCount" resultType="dazhimen.bg.bean.SingleValueBean">
          select count(pid) as valueinfo
         from product a

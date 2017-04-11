@@ -16,11 +16,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import util.Constant;
+import util.DateUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -289,9 +292,9 @@ public class ProductController {
             ProductService productService = new ProductService();
             String page = resq.getParameter("page");
             String rows = resq.getParameter("rows");
-            String randomStr = resq.getParameter("randomStr");
+            String queryByParamFlag = resq.getParameter("queryByParamFlag");
             String result = null;
-            if(randomStr == null || randomStr.equals("")){
+            if(queryByParamFlag == null || queryByParamFlag.equals("")){
                 result = productService.queryAllProducts(page, rows);
             }else{
                 String pidCondition = resq.getParameter("pidCondition");
@@ -300,6 +303,14 @@ public class ProductController {
                 String starttimeCondition = resq.getParameter("starttimeCondition");
                 String endtimeCondition = resq.getParameter("endtimeCondition");
                 String statusCondition = resq.getParameter("statusCondition");
+                QueryProductParamBean paramBean = new QueryProductParamBean();
+                paramBean.setPidCondition(pidCondition);
+                paramBean.setPnameCondition(pnameCondition);
+                paramBean.setTypeCondition(typeCondition);
+                paramBean.setStatusCondition(statusCondition);
+                paramBean.setStarttimeCondition(starttimeCondition);
+                paramBean.setEndtimeCondition(endtimeCondition);
+                result = productService.queryAllProductsByParams(page, rows, paramBean);
             }
             resp.getWriter().write(result);
         }catch (Exception e){

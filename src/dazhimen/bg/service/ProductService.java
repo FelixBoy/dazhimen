@@ -351,20 +351,22 @@ public class ProductService {
         }
         return mainImageBeans;
     }
-    public String queryAllProductsByParams(String page, String rows) throws BgException {
+    public String queryAllProductsByParams(String page, String rows, QueryProductParamBean paramBean) throws BgException {
         List<ListViewProductBean> productBeans = null;
         SqlSession sqlSession = null;
         Integer totalCount = 0;
         try {
             sqlSession = MyBatisUtil.createSession();
 
-            SingleValueBean allProductCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllProductCount");
+            SingleValueBean allProductCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllProductCountByParam", paramBean);
             if(allProductCountValue == null || allProductCountValue.getValueInfo() == null){
                 throw new ApiException("获取产品数据总条数出错");
             }
             totalCount = Integer.parseInt(allProductCountValue.getValueInfo());
-            PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);
-            productBeans = sqlSession.selectList("dazhimen.bg.bean.Product.listAllProduct", paramBean);
+            PaginationParamBean paginationParamBean = PaginationUtil.getPaginationParamBean(page,rows);
+            paramBean.setStartnum(paginationParamBean.getStartnum());
+            paramBean.setGetrows(paginationParamBean.getGetrows());
+            productBeans = sqlSession.selectList("dazhimen.bg.bean.Product.listAllProductByParam", paramBean);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BgException("出现异常，查询所有产品信息失败");

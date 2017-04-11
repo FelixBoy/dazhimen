@@ -158,7 +158,7 @@
         var statusCondition = $("#statusCondition").val();
         if(pidCondition.length == '0' && pnameCondition.length == '0' && typeCondition == '0'
             && !starttimeCondition && !endtimeCondition && statusCondition == '0'){
-            MsgBox.show("请指定筛选条件");
+            clearSearchParams();
             return;
         }
 
@@ -169,14 +169,28 @@
         queryParameter.starttimeCondition = starttimeCondition;
         queryParameter.endtimeCondition = endtimeCondition;
         queryParameter.statusCondition = statusCondition;
-        queryParameter.randomStr = Math.random();
+        queryParameter.queryByParamFlag = Math.random();
+        $("#productList").datagrid("reload");
+    }
+    function clearSearchParams(){
+        var queryParameter = $('#productList').datagrid("options").queryParams;
+        queryParameter.pidCondition = null;
+        queryParameter.pnameCondition = null;
+        queryParameter.typeCondition = null;
+        queryParameter.starttimeCondition = null;
+        queryParameter.endtimeCondition = null;
+        queryParameter.statusCondition = null;
+        queryParameter.queryByParamFlag = null
+        $("#queryProductParamsForm").form('clear');;
+        $("#typeCondition").combobox('setValue','0');
+        $("#statusCondition").combobox('setValue','0');
         $("#productList").datagrid("reload");
     }
 </script>
 <div style="padding:2px 0;">
     <div id="modifyProductStatusDialog"></div>
     <div style="margin:0px auto;width: 800px;">
-        <form id="selectMasterForm">
+        <form id="queryProductParamsForm">
             <table cellpadding="5">
                 <tr>
                     <td colspan="6" >
@@ -203,10 +217,10 @@
 
                 </tr>
                 <tr>
-                    <td>创建时间:</td>
+                    <td>上传时间:</td>
                     <td><input id="starttimeCondition" name="starttimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'起始时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false"></td>
-                    <td>至:</td>
+                    <td>至</td>
                     <td><input id="endtimeCondition" name="endtimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'结束时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false" ></td>
                     <td>状态:</td>
@@ -221,7 +235,10 @@
                     </td>
                 </tr>
                 <tr align="right">
-                    <td colspan="6"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="SearchProductByParams()">检索</a></td>
+                    <td colspan="6">
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="SearchProductByParams()">检索</a>
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="clearSearchParams()">清空条件</a>
+                    </td>
                 </tr>
             </table>
         </form>

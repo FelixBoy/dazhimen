@@ -66,9 +66,9 @@ public class Constant {
     public static final String paymentType_AliPay = "3";
 
     //是否部署在阿里云
-    public static final boolean isDeployInAliyun = false;
+    public static final boolean isDeployInAliyun = true;
     //阿里云Ip
     public static final String AliyunIP = "47.92.73.149";
 
-    public static final String FrontEndVersion = "v1.2";
+    public static final String FrontEndVersion = "v1.3";
 }

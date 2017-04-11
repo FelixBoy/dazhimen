@@ -37,7 +37,6 @@ public class ApiCustomerService {
         try{
             sqlSession = MyBatisUtil.createSession();
             String oldHeaderUrl = sqlSession.selectOne("dazhimen.api.bean.ApiCustomer.getCustomerHeaderUrl", cid);
-//            String mainImgFileOldName = mainImgPath.substring(mainImgPath.lastIndexOf("/") + 1);
             String customerMainFolderPath = bashPath + Constant.customerPrefixPath  + cid + "\\";
             FileManageService fileService = new FileManageService();
             try {
@@ -57,24 +56,20 @@ public class ApiCustomerService {
                 e.printStackTrace();
                 throw new ApiException("出现异常，修改用户头像失败");
             }
-            if(oldHeaderUrl == null || oldHeaderUrl.equals("")){
-                String headerNewFileRelPath = Constant.uploadCustomerDbPrefixPath + cid + "/" + headerFileNewName;
-                ApiUpdateHeaderFilePathBean fileUrlBean = new ApiUpdateHeaderFilePathBean();
-                fileUrlBean.setCid(cid);
-                fileUrlBean.setHeaderurl(headerNewFileRelPath);
-                sqlSession.update("dazhimen.bg.bean.ApiCustomer.updateHeaderFileUrl",fileUrlBean);
-                sqlSession.commit();
+            if(oldHeaderUrl != null && !oldHeaderUrl.equals("")){
+                String headerImgFileOldName = oldHeaderUrl.substring(oldHeaderUrl.lastIndexOf("/") + 1);
+                if(!headerImgFileOldName.equals(headerFileNewName)) {
+                    fileService.deleteFile(customerMainFolderPath + headerImgFileOldName);
+                }
+
             }
-//            if(!mainImgFileOldName.equals(mainImageFileNewName)){
-//                FileManageService fileManageService = new FileManageService();
-//                fileManageService.deleteFile(productMainFolderPath+mainImgFileOldName);
-//                String mainImageNewFileRelPath = Constant.uploadProductDbPrefixPath + pid + "/" + mainImageFileNewName;
-//                UpdateMainImgFilePathBean filePathBean = new UpdateMainImgFilePathBean();
-//                filePathBean.setPid(pid);
-//                filePathBean.setMainimage(mainImageNewFileRelPath);
-//                sqlSession.update("dazhimen.bg.bean.Product.updateMainImgPath",filePathBean);
-//                sqlSession.commit();
-//            }
+
+            String headerNewFileRelPath = Constant.uploadCustomerDbPrefixPath + cid + "/" + headerFileNewName;
+            ApiUpdateHeaderFilePathBean fileUrlBean = new ApiUpdateHeaderFilePathBean();
+            fileUrlBean.setCid(cid);
+            fileUrlBean.setHeaderurl(headerNewFileRelPath);
+            sqlSession.update("dazhimen.api.bean.ApiCustomer.updateHeaderFileUrl",fileUrlBean);
+            sqlSession.commit();
         }catch (ApiException e){
             e.printStackTrace();
             sqlSession.rollback();
