@@ -12,6 +12,24 @@ public class NewsContentBean {
     private CommonsMultipartFile contentfile = null;
     private String contenttext = null;
     private String contentsort = null;
+    private String contentvalue = null;
+    private String nid = null;
+
+    public String getNid() {
+        return nid;
+    }
+
+    public void setNid(String nid) {
+        this.nid = nid;
+    }
+
+    public String getContentvalue() {
+        return contentvalue;
+    }
+
+    public void setContentvalue(String contentvalue) {
+        this.contentvalue = contentvalue;
+    }
 
     public String getContentid() {
         return contentid;

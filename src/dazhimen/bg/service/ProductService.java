@@ -240,9 +240,9 @@ public class ProductService {
 
             CommonsMultipartFile listImageFile = productBean.getListImgFile();
             //获得文件的原始名称
-            String lisgImageOrginalName = listImageFile.getOriginalFilename();
+            String listImageOrginalName = listImageFile.getOriginalFilename();
             //获得原始文件的后缀
-            String listImageSuffixName = lisgImageOrginalName.substring(lisgImageOrginalName.lastIndexOf("."));
+            String listImageSuffixName = listImageOrginalName.substring(listImageOrginalName.lastIndexOf("."));
             //新文件名
             String listImageFileNewName = pid + "_listimg" + listImageSuffixName;
 

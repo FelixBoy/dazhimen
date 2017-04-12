@@ -1,7 +1,10 @@
 package dazhimen.bg.controller;
 
+import com.google.gson.JsonObject;
 import dazhimen.bg.bean.AddNewsBean;
 import dazhimen.bg.bean.NewsContentBean;
+import dazhimen.bg.exception.BgException;
+import dazhimen.bg.service.NewsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,8 +27,24 @@ public class NewsController {
     @RequestMapping(value="/saveAddNews", method = RequestMethod.POST)
     public ModelAndView saveAddNews(HttpServletRequest resq, HttpServletResponse resp){
         AddNewsBean addNewsBean = getAddNewsBean(resq);
-        System.out.println(addNewsBean);
-        return null;
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        ModelAndView mav = new ModelAndView("fileUploadAfterAction");
+        NewsService newsService = new NewsService();
+        try {
+            newsService.saveAddNews(addNewsBean, basePath);
+        } catch (BgException e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code", "400");
+            jsonObj.addProperty("msg",e.getMessage());
+            mav.addObject("parameters", jsonObj.toString());
+            return mav;
+        }
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("code", "200");
+        jsonObj.addProperty("msg","新闻上传成功");
+        mav.addObject("parameters", jsonObj.toString());
+        return mav;
     }
     private AddNewsBean getAddNewsBean(HttpServletRequest resq){
         AddNewsBean addNewsBean = new AddNewsBean();

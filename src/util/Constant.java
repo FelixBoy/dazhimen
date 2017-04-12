@@ -8,6 +8,15 @@ public class Constant {
     //字符集
     public static final String CharSet = "utf-8";
 
+    //数据库中nid（新闻id)的序列名称
+    public static final String newsSeqName = "news_seq";
+    //nid中编码中，最后面部分的，数字序列的长度
+    public static final int newsSeqLength = 3;
+    //数据库中contentid（新闻内容id)的序列名称
+    public static final String newsContentSeqName = "news_content_seq";
+    //contentid中编码中，最后面部分的，数字序列的长度
+    public static final int newsContentSeqLength = 5;
+
     public static final String orderSeqName = "order_seq";
     //uid中编码中，最后面部分的，数字序列的长度
     public static final int orderSeqLength = 5;
@@ -35,6 +44,11 @@ public class Constant {
 
     //加密签名Key
     public static final String signKey = "dazhimen666";
+    //产品上传新闻文件 前缀路径
+    public static final String newsPrefixPath = "upload\\news\\";
+
+    //数据库中存储 上传新闻文件的目录 前缀
+    public static final String uploadNewsDbPrefixPath = "upload/news/";
     //产品上传产品文件 前缀路径
     public static final String productPrefixPath = "upload\\product\\";
 

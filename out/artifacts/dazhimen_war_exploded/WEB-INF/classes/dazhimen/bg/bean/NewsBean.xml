@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.News">
-
-
+    <insert id="saveAddNews" parameterType="dazhimen.bg.bean.AddNewsBean">
+        insert into news(nid,title,mainimgurl,listimgurl)
+        values(#{nid}, #{title}, #{mainimgurl}, #{listimgurl})
+    </insert>
+    <insert id="saveAddNewContents" parameterType="dazhimen.bg.bean.NewsContentBean">
+       insert into news_content(contentid, contenttype, contentvalue, contentsort, nid)
+                      values(#{contentid},#{contenttype},#{contentvalue},#{contentsort},#{nid})
+    </insert>
 </mapper>

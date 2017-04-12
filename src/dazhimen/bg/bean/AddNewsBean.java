@@ -12,6 +12,8 @@ public class AddNewsBean {
     private String title = null;
     private CommonsMultipartFile listImgFile = null;
     private CommonsMultipartFile mainImgFile = null;
+    private String listimgurl = null;
+    private String mainimgurl = null;
     private List<NewsContentBean> contentBeans = null;
 
     @Override
@@ -23,6 +25,22 @@ public class AddNewsBean {
                 ", mainImgFile=" + mainImgFile +
                 ", contentBeans=" + contentBeans +
                 '}';
+    }
+
+    public String getListimgurl() {
+        return listimgurl;
+    }
+
+    public void setListimgurl(String listimgurl) {
+        this.listimgurl = listimgurl;
+    }
+
+    public String getMainimgurl() {
+        return mainimgurl;
+    }
+
+    public void setMainimgurl(String mainimgurl) {
+        this.mainimgurl = mainimgurl;
     }
 
     public String getNid() {
