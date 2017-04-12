@@ -13,9 +13,6 @@
         where b.isdel = '0' and b.status != '3' and b.type = '2'
           and b.pname like #{keyword}
         union
-        select c.courseid as id,c.coursename as name, '3' as type,'0' as isstart
-         from course c where c.coursename like #{keyword}
-        union
         select d.uid as id, d.`name` as id,'5' as type,'0' as isstart
          from user d where d.type = '1' and d.isdel = '0'
          and d.`name` like #{keyword}

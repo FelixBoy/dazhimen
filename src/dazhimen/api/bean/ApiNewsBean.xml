@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.api.bean.ApiNews">
+    <select id="getNewsInforById" resultType="dazhimen.api.bean.ApiHomePageNewsBean">
+        select nid, title, listimgurl
+        from news where isdel = '0'
+         and status = '1'
+         and nid = #{nid}
+    </select>
+    <select id="getHomePageNews" resultType="dazhimen.api.bean.ApiHomePageNewsBean">
+        select nid, title, listimgurl
+        from news where isdel = '0' and status = '1'
+        limit #{getCountInt}
+    </select>
+    <select id="getNewsContentById" resultType="dazhimen.api.bean.ApiNewsContentBean">
+        select contentvalue,contenttype
+        from news_content where nid = #{nid}
+        order by contentsort
+    </select>
+
+    <select id="checkNidIsExists" resultType="dazhimen.api.bean.SingleValueBean">
+        select 1 as valueinfo
+          from news
+         where nid = #{nid}
+           and status = '1'
+           and isdel = '0'
+    </select>
+</mapper>

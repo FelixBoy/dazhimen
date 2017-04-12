@@ -10,6 +10,22 @@ import org.apache.ibatis.session.SqlSession;
  * Created by Administrator on 2017/3/27.
  */
 public class CheckIsExistsUtils {
+    public boolean checkNidIsExists(String nid) throws ApiException {
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            SingleValueBean value = sqlSession.selectOne("dazhimen.api.bean.ApiNews.checkNidIsExists", nid);
+            if(value != null && value.getValueInfo()!= null && value.getValueInfo().equals("1")){
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，检验nid是否存在失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return false;
+    }
 
     public boolean checkCourseidIsExists(String courseid) throws ApiException {
         SqlSession sqlSession = null;

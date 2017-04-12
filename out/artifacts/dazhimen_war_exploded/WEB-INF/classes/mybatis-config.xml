@@ -21,5 +21,6 @@
         <mapper resource="dazhimen/api/bean/ApiRechargeBean.xml"/>
         <mapper resource="dazhimen/api/bean/ApiOrderBean.xml"/>
         <mapper resource="dazhimen/api/bean/ApiGlobalBean.xml"/>
+        <mapper resource="dazhimen/api/bean/ApiNewsBean.xml"/>
     </mappers>
 </configuration>
