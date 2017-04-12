@@ -118,8 +118,8 @@
             <li id="indexsort_manange">首页排序</li>
             <li id="news_manage">新闻管理</li>
             <li id="permission_manage">权限管理</li>
-            <li id="textarea_test" >TextArea</li>
-            <li id="test_fileuploadcb" >测试文件上传回调</li>
+            <li id="textarea_test" >新增新闻</li>
+            <%--<li id="test_fileuploadcb" >测试文件上传回调</li>--%>
         </ul>
     </div>
 </div>
