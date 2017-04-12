@@ -74,12 +74,19 @@
                         }
                     });
                     break;
+                <%--case 'indexsort_manange':--%>
+                    <%--$('#content_panel').panel({--%>
+                        <%--href:"<%=request.getContextPath() %>/playsort/fwdIndexSortManagePage?random_id="+Math.random(),--%>
+                        <%--onLoad:function(){--%>
+                        <%--}--%>
+                    <%--});--%>
+                    <%--break;--%>
                 case 'test_fileuploadcb':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/demo/fwdTestFileUploadCallBack?random_id="+Math.random()
                     });
                     break;
-                case 'test_msgbox':
+                case 'textarea_test':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/demo/fwdTestMsgBox?random_id="+Math.random()
                     });
@@ -111,13 +118,8 @@
             <li id="indexsort_manange">首页排序</li>
             <li id="news_manage">新闻管理</li>
             <li id="permission_manage">权限管理</li>
-            <%--<li id="test" data-options="state:'closed'">--%>
-                <%--<span>测试</span>--%>
-                <%--<ul>--%>
-                    <%--<li id="test_fileuploadcb" >测试文件上传回调</li>--%>
-                    <%--<li id="test_msgbox" >MsgBoxDemo</li>--%>
-                <%--</ul>--%>
-            <%--</li>--%>
+            <li id="textarea_test" >TextArea</li>
+            <li id="test_fileuploadcb" >测试文件上传回调</li>
         </ul>
     </div>
 </div>

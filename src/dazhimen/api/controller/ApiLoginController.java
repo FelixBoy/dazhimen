@@ -42,6 +42,19 @@ public class ApiLoginController {
             ThirdPartLoginBean loginBean = getThirdPartLoginBean(resq);
             ApiLoginService apiLoginService = new ApiLoginService();
             ApiCustomerBean customerBean = apiLoginService.doThirdPartLogin(loginBean);
+            String headerUrl = customerBean.getHeaderurl();
+            if(headerUrl != null && !headerUrl.equals("")){
+                if(!headerUrl.contains("http")){
+                    String localIp = resq.getLocalAddr();//获取本地ip
+                    if(Constant.isDeployInAliyun){
+                        localIp = Constant.AliyunIP;
+                    }
+                    int localPort = resq.getLocalPort();//获取本地的端口
+                    String appName = resq.getContextPath();
+                    String newHeaderUrl = "http://" + localIp + ":" + localPort + appName + "/" + headerUrl;
+                    customerBean.setHeaderurl(newHeaderUrl);
+                }
+            }
             try {
                 JSONObject jsonObj = new JSONObject();
                 jsonObj.put("code","200");
@@ -90,7 +103,19 @@ public class ApiLoginController {
             MphoneLoginBean loginBean = getMphoneLoginBean(resq);
             ApiLoginService apiLoginService = new ApiLoginService();
             ApiCustomerBean customerBean = apiLoginService.doMphoneLogin(loginBean);
-
+            String headerUrl = customerBean.getHeaderurl();
+            if(headerUrl != null && !headerUrl.equals("")){
+                if(!headerUrl.contains("http")){
+                    String localIp = resq.getLocalAddr();//获取本地ip
+                    if(Constant.isDeployInAliyun){
+                        localIp = Constant.AliyunIP;
+                    }
+                    int localPort = resq.getLocalPort();//获取本地的端口
+                    String appName = resq.getContextPath();
+                    String newHeaderUrl = "http://" + localIp + ":" + localPort + appName + "/" + headerUrl;
+                    customerBean.setHeaderurl(newHeaderUrl);
+                }
+            }
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code","200");
             jsonObject.put("msg","成功");

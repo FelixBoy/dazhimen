@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Administrator on 2017/3/22.
@@ -29,6 +30,12 @@ public class DemoController {
     @RequestMapping(value="fwdTestMsgBox")
     public String fwdTestMsgBox(){
         return "/demo/msgbox";
+    }
+    @RequestMapping(value="testTextArea")
+    public void testTextArea(HttpServletRequest resq, HttpServletResponse resp) throws UnsupportedEncodingException {
+        resq.setCharacterEncoding("utf-8");
+//        String[] intorductions = resq.getParameterValues("introduction");
+        System.out.println("test");
     }
     @RequestMapping(value="/fwdSuspensionInfor")
     public String fwdSuspensionInfor(){

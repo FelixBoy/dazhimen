@@ -106,4 +106,8 @@ public class PlaySortController {
             }
         }
     }
+    @RequestMapping("/fwdIndexSortManagePage")
+    public String fwdIndexSortManagePage(){
+        return "/playsort/manageIndexSort";
+    }
 }
