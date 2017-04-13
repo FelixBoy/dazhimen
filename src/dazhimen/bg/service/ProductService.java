@@ -1,6 +1,5 @@
 package dazhimen.bg.service;
 
-import dazhimen.api.exception.ApiException;
 import dazhimen.bg.bean.*;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
@@ -42,7 +41,7 @@ public class ProductService {
             sqlSession = MyBatisUtil.createSession();
             SingleValueBean allCourseCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllCourseCountByPid", pid);
             if(allCourseCountValue == null || allCourseCountValue.getValueInfo() == null){
-                throw new ApiException("获取课程数据总条数出错");
+                throw new BgException("获取课程数据总条数出错");
             }
             totalCount = Integer.parseInt(allCourseCountValue.getValueInfo());
         } catch (Exception e) {
@@ -101,7 +100,7 @@ public class ProductService {
             sqlSession = MyBatisUtil.createSession();
             SingleValueBean allSelectMasterCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllMastersCount");
             if(allSelectMasterCountValue == null || allSelectMasterCountValue.getValueInfo() == null){
-                throw new ApiException("获取选择掌门数据总条数出错");
+                throw new BgException("获取选择掌门数据总条数出错");
             }
             totalCount = Integer.parseInt(allSelectMasterCountValue.getValueInfo());
             PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);
@@ -360,7 +359,7 @@ public class ProductService {
 
             SingleValueBean allProductCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllProductCountByParam", paramBean);
             if(allProductCountValue == null || allProductCountValue.getValueInfo() == null){
-                throw new ApiException("获取产品数据总条数出错");
+                throw new BgException("获取产品数据总条数出错");
             }
             totalCount = Integer.parseInt(allProductCountValue.getValueInfo());
             PaginationParamBean paginationParamBean = PaginationUtil.getPaginationParamBean(page,rows);
@@ -387,7 +386,7 @@ public class ProductService {
 
             SingleValueBean allProductCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllProductCount");
             if(allProductCountValue == null || allProductCountValue.getValueInfo() == null){
-                throw new ApiException("获取产品数据总条数出错");
+                throw new BgException("获取产品数据总条数出错");
             }
             totalCount = Integer.parseInt(allProductCountValue.getValueInfo());
             PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);

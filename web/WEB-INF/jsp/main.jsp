@@ -74,21 +74,21 @@
                         }
                     });
                     break;
-                <%--case 'indexsort_manange':--%>
-                    <%--$('#content_panel').panel({--%>
-                        <%--href:"<%=request.getContextPath() %>/playsort/fwdIndexSortManagePage?random_id="+Math.random(),--%>
-                        <%--onLoad:function(){--%>
-                        <%--}--%>
-                    <%--});--%>
-                    <%--break;--%>
+                case 'indexsort_manange':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/playsort/fwdIndexSortManagePage?random_id="+Math.random(),
+                        onLoad:function(){
+                        }
+                    });
+                    break;
                 case 'test_fileuploadcb':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/demo/fwdTestFileUploadCallBack?random_id="+Math.random()
                     });
                     break;
-                case 'textarea_test':
+                case 'news_manage':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/demo/fwdTestMsgBox?random_id="+Math.random()
+                        href:"<%=request.getContextPath() %>/news/fwdManageNewsPage?random_id="+Math.random()
                     });
                     break;
                 default:
@@ -117,7 +117,6 @@
             <li id="order_manage">订单查询</li>
             <li id="indexsort_manange">首页排序</li>
             <li id="news_manage">新闻管理</li>
-            <li id="textarea_test" >新增新闻</li>
             <li id="permission_manage">权限管理</li>
             <%--<li id="test_fileuploadcb" >测试文件上传回调</li>--%>
         </ul>

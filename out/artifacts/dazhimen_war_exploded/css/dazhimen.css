@@ -25,3 +25,19 @@
 .form-label-cell{
     width: 70px;
 }
+.dazhimenTreeTitle {
+    height: 35px;
+}
+.dazhimenTreeTitle-icon {
+    float: left;
+    height: 100%;
+    width: 17px;
+    margin: 0 8px 0 8px;
+    background: url(../image/form/normal.png) no-repeat center center !important;
+}
+.dazhimenTreeTitle-text {
+    height: 100%;
+    float: left;
+    font: bold 14px/35px "宋体";
+    color: #3a3a3a;
+}

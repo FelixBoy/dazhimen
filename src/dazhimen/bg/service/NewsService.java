@@ -1,13 +1,14 @@
 package dazhimen.bg.service;
 
-import dazhimen.bg.bean.AddNewsBean;
-import dazhimen.bg.bean.NewsContentBean;
+import dazhimen.bg.bean.*;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
+import net.sf.json.JSONObject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import util.Constant;
 import util.IdUtils;
+import util.PaginationUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,31 @@ import java.util.List;
  * Created by Administrator on 2017/4/12.
  */
 public class NewsService {
+    public String queryAllNews(String page, String rows) throws BgException {
+        List<ListViewNewsBean> newsBeans = null;
+        SqlSession sqlSession = null;
+        Integer totalCount = 0;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+
+            SingleValueBean allProductCountValue = sqlSession.selectOne("dazhimen.bg.bean.News.getAllNewsCount");
+            if(allProductCountValue == null || allProductCountValue.getValueInfo() == null){
+                throw new BgException("获取新闻数据总条数出错");
+            }
+            totalCount = Integer.parseInt(allProductCountValue.getValueInfo());
+            PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);
+            newsBeans = sqlSession.selectList("dazhimen.bg.bean.News.listAllNews", paramBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BgException("出现异常，查询所有新闻信息失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("total", totalCount);
+        jsonObject.put("rows", newsBeans);
+        return jsonObject.toString();
+    }
     public void saveAddNews(AddNewsBean addNewsBean, String basePath) throws BgException {
         //1 生成nid
         IdUtils idUtils = new IdUtils();

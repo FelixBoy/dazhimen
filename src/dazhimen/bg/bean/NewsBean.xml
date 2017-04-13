@@ -10,4 +10,18 @@
        insert into news_content(contentid, contenttype, contentvalue, contentsort, nid)
                       values(#{contentid},#{contenttype},#{contentvalue},#{contentsort},#{nid})
     </insert>
+    <select id="getAllNewsCount" resultType="dazhimen.bg.bean.SingleValueBean">
+        select count(nid) as valueinfo
+        from news a
+        where a.isdel = '0'
+    </select>
+    <select id="listAllNews" resultType="dazhimen.bg.bean.ListViewNewsBean"
+            parameterType="dazhimen.bg.bean.PaginationParamBean">
+       select nid,title,getcodetxt('newsstatus',a.status) status,a.status statusnum,
+               date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createdatetime
+        from news a
+       where a.isdel = '0'
+       order by a.indexsort,createdatetime desc
+       limit #{startnum},#{getrows}
+    </select>
 </mapper>

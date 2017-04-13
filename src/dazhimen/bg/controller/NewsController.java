@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import util.Constant;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -24,6 +26,53 @@ import java.util.List;
 @Controller
 @RequestMapping("/news")
 public class NewsController {
+    @RequestMapping("/fwdManageNewsPage")
+    public String fwdManageNewsPage(){
+        return "/news/manageNews";
+    }
+    @RequestMapping("/queryAllNews")
+    public void queryAllNews(HttpServletRequest resq, HttpServletResponse resp){
+        resp.setCharacterEncoding(Constant.CharSet);
+        try{
+            String page = resq.getParameter("page");
+            String rows = resq.getParameter("rows");
+            String queryByParamFlag = resq.getParameter("queryByParamFlag");
+            String result = null;
+            NewsService newsService = new NewsService();
+            if(queryByParamFlag == null || queryByParamFlag.equals("")){
+                result = newsService.queryAllNews(page, rows);
+            }else{
+//                String pidCondition = resq.getParameter("pidCondition");
+//                String pnameCondition = resq.getParameter("pnameCondition");
+//                String typeCondition = resq.getParameter("typeCondition");
+//                String starttimeCondition = resq.getParameter("starttimeCondition");
+//                String endtimeCondition = resq.getParameter("endtimeCondition");
+//                String statusCondition = resq.getParameter("statusCondition");
+//                QueryProductParamBean paramBean = new QueryProductParamBean();
+//                paramBean.setPidCondition(pidCondition);
+//                paramBean.setPnameCondition(pnameCondition);
+//                paramBean.setTypeCondition(typeCondition);
+//                paramBean.setStatusCondition(statusCondition);
+//                paramBean.setStarttimeCondition(starttimeCondition);
+//                paramBean.setEndtimeCondition(endtimeCondition);
+//                result = productService.queryAllProductsByParams(page, rows, paramBean);
+            }
+            resp.getWriter().write(result);
+        }catch (Exception e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询所有产品信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+    }
+    @RequestMapping(value="fwdAddNewsPage")
+    public String fwdAddNewsPage(){
+        return "/news/addNews";
+    }
     @RequestMapping(value="/saveAddNews", method = RequestMethod.POST)
     public ModelAndView saveAddNews(HttpServletRequest resq, HttpServletResponse resp){
         AddNewsBean addNewsBean = getAddNewsBean(resq);
