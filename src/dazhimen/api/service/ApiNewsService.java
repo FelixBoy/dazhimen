@@ -1,6 +1,7 @@
 package dazhimen.api.service;
 
 import dazhimen.api.bean.ApiHomePageNewsBean;
+import dazhimen.api.bean.ApiMoreNewsBean;
 import dazhimen.api.bean.ApiNewsContentBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
@@ -9,11 +10,49 @@ import org.apache.ibatis.session.SqlSession;
 import util.CheckIsExistsUtils;
 
 import java.util.List;
-
 /**
  * Created by Administrator on 2017/4/12.
  */
 public class ApiNewsService {
+    public List<ApiMoreNewsBean> searchNews(String keyword) throws ApiException {
+        List<ApiMoreNewsBean> newsBeans = null;
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            newsBeans = sqlSession.selectList("dazhimen.api.bean.ApiNews.searchNews", keyword);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，检索新闻出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return newsBeans;
+    }
+    public List<ApiMoreNewsBean> getMoreNews(String getcount) throws ParameterCheckException, ApiException {
+        if(getcount != null && !getcount.equals("")){
+            try{
+                Integer.parseInt(getcount);
+            }catch (Exception e){
+                throw new ParameterCheckException("传入的参数[getCount]不是有效的数字");
+            }
+        }
+        List<ApiMoreNewsBean> newsBeans = null;
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            if(getcount == null || getcount.equals("")){
+                newsBeans = sqlSession.selectList("dazhimen.api.bean.ApiNews.getMoreNews");
+            }else{
+                newsBeans = sqlSession.selectList("dazhimen.api.bean.ApiNews.getMoreNewsByCount", Integer.parseInt(getcount));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，获取更多新闻出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return newsBeans;
+    }
     public List<ApiNewsContentBean> getNewsContentById(String nid) throws ApiException {
         List<ApiNewsContentBean> contentBeans = null;
         CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();

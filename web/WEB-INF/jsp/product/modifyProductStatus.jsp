@@ -13,8 +13,6 @@
             $("#undergroud").attr("checked", "checked");
         <%}%>
     <%}%>
-</script>
-<script>
     function modifyStatus(index){
         var newStatus;
         if(index == '1'){
@@ -30,17 +28,23 @@
         if(newStatus == oldStatus){
             return;
         }
-        $.get("<%=request.getContextPath()%>/product/saveModifyProductStatus?random_id=" + Math.random()
-                + "&pid=<%=request.getAttribute("pid")%>&status="+newStatus,
-            function(data){
+        $.ajax({
+            url:"<%=request.getContextPath()%>/product/saveModifyProductStatus?random_id=" + Math.random()
+            + "&pid=<%=request.getAttribute("pid")%>&status="+newStatus,
+            type:'get',
+            async:false,
+            error:function(data){
+                MsgBox.show(data.responseText);
+            },
+            success:function(data){
                 MsgBox.show(data);
                 $('#modifyProductStatusDialog').dialog('close');		// close the dialog
                 $('#productList').datagrid('reload');
             }
-        );
+        });
     }
 </script>
-<form id="modifyProductStatusForm" action="<%=request.getContextPath()%>/product/modifyProductStatus" method="post">
+<form id="modifyProductStatusForm" method="post">
     <table cellpadding="5">
         <tr>
             <td colspan="6" >

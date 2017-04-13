@@ -69,6 +69,31 @@ public class NewsController {
         }
 
     }
+    @RequestMapping("/fwdModifyNewsStatusPage")
+    public String fwdModifyNewsStatusPage(HttpServletRequest resq){
+        resq.setAttribute("nid", resq.getParameter("nid"));
+        resq.setAttribute("status" ,resq.getParameter("status"));
+        return "/news/modifyNewsStatus";
+    }
+    @RequestMapping("/saveModifyNewsStatus")
+    public void saveModifyNewsStatus(HttpServletRequest resq,HttpServletResponse resp) {
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            String nid = resq.getParameter("nid");
+            String status = resq.getParameter("status");
+            NewsService newsService = new NewsService();
+            newsService.saveModifyNewsStatus(nid, status);
+            resp.getWriter().write("修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，修改新闻状态失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
     @RequestMapping(value="fwdAddNewsPage")
     public String fwdAddNewsPage(){
         return "/news/addNews";

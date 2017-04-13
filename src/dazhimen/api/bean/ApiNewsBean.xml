@@ -26,4 +26,23 @@
            and status = '1'
            and isdel = '0'
     </select>
+    <select id="getMoreNews" resultType="dazhimen.api.bean.ApiMoreNewsBean">
+      select nid, title, listimgurl, date_format(createdate,'%Y年%m月%d日') createdate
+        from news where isdel = '0' and status = '1'
+        order by createdatetime desc
+    </select>
+    <select id="getMoreNewsByCount"  resultType="dazhimen.api.bean.ApiMoreNewsBean">
+         select nid, title, listimgurl, date_format(createdate,'%Y年%m月%d日') createdate
+        from news where isdel = '0' and status = '1'
+        order by createdatetime desc
+        limit #{getcount}
+    </select>
+    <select id="searchNews" resultType="dazhimen.api.bean.ApiMoreNewsBean">
+        select nid, title, listimgurl, date_format(createdate,'%Y年%m月%d日') createdate
+        from news
+        where isdel = '0'
+        and status ='1'
+        and title like concat('%', #{keyword}, '%')
+        order by createdatetime desc
+    </select>
 </mapper>

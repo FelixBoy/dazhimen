@@ -41,7 +41,25 @@
             }
         });
     }
+    function fwdModifyNewsStatusPage(index){
+        $('#newsList').datagrid('selectRow',index);
+        var row = $('#newsList').datagrid('getSelected');
+        if (row){
+            $('#modifyNewsStatusDialog').dialog({
+                title: '修改新闻【' + row.title + '】的状态',
+                width: 330,
+                height: 150,
+                closed: true,
+                cache: false,
+                href: "<%=request.getContextPath()%>/news/fwdModifyNewsStatusPage?random_id=" + Math.random()+"&nid=" + row.nid
+                + "&status=" + row.statusnum,
+                modal: true
+            });
+            $('#modifyNewsStatusDialog').dialog("open");
+        }
+    }
 </script>
+<div id="modifyNewsStatusDialog"></div>
 <div style="padding:5px 0;">
     <table id="newsList" style="width: auto;height: auto;">
     </table>

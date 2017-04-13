@@ -2,10 +2,12 @@ package dazhimen.api.controller;
 
 import com.google.gson.Gson;
 import dazhimen.api.bean.ApiHomePageNewsBean;
+import dazhimen.api.bean.ApiMoreNewsBean;
 import dazhimen.api.bean.ApiNewsContentBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiNewsService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Administrator on 2017/4/12.
@@ -25,6 +27,107 @@ import java.util.List;
 @Controller
 @RequestMapping("/api/news")
 public class ApiNewsController {
+
+    @RequestMapping(value = "searchNews", method = RequestMethod.POST)
+    public void searchNews(HttpServletRequest resq, HttpServletResponse resp) {
+        try {
+            if (resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            checkSearhNewsPara(resq);
+            ApiNewsService newsService = new ApiNewsService();
+            List<ApiMoreNewsBean> newsBeans = newsService.searchNews(resq.getParameter("keyword"));
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","成功");
+            if(newsBeans == null || newsBeans.size() == 0){
+                jsonObj.put("data",new Gson().toJson(null));
+            }else{
+                JSONArray newsResult = dealApiMoreNewsBean(resq, newsBeans);
+                jsonObj.put("data",newsResult);
+            }
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    @RequestMapping(value = "getMoreNews", method = RequestMethod.POST)
+    public void getMoreNews(HttpServletRequest resq, HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            ApiNewsService newsService = new ApiNewsService();
+            List<ApiMoreNewsBean> newsBeans = newsService.getMoreNews(resq.getParameter("getcount"));
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","成功");
+            if(newsBeans == null || newsBeans.size() == 0){
+                jsonObj.put("data",new Gson().toJson(null));
+            }else{
+                JSONArray newsResult = dealApiMoreNewsBean(resq, newsBeans);
+                jsonObj.put("data",newsResult);
+            }
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+    }
     @RequestMapping(value = "getHomePageNews", method = RequestMethod.POST)
     public void getHomePageNews(HttpServletRequest resq, HttpServletResponse resp){
         try {
@@ -145,6 +248,45 @@ public class ApiNewsController {
             }
             return newsBeans;
     }
+    private JSONArray dealApiMoreNewsBean(HttpServletRequest resq, List<ApiMoreNewsBean> newsBeans){
+        String localIp = resq.getLocalAddr();//获取本地ip
+        if(Constant.isDeployInAliyun){
+            localIp = Constant.AliyunIP;
+        }
+        int localPort = resq.getLocalPort();//获取本地的端口
+        String appName = resq.getContextPath();
+        List<String> createDateList = new ArrayList<String>();
+        for(int i = 0; i < newsBeans.size(); i++){
+            ApiMoreNewsBean newsBean = newsBeans.get(i);
+            String listImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + newsBean.getListimgurl();
+            newsBean.setListimgurl(listImgUrl);
+            if(!createDateList.contains(newsBean.getCreatedate())){
+                createDateList.add(newsBean.getCreatedate());
+            }
+        }
+        JSONArray jsonArray = new JSONArray();
+        for(int i = 0; i < createDateList.size(); i++){
+            String createDate_i = createDateList.get(i);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("createdate", createDate_i);
+            List<ApiHomePageNewsBean> homePageNewsBeans = new ArrayList<ApiHomePageNewsBean>();
+            for(int j = 0; j < newsBeans.size(); j++){
+                ApiMoreNewsBean moreNewsBean = newsBeans.get(j);
+                String newsBeanCreateDate = moreNewsBean.getCreatedate();
+                if(newsBeanCreateDate.equals(createDate_i)){
+                    ApiHomePageNewsBean homePageNewsBean = new ApiHomePageNewsBean();
+                    homePageNewsBean.setNid(moreNewsBean.getNid());
+                    homePageNewsBean.setListimgurl(moreNewsBean.getListimgurl());
+                    homePageNewsBean.setTitle(moreNewsBean.getTitle());
+                    homePageNewsBeans.add(homePageNewsBean);
+                }
+            }
+            jsonObject.put("newslist", new Gson().toJson(homePageNewsBeans));
+            jsonArray.add(jsonObject);
+        }
+        return jsonArray;
+    }
+
     private List<ApiNewsContentBean> dealNewsContentBean(HttpServletRequest resq, List<ApiNewsContentBean> contentBeans){
         String localIp = resq.getLocalAddr();//获取本地ip
         if(Constant.isDeployInAliyun){
@@ -168,6 +310,15 @@ public class ApiNewsController {
         }
         if(nid.equals("")){
             throw new ParameterCheckException("参数[nid]的值为空");
+        }
+    }
+    private void checkSearhNewsPara(HttpServletRequest resq) throws ParameterCheckException {
+        String keyword = resq.getParameter("keyword");
+        if(keyword == null){
+            throw new ParameterCheckException("未取到参数[keyword]");
+        }
+        if(keyword.equals("")){
+            throw new ParameterCheckException("参数[keyword]的值为空");
         }
     }
 }

@@ -30,7 +30,6 @@
             });
             $('#modifyProductStatusDialog').dialog("open");
         }
-
     }
     function fwdManageCoursePage(index){
         $('#productList').datagrid('selectRow',index);

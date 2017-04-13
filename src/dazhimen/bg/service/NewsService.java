@@ -18,6 +18,23 @@ import java.util.List;
  * Created by Administrator on 2017/4/12.
  */
 public class NewsService {
+    public void saveModifyNewsStatus(String nid, String status) throws BgException {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            ModifyNewsStatusBean newsStatusBean = new ModifyNewsStatusBean();
+            newsStatusBean.setNid(nid);
+            newsStatusBean.setStatus(status);
+            sqlSession.update("dazhimen.bg.bean.News.saveModifyNewsStatus",newsStatusBean);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+            e.printStackTrace();
+            throw new BgException("出现异常，修改新闻状态失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
     public String queryAllNews(String page, String rows) throws BgException {
         List<ListViewNewsBean> newsBeans = null;
         SqlSession sqlSession = null;
