@@ -720,69 +720,6 @@ public class ApiProductController {
             e1.printStackTrace();
         }
     }
-    @RequestMapping(value = "/getCustomerCollectProduct", method = RequestMethod.POST)
-    public void getCustomerCollectProduct(HttpServletRequest resq, HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
-        String cid = null;
-        try {
-            ApiUtils.checkSignature(resq);
-            cid = resq.getParameter("cid");
-            if(cid == null){
-                throw new ParameterCheckException("未取到参数[cid]");
-            }
-            if(cid == ""){
-                throw new ParameterCheckException("参数[cid]的值为空");
-            }
-        }catch (ParameterCheckException e) {
-            e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            return;
-        }
-        ApiProductService productService = new ApiProductService();
-        List<ApiCustomerCollectProductBean> productBeans = null;
-
-        try {
-            productBeans = productService.getCustomerCollectProduct(cid);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg","出现异常，查询会员收藏产品信息出错");
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            return;
-        }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", "200");
-        jsonObject.put("msg", "获取成功");
-        if(productBeans == null || productBeans.size()==0){
-            jsonObject.put("data", new Gson().toJson(null));
-        }else{
-            productBeans = dealCollectProductBean(resq,productBeans);
-            jsonObject.put("data", new Gson().toJson(productBeans));
-        }
-        try {
-            resp.getWriter().write(jsonObject.toString());
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-    }
     private void checkGetProductInforPara(HttpServletRequest resq) throws ParameterCheckException {
         String pid = resq.getParameter("pid");
         if(pid == null){
@@ -807,22 +744,6 @@ public class ApiProductController {
         if(cid.equals("")){
             throw new ParameterCheckException("参数[cid]的值为空");
         }
-    }
-    private List<ApiCustomerCollectProductBean> dealCollectProductBean(HttpServletRequest resq,
-                                                    List<ApiCustomerCollectProductBean> productBeans){
-        String localIp = resq.getLocalAddr();//获取本地ip
-        if(Constant.isDeployInAliyun){
-            localIp = Constant.AliyunIP;
-        }
-        int localPort = resq.getLocalPort();//获取本地的端口
-        String appName = resq.getContextPath();
-        for(int i = 0; i < productBeans.size(); i++){
-            ApiCustomerCollectProductBean productBean = productBeans.get(i);
-
-            String listImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + productBean.getListimgurl();
-            productBean.setListimgurl(listImgUrl);
-        }
-        return productBeans;
     }
     private List<ApiListViewCourseBean> dealApiListViewCourseBean(HttpServletRequest resq,
                                                             List<ApiListViewCourseBean> courseBeans){

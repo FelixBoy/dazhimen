@@ -25,4 +25,23 @@
         set indexplay = '0'
         where pid = #{pid}
     </update>
+    <select id="getAddSkillPackIndexSortData" resultType="dazhimen.bg.bean.indexsort.ProductIndexSortBean">
+        select a.pid,a.pname,getcodetxt('producttype',a.type) type
+          from product a
+        where a.status != '3' and a.isdel = '0' and indexsort = '99' and type = '1'
+    </select>
+    <select id="getSkillPackNextSortPosition" resultType="java.lang.String">
+        select count(b.pid)+1 from product b where b.type = '1' and b.status != '3' and b.indexsort != '99'
+    </select>
+    <update id="saveAddSkillPackIndexSort" parameterType="dazhimen.bg.bean.indexsort.UpdateSkillPackIndexSortBean">
+        update product
+        set indexsort = #{nextIndexSort}
+        where pid = #{pid}
+    </update>
+    <select id="queryAllSkillPackIndexSort" resultType="dazhimen.bg.bean.indexsort.ProductIndexSortBean">
+        select a.pid,a.pname,getcodetxt('producttype',a.type) type
+          from product a
+        where status != '3' and a.isdel = '0' and indexsort != '99' and type = '1'
+        order by indexsort
+    </select>
 </mapper>

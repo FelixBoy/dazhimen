@@ -1,10 +1,4 @@
 <script type="text/javascript">
-    function formatOperInAddIndexPlay(val,row,index) {
-        return '<a href="javascript:void(0)" onclick="viewProductInfoInAddIndexPlay('+index+')">查看详情</a>';
-    }
-    function viewProductInfoInAddIndexPlay(index) {
-        MsgBox.show("功能正在开发，敬请期待");
-    }
     $(function(){
         $('#addIndexPlayList').datagrid({
             onLoadSuccess: function(data){
@@ -62,10 +56,9 @@
            rownumbers="true" fitColumns="true" singleSelect="true" >
         <thead>
         <tr>
-            <th data-options="field:'pid'" width="20%">Id</th>
-            <th data-options="field:'pname'" width="30%">名称</th>
-            <th data-options="field:'type'" width="20%">类型</th>
-            <th data-options="field:'operate',align:'center',formatter:formatOperInAddIndexPlay" width="30%">操作</th>
+            <th data-options="field:'pid'" width="30%">Id</th>
+            <th data-options="field:'pname'" width="40%">名称</th>
+            <th data-options="field:'type'" width="30%">类型</th>
         </tr>
         </thead>
     </table>

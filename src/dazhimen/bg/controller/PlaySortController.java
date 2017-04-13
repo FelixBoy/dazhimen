@@ -2,6 +2,7 @@ package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
 import dazhimen.bg.bean.IndexPlayBean;
+import dazhimen.bg.bean.indexsort.ProductIndexSortBean;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.PlaySortService;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,68 @@ import java.util.List;
 @Controller
 @RequestMapping("/playsort")
 public class PlaySortController {
+
+    @RequestMapping("/forwardAddSkillPackIndexSortPage")
+    public String forwardAddProductIndexSortPage(){
+        return "/playsort/addSkillPackIndexSort";
+    }
+    @RequestMapping("/getAddSkillPackIndexSortData")
+    public void getAddSkillPackIndexSortData(HttpServletResponse resp){
+        resp.setCharacterEncoding(Constant.CharSet);
+        PlaySortService playSortService = new PlaySortService();
+        try {
+            List<ProductIndexSortBean> productBeans = playSortService.getAddSkillPackIndexSortData();
+            resp.getWriter().write(new Gson().toJson(productBeans));
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询新增轮播数据出错");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    @RequestMapping("/saveAddSkillPackIndexSort")
+    public void saveAddSkillPackIndexSort(@RequestParam("pid") String pid,HttpServletResponse resp){
+        resp.setCharacterEncoding(Constant.CharSet);
+        PlaySortService playSortService = new PlaySortService();
+        try{
+            boolean result = playSortService.saveAddSkillPackIndexSort(pid);
+            if(result){
+                resp.getWriter().write("新增技能包首页排序成功");
+            }else{
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                resp.getWriter().write("新增技能包首页排序失败");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，新增技能包首页排序出错");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    @RequestMapping("/queryAllSkillPackIndexSort")
+    public void queryAllSkillPackIndexSort(HttpServletResponse resp){
+        resp.setCharacterEncoding(Constant.CharSet);
+        PlaySortService playSortService = new PlaySortService();
+        try {
+            List<ProductIndexSortBean> productBeans = playSortService.queryAllSkillPackIndexSort();
+            resp.getWriter().write(new Gson().toJson(productBeans));
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                resp.getWriter().write("出现异常，查询技能包首页排序信息失败");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
     @RequestMapping("/fwdIndexPlayManagePage")
     public String fwdIndexPlayManagePage(){
         return "/playsort/manageIndexPlay";

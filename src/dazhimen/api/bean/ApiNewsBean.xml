@@ -45,4 +45,23 @@
         and title like concat('%', #{keyword}, '%')
         order by createdatetime desc
     </select>
+    <select id="getNewsIsCollection" parameterType="dazhimen.api.bean.ApiQueryNewsCollectionParamBean"
+        resultType="dazhimen.api.bean.SingleValueBean">
+      select 1 as valueinfo
+        from ir_customer_news
+      where cid = #{cid} and nid = #{nid}
+    </select>
+    <insert id="collectNews" parameterType="dazhimen.api.bean.ApiQueryNewsCollectionParamBean">
+      insert into ir_customer_news(cid, nid)
+         values(#{cid}, #{nid})
+    </insert>
+    <delete id="cancelCollectNews" parameterType="dazhimen.api.bean.ApiQueryNewsCollectionParamBean">
+        delete from ir_customer_news where cid = #{cid} and nid = #{nid}
+    </delete>
+    <select id="getCustomerCollectNews" resultType="dazhimen.api.bean.ApiHomePageNewsBean">
+      select a.nid, a.title, a.listimgurl
+        from news a,ir_customer_news b
+        where a.nid = b.nid
+         and b.cid = #{cid}
+    </select>
 </mapper>

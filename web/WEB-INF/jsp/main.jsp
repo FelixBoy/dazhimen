@@ -112,10 +112,10 @@
             <li id="master_manage">掌门管理</li>
             <li id="admin_manage">管理员管理</li>
             <li id="indexplay_manage">首页轮播</li>
+            <li id="indexsort_manange">首页排序</li>
             <li id="customer_manage">会员查询</li>
             <li id="recharge_manage">充值查询</li>
             <li id="order_manage">订单查询</li>
-            <li id="indexsort_manange">首页排序</li>
             <li id="news_manage">新闻管理</li>
             <li id="permission_manage">权限管理</li>
             <%--<li id="test_fileuploadcb" >测试文件上传回调</li>--%>

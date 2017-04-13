@@ -1,8 +1,6 @@
 package dazhimen.api.service;
 
-import dazhimen.api.bean.ApiHomePageNewsBean;
-import dazhimen.api.bean.ApiMoreNewsBean;
-import dazhimen.api.bean.ApiNewsContentBean;
+import dazhimen.api.bean.*;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
 import db.MyBatisUtil;
@@ -14,6 +12,74 @@ import java.util.List;
  * Created by Administrator on 2017/4/12.
  */
 public class ApiNewsService {
+    public List<ApiHomePageNewsBean> getCustomerCollectNews(String cid) throws ApiException {
+        List<ApiHomePageNewsBean> newsBeans = null;
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            newsBeans = sqlSession.selectList("dazhimen.api.bean.ApiNews.getCustomerCollectNews", cid);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，查询会员收藏的新闻信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return newsBeans;
+    }
+    public void cancelCollectNews(String cid, String nid) throws ApiException {
+        CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();
+        if(!checkUtil.checkCidIsExists(cid)){
+            throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
+        }
+        if(!checkUtil.checkNidIsExists(nid)){
+            throw new ApiException("传入的[nid]值，无效。在数据库中不存在，或者已经下架。");
+        }
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            ApiQueryNewsCollectionParamBean paramBean = new ApiQueryNewsCollectionParamBean();
+            paramBean.setCid(cid);
+            paramBean.setNid(nid);
+            sqlSession.delete("dazhimen.api.bean.ApiNews.cancelCollectNews",paramBean);
+            sqlSession.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new ApiException("取消收藏新闻失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+    public boolean collectNews(String cid, String nid) throws ApiException {
+        int result = 0;
+        SqlSession sqlSession = null;
+        CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();
+        if(!checkUtil.checkCidIsExists(cid)){
+            throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
+        }
+        if(!checkUtil.checkNidIsExists(nid)){
+            throw new ApiException("传入的[nid]值，无效。在数据库中不存在，或者已经下架。");
+        }
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            ApiQueryNewsCollectionParamBean paramBean = new ApiQueryNewsCollectionParamBean();
+            paramBean.setCid(cid);
+            paramBean.setNid(nid);
+            SingleValueBean value = sqlSession.selectOne("dazhimen.api.bean.ApiNews.getNewsIsCollection", paramBean);
+            if(value != null && value.getValueInfo()!= null && value.getValueInfo().equals("1")){
+                return true;
+            }
+            result = sqlSession.insert("dazhimen.api.bean.ApiNews.collectNews", paramBean);
+            sqlSession.commit();
+        }catch (Exception e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new ApiException("出现异常，收藏失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return result == 1;
+    }
     public List<ApiMoreNewsBean> searchNews(String keyword) throws ApiException {
         List<ApiMoreNewsBean> newsBeans = null;
         SqlSession sqlSession = null;

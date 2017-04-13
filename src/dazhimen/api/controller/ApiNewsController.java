@@ -1,12 +1,14 @@
 package dazhimen.api.controller;
 
 import com.google.gson.Gson;
+import dazhimen.api.bean.ApiCustomerCollectProductBean;
 import dazhimen.api.bean.ApiHomePageNewsBean;
 import dazhimen.api.bean.ApiMoreNewsBean;
 import dazhimen.api.bean.ApiNewsContentBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiNewsService;
+import dazhimen.api.service.ApiProductService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -27,7 +29,177 @@ import java.util.*;
 @Controller
 @RequestMapping("/api/news")
 public class ApiNewsController {
+    @RequestMapping(value = "getCustomerCollectList", method = RequestMethod.POST)
+    public void getCustomerCollectList(HttpServletRequest resq, HttpServletResponse resp) {
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        String cid = null;
+        try {
+            ApiUtils.checkSignature(resq);
+            cid = resq.getParameter("cid");
+            if(cid == null){
+                throw new ParameterCheckException("未取到参数[cid]");
+            }
+            if(cid.equals("")){
+                throw new ParameterCheckException("参数[cid]的值为空");
+            }
+            ApiProductService productService = new ApiProductService();
+            List<ApiCustomerCollectProductBean> productBeans = productService.getCustomerCollectProduct(cid);
+            ApiNewsService newsService = new ApiNewsService();
+            List<ApiHomePageNewsBean> newsBeans = newsService.getCustomerCollectNews(cid);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", "200");
+            jsonObject.put("msg", "获取成功");
+            Gson gson = new Gson();
+            if(productBeans == null || productBeans.size()==0){
+                jsonObject.put("productlist", gson.toJson(null));
+            }else{
+                productBeans = dealCollectProductBean(resq,productBeans);
+                jsonObject.put("productlist", gson.toJson(productBeans));
+            }
+            if(newsBeans == null || newsBeans.size() == 0){
+                jsonObject.put("newslist", gson.toJson(null));
+            }else{
+                newsBeans = dealApiHomePageNewsBean(resq, newsBeans);
+                jsonObject.put("newslist", gson.toJson(newsBeans));
+            }
+            try {
+                resp.getWriter().write(jsonObject.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (ParameterCheckException e){
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg","出现异常，查询会员收藏列表出错");
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg","出现异常，查询会员收藏列表出错");
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    @RequestMapping(value = "cancelCollectNews", method = RequestMethod.POST)
+    public void cancelCollectNews(HttpServletRequest resq, HttpServletResponse resp) {
+        try {
+            if (resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            checkCollectNewsPara(resq);
+            String cid = resq.getParameter("cid");
+            String nid = resq.getParameter("nid");
+            ApiNewsService newsService = new ApiNewsService();
+            newsService.cancelCollectNews(cid, nid);
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","200");
+            jsonObj.put("msg","取消收藏成功");
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (ParameterCheckException e){
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
 
+    @RequestMapping(value = "collectNews", method = RequestMethod.POST)
+    public void collectNews(HttpServletRequest resq, HttpServletResponse resp) {
+        try {
+            if (resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            checkCollectNewsPara(resq);
+            String cid = resq.getParameter("cid");
+            String nid = resq.getParameter("nid");
+            ApiNewsService newsService = new ApiNewsService();
+            boolean result = newsService.collectNews(cid, nid);
+
+            if(result){
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("code","200");
+                jsonObj.put("msg","收藏成功");
+                try {
+                    resp.getWriter().write(jsonObj.toString());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }else{
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("code","400");
+                jsonObj.put("msg","收藏失败");
+                try {
+                    resp.getWriter().write(jsonObj.toString());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (ParameterCheckException e){
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
     @RequestMapping(value = "searchNews", method = RequestMethod.POST)
     public void searchNews(HttpServletRequest resq, HttpServletResponse resp) {
         try {
@@ -320,5 +492,37 @@ public class ApiNewsController {
         if(keyword.equals("")){
             throw new ParameterCheckException("参数[keyword]的值为空");
         }
+    }
+    private void checkCollectNewsPara(HttpServletRequest resq) throws ParameterCheckException {
+        String cid = resq.getParameter("cid");
+        if(cid == null){
+            throw new ParameterCheckException("未取到参数[cid]");
+        }
+        if(cid.equals("")){
+            throw new ParameterCheckException("参数[cid]的值为空");
+        }
+        String nid = resq.getParameter("nid");
+        if(nid == null){
+            throw new ParameterCheckException("未取到参数[nid]");
+        }
+        if(nid.equals("")){
+            throw new ParameterCheckException("参数[nid]的值为空");
+        }
+    }
+    private List<ApiCustomerCollectProductBean> dealCollectProductBean(HttpServletRequest resq,
+                                                                       List<ApiCustomerCollectProductBean> productBeans){
+        String localIp = resq.getLocalAddr();//获取本地ip
+        if(Constant.isDeployInAliyun){
+            localIp = Constant.AliyunIP;
+        }
+        int localPort = resq.getLocalPort();//获取本地的端口
+        String appName = resq.getContextPath();
+        for(int i = 0; i < productBeans.size(); i++){
+            ApiCustomerCollectProductBean productBean = productBeans.get(i);
+
+            String listImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + productBean.getListimgurl();
+            productBean.setListimgurl(listImgUrl);
+        }
+        return productBeans;
     }
 }

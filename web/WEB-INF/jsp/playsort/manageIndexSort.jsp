@@ -1,60 +1,47 @@
 <script>
-    function MoveUp() {
-        var row = $("#Student_Table").datagrid('getSelected');
-        var index = $("#Student_Table").datagrid('getRowIndex', row);
-        mysort(index, 'up', 'Student_Table');
-
+    function formatOper(val,row,index) {
+        return '<a href="javascript:void(0)" onclick="saveUpSkillPack('+index+')">上移</a>&nbsp&nbsp&nbsp&nbsp'
+            +'<a href="javascript:void(0)" onclick="saveDownSkillPack('+index+')">下移</a>';
     }
-    //下移
-    function MoveDown() {
-        var row = $("#Student_Table").datagrid('getSelected');
-        var index = $("#Student_Table").datagrid('getRowIndex', row);
-        mysort(index, 'down', 'Student_Table');
-
+    function saveUpSkillPack(index){
+        MsgBox.show("功能正在开发，敬请期待");
     }
-
-    function mysort(index, type, gridname) {
-        if ("up" == type) {
-            if (index != 0) {
-                var toup = $('#' + gridname).datagrid('getData').rows[index];
-                var todown = $('#' + gridname).datagrid('getData').rows[index - 1];
-                $('#' + gridname).datagrid('getData').rows[index] = todown;
-                $('#' + gridname).datagrid('getData').rows[index - 1] = toup;
-                $('#' + gridname).datagrid('refreshRow', index);
-                $('#' + gridname).datagrid('refreshRow', index - 1);
-                $('#' + gridname).datagrid('selectRow', index - 1);
-            }
-        } else if ("down" == type) {
-            var rows = $('#' + gridname).datagrid('getRows').length;
-            if (index != rows - 1) {
-                var todown = $('#' + gridname).datagrid('getData').rows[index];
-                var toup = $('#' + gridname).datagrid('getData').rows[index + 1];
-                $('#' + gridname).datagrid('getData').rows[index + 1] = todown;
-                $('#' + gridname).datagrid('getData').rows[index] = toup;
-                $('#' + gridname).datagrid('refreshRow', index);
-                $('#' + gridname).datagrid('refreshRow', index + 1);
-                $('#' + gridname).datagrid('selectRow', index + 1);
-            }
+    function saveDownSkillPack(index){
+        MsgBox.show("功能正在开发，敬请期待");
+    }
+    function forwardAddSkillPackIndexSortPage(){
+        var rows = $("#skillPackIndexSortList").datagrid("getRows");
+        if(rows.length >= 2){
+            MsgBox.show("最多允许有2个技能包，添加为首页排序");
+            return;
         }
-
+        $('#addSkillPackIndexSortDialog').dialog({
+            title: '新增【技能包】首页排序',
+            width: 580,
+            height: 500,
+            closed: true,
+            cache: false,
+            href: "<%=request.getContextPath()%>/playsort/forwardAddSkillPackIndexSortPage?random_id=" + Math.random(),
+            modal: true
+        });
+        $('#addSkillPackIndexSortDialog').dialog("open");
     }
 </script>
 <div style="padding:5px 0;">
-    <div id="addIndexPlayDialog" style="text-align: center;"></div>
-    <table id="indexPlayList" title="首页排序列表" class="easyui-datagrid" style="width: auto;height: auto;"
-           url="<%=request.getContextPath()%>/playsort/queryAllIndexPlay?random_id="+Math.random()
+    <div id="addSkillPackIndexSortDialog" style="text-align: center;"></div>
+    <table id="skillPackIndexSortList" title="技能包首页排序" class="easyui-datagrid" style="width: auto;height: auto;"
+           url="<%=request.getContextPath()%>/playsort/queryAllSkillPackIndexSort?random_id="+Math.random()
            rownumbers="true" fitColumns="true" singleSelect="true" >
         <thead>
         <tr>
             <th data-options="field:'pid'" width="20%">Id</th>
             <th data-options="field:'pname'" width="30%">名称</th>
             <th data-options="field:'type'" width="20%">类型</th>
+            <th data-options="field:'operate',align:'center',formatter:formatOper" width="30%">操作</th>
         </tr>
         </thead>
     </table>
     <br/>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddIndexPlayPage()">新增</a>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddIndexPlayPage()">上移</a>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddIndexPlayPage()">下移</a>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddIndexPlayPage()">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddSkillPackIndexSortPage()">新增</a>
+    <%--<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddIndexPlayPage()">删除</a>--%>
 </div>
