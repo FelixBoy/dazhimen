@@ -11,6 +11,7 @@ import util.CheckIsExistsUtils;
 import util.Constant;
 import util.IdUtils;
 import util.WXPayUtil;
+import util.AlipayUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -86,7 +87,48 @@ public class ApiRechargeService {
         }
         return resultMap;
     }
+    public String doRechargeByAlipay(HttpServletRequest resq) throws ApiException {
+        String cid = resq.getParameter("cid");
+        SortedMap<String, Object> resultMap = null;
+        String orderString = null;
+        CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();
+        if(!checkUtil.checkCidIsExists(cid)){
+            throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
+        }
+        try {
+            String rechargeAmount = resq.getParameter("rechargeamout");
+            Double rechargeAmountDouble = null;
+            try{
+                rechargeAmountDouble = Double.parseDouble(rechargeAmount);
+            }catch (NumberFormatException e){
+                e.printStackTrace();
+                throw new ApiException("支付宝统一下单接口调用错误:充值金额不是有效的数字");
+            }
 
+            String localIp = resq.getLocalAddr();
+            String appName = resq.getContextPath();
+            if(Constant.isDeployInAliyun){
+                localIp = Constant.AliyunIP;
+            }
+            int localPort = resq.getLocalPort();
+            String notify_url = "http://" + localIp + ":" + localPort + appName + "/api/recharge/dealAliPayRechargeResult";
+            String recid = new IdUtils().getRECId();
+            orderString = AlipayUtil.orderPay(rechargeAmountDouble, recid,"大职门余额充值", notify_url, cid);
+            if(orderString != null && !orderString.equals("")){
+                System.out.println("支付宝统一下单接口调用成功---[" + orderString + "]");
+            }else{
+                throw new ApiException("支付宝统一下单接口调用错误");
+            }
+
+        } catch (ApiException e){
+            e.printStackTrace();
+            throw new ApiException(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApiException("出现异常，发起支付宝充值失败");
+        }
+        return orderString;
+    }
     public void dealWXRechargeResult(Map<String, String> map) throws ApiException {
         //更新用户余额，并更新充值记录的数据
         SqlSession sqlSession = null;

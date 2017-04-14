@@ -1,5 +1,8 @@
 package dazhimen.api.controller;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayConstants;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.google.gson.Gson;
 import dazhimen.api.bean.ApiBalanceBean;
 import dazhimen.api.exception.ApiException;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import util.ApiUtils;
 import util.Constant;
 import util.WXPayUtil;
+import util.AlipayUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +24,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 
@@ -159,7 +165,83 @@ public class ApiRechargeController {
         }
 
     }
+    @RequestMapping(value="/doRechargeByAlipay", method = RequestMethod.POST)
+    public void doRechargeByAlipay(HttpServletRequest resq, HttpServletResponse resp){
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            checkDoRechargeByWeixinPara(resq);
+            ApiRechargeService rechargeService = new ApiRechargeService();
 
+            String orderString = rechargeService.doRechargeByAlipay(resq);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", "200");
+            jsonObject.put("msg", "获取成功");
+            jsonObject.put("data", orderString);
+            try {
+                resp.getWriter().write(jsonObject.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    @RequestMapping("/dealAliPayRechargeResult")
+    public void dealAliPayRechargeResult(HttpServletRequest resq, HttpServletResponse resp){
+        //获取支付宝POST过来反馈信息
+        System.out.println("===========进入支付宝回调=================");
+        Map<String,String> params = new HashMap<String,String>();
+        Map requestParams = resq.getParameterMap();
+        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+            String name = (String) iter.next();
+            String[] values = (String[]) requestParams.get(name);
+            String valueStr = "";
+            for (int i = 0; i < values.length; i++) {
+                valueStr = (i == values.length - 1) ? valueStr + values[i]
+                        : valueStr + values[i] + ",";
+            }
+            //乱码解决，这段代码在出现乱码时使用。
+            //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+            params.put(name, valueStr);
+        }
+        try {
+            boolean flag = AlipaySignature.rsaCheckV1(params, AlipayUtil.ALIPAY_PUBLIC_KEY, AlipayConstants.CHARSET_UTF8,AlipayConstants.SIGN_TYPE_RSA);
+            if(flag){
+                System.out.println("========支付宝订单支付成功=========");
+                System.out.println(params.toString());
+            }else{
+                System.out.println("========支付宝订单支付失败=========");
+            }
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+    }
     @RequestMapping("/recheckWXRechargeResult")
     public void recheckWXRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
         try {
