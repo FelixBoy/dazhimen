@@ -179,12 +179,13 @@ public class ApiRechargeController {
             checkDoRechargeByWeixinPara(resq);
             ApiRechargeService rechargeService = new ApiRechargeService();
 
-            String orderString = rechargeService.doRechargeByAlipay(resq);
+            Map<String, String> resultMap = rechargeService.doRechargeByAlipay(resq);
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", "200");
             jsonObject.put("msg", "获取成功");
-            jsonObject.put("data", orderString);
+            jsonObject.put("orderstring", resultMap.get("orderstring"));
+            jsonObject.put("recid", resultMap.get("recid"));
             try {
                 resp.getWriter().write(jsonObject.toString());
             } catch (IOException e1) {
@@ -235,14 +236,18 @@ public class ApiRechargeController {
             if(flag){
                 System.out.println("========支付宝订单支付成功=========");
                 System.out.println(params.toString());
+                ApiRechargeService rechargeService = new ApiRechargeService();
+                rechargeService.dealAliPayRechargeResult(params);
             }else{
                 System.out.println("========支付宝订单支付失败=========");
             }
         } catch (AlipayApiException e) {
             e.printStackTrace();
+        } catch (ApiException e) {
+            e.printStackTrace();
         }
     }
-    @RequestMapping("/recheckWXRechargeResult")
+    @RequestMapping(value = "/recheckWXRechargeResult", method = RequestMethod.POST)
     public void recheckWXRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
         try {
             if(resq.getCharacterEncoding() == null)
@@ -298,7 +303,79 @@ public class ApiRechargeController {
         }
 
     }
+    @RequestMapping(value = "/recheckAlipayRechargeResult", method = RequestMethod.POST)
+    public void recheckAlipayRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
+        try {
+            if(resq.getCharacterEncoding() == null)
+                resq.setCharacterEncoding(Constant.CharSet);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        resp.setCharacterEncoding(Constant.CharSet);
+        try {
+            ApiUtils.checkSignature(resq);
+            checkAlipayRechargeResultPara(resq);
+            ApiRechargeService rechargeService = new ApiRechargeService();
+            boolean result = rechargeService.recheckAlipayRechargeResult(resq.getParameter("recid"), resq.getParameter("cid"));
+            if(result){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("code", "200");
+                jsonObject.put("msg", "复核成功");
+                try {
+                    resp.getWriter().write(jsonObject.toString());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }else{
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("code", "400");
+                jsonObject.put("msg", "复核失败");
+                try {
+                    resp.getWriter().write(jsonObject.toString());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("msg",e.getMessage());
+            try {
+                resp.getWriter().write(jsonObj.toString());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+    }
     private void checkWXRechargeResultPara(HttpServletRequest resq) throws ParameterCheckException {
+        String recid = resq.getParameter("recid");
+        if(recid == null){
+            throw new ParameterCheckException("未取到参数[recid]");
+        }
+        if(recid.equals("")){
+            throw new ParameterCheckException("参数[recid]的值为空");
+        }
+        String cid = resq.getParameter("cid");
+        if(cid == null){
+            throw new ParameterCheckException("未取到参数[cid]");
+        }
+        if(cid.equals("")){
+            throw new ParameterCheckException("参数[cid]的值为空");
+        }
+    }
+    private void checkAlipayRechargeResultPara(HttpServletRequest resq) throws ParameterCheckException {
         String recid = resq.getParameter("recid");
         if(recid == null){
             throw new ParameterCheckException("未取到参数[recid]");

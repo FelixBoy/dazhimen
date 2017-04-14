@@ -80,7 +80,7 @@ public class Constant {
     public static final String paymentType_AliPay = "3";
 
     //是否部署在阿里云
-    public static final boolean isDeployInAliyun = true;
+    public static final boolean isDeployInAliyun = false;
     //阿里云Ip
     public static final String AliyunIP = "47.92.73.149";
 

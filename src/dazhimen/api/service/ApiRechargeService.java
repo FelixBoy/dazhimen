@@ -15,6 +15,7 @@ import util.AlipayUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 
@@ -87,9 +88,9 @@ public class ApiRechargeService {
         }
         return resultMap;
     }
-    public String doRechargeByAlipay(HttpServletRequest resq) throws ApiException {
+    public HashMap doRechargeByAlipay(HttpServletRequest resq) throws ApiException {
         String cid = resq.getParameter("cid");
-        SortedMap<String, Object> resultMap = null;
+        HashMap<String, String> resultMap = new HashMap<>();
         String orderString = null;
         CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();
         if(!checkUtil.checkCidIsExists(cid)){
@@ -113,13 +114,14 @@ public class ApiRechargeService {
             int localPort = resq.getLocalPort();
             String notify_url = "http://" + localIp + ":" + localPort + appName + "/api/recharge/dealAliPayRechargeResult";
             String recid = new IdUtils().getRECId();
+            resultMap.put("recid", recid);
             orderString = AlipayUtil.orderPay(rechargeAmountDouble, recid,"大职门余额充值", notify_url, cid);
             if(orderString != null && !orderString.equals("")){
                 System.out.println("支付宝统一下单接口调用成功---[" + orderString + "]");
             }else{
                 throw new ApiException("支付宝统一下单接口调用错误");
             }
-
+            resultMap.put("orderstring", orderString);
         } catch (ApiException e){
             e.printStackTrace();
             throw new ApiException(e.getMessage());
@@ -127,7 +129,7 @@ public class ApiRechargeService {
             e.printStackTrace();
             throw new ApiException("出现异常，发起支付宝充值失败");
         }
-        return orderString;
+        return resultMap;
     }
     public void dealWXRechargeResult(Map<String, String> map) throws ApiException {
         //更新用户余额，并更新充值记录的数据
@@ -177,6 +179,65 @@ public class ApiRechargeService {
             dealWXRechargeResult(map);
             return true;
         }else{
+            return false;
+        }
+    }
+
+    public void dealAliPayRechargeResult(Map<String, String> map) throws ApiException {
+        //更新用户余额，并更新充值记录的数据
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            String trade_status = map.get("trade_status");
+            if(trade_status == null || trade_status.equals("") || !trade_status.equals("TRADE_SUCCESS")){
+                throw new ApiException("支付宝充值回调，返回交易状态异常");
+            }
+            String recid = map.get("out_trade_no");
+            String trade_no = map.get("trade_no");
+            String total_amount_str = map.get("total_amount");
+            Double recamount = Double.parseDouble(total_amount_str);
+            String cid = map.get("passback_params");
+            SingleValueBean valueBean = sqlSession.selectOne("dazhimen.api.bean.ApiRecharge.checkISTransactionExists", trade_no);
+            if(valueBean != null && valueBean.getValueInfo() != null && valueBean.getValueInfo().equals("1")){
+                return;
+            }
+
+            ApiRechargeByWeixinBean rechargeByWeixinBean = new ApiRechargeByWeixinBean();
+            rechargeByWeixinBean.setCid(cid);
+            rechargeByWeixinBean.setRecamount(recamount);
+            rechargeByWeixinBean.setRecid(recid);
+            rechargeByWeixinBean.setTransaction_id(trade_no);
+            sqlSession.insert("dazhimen.api.bean.ApiRecharge.doRechargeByWeixin", rechargeByWeixinBean);
+
+
+            ApiUpdateCustomerBalanceBean customerBalanceBean = new ApiUpdateCustomerBalanceBean();
+            customerBalanceBean.setChangeamount(recamount);
+            customerBalanceBean.setCid(cid);
+            sqlSession.update("dazhimen.api.bean.ApiRecharge.updateCustomerBalanceAfterWX",customerBalanceBean);
+            sqlSession.commit();
+        }catch (ApiException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new ApiException(e.getMessage());
+        }catch(Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new ApiException("处理支付宝充值结果失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+    public boolean recheckAlipayRechargeResult(String recid, String cid) throws ApiException {
+        if(!new CheckIsExistsUtils().checkCidIsExists(cid)){
+            throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
+        }
+        Map<String, String> map = AlipayUtil.orderQuery(recid);
+        String trade_status = map.get("trade_status");
+        if(trade_status != null && !trade_status.equals("") && trade_status.equals("TRADE_SUCCESS")){
+            map.put("passback_params", cid);
+            dealAliPayRechargeResult(map);
+            return true;
+        } else{
             return false;
         }
     }
