@@ -8,11 +8,12 @@
     <select id="queryAllRecharge" resultType="dazhimen.bg.bean.ViewRechargeBean"
             parameterType="dazhimen.bg.bean.PaginationParamBean">
       select a.recid,a.recamount,b.cid,b.name cname,b.nickname cnickname,b.mphone,
+              getcodetxt('paymenttype', a.paymenttype) as paymenttype,
               transaction_id,date_format(a.recdatetime,'%Y-%m-%d %H:%i:%s') recdatetime
         from recharge a,customer b
        where a.cid = b.cid
          and a.isdel = '0'
-         order by a.recid
+         order by a.recid desc
         limit #{startnum},#{getrows}
     </select>
 </mapper>

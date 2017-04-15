@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.ObjectInput;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Administrator on 2017/4/9.
@@ -27,6 +28,12 @@ public class DazhimenFilter implements Filter {
         String resqURL = resq.getRequestURL().toString();
         if(resqURL != null || !resqURL.equals("")){
             if(isApiInvoke(resqURL) || isStaticResource(resqURL) || isLoginPage(resqURL)){
+                try {
+                    if(resq.getCharacterEncoding() == null)
+                        resq.setCharacterEncoding(Constant.CharSet);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 filterChain.doFilter(servletRequest,servletResponse);
             }else{
                 HttpSession session = resq.getSession(false);

@@ -9,13 +9,14 @@
             loadMsg:"正在加载充值数据...",
             columns: [[
                 { field: 'recid', title: '充值Id', width: '10%'},
-                { field: 'recamount', title: '充值金额', width: '15%'},
+                { field: 'recamount', title: '充值金额', width: '5%'},
                 { field: 'recdatetime', title: '充值时间', width: '15%'},
-                { field: 'transaction_id', title: '支付订单号', width: '15%'},
+                { field: 'paymenttype', title: '支付类型', width: '10%'},
+                { field: 'transaction_id', title: '支付订单号', width: '20%'},
                 { field: 'cid', title: '会员ID', width: '10%'},
                 { field: 'cname', title: '会员姓名', width: '10%' },
                 { field: 'cnickname', title: '会员昵称', width: '10%' },
-                { field: 'mphone', title: '会员手机号码', width: '15%' }
+                { field: 'mphone', title: '会员手机号码', width: '10%' }
             ]],
             pagination: true
         });

@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import util.ApiUtils;
 import util.Constant;
+import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,14 +32,6 @@ public class ApiCustomerController {
 
     @RequestMapping(value="modifyHeader", method = RequestMethod.POST)
     public void modifyHeader(HttpServletRequest resq, HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
-        resp.setContentType("text/html");
         try {
             ApiUtils.checkSignature(resq);
             String cid = resq.getParameter("cid");
@@ -76,43 +69,18 @@ public class ApiCustomerController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             jsonObj.put("data",new Gson().toJson(customerBean));
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
 
     }
     @RequestMapping(value="getPersonalInfo", method = RequestMethod.POST)
     public void getPersonalInfo(HttpServletRequest resq, HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             checkGetPersonalInfoPara(resq);
             ApiUtils.checkSignature(resq);
@@ -136,42 +104,17 @@ public class ApiCustomerController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             jsonObj.put("data",new Gson().toJson(customerBean));
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping(value="modifyPersonalInfo", method = RequestMethod.POST)
     public void modifyPersonalInfo(HttpServletRequest resq, HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             checkModifyPersonalInfoPara(resq);
             ApiUtils.checkSignature(resq);
@@ -184,31 +127,13 @@ public class ApiCustomerController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             jsonObj.put("data",new Gson().toJson(customerBean));
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     private void checkGetPersonalInfoPara(HttpServletRequest resq) throws ParameterCheckException {
@@ -229,6 +154,15 @@ public class ApiCustomerController {
         String verifycode = resq.getParameter("verifycode");
         if(verifycode == null){
             throw new ParameterCheckException("未取到参数[verifycode]");
+        }
+        if(cid.equals("")){
+            throw new ParameterCheckException("参数[cid]的值为空");
+        }
+        if(mphone.equals("")){
+            throw new ParameterCheckException("参数[mphone]的值为空");
+        }
+        if(verifycode.equals("")){
+            throw new ParameterCheckException("参数[verifycode]的值为空");
         }
     }
     private ModifyCustomerInfoBean getModifyPersonalInfoBean(HttpServletRequest resq) {

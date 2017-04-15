@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import util.ApiUtils;
 import util.Constant;
+import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,15 +28,7 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping("/api/customer")
 public class ApiLoginController {
     @RequestMapping(value = "/thirdPartLogin",method = RequestMethod.POST)
-    public void doThirdPartLogin(HttpServletRequest resq,
-                                 HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void doThirdPartLogin(HttpServletRequest resq, HttpServletResponse resp){
         try {
             checkThirdPartLoginParam(resq);
             ApiUtils.checkSignature(resq);
@@ -55,48 +48,23 @@ public class ApiLoginController {
                     customerBean.setHeaderurl(newHeaderUrl);
                 }
             }
-            try {
                 JSONObject jsonObj = new JSONObject();
                 jsonObj.put("code","200");
                 jsonObj.put("msg","成功");
                 jsonObj.put("data",new Gson().toJson(customerBean));
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                ResponseUtil.writeMsg(resp,jsonObj.toString());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
 
     @RequestMapping(value="/mphoneLogin",method = RequestMethod.POST)
     public void doMphoneLogin(HttpServletRequest resq,
                         HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             checkMphoneLoginParam(resq);
             ApiUtils.checkSignature(resq);
@@ -120,43 +88,18 @@ public class ApiLoginController {
             jsonObject.put("code","200");
             jsonObject.put("msg","成功");
             jsonObject.put("data",new Gson().toJson(customerBean));
-            try {
-                resp.getWriter().write(jsonObject.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp,jsonObject.toString());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping(value="/getVerifyCode",method = RequestMethod.POST)
     public void getVerifyCode(HttpServletRequest resq,
                               HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             checkGetVerifyCodePara(resq);
             ApiUtils.checkSignature(resq);
@@ -164,21 +107,10 @@ public class ApiLoginController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             jsonObj.put("data",new Gson().toJson(null));
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     private void checkGetVerifyCodePara(HttpServletRequest resq) throws ParameterCheckException {

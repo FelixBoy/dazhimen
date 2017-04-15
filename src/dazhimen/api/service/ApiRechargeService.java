@@ -152,6 +152,7 @@ public class ApiRechargeService {
             rechargeByWeixinBean.setRecamount(recamount);
             rechargeByWeixinBean.setRecid(recid);
             rechargeByWeixinBean.setTransaction_id(transaction_id);
+            rechargeByWeixinBean.setPaymenttype(Constant.paymentType_WXPay);
             sqlSession.insert("dazhimen.api.bean.ApiRecharge.doRechargeByWeixin", rechargeByWeixinBean);
 
             ApiUpdateCustomerBalanceBean customerBalanceBean = new ApiUpdateCustomerBalanceBean();
@@ -207,6 +208,7 @@ public class ApiRechargeService {
             rechargeByWeixinBean.setRecamount(recamount);
             rechargeByWeixinBean.setRecid(recid);
             rechargeByWeixinBean.setTransaction_id(trade_no);
+            rechargeByWeixinBean.setPaymenttype(Constant.paymentType_AliPay);
             sqlSession.insert("dazhimen.api.bean.ApiRecharge.doRechargeByWeixin", rechargeByWeixinBean);
 
 

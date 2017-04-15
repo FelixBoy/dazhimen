@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import util.ApiUtils;
 import util.Constant;
+import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,13 +27,6 @@ public class ApiIndexPlayController {
     @RequestMapping("/getIndexPlay")
     public void getIndexPlay(HttpServletRequest resq, HttpServletResponse resp){
         try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
-        try {
             ApiUtils.checkSignature(resq);
             ApiIndexPlayService indexPlayService = new ApiIndexPlayService();
             List<ApiIndexPlayBean> indexPlayBeans = indexPlayService.getIndexPlay();
@@ -45,31 +39,13 @@ public class ApiIndexPlayController {
                 indexPlayBeans = dealApiIndexPlayBean(resq, indexPlayBeans);
                 jsonObj.put("data",new Gson().toJson(indexPlayBeans));
             }
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         }catch (ApiException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     private List<ApiIndexPlayBean> dealApiIndexPlayBean(HttpServletRequest resq, List<ApiIndexPlayBean> indexPlayBeans){

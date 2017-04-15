@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import util.ApiUtils;
 import util.Constant;
+import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,13 +28,6 @@ public class ApiGlobalController {
     @RequestMapping(value = "/globalSearch", method = RequestMethod.POST)
     public void globalSearch(HttpServletRequest resq, HttpServletResponse resp){
         try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
-        try {
             ApiUtils.checkSignature(resq);
             checkGlobalSearchPara(resq);
             ApiGlobalService globalService = new ApiGlobalService();
@@ -46,31 +40,13 @@ public class ApiGlobalController {
             }else{
                 jsonObject.put("data", new Gson().toJson(searchBeans));
             }
-            try {
-                resp.getWriter().write(jsonObject.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     private void checkGlobalSearchPara(HttpServletRequest resq) throws ParameterCheckException {

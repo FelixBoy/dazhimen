@@ -7,6 +7,7 @@ import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
+import util.CheckIsExistsUtils;
 import util.Constant;
 import util.IdUtils;
 
@@ -49,14 +50,20 @@ public class ApiLoginService {
         return customerBean;
     }
     public ApiCustomerBean getCustomerInfoByCid(String cid) throws ApiException {
+        if(!CheckIsExistsUtils.checkCidIsExists(cid)){
+            throw new ApiException("传入的[cid]值无效，在数据库中不存在");
+        }
         ApiCustomerBean customerBean = null;
         SqlSession sqlSession = null;
         try {
             sqlSession = MyBatisUtil.createSession();
             customerBean = sqlSession.selectOne("dazhimen.api.bean.ApiLogin.getCustomerInfoByCid", cid);
+            if(customerBean == null || customerBean.getCid() == null || customerBean.getCid().equals("")){
+                throw new ApiException("出现异常，查询会员信息出错");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiException("查询会员信息出错");
+            throw new ApiException("出现异常，查询会员信息出错");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }

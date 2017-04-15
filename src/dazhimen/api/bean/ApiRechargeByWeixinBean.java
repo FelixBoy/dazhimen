@@ -8,6 +8,15 @@ public class ApiRechargeByWeixinBean {
     private String cid = null;
     private Double recamount = null;
     private String transaction_id = null;
+    private String paymenttype = null;
+
+    public String getPaymenttype() {
+        return paymenttype;
+    }
+
+    public void setPaymenttype(String paymenttype) {
+        this.paymenttype = paymenttype;
+    }
 
     public String getRecid() {
         return recid;

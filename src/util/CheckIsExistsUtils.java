@@ -10,7 +10,7 @@ import org.apache.ibatis.session.SqlSession;
  * Created by Administrator on 2017/3/27.
  */
 public class CheckIsExistsUtils {
-    public boolean checkNidIsExists(String nid) throws ApiException {
+    public static boolean checkNidIsExists(String nid) throws ApiException {
         SqlSession sqlSession = null;
         try{
             sqlSession = MyBatisUtil.createSession();
@@ -27,7 +27,7 @@ public class CheckIsExistsUtils {
         return false;
     }
 
-    public boolean checkCourseidIsExists(String courseid) throws ApiException {
+    public static boolean checkCourseidIsExists(String courseid) throws ApiException {
         SqlSession sqlSession = null;
         try{
             sqlSession = MyBatisUtil.createSession();
@@ -44,7 +44,7 @@ public class CheckIsExistsUtils {
         return false;
     }
 
-    public boolean checkCidIsExists(String cid) throws ApiException {
+    public static boolean checkCidIsExists(String cid) throws ApiException {
         SqlSession sqlSession = null;
         try{
             sqlSession = MyBatisUtil.createSession();
@@ -61,7 +61,7 @@ public class CheckIsExistsUtils {
         return false;
     }
 
-    public boolean checkPidIsExists(String pid) throws ApiException {
+    public static boolean checkPidIsExists(String pid) throws ApiException {
         SqlSession sqlSession = null;
         try{
             sqlSession = MyBatisUtil.createSession();

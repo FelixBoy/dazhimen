@@ -23,7 +23,7 @@ import java.io.IOException;
  */
 public class ApiCustomerService {
     public void modifyHeader(String cid, CommonsMultipartFile headerFile, String bashPath) throws ApiException, ParameterCheckException {
-        if(!new CheckIsExistsUtils().checkCidIsExists(cid)){
+        if(!CheckIsExistsUtils.checkCidIsExists(cid)){
             throw new ApiException("传入的cid值无效，在数据库不存在");
         }
         //获得文件的原始名称
@@ -87,13 +87,10 @@ public class ApiCustomerService {
             throw new ParameterCheckException("ApiCustomerService的modifyPersonalInfo方法，参数为null");
         }
         String cid = customerInfoBean.getCid();
+        if(!CheckIsExistsUtils.checkCidIsExists(cid)){
+            throw new ApiException("传入的cid值无效，在数据库不存在");
+        }
         String mphone = customerInfoBean.getMphone();
-        if(cid.equals("")){
-            throw new ParameterCheckException("参数[cid]的值为空");
-        }
-        if(mphone.equals("")){
-            throw new ParameterCheckException("参数[mphone]的值为空");
-        }
         //校验验证码
         if(!checkVerifyCode(customerInfoBean.getVerifycode())){
             throw new ParameterCheckException("验证码输入错误");

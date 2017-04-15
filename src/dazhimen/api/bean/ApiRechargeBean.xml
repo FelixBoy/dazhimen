@@ -6,8 +6,8 @@
        select accoutbalance from customer where cid = #{cid}
     </select>
     <insert id="doRechargeByWeixin" parameterType="dazhimen.api.bean.ApiRechargeByWeixinBean">
-        insert into recharge(recid,recamount,cid, transaction_id, recdatetime)
-        values(#{recid}, #{recamount}, #{cid},#{transaction_id}, now())
+        insert into recharge(recid,recamount,cid, paymenttype,transaction_id, recdatetime)
+        values(#{recid}, #{recamount}, #{cid},#{paymenttype},#{transaction_id}, now())
     </insert>
 
     <select id="checkISTransactionExists" resultType="dazhimen.api.bean.SingleValueBean">

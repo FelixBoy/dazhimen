@@ -8,10 +8,19 @@ public class ViewRechargeBean {
     private Double recamount = null;
     private String cid = null;
     private String cname = null;
+    private String paymenttype = null;
     private String cnickname = null;
     private String mphone = null;
     private String transaction_id = null;
     private String recdatetime = null;
+
+    public String getPaymenttype() {
+        return paymenttype;
+    }
+
+    public void setPaymenttype(String paymenttype) {
+        this.paymenttype = paymenttype;
+    }
 
     public String getCnickname() {
         return cnickname;
