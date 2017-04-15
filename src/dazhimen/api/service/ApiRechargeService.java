@@ -10,8 +10,8 @@ import org.apache.ibatis.session.SqlSession;
 import util.CheckIsExistsUtils;
 import util.Constant;
 import util.IdUtils;
-import util.WXPayUtil;
-import util.AlipayUtil;
+import util.pay.WXPayUtil;
+import util.pay.AlipayUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;

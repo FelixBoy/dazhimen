@@ -9,11 +9,18 @@
            and isdel = '0'
     </select>
 
-    <select id="checkPassword" parameterType="dazhimen.bg.bean.LoginBean" resultType="dazhimen.bg.bean.SingleValueBean">
+    <select id="checkPassword" parameterType="dazhimen.bg.bean.login.LoginBean" resultType="dazhimen.bg.bean.SingleValueBean">
         select 1 as valueinfo
           from user
          where loginname = #{loginname}
            and password = #{password}
            and isdel = '0'
+    </select>
+
+    <select id="getUserInfoByLoginname" resultType="dazhimen.bg.bean.login.LoginUserBean">
+        select uid, name as uname,loginname,type as utype, getcodetxt('usertype', type) as utypeStr
+          from user
+        where loginname = #{loginname}
+          and isdel = '0'
     </select>
 </mapper>

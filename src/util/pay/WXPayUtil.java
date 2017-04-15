@@ -1,31 +1,16 @@
-package util;
+package util.pay;
 
-import dazhimen.bg.exception.BgException;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.Consts;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContexts;
-import org.apache.http.util.EntityUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
-import javax.net.ssl.SSLContext;
-import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.KeyStore;
 import java.util.*;
 
 public class WXPayUtil{

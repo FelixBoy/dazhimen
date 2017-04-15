@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import util.ApiUtils;
 import util.Constant;
-import util.WXPayUtil;
-import util.AlipayUtil;
+import util.pay.WXPayUtil;
+import util.pay.AlipayUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

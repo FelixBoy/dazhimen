@@ -41,6 +41,15 @@
             }
         });
     }
+    function fwdEditNewsPage(index){
+        MsgBox.show("功能正在开发，敬请期待");
+    }
+    function fwdViewNewsPage(index){
+        MsgBox.show("功能正在开发，敬请期待");
+    }
+    function saveNewsDel(index){
+        MsgBox.show("功能正在开发，敬请期待");
+    }
     function fwdModifyNewsStatusPage(index){
         $('#newsList').datagrid('selectRow',index);
         var row = $('#newsList').datagrid('getSelected');

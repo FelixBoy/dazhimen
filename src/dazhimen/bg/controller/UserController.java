@@ -17,6 +17,7 @@ import util.Constant;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -27,10 +28,17 @@ import java.util.Map;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    /**
-     * 转向主页面
-     * @return
-     */
+    @RequestMapping("/fwdTipsInforPage")
+    public String fwdTipsInforPage(HttpServletRequest resq){
+        try {
+            resq.setCharacterEncoding("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String tipinfo = resq.getParameter("tipinfo");
+        resq.setAttribute("info", tipinfo);
+        return "tipsInfo";
+    }
     @RequestMapping("/fwdMainPage")
     public String forwardMainPage(){
         return "main";

@@ -5,6 +5,16 @@ package util;
  * 系统中用到的常量定义
  */
 public class Constant {
+    //文件后缀名常量
+    public static final String FileSuffix_JPG = ".jpg";
+    public static final String FileSuffix_PNG = ".png";
+    public static final String FileSuffix_GIF = ".gif";
+    public static final String FileSuffix_MP3 = ".mp3";
+    public static final String FileSuffix_CSS = ".css";
+    public static final String FileSuffix_JS = ".js";
+    public static final String FileSuffix_HTML = ".html";
+    //session中存储登录用户信息的key值
+    public static final String LoginUserKey = "loginuser";
     //字符集
     public static final String CharSet = "utf-8";
 
@@ -80,7 +90,7 @@ public class Constant {
     public static final String paymentType_AliPay = "3";
 
     //是否部署在阿里云
-    public static final boolean isDeployInAliyun = true;
+    public static final boolean isDeployInAliyun = false;
     //阿里云Ip
     public static final String AliyunIP = "47.92.73.149";
 

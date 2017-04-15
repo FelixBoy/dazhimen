@@ -1,7 +1,8 @@
 package dazhimen.bg.service;
 
-import dazhimen.bg.bean.LoginBean;
+import dazhimen.bg.bean.login.LoginBean;
 import dazhimen.bg.bean.SingleValueBean;
+import dazhimen.bg.bean.login.LoginUserBean;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
@@ -48,5 +49,26 @@ public class LoginService {
             MyBatisUtil.closeSession(sqlSession);
         }
         return result;
+    }
+
+    public LoginUserBean getUserInfoByLoginname(String loginname) throws BgException {
+        SqlSession sqlSession = null;
+        LoginUserBean userBean = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            userBean = sqlSession.selectOne("dazhimen.bg.bean.Login.getUserInfoByLoginname", loginname);
+            if(userBean == null || userBean.getUid() == null || userBean.getUname() == null || userBean.getUtype() == null){
+                throw new BgException("获取登录用户的信息出错");
+            }
+        }catch(BgException e){
+            e.printStackTrace();
+            throw new BgException(e.getMessage());
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new BgException("出现异常，获取登录用户信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return userBean;
     }
 }

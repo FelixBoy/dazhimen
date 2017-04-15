@@ -28,13 +28,10 @@
         var code = resultObj.code;
         if(code == '200'){
             var msg = resultObj.msg;
-//            var pid = resultObj.pid;
             MsgBox.show(msg);
-            <%--$('#content_panel').panel({--%>
-            <%--href:"<%=request.getContextPath() %>/product/fwdProductInfoPage?random_id=" + Math.random()+"&pid=" + pid,--%>
-            <%--onLoad:function(){--%>
-            <%--}--%>
-            <%--});--%>
+            $('#content_panel').panel({
+                href:"<%=request.getContextPath() %>/news/fwdManageNewsPage?random_id="+Math.random()
+            });
         }else{
             MsgBox.show(resultObj.msg);
         }

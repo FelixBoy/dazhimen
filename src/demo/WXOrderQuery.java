@@ -1,6 +1,6 @@
 package demo;
 
-import util.WXPayUtil;
+import util.pay.WXPayUtil;
 
 import java.util.Map;
 

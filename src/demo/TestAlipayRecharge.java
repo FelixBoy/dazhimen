@@ -1,7 +1,7 @@
 package demo;
 
 import dazhimen.api.exception.ApiException;
-import util.AlipayUtil;
+import util.pay.AlipayUtil;
 
 /**
  * Created by Administrator on 2017/4/14.
