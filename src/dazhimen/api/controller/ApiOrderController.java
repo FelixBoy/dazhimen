@@ -17,6 +17,7 @@ import util.pay.AlipayUtil;
 import util.ApiUtils;
 import util.Constant;
 import util.pay.WXPayUtil;
+import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,15 +34,7 @@ import java.util.*;
 @RequestMapping("/api/order")
 public class ApiOrderController {
     @RequestMapping(value = "/getPurchaseProductByCid",method = RequestMethod.POST)
-    public void getPurchaseProductByCid(HttpServletRequest resq,
-                                        HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void getPurchaseProductByCid(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
             checkGetPurchaseProductByCidPara(resq);
@@ -56,42 +49,17 @@ public class ApiOrderController {
                 productBeans = dealPurchaseProductBean(resq,productBeans);
                 jsonObject.put("data", new Gson().toJson(productBeans));
             }
-            try {
-                resp.getWriter().write(jsonObject.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping(value="/buyProductByBalance", method = RequestMethod.POST)
     public void buyProductByBalance(HttpServletRequest resq, HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             ApiUtils.checkSignature(resq);
             checkBuyProductByBalancePara(resq);
@@ -100,44 +68,19 @@ public class ApiOrderController {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", "200");
             jsonObject.put("msg", "购买成功");
-            try {
-                resp.getWriter().write(jsonObject.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
 
     }
 
     @RequestMapping(value="/buyProductByWXPay", method = RequestMethod.POST)
     public void buyProductByWXPay(HttpServletRequest resq, HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             ApiUtils.checkSignature(resq);
             checkBuyProductByBalancePara(resq);
@@ -163,42 +106,17 @@ public class ApiOrderController {
             jsonObject.put("code", "200");
             jsonObject.put("msg", "获取成功");
             jsonObject.put("data", resultMap);
-            try {
-                resp.getWriter().write(jsonObject.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping(value="/buyProductByAlipay", method = RequestMethod.POST)
     public void buyProductByAlipay(HttpServletRequest resq, HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             ApiUtils.checkSignature(resq);
             checkBuyProductByBalancePara(resq);
@@ -220,31 +138,13 @@ public class ApiOrderController {
             jsonObject.put("orderstring", resultMap.get("orderstring"));
             jsonObject.put("orderid", resultMap.get("orderid"));
             jsonObject.put("pid", resultMap.get("pid"));
-            try {
-                resp.getWriter().write(jsonObject.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping("/dealAliPayByProductResult")
@@ -327,13 +227,6 @@ public class ApiOrderController {
     @RequestMapping(value = "/recheckWXPayBuyProductResult", method = RequestMethod.POST)
     public void recheckWXPayBuyProductResult(HttpServletRequest resq, HttpServletResponse resp){
         try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
-        try {
             ApiUtils.checkSignature(resq);
             checkWXPayBuyProductResultPara(resq);
             ApiOrderService orderService = new ApiOrderService();
@@ -342,53 +235,21 @@ public class ApiOrderController {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("code", "200");
                 jsonObject.put("msg", "复核成功");
-                try {
-                    resp.getWriter().write(jsonObject.toString());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                ResponseUtil.writeMsg(resp, jsonObject.toString());
             }else{
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("code", "400");
-                jsonObject.put("msg", "复核失败");
-                try {
-                    resp.getWriter().write(jsonObject.toString());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                ResponseUtil.writeFailMsgToApiResult(resp, "复核失败");
             }
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
 
     @RequestMapping(value = "/recheckAlipayBuyProductResult", method = RequestMethod.POST)
     public void recheckAlipayBuyProductResult(HttpServletRequest resq, HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             ApiUtils.checkSignature(resq);
             checkAlipayBuyProductResultPara(resq);
@@ -398,41 +259,16 @@ public class ApiOrderController {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("code", "200");
                 jsonObject.put("msg", "复核成功");
-                try {
-                    resp.getWriter().write(jsonObject.toString());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                ResponseUtil.writeMsg(resp, jsonObject.toString());
             }else{
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("code", "400");
-                jsonObject.put("msg", "复核失败");
-                try {
-                    resp.getWriter().write(jsonObject.toString());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                ResponseUtil.writeFailMsgToApiResult(resp, "复核失败");
             }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     private List<ApiCustomerPurchaseProductBean> dealPurchaseProductBean(HttpServletRequest resq,

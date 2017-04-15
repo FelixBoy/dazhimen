@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import util.ApiUtils;
 import util.Constant;
+import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,15 +27,7 @@ import java.util.List;
 public class ApiMasterController {
 
     @RequestMapping(value = "/getHomePageMasterInfo",method = RequestMethod.POST)
-    public void getHomePageMasterInfo(HttpServletRequest resq,
-                                     HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void getHomePageMasterInfo(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
             ApiMasterService masterService = new ApiMasterService();
@@ -48,44 +41,18 @@ public class ApiMasterController {
                 masterBeans = dealApiHomePageMasterBean(resq, masterBeans);
                 jsonObj.put("data",new Gson().toJson(masterBeans));
             }
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         }catch (ApiException e) {
-                e.printStackTrace();
-                JSONObject jsonObj = new JSONObject();
-                jsonObj.put("code","400");
-                jsonObj.put("msg",e.getMessage());
-                try {
-                    resp.getWriter().write(jsonObj.toString());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
 
     @RequestMapping(value = "/getMoreMasterInfo",method = RequestMethod.POST)
-    public void getMoreMasterInfo(HttpServletRequest resq,
-                                      HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void getMoreMasterInfo(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
             ApiMasterService masterService = new ApiMasterService();
@@ -99,43 +66,17 @@ public class ApiMasterController {
                 masterBeans = dealApiHomePageMasterBean(resq, masterBeans);
                 jsonObj.put("data",new Gson().toJson(masterBeans));
             }
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         }catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping(value = "/searchMasterInfo",method = RequestMethod.POST)
-    public void searchMasterInfo(HttpServletRequest resq,
-                                  HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void searchMasterInfo(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
             checkSearchMasterInfo(resq);
@@ -150,57 +91,24 @@ public class ApiMasterController {
                 masterBeans = dealApiHomePageMasterBean(resq, masterBeans);
                 jsonObj.put("data",new Gson().toJson(masterBeans));
             }
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         }catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
 
     @RequestMapping(value = "/getMasterInfoById",method = RequestMethod.POST)
-    public void getMasterInfoById(HttpServletRequest resq,
-                                      HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void getMasterInfoById(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
             checkGetMasterInforPara(resq);
         }catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
             return;
         }
         ApiMasterBean masterBean = null;
@@ -209,14 +117,7 @@ public class ApiMasterController {
             masterBean = masterService.getMasterInfoById(resq.getParameter("masterid"));
         }catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
             return;
         }
         if(masterBean != null){
@@ -232,20 +133,9 @@ public class ApiMasterController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             jsonObj.put("data", new Gson().toJson(masterBean));
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         }else{
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg","无法获取指定masterid的掌门信息");
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, "无法获取指定masterid的掌门信息");
         }
     }
     private List<ApiMasterBean> dealApiHomePageMasterBean(HttpServletRequest resq,
