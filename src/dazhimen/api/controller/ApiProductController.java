@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import util.ApiUtils;
 import util.Constant;
+import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,15 +30,7 @@ import java.util.List;
 public class ApiProductController {
 
     @RequestMapping(value = "/updateCourseViewCount",method = RequestMethod.POST)
-    public void updateCourseViewCount(HttpServletRequest resq,
-                                      HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void updateCourseViewCount(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
             checkUpdateCourseViewCountPara(resq);
@@ -46,44 +39,18 @@ public class ApiProductController {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","更新成功");
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
 
     }
     @RequestMapping(value = "/getHomePageSkillPack",method = RequestMethod.POST)
-    public void getHomePageSkillPack(HttpServletRequest resq,
-                                     HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void getHomePageSkillPack(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
             ApiProductService productService = new ApiProductService();
@@ -97,43 +64,17 @@ public class ApiProductController {
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping(value = "/getHomePageExperiencePack",method = RequestMethod.POST)
-    public void getHomePageExperiencePack(HttpServletRequest resq,
-                                     HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void getHomePageExperiencePack(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
             ApiProductService productService = new ApiProductService();
@@ -147,42 +88,17 @@ public class ApiProductController {
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping(value = "/getMoreSkillPack",method = RequestMethod.POST)
     public void getMoreSkillPack(HttpServletRequest resq, HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             ApiUtils.checkSignature(resq);
             ApiProductService productService = new ApiProductService();
@@ -196,42 +112,17 @@ public class ApiProductController {
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping(value = "/getExperienceSkillPack",method = RequestMethod.POST)
     public void getExperienceSkillPack(HttpServletRequest resq, HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             ApiUtils.checkSignature(resq);
             ApiProductService productService = new ApiProductService();
@@ -245,43 +136,17 @@ public class ApiProductController {
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping(value = "/searchSkillPack",method = RequestMethod.POST)
-    public void searchSkillPack(HttpServletRequest resq,
-                                 HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void searchSkillPack(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
             checkSearhProductPara(resq);
@@ -296,43 +161,17 @@ public class ApiProductController {
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping(value = "/searchExperiencePack",method = RequestMethod.POST)
-    public void searchExperiencePack(HttpServletRequest resq,
-                                HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void searchExperiencePack(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
             checkSearhProductPara(resq);
@@ -347,56 +186,23 @@ public class ApiProductController {
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping(value = "/getProductInforById",method = RequestMethod.POST)
-    public void getProductInforById(HttpServletRequest resq,
-                                          HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void getProductInforById(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
             checkGetProductInforPara(resq);
         }catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
             return;
         }
         ApiProductService productService = new ApiProductService();
@@ -407,14 +213,7 @@ public class ApiProductController {
             productBean = productService.getProductInforById(pid, cid);
         }catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
             return;
         }
         if(productBean != null){
@@ -430,31 +229,13 @@ public class ApiProductController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             jsonObj.put("data", new Gson().toJson(productBean));
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObj.toString());
         }else{
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg","无法获取指定pid的产品信息");
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, "无法获取指定pid的产品信息");
         }
     }
     @RequestMapping(value = "/collectProduct", method = RequestMethod.POST)
     public void collectProduct(HttpServletRequest resq, HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             ApiUtils.checkSignature(resq);
             checkCollectProductPara(resq);
@@ -468,66 +249,27 @@ public class ApiProductController {
                 jsonObj.put("code","200");
                 jsonObj.put("msg","收藏成功");
                 jsonObj.put("data", new Gson().toJson(null));
-                try {
-                    resp.getWriter().write(jsonObj.toString());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                ResponseUtil.writeMsg(resp, jsonObj.toString());
             }else{
-                JSONObject jsonObj = new JSONObject();
-                jsonObj.put("code","400");
-                jsonObj.put("msg","收藏失败");
-                try {
-                    resp.getWriter().write(jsonObj.toString());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                ResponseUtil.writeFailMsgToApiResult(resp, "收藏失败");
             }
         }catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }catch (ParameterCheckException e){
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
 
     }
     @RequestMapping(value = "/cancelCollectProduct", method = RequestMethod.POST)
     public void cancelCollectProduct(HttpServletRequest resq, HttpServletResponse resp){
         try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
-        try {
             ApiUtils.checkSignature(resq);
             checkCollectProductPara(resq);
         }catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
             return;
         }
         String pid = resq.getParameter("pid");
@@ -537,14 +279,7 @@ public class ApiProductController {
             productService.cancelCollectProduct(cid, pid);
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
             return;
         }
 
@@ -552,35 +287,17 @@ public class ApiProductController {
         jsonObj.put("code","200");
         jsonObj.put("msg","取消收藏成功");
         jsonObj.put("data", new Gson().toJson(null));
-        try {
-            resp.getWriter().write(jsonObj.toString());
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        ResponseUtil.writeMsg(resp, jsonObj.toString());
     }
 
     @RequestMapping(value = "/getProductCourseList", method = RequestMethod.POST)
     public void getProductCourseList(HttpServletRequest resq, HttpServletResponse resp){
         try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
-        try {
             ApiUtils.checkSignature(resq);
             checkGetProductInforPara(resq);
         }catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
             return;
         }
         String pid = resq.getParameter("pid");
@@ -607,14 +324,7 @@ public class ApiProductController {
             mainImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + mainImgPath;
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
             return;
         }
         JSONObject jsonObject = new JSONObject();
@@ -633,35 +343,17 @@ public class ApiProductController {
             dataObject.put("courselist", new Gson().toJson(courseBeans));
         }
         jsonObject.put("data", dataObject.toString());
-        try {
-            resp.getWriter().write(jsonObject.toString());
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        ResponseUtil.writeMsg(resp, jsonObject.toString());
     }
 
     @RequestMapping(value = "/getReverseCourseList", method = RequestMethod.POST)
     public void getReverseCourseList(HttpServletRequest resq, HttpServletResponse resp){
         try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
-        try {
             ApiUtils.checkSignature(resq);
             checkGetProductInforPara(resq);
         }catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
             return;
         }
         String pid = resq.getParameter("pid");
@@ -688,14 +380,7 @@ public class ApiProductController {
             mainImgUrl = "http://" + localIp + ":" + localPort + appName + "/" + mainImgPath;
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
             return;
         }
         JSONObject jsonObject = new JSONObject();
@@ -714,11 +399,7 @@ public class ApiProductController {
             dataObject.put("courselist", new Gson().toJson(courseBeans));
         }
         jsonObject.put("data", dataObject.toString());
-        try {
-            resp.getWriter().write(jsonObject.toString());
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        ResponseUtil.writeMsg(resp, jsonObject.toString());
     }
     private void checkGetProductInforPara(HttpServletRequest resq) throws ParameterCheckException {
         String pid = resq.getParameter("pid");

@@ -17,6 +17,7 @@ import util.ApiUtils;
 import util.Constant;
 import util.pay.WXPayUtil;
 import util.pay.AlipayUtil;
+import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,13 +39,6 @@ public class ApiRechargeController {
     @RequestMapping(value="/getBalanceByCid", method = RequestMethod.POST)
     public void getBalanceByCid(HttpServletRequest resq, HttpServletResponse resp){
         try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
-        try {
             ApiUtils.checkSignature(resq);
             checkGetBalanceByCidPara(resq);
             ApiRechargeService rechargeService = new ApiRechargeService();
@@ -57,42 +51,17 @@ public class ApiRechargeController {
             }else{
                 jsonObject.put("data", new Gson().toJson(balance));
             }
-            try {
-                resp.getWriter().write(jsonObject.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping(value="/doRechargeByWeixin", method = RequestMethod.POST)
     public void doRechargeByWeixin(HttpServletRequest resq, HttpServletResponse resp){
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             ApiUtils.checkSignature(resq);
             checkDoRechargeByWeixinPara(resq);
@@ -104,31 +73,13 @@ public class ApiRechargeController {
             jsonObject.put("code", "200");
             jsonObject.put("msg", "获取成功");
             jsonObject.put("data", resultMap);
-            try {
-                resp.getWriter().write(jsonObject.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping("/dealWXRechargeResult")
@@ -168,13 +119,6 @@ public class ApiRechargeController {
     @RequestMapping(value="/doRechargeByAlipay", method = RequestMethod.POST)
     public void doRechargeByAlipay(HttpServletRequest resq, HttpServletResponse resp){
         try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
-        try {
             ApiUtils.checkSignature(resq);
             checkDoRechargeByWeixinPara(resq);
             ApiRechargeService rechargeService = new ApiRechargeService();
@@ -186,31 +130,13 @@ public class ApiRechargeController {
             jsonObject.put("msg", "获取成功");
             jsonObject.put("orderstring", resultMap.get("orderstring"));
             jsonObject.put("recid", resultMap.get("recid"));
-            try {
-                resp.getWriter().write(jsonObject.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
     @RequestMapping("/dealAliPayRechargeResult")
@@ -250,13 +176,6 @@ public class ApiRechargeController {
     @RequestMapping(value = "/recheckWXRechargeResult", method = RequestMethod.POST)
     public void recheckWXRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
         try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
-        try {
             ApiUtils.checkSignature(resq);
             checkWXRechargeResultPara(resq);
             ApiRechargeService rechargeService = new ApiRechargeService();
@@ -265,53 +184,21 @@ public class ApiRechargeController {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("code", "200");
                 jsonObject.put("msg", "复核成功");
-                try {
-                    resp.getWriter().write(jsonObject.toString());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                ResponseUtil.writeMsg(resp, jsonObject.toString());
             }else{
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("code", "400");
-                jsonObject.put("msg", "复核失败");
-                try {
-                    resp.getWriter().write(jsonObject.toString());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                ResponseUtil.writeFailMsgToApiResult(resp, "复核失败");
             }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
 
     }
     @RequestMapping(value = "/recheckAlipayRechargeResult", method = RequestMethod.POST)
     public void recheckAlipayRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
-        try {
-            if(resq.getCharacterEncoding() == null)
-                resq.setCharacterEncoding(Constant.CharSet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             ApiUtils.checkSignature(resq);
             checkAlipayRechargeResultPara(resq);
@@ -321,41 +208,16 @@ public class ApiRechargeController {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("code", "200");
                 jsonObject.put("msg", "复核成功");
-                try {
-                    resp.getWriter().write(jsonObject.toString());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                ResponseUtil.writeMsg(resp, jsonObject.toString());
             }else{
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("code", "400");
-                jsonObject.put("msg", "复核失败");
-                try {
-                    resp.getWriter().write(jsonObject.toString());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                ResponseUtil.writeFailMsgToApiResult(resp, "复核失败");
             }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("code","400");
-            jsonObj.put("msg",e.getMessage());
-            try {
-                resp.getWriter().write(jsonObj.toString());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
 
     }
