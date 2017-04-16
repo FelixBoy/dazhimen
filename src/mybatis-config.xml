@@ -12,7 +12,7 @@
         <mapper resource="dazhimen/bg/bean/UtilBean.xml"/>
         <mapper resource="dazhimen/bg/bean/RechargeBean.xml"/>
         <mapper resource="dazhimen/bg/bean/OrderBean.xml"/>
-        <mapper resource="dazhimen/bg/bean/NewsBean.xml"/>
+        <mapper resource="dazhimen/bg/bean/news/NewsBean.xml"/>
         <mapper resource="dazhimen/api/bean/ApiCustomerBean.xml"/>
         <mapper resource="dazhimen/api/bean/ApiLoginBean.xml"/>
         <mapper resource="dazhimen/api/bean/ApiProductBean.xml"/>

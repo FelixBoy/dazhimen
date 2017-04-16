@@ -1,6 +1,8 @@
 package dazhimen.bg.service;
 
-import dazhimen.bg.bean.*;
+import dazhimen.bg.bean.PaginationParamBean;
+import dazhimen.bg.bean.SingleValueBean;
+import dazhimen.bg.bean.news.*;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import net.sf.json.JSONObject;
@@ -42,16 +44,44 @@ public class NewsService {
         try {
             sqlSession = MyBatisUtil.createSession();
 
-            SingleValueBean allProductCountValue = sqlSession.selectOne("dazhimen.bg.bean.News.getAllNewsCount");
-            if(allProductCountValue == null || allProductCountValue.getValueInfo() == null){
+            SingleValueBean allNewsCountValue = sqlSession.selectOne("dazhimen.bg.bean.News.getAllNewsCount");
+            if(allNewsCountValue == null || allNewsCountValue.getValueInfo() == null){
                 throw new BgException("获取新闻数据总条数出错");
             }
-            totalCount = Integer.parseInt(allProductCountValue.getValueInfo());
+            totalCount = Integer.parseInt(allNewsCountValue.getValueInfo());
             PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);
             newsBeans = sqlSession.selectList("dazhimen.bg.bean.News.listAllNews", paramBean);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BgException("出现异常，查询所有新闻信息失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("total", totalCount);
+        jsonObject.put("rows", newsBeans);
+        return jsonObject.toString();
+    }
+
+    public String queryAllNewsByParams(String page, String rows, QueryNewsParamBean paramBean) throws BgException {
+        List<ListViewNewsBean> newsBeans = null;
+        SqlSession sqlSession = null;
+        Integer totalCount = 0;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+
+            SingleValueBean allNewsCountValue = sqlSession.selectOne("dazhimen.bg.bean.News.getAllNewsCountByParam", paramBean);
+            if(allNewsCountValue == null || allNewsCountValue.getValueInfo() == null){
+                throw new BgException("获取新闻数据总条数出错");
+            }
+            totalCount = Integer.parseInt(allNewsCountValue.getValueInfo());
+            PaginationParamBean paginationParamBean = PaginationUtil.getPaginationParamBean(page,rows);
+            paramBean.setStartnum(paginationParamBean.getStartnum());
+            paramBean.setGetrows(paginationParamBean.getGetrows());
+            newsBeans = sqlSession.selectList("dazhimen.bg.bean.News.listAllNewsByParam", paramBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BgException("出现异常，查询所有产品信息失败");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }

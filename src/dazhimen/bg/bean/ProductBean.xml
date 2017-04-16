@@ -85,7 +85,7 @@
         <if test="endtimeCondition != null and endtimeCondition !=''">
             and createdatetime <![CDATA[<=]]> #{endtimeCondition}
         </if>
-        order by a.indexsort,createdatetime desc
+        order by createdatetime desc
         limit #{startnum},#{getrows}
     </select>
 
@@ -102,7 +102,7 @@
                buycount,concat(a.price,'/年') as price
         from product a, user b
        where a.uid = b.uid and a.isdel = '0'
-       order by a.indexsort,createdatetime desc
+       order by createdatetime desc
        limit #{startnum},#{getrows}
     </select>
 

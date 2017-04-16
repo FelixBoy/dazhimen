@@ -164,14 +164,16 @@
         <tr id="imgtr">
             <td nowrap="nowrap">列表图片:</td>
             <td id="listimgtr" colspan="2"><input class="dzm-noBorder-text" readonly="true" type="hidden" id="listimage" name="listImage" />
-                <img id="listImageInModify" width="100px" height="100px"/><br/>
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="openModifyListImgDialog()">修改列表图片</a>
+                <img id="listImageInModify" width="100px" height="100px"/>
             </td>
             <td align='right'>产品主图:</td>
             <td align='left' colspan='2'>
                 <img id="mainImageRealInModify"  align='left' width='200px' height='100px'/><br/>
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="openModifyMainImgDialog()">修改产品主图</a>
             </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: right;"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="openModifyListImgDialog()">修改列表图片</a></td>
+            <td colspan="3" style="text-align: center;"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="openModifyMainImgDialog()">修改产品主图</a></td>
         </tr>
     </table>
     </form>

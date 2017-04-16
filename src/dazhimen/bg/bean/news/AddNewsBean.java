@@ -1,5 +1,6 @@
-package dazhimen.bg.bean;
+package dazhimen.bg.bean.news;
 
+import dazhimen.bg.bean.news.NewsContentBean;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.util.List;

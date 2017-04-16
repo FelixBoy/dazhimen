@@ -1,26 +1,4 @@
 <script type="text/javascript">
-    <%--function saveCustomerDel(index){--%>
-        <%--$("#customerList").datagrid("selectRow", index);--%>
-        <%--var row = $("#customerList").datagrid("getSelected");--%>
-        <%--if(row){--%>
-            <%--$.messager.confirm('确认','您确认删除用户【'+ row.cid + '】吗？',function(r){--%>
-                <%--if(r){--%>
-                    <%--$.ajax({--%>
-                        <%--url:"<%=request.getContextPath()%>/customer/saveCustomerDel?cid=" + row.cid + "&random_id=" + Math.random(),--%>
-                        <%--type:"get",--%>
-                        <%--async:false,--%>
-                        <%--error:function(data){--%>
-                            <%--MsgBox.show(data.responseText);--%>
-                        <%--},--%>
-                        <%--success:function(data){--%>
-                            <%--MsgBox.show(data);--%>
-                            <%--$("#customerList").datagrid("reload");--%>
-                        <%--}--%>
-                    <%--});--%>
-                <%--}--%>
-            <%--});--%>
-        <%--}--%>
-    <%--}--%>
     $(function () {
         $("#customerList").datagrid({
             title:"客户列表",

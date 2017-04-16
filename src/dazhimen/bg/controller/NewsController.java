@@ -1,8 +1,9 @@
 package dazhimen.bg.controller;
 
 import com.google.gson.JsonObject;
-import dazhimen.bg.bean.AddNewsBean;
-import dazhimen.bg.bean.NewsContentBean;
+import dazhimen.bg.bean.news.AddNewsBean;
+import dazhimen.bg.bean.news.NewsContentBean;
+import dazhimen.bg.bean.news.QueryNewsParamBean;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.NewsService;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import util.Constant;
+import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +34,6 @@ public class NewsController {
     }
     @RequestMapping("/queryAllNews")
     public void queryAllNews(HttpServletRequest resq, HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try{
             String page = resq.getParameter("page");
             String rows = resq.getParameter("rows");
@@ -42,30 +43,23 @@ public class NewsController {
             if(queryByParamFlag == null || queryByParamFlag.equals("")){
                 result = newsService.queryAllNews(page, rows);
             }else{
-//                String pidCondition = resq.getParameter("pidCondition");
-//                String pnameCondition = resq.getParameter("pnameCondition");
-//                String typeCondition = resq.getParameter("typeCondition");
-//                String starttimeCondition = resq.getParameter("starttimeCondition");
-//                String endtimeCondition = resq.getParameter("endtimeCondition");
-//                String statusCondition = resq.getParameter("statusCondition");
-//                QueryProductParamBean paramBean = new QueryProductParamBean();
-//                paramBean.setPidCondition(pidCondition);
-//                paramBean.setPnameCondition(pnameCondition);
-//                paramBean.setTypeCondition(typeCondition);
-//                paramBean.setStatusCondition(statusCondition);
-//                paramBean.setStarttimeCondition(starttimeCondition);
-//                paramBean.setEndtimeCondition(endtimeCondition);
-//                result = productService.queryAllProductsByParams(page, rows, paramBean);
+                String nidCondition = resq.getParameter("nidCondition");
+                String ntitleCondition = resq.getParameter("ntitleCondition");
+                String starttimeCondition = resq.getParameter("starttimeCondition");
+                String endtimeCondition = resq.getParameter("endtimeCondition");
+                String statusCondition = resq.getParameter("statusCondition");
+                QueryNewsParamBean paramBean = new QueryNewsParamBean();
+                paramBean.setNidCondition(nidCondition);
+                paramBean.setNtitleCondition(ntitleCondition);
+                paramBean.setStatusCondition(statusCondition);
+                paramBean.setStarttimeCondition(starttimeCondition);
+                paramBean.setEndtimeCondition(endtimeCondition);
+                result = newsService.queryAllNewsByParams(page, rows, paramBean);
             }
-            resp.getWriter().write(result);
+            ResponseUtil.writeMsg(resp, result);
         }catch (Exception e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询所有产品信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询所有新闻信息失败");
         }
 
     }
@@ -83,15 +77,10 @@ public class NewsController {
             String status = resq.getParameter("status");
             NewsService newsService = new NewsService();
             newsService.saveModifyNewsStatus(nid, status);
-            resp.getWriter().write("修改成功");
+            ResponseUtil.writeMsg(resp, "修改成功");
         } catch (Exception e) {
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，修改新闻状态失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，修改新闻状态失败");
         }
     }
     @RequestMapping(value="fwdAddNewsPage")

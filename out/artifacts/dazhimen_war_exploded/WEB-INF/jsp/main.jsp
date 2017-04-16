@@ -175,6 +175,8 @@
 <div id="center_oper_area" data-options="region:'center',title:' '">
     <div id="content_panel" class="easyui-panel"style="padding:10px;text-align: center"
          data-options="fit:true,border:false">
+        <div style="height: 200px;"></div>
+        <div style="height:100px;font-size: 30px;line-height: 60px;">欢迎使用大职门后台管理系统</div>
     </div>
 </div>
 </body>

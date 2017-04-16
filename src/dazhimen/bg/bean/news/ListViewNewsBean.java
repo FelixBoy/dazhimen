@@ -1,4 +1,4 @@
-package dazhimen.bg.bean;
+package dazhimen.bg.bean.news;
 
 /**
  * Created by Administrator on 2017/4/13.

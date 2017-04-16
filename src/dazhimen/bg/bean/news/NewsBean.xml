@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.bg.bean.News">
+    <insert id="saveAddNews" parameterType="dazhimen.bg.bean.news.AddNewsBean">
+        insert into news(nid,title,mainimgurl,listimgurl,createdatetime,createdate)
+        values(#{nid}, #{title}, #{mainimgurl}, #{listimgurl}, now(), now())
+    </insert>
+    <insert id="saveAddNewContents" parameterType="dazhimen.bg.bean.news.NewsContentBean">
+       insert into news_content(contentid, contenttype, contentvalue, contentsort, nid)
+                      values(#{contentid},#{contenttype},#{contentvalue},#{contentsort},#{nid})
+    </insert>
+    <select id="getAllNewsCount" resultType="dazhimen.bg.bean.SingleValueBean">
+        select count(nid) as valueinfo
+        from news a
+        where a.isdel = '0'
+    </select>
+    <select id="getAllNewsCountByParam" resultType="dazhimen.bg.bean.SingleValueBean"
+        parameterType="dazhimen.bg.bean.news.QueryNewsParamBean">
+        select count(nid) as valueinfo
+        from news a
+        where a.isdel = '0'
+        <if test="nidCondition != null and nidCondition != ''">
+            and  nid like concat('%', #{nidCondition}, '%')
+        </if>
+        <if test="ntitleCondition != null and ntitleCondition != ''">
+            and title like concat('%', #{ntitleCondition}, '%')
+        </if>
+        <if test="statusCondition != null and statusCondition != -1">
+            and status = #{statusCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and createdatetime <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and createdatetime <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+    </select>
+    <select id="listAllNews" resultType="dazhimen.bg.bean.news.ListViewNewsBean"
+            parameterType="dazhimen.bg.bean.PaginationParamBean">
+       select nid,title,getcodetxt('newsstatus',a.status) status,a.status statusnum,
+               date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createdatetime
+        from news a
+       where a.isdel = '0'
+       order by createdatetime desc
+       limit #{startnum},#{getrows}
+    </select>
+    <select id="listAllNewsByParam" resultType="dazhimen.bg.bean.news.ListViewNewsBean"
+            parameterType="dazhimen.bg.bean.news.QueryNewsParamBean">
+        select nid,title,getcodetxt('newsstatus',a.status) status,a.status statusnum,
+        date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createdatetime
+        from news a
+        where a.isdel = '0'
+        <if test="nidCondition != null and nidCondition != ''">
+            and  nid like concat('%', #{nidCondition}, '%')
+        </if>
+        <if test="ntitleCondition != null and ntitleCondition != ''">
+            and title like concat('%', #{ntitleCondition}, '%')
+        </if>
+        <if test="statusCondition != null and statusCondition != -1">
+            and status = #{statusCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and createdatetime <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and createdatetime <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+        order by createdatetime desc
+        limit #{startnum},#{getrows}
+    </select>
+    <update id="saveModifyNewsStatus" parameterType="dazhimen.bg.bean.news.ModifyNewsStatusBean">
+        update news set status = #{status} where nid = #{nid}
+    </update>
+</mapper>
