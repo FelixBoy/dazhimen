@@ -2,6 +2,7 @@ package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
 import dazhimen.bg.bean.IndexPlayBean;
+import dazhimen.bg.bean.indexsort.NewsIndexSortBean;
 import dazhimen.bg.bean.indexsort.ProductIndexSortBean;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.PlaySortService;
@@ -35,7 +36,7 @@ public class PlaySortController {
             ResponseUtil.writeMsg(resp, new Gson().toJson(productBeans));
         } catch (Exception e) {
             e.printStackTrace();
-            ResponseUtil.writeFailMsgToBrowse(resp ,"出现异常，查询新增轮播数据出错");
+            ResponseUtil.writeFailMsgToBrowse(resp ,"出现异常，查询新增技能包首页排序数据出错");
         }
     }
 
@@ -54,10 +55,16 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，新增技能包首页排序出错");
         }
     }
-
-    @RequestMapping("/saveUpSkillPack")
-    public void saveUpSkillPack(HttpServletRequest resq, HttpServletResponse resp){
-
+    @RequestMapping("/clearSkillPackIndexSort")
+    public void clearSkillPackIndexSort(HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try {
+            playSortService.clearSkillPackIndexSort();
+            ResponseUtil.writeMsg(resp, "清空技能包首页排序成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
     }
     @RequestMapping("/queryAllSkillPackIndexSort")
     public void queryAllSkillPackIndexSort(HttpServletResponse resp){
@@ -68,6 +75,116 @@ public class PlaySortController {
         } catch (Exception e) {
             e.printStackTrace();
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询技能包首页排序信息失败");
+        }
+    }
+
+    @RequestMapping("/queryAllExperiencePackIndexSort")
+    public void queryAllExperiencePackIndexSort(HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try {
+            List<ProductIndexSortBean> productBeans = playSortService.queryAllExperiencePackIndexSort();
+            ResponseUtil.writeMsg(resp, new Gson().toJson(productBeans));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询经验包首页排序信息失败");
+        }
+    }
+    @RequestMapping("/forwardAddExperiencePackIndexSortPage")
+    public String forwardAddExperiencePackIndexSortPage(){
+        return "/playsort/addExperiencePackIndexSort";
+    }
+
+    @RequestMapping("/getAddExperiencePackIndexSortData")
+    public void getAddExperiencePackIndexSortData(HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try {
+            List<ProductIndexSortBean> productBeans = playSortService.getAddExperiencePackIndexSortData();
+            ResponseUtil.writeMsg(resp, new Gson().toJson(productBeans));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp ,"出现异常，查询新增经验包首页排序数据出错");
+        }
+    }
+    @RequestMapping("/saveAddExperiencePackIndexSort")
+    public void saveAddExperiencePackIndexSort(@RequestParam("pid") String pid,HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try{
+            boolean result = playSortService.saveAddExperiencePackIndexSort(pid);
+            if(result){
+                ResponseUtil.writeMsg(resp,"新增经验包首页排序成功");
+            }else{
+                ResponseUtil.writeFailMsgToBrowse(resp, "新增经验包首页排序失败");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，新增经验包首页排序出错");
+        }
+    }
+    @RequestMapping("/clearExperiencePackIndexSort")
+    public void clearExperiencePackIndexSort(HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try {
+            playSortService.clearExperiencePackIndexSort();
+            ResponseUtil.writeMsg(resp, "清空经验包首页排序成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+
+    @RequestMapping("/queryAllNewsIndexSort")
+    public void queryAllNewsIndexSort(HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try {
+            List<NewsIndexSortBean> newsBeans = playSortService.queryAllNewsIndexSort();
+            ResponseUtil.writeMsg(resp, new Gson().toJson(newsBeans));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询新闻首页排序信息失败");
+        }
+    }
+
+    @RequestMapping("/forwardAddNewsIndexSortPage")
+    public String forwardAddNewsIndexSortPage(){
+        return "/playsort/addNewsIndexSort";
+    }
+    @RequestMapping("/getAddNewsIndexSortData")
+    public void getAddNewsIndexSortData(HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try {
+            List<NewsIndexSortBean> newsBeans = playSortService.getAddNewsIndexSortData();
+            ResponseUtil.writeMsg(resp, new Gson().toJson(newsBeans));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp ,"出现异常，查询新增新闻首页排序数据出错");
+        }
+    }
+
+    @RequestMapping("/saveAddNewsIndexSort")
+    public void saveAddNewsIndexSort(@RequestParam("nid") String nid,HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try{
+            boolean result = playSortService.saveAddNewsIndexSort(nid);
+            if(result){
+                ResponseUtil.writeMsg(resp,"新增新闻首页排序成功");
+            }else{
+                ResponseUtil.writeFailMsgToBrowse(resp, "新增新闻首页排序失败");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，新增新闻首页排序出错");
+        }
+    }
+
+    @RequestMapping("/clearNewsIndexSort")
+    public void clearNewsIndexSort(HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try {
+            playSortService.clearNewsIndexSort();
+            ResponseUtil.writeMsg(resp, "清空新闻首页排序成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
     @RequestMapping("/fwdIndexPlayManagePage")

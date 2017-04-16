@@ -57,7 +57,7 @@
         select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price,status as isstart
           from product
         where isdel = '0' and type = #{type} and status !='3'
-        order by indexsort,createdatetime
+        order by indexsort,createdatetime desc
         limit #{getcount}
     </select>
 

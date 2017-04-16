@@ -11,6 +11,7 @@
     <select id="getHomePageNews" resultType="dazhimen.api.bean.ApiHomePageNewsBean">
         select nid, title, listimgurl
         from news where isdel = '0' and status = '1'
+        order by indexsort,createdatetime desc
         limit #{getCountInt}
     </select>
     <select id="getNewsContentById" resultType="dazhimen.api.bean.ApiNewsContentBean">

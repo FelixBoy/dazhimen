@@ -5,6 +5,11 @@ package util;
  * 系统中用到的常量定义
  */
 public class Constant {
+    //首页各类实体排序的个数
+    public static final Integer IndexSortNumber_SkillPack = 3;
+    public static final Integer IndexSortNumber_ExperiencePack = 3;
+    public static final Integer IndexSortNumber_NewsPack = 3;
+    public static final Integer IndexSortNumber_Master = 3;
     //文件后缀名常量
     public static final String FileSuffix_JPG = ".jpg";
     public static final String FileSuffix_PNG = ".png";

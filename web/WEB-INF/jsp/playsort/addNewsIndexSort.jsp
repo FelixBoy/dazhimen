@@ -1,17 +1,17 @@
 <script type="text/javascript">
     $(function(){
-        $('#addSkillPackIndexSortList').datagrid({
+        $('#addNewsIndexSortList').datagrid({
             onLoadSuccess: function(data){
-                $('#addSkillPackIndexSortList').datagrid('selectRow',0);
+                $('#addNewsIndexSortList').datagrid('selectRow',0);
             }
         });
     });
     $(function(){
-        $("#addSkillPackIndexSortList").datagrid({
+        $("#addNewsIndexSortList").datagrid({
             onDblClickRow:function(index, row){
                 if(row){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/playsort/saveAddSkillPackIndexSort?pid=" + row.pid
+                        url:"<%=request.getContextPath()%>/playsort/saveAddNewsIndexSort?nid=" + row.nid
                         + "&random_id="+Math.random(),
                         type:'get',
                         async:false,
@@ -20,8 +20,8 @@
                         },
                         success:function(data){
                             MsgBox.show(data);
-                            $('#addSkillPackIndexSortDialog').dialog('close');
-                            $('#skillPackIndexSortList').datagrid('reload');
+                            $('#addNewsIndexSortDialog').dialog('close');
+                            $('#newsIndexSortList').datagrid('reload');
                         }
                     });
 
@@ -29,11 +29,11 @@
             }
         });
     });
-    function onSelectSkillPackIndexSort(){
-        var row = $('#addSkillPackIndexSortList').datagrid('getSelected');
+    function onSelectNewsIndexSort(){
+        var row = $('#addNewsIndexSortList').datagrid('getSelected');
         if(row){
             $.ajax({
-                url:"<%=request.getContextPath()%>/playsort/saveAddSkillPackIndexSort?pid=" + row.pid
+                url:"<%=request.getContextPath()%>/playsort/saveAddNewsIndexSort?nid=" + row.nid
                 + "&random_id="+Math.random(),
                 type:'get',
                 async:false,
@@ -42,26 +42,25 @@
                 },
                 success:function(data){
                     MsgBox.show(data);
-                    $('#addSkillPackIndexSortDialog').dialog('close');
-                    $('#skillPackIndexSortList').datagrid('reload');
+                    $('#addNewsIndexSortDialog').dialog('close');
+                    $('#newsIndexSortList').datagrid('reload');
                 }
             });
         }
     }
 </script>
 <div style="padding:5px 0;">
-    <table id="addSkillPackIndexSortList" class="easyui-datagrid" style="width: auto;height: auto;"
-           url="<%=request.getContextPath()%>/playsort/getAddSkillPackIndexSortData?random_id="+Math.random()
+    <table id="addNewsIndexSortList" class="easyui-datagrid" style="width: auto;height: auto;"
+           url="<%=request.getContextPath()%>/playsort/getAddNewsIndexSortData?random_id="+Math.random()
            rownumbers="true" fitColumns="true" singleSelect="true" >
         <thead>
         <tr>
-            <th data-options="field:'pid'" width="30%">Id</th>
-            <th data-options="field:'pname'" width="40%">名称</th>
-            <th data-options="field:'type'" width="30%">类型</th>
+            <th data-options="field:'nid'" width="30%">Id</th>
+            <th data-options="field:'title'" width="70%">标题</th>
         </tr>
         </thead>
     </table>
 </div>
 <div style="text-align:right;padding-right:50px;padding-top:5px">
-    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="onSelectSkillPackIndexSort()">选择</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="onSelectNewsIndexSort()">选择</a>
 </div>
