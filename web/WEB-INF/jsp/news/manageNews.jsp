@@ -70,7 +70,9 @@
 </script>
 <div id="modifyNewsStatusDialog"></div>
 <div style="padding:5px 0;">
+    <div style="height:30px;font-size: 20px;line-height: 30px;color:red;font-weight:bold;">新闻模块，正在使用富文本编辑器重写，暂时仅提供【添加新闻，修改状态】</div>
     <table id="newsList" style="width: auto;height: auto;">
     </table>
+    <br/>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddNewsPage()">添加新闻</a>
 </div>
