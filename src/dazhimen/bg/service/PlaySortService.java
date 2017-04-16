@@ -1,13 +1,9 @@
 package dazhimen.bg.service;
 
-import dazhimen.bg.bean.IndexPlayBean;
-import dazhimen.bg.bean.indexsort.NewsIndexSortBean;
-import dazhimen.bg.bean.indexsort.ProductIndexSortBean;
-import dazhimen.bg.bean.indexsort.UpdateIndexSortBean;
+import dazhimen.bg.bean.playsort.*;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
-import util.Constant;
 
 import java.util.List;
 
@@ -98,6 +94,33 @@ public class PlaySortService {
         return result == 1;
     }
 
+    public boolean saveAddMasterIndexSort(String nid) throws BgException {
+        SqlSession sqlSession = null;
+        int result = 0;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            String nextIndexSortPosition = sqlSession.selectOne("dazhimen.bg.bean.PlaySort.getMasterNextSortPosition");
+            if(nextIndexSortPosition == null || nextIndexSortPosition.equals("")){
+                throw new BgException("获得掌门下一个排序位置出错");
+            }
+            UpdateIndexSortBean indexSortBean = new UpdateIndexSortBean();
+            indexSortBean.setId(nid);
+            indexSortBean.setIndexsort(nextIndexSortPosition);
+            result = sqlSession.update("dazhimen.bg.bean.PlaySort.saveAddMasterIndexSort", indexSortBean);
+            sqlSession.commit();
+        }catch (BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException(e.getMessage());
+        }catch(Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，保存掌门首页排序数据出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return result == 1;
+    }
     public void clearSkillPackIndexSort() throws BgException {
         SqlSession sqlSession = null;
         try{
@@ -136,6 +159,21 @@ public class PlaySortService {
             e.printStackTrace();
             sqlSession.rollback();
             throw new BgException("出现异常，清空新闻首页排序出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+
+    public void clearMasterIndexSort() throws BgException {
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            sqlSession.update("dazhimen.bg.bean.PlaySort.clearMasterIndexSort");
+            sqlSession.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，清空掌门首页排序出错");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }
@@ -182,6 +220,20 @@ public class PlaySortService {
             MyBatisUtil.closeSession(sqlSession);
         }
         return newsBeans;
+    }
+    public List<MasterIndexSortBean> queryAllMasterIndexSort() throws BgException {
+        List<MasterIndexSortBean> masterBeans = null;
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            masterBeans = sqlSession.selectList("dazhimen.bg.bean.PlaySort.queryAllMasterIndexSort");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BgException("出现异常，查询所有掌门首页排序出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return masterBeans;
     }
 
     public List<IndexPlayBean> queryAllIndexPlay() throws BgException {
@@ -241,6 +293,20 @@ public class PlaySortService {
         return newsBeans;
     }
 
+    public List<MasterIndexSortBean> getAddMasterIndexSortData() throws BgException {
+        List<MasterIndexSortBean> masterBeans = null;
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            masterBeans = sqlSession.selectList("dazhimen.bg.bean.PlaySort.getAddMasterIndexSortData");
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BgException("出现异常，查询掌门首页排序内容出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return masterBeans;
+    }
     public List<IndexPlayBean> getAddIndexPlayData() throws BgException {
         List<IndexPlayBean> indexPlayBeans = null;
         SqlSession sqlSession = null;

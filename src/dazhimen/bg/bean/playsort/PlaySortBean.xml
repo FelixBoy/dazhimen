@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.PlaySort">
-    <select id="listAllIndexPlay" resultType="dazhimen.bg.bean.IndexPlayBean">
+    <select id="listAllIndexPlay" resultType="dazhimen.bg.bean.playsort.IndexPlayBean">
         select a.pid,a.pname,getcodetxt('producttype',a.type) type
           from product a
         where a.status != '3' and a.isdel = '0' and a.indexplay = '1'
         <!--未来要 重新梳理一下字段，并拼接上 新闻模块-->
     </select>
 
-    <select id="getAddIndexPlayData" resultType="dazhimen.bg.bean.IndexPlayBean">
+    <select id="getAddIndexPlayData" resultType="dazhimen.bg.bean.playsort.IndexPlayBean">
           select a.pid,a.pname,getcodetxt('producttype',a.type) type
           from product a
         where a.status != '3' and a.isdel = '0' and a.indexplay = '0'
@@ -25,33 +25,33 @@
         set indexplay = '0'
         where pid = #{pid}
     </update>
-    <select id="getAddSkillPackIndexSortData" resultType="dazhimen.bg.bean.indexsort.ProductIndexSortBean">
+    <select id="getAddSkillPackIndexSortData" resultType="dazhimen.bg.bean.playsort.ProductIndexSortBean">
         select a.pid,a.pname,getcodetxt('producttype',a.type) type
           from product a
         where a.status != '3' and a.isdel = '0' and indexsort = '99' and type = '1'
          order by createdatetime desc
     </select>
     <select id="getSkillPackNextSortPosition" resultType="java.lang.String">
-        select count(b.pid)+1 from product b where b.type = '1' and b.status != '3' and b.indexsort != '99'
+        select count(b.pid)+1 from product b where b.type = '1' and b.status != '3' and b.indexsort != '99' and b.isdel = '0'
     </select>
-    <update id="saveAddSkillPackIndexSort" parameterType="dazhimen.bg.bean.indexsort.UpdateIndexSortBean">
+    <update id="saveAddSkillPackIndexSort" parameterType="dazhimen.bg.bean.playsort.UpdateIndexSortBean">
         update product
         set indexsort = #{indexsort}
         where pid = #{id}
     </update>
-    <select id="queryAllSkillPackIndexSort" resultType="dazhimen.bg.bean.indexsort.ProductIndexSortBean">
+    <select id="queryAllSkillPackIndexSort" resultType="dazhimen.bg.bean.playsort.ProductIndexSortBean">
         select a.pid,a.pname,getcodetxt('producttype',a.type) type
           from product a
         where status != '3' and a.isdel = '0' and indexsort != '99' and type = '1'
         order by indexsort
     </select>
-    <select id="queryAllExperiencePackIndexSort" resultType="dazhimen.bg.bean.indexsort.ProductIndexSortBean">
+    <select id="queryAllExperiencePackIndexSort" resultType="dazhimen.bg.bean.playsort.ProductIndexSortBean">
         select a.pid,a.pname,getcodetxt('producttype',a.type) type
         from product a
         where status != '3' and a.isdel = '0' and indexsort != '99' and type = '2'
         order by indexsort
     </select>
-    <select id="getAddExperiencePackIndexSortData" resultType="dazhimen.bg.bean.indexsort.ProductIndexSortBean">
+    <select id="getAddExperiencePackIndexSortData" resultType="dazhimen.bg.bean.playsort.ProductIndexSortBean">
         select a.pid,a.pname,getcodetxt('producttype',a.type) type
         from product a
         where a.status != '3' and a.isdel = '0' and indexsort = '99' and type = '2'
@@ -61,9 +61,9 @@
         update product set indexsort = '99' where isdel = '0' and type = '1';
     </update>
     <select id="getExperiencePackNextSortPosition" resultType="java.lang.String">
-        select count(b.pid)+1 from product b where b.type = '2' and b.status != '3' and b.indexsort != '99'
+        select count(b.pid)+1 from product b where b.type = '2' and b.status != '3' and b.indexsort != '99'  and b.isdel = '0'
     </select>
-    <update id="saveAddExperiencePackIndexSort" parameterType="dazhimen.bg.bean.indexsort.UpdateIndexSortBean">
+    <update id="saveAddExperiencePackIndexSort" parameterType="dazhimen.bg.bean.playsort.UpdateIndexSortBean">
         update product
         set indexsort = #{indexsort}
         where pid = #{id}
@@ -72,14 +72,14 @@
         update product set indexsort = '99' where isdel = '0' and type = '2';
     </update>
 
-    <select id="queryAllNewsIndexSort" resultType="dazhimen.bg.bean.indexsort.NewsIndexSortBean">
+    <select id="queryAllNewsIndexSort" resultType="dazhimen.bg.bean.playsort.NewsIndexSortBean">
         select a.nid,a.title
         from news a
         where status != '0' and a.isdel = '0' and indexsort != '99'
         order by indexsort
     </select>
 
-    <select id="getAddNewsIndexSortData" resultType="dazhimen.bg.bean.indexsort.NewsIndexSortBean">
+    <select id="getAddNewsIndexSortData" resultType="dazhimen.bg.bean.playsort.NewsIndexSortBean">
       select a.nid,a.title
         from news a
         where status != '0' and a.isdel = '0' and indexsort = '99'
@@ -87,9 +87,9 @@
     </select>
 
     <select id="getNewsNextSortPosition" resultType="java.lang.String">
-        select count(b.nid)+1 from news b where b.status != '0' and b.indexsort != '99'
+        select count(b.nid)+1 from news b where b.status != '0' and b.isdel = '0' and b.indexsort != '99'
     </select>
-    <update id="saveAddNewsIndexSort" parameterType="dazhimen.bg.bean.indexsort.UpdateIndexSortBean">
+    <update id="saveAddNewsIndexSort" parameterType="dazhimen.bg.bean.playsort.UpdateIndexSortBean">
         update news
         set indexsort = #{indexsort}
         where nid = #{id}
@@ -97,5 +97,31 @@
 
     <update id="clearNewsIndexSort">
         update news set indexsort = '99' where isdel = '0'
+    </update>
+
+
+    <select id="queryAllMasterIndexSort" resultType="dazhimen.bg.bean.playsort.MasterIndexSortBean">
+        select a.uid,a.name as uname, mphone
+        from user a
+        where type = '1' and a.isdel = '0' and indexsort != '99'
+        order by indexsort
+    </select>
+
+    <select id="getAddMasterIndexSortData" resultType="dazhimen.bg.bean.playsort.MasterIndexSortBean">
+        select a.uid,a.name as uname, mphone
+        from user a
+        where type = '1' and a.isdel = '0' and indexsort = '99'
+       order by createdate desc
+    </select>
+    <select id="getMasterNextSortPosition" resultType="java.lang.String">
+        select count(b.uid)+1 from user b where b.type = '1' and b.isdel = '0' and b.indexsort != '99'
+    </select>
+    <update id="saveAddMasterIndexSort" parameterType="dazhimen.bg.bean.playsort.UpdateIndexSortBean">
+        update user
+        set indexsort = #{indexsort}
+        where uid = #{id}
+    </update>
+    <update id="clearMasterIndexSort">
+        update user set indexsort = '99' where isdel = '0' and type = '1'
     </update>
 </mapper>

@@ -1,21 +1,12 @@
-package dazhimen.bg.bean;
+package dazhimen.bg.bean.playsort;
 
 /**
- * Created by Administrator on 2017/4/1.
+ * Created by Administrator on 2017/4/13.
  */
-public class IndexPlayBean {
+public class ProductIndexSortBean {
     private String pid = null;
     private String pname = null;
     private String type = null;
-
-    @Override
-    public String toString() {
-        return "IndexPlayBean{" +
-                "pid='" + pid + '\'' +
-                ", pname='" + pname + '\'' +
-                ", type='" + type + '\'' +
-                '}';
-    }
 
     public String getPid() {
         return pid;

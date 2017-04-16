@@ -51,6 +51,24 @@
         });
         $('#addNewsIndexSortDialog').dialog("open");
     }
+
+    function forwardAddMasterIndexSortPage(){
+        var rows = $("#masterIndexSortList").datagrid("getRows");
+        if(rows.length >= 2){
+            MsgBox.show("最多有2个【掌门】首页排序");
+            return;
+        }
+        $('#addMasterIndexSortDialog').dialog({
+            title: '新增【掌门】首页排序',
+            width: 580,
+            height: 500,
+            closed: true,
+            cache: false,
+            href: "<%=request.getContextPath()%>/playsort/forwardAddMasterIndexSortPage?random_id=" + Math.random(),
+            modal: true
+        });
+        $('#addMasterIndexSortDialog').dialog("open");
+    }
     function clearSkillPackIndexSort(){
         $.messager.confirm('确认','您确定清空【技能包】首页排序吗？',function(r){
             if (r){
@@ -105,6 +123,25 @@
             }
         });
     }
+    function clearMasterIndexSort(){
+        $.messager.confirm('确认','您确定清空【掌门】首页排序吗？',function(r){
+            if (r){
+                $.ajax({
+                    url:"<%=request.getContextPath()%>/playsort/clearMasterIndexSort?random_id="+Math.random(),
+                    type:'get',
+                    async:false,
+                    error:function(data){
+                        MsgBox.show(data.responseText);
+                    },
+                    success:function(data){
+                        MsgBox.show(data);
+                        $('#masterIndexSortList').datagrid('reload');
+                    }
+                });
+            }
+        });
+    }
+
 </script>
 <div style="padding:5px 0;">
     <div class="easyui-layout" style="width:100%;height:230px;text-align: center;">
@@ -174,9 +211,9 @@
                    rownumbers="true" fitColumns="true" singleSelect="true" >
                 <thead>
                 <tr>
-                    <th data-options="field:'pid'" width="30%">Id</th>
-                    <th data-options="field:'pname'" width="40%">名称</th>
-                    <th data-options="field:'type'" width="30%">类型</th>
+                    <th data-options="field:'uid'" width="30%">Id</th>
+                    <th data-options="field:'uname'" width="40%">姓名</th>
+                    <th data-options="field:'mphone'" width="30%">手机号码</th>
                 </tr>
                 </thead>
             </table>

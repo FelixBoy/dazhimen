@@ -1,20 +1,18 @@
 package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
-import dazhimen.bg.bean.IndexPlayBean;
-import dazhimen.bg.bean.indexsort.NewsIndexSortBean;
-import dazhimen.bg.bean.indexsort.ProductIndexSortBean;
+import dazhimen.bg.bean.playsort.IndexPlayBean;
+import dazhimen.bg.bean.playsort.MasterIndexSortBean;
+import dazhimen.bg.bean.playsort.NewsIndexSortBean;
+import dazhimen.bg.bean.playsort.ProductIndexSortBean;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.PlaySortService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import util.Constant;
 import util.web.ResponseUtil;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -182,6 +180,61 @@ public class PlaySortController {
         try {
             playSortService.clearNewsIndexSort();
             ResponseUtil.writeMsg(resp, "清空新闻首页排序成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+
+    @RequestMapping("/queryAllMasterIndexSort")
+    public void queryAllMasterIndexSort(HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try {
+            List<MasterIndexSortBean> masterBeans = playSortService.queryAllMasterIndexSort();
+            ResponseUtil.writeMsg(resp, new Gson().toJson(masterBeans));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询新闻首页排序信息失败");
+        }
+    }
+    @RequestMapping("/forwardAddMasterIndexSortPage")
+    public String forwardAddMasterIndexSortPage(){
+        return "/playsort/addMasterIndexSort";
+    }
+
+    @RequestMapping("/getAddMasterIndexSortData")
+    public void getAddMasterIndexSortData(HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try {
+            List<MasterIndexSortBean> masterBeans = playSortService.getAddMasterIndexSortData();
+            ResponseUtil.writeMsg(resp, new Gson().toJson(masterBeans));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp ,"出现异常，查询新增新闻首页排序数据出错");
+        }
+    }
+
+    @RequestMapping("/saveAddMasterIndexSort")
+    public void saveAddMasterIndexSort(@RequestParam("uid") String uid,HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try{
+            boolean result = playSortService.saveAddMasterIndexSort(uid);
+            if(result){
+                ResponseUtil.writeMsg(resp,"新增掌门首页排序成功");
+            }else{
+                ResponseUtil.writeFailMsgToBrowse(resp, "新增掌门首页排序失败");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，新增掌门首页排序出错");
+        }
+    }
+    @RequestMapping("/clearMasterIndexSort")
+    public void clearMasterIndexSort(HttpServletResponse resp){
+        PlaySortService playSortService = new PlaySortService();
+        try {
+            playSortService.clearMasterIndexSort();
+            ResponseUtil.writeMsg(resp, "清空掌门首页排序成功");
         } catch (BgException e) {
             e.printStackTrace();
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
