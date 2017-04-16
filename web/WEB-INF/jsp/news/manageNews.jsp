@@ -62,8 +62,8 @@
         queryParameter.starttimeCondition = null;
         queryParameter.endtimeCondition = null;
         queryParameter.statusCondition = null;
-        queryParameter.queryByParamFlag = null
-        $("#queryNewsParamsForm").form('clear');;
+        queryParameter.queryByParamFlag = null;
+        $("#queryNewsParamsForm").form('clear');
         $("#statusCondition").combobox('setValue','-1');
         $("#newsList").datagrid("reload");
     }

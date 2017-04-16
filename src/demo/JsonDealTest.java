@@ -1,12 +1,8 @@
 package demo;
 
-import com.google.gson.Gson;
-import dazhimen.bg.bean.UserBean;
 import dazhimen.bg.exception.BgException;
-import dazhimen.bg.service.UserService;
 
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Created by zhj on 2017/3/13.

@@ -4,14 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <mappers>
-        <mapper resource="dazhimen/bg/bean/UserBean.xml"/>
-        <mapper resource="dazhimen/bg/bean/CustomerBean.xml"/>
+        <mapper resource="dazhimen/bg/bean/user/UserBean.xml"/>
+        <mapper resource="dazhimen/bg/bean/customer/CustomerBean.xml"/>
         <mapper resource="dazhimen/bg/bean/ProductBean.xml"/>
         <mapper resource="dazhimen/bg/bean/login/LoginBean.xml"/>
         <mapper resource="dazhimen/bg/bean/playsort/PlaySortBean.xml"/>
         <mapper resource="dazhimen/bg/bean/UtilBean.xml"/>
-        <mapper resource="dazhimen/bg/bean/RechargeBean.xml"/>
-        <mapper resource="dazhimen/bg/bean/OrderBean.xml"/>
+        <mapper resource="dazhimen/bg/bean/recharge/RechargeBean.xml"/>
+        <mapper resource="dazhimen/bg/bean/order/OrderBean.xml"/>
         <mapper resource="dazhimen/bg/bean/news/NewsBean.xml"/>
         <mapper resource="dazhimen/api/bean/ApiCustomerBean.xml"/>
         <mapper resource="dazhimen/api/bean/ApiLoginBean.xml"/>

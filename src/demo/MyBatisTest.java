@@ -1,6 +1,6 @@
 package demo;
 
-import dazhimen.bg.bean.UserBean;
+import dazhimen.bg.bean.user.UserBean;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 

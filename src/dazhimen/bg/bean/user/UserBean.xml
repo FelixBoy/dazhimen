@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.bg.bean.User">
+    <select id="getAllMasterCount" resultType="dazhimen.bg.bean.SingleValueBean">
+       select count(uid) as valueinfo
+          from user
+        where type = '1'
+          and isdel = '0'
+    </select>
+    <select id="getAllMasterCountByParam" resultType="dazhimen.bg.bean.SingleValueBean"
+     parameterType="dazhimen.bg.bean.user.QueryMasterParamBean">
+        select count(uid) as valueinfo
+        from user
+        where type = '1'
+        and isdel = '0'
+        <if test="uidCondition != null and uidCondition != ''">
+            and uid like concat('%', #{uidCondition}, '%')
+        </if>
+        <if test="mphoneCondition != null and mphoneCondition != ''">
+            and mphone like concat('%', #{mphoneCondition}, '%')
+        </if>
+        <if test="nameCondition != null and nameCondition != ''">
+            and name like concat('%', #{nameCondition}, '%')
+        </if>
+        <if test="loginnameCondition != null and loginnameCondition != ''">
+            and loginname like concat('%', #{loginnameCondition}, '%')
+        </if>
+        <if test="genderCondition != null and genderCondition != 0">
+            and  gender = #{genderCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and createdate <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and createdate <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+    </select>
+
+    <select id="listAllMaster" resultType="dazhimen.bg.bean.user.UserBean"
+            parameterType="dazhimen.bg.bean.PaginationParamBean">
+        select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,introduction,
+              date_format(createdate,'%Y-%m-%d %H:%i:%s') createDatestr
+          from user
+        where type = '1'
+          and isdel = '0'
+          order by createdate desc
+          limit #{startnum},#{getrows}
+    </select>
+    <select id="listAllMasterByParam" resultType="dazhimen.bg.bean.user.UserBean"
+            parameterType="dazhimen.bg.bean.user.QueryMasterParamBean">
+        select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,introduction,
+        date_format(createdate,'%Y-%m-%d %H:%i:%s') createDatestr
+        from user
+        where type = '1'
+        and isdel = '0'
+        <if test="uidCondition != null and uidCondition != ''">
+            and uid like concat('%', #{uidCondition}, '%')
+        </if>
+        <if test="mphoneCondition != null and mphoneCondition != ''">
+            and mphone like concat('%', #{mphoneCondition}, '%')
+        </if>
+        <if test="nameCondition != null and nameCondition != ''">
+            and name like concat('%', #{nameCondition}, '%')
+        </if>
+        <if test="loginnameCondition != null and loginnameCondition != ''">
+            and loginname like concat('%', #{loginnameCondition}, '%')
+        </if>
+        <if test="genderCondition != null and genderCondition != 0">
+            and  gender = #{genderCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and createdate <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and createdate <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+        order by createdate desc
+        limit #{startnum},#{getrows}
+    </select>
+
+
+    <select id = "checkLoginname" parameterType="string" resultType="dazhimen.bg.bean.SingleValueBean">
+        select 1 as valueinfo
+          from user
+         where loginname = #{loginname}
+    </select>
+
+    <insert id="saveAddMater" parameterType="dazhimen.bg.bean.user.UserBean">
+        insert into user(uid,    name,  mphone,   password,   gender,   type,  loginname,identity,introduction,headerimg,createdate)
+                  values(#{uid}, #{name}, #{mphone},#{password},#{gender},#{type},#{loginname},#{identity},#{introduction}, #{headerimg},now())
+    </insert>
+
+    <select id="getMasterById" resultType="dazhimen.bg.bean.user.UserBean">
+        select uid,name,mphone,gender,loginname,loginname as loginnameorginal,introduction,headerimg,identity
+          from user
+         where uid = #{uid}
+    </select>
+
+    <select id="getAdminById" resultType="dazhimen.bg.bean.user.UserBean">
+        select uid,name,mphone,gender,loginname,loginname as loginnameorginal,remarks
+        from user
+        where uid = #{uid}
+    </select>
+
+    <update id="saveMasterModify" parameterType="dazhimen.bg.bean.user.UserBean">
+        update user
+           set name = #{name},mphone = #{mphone},gender = #{gender},
+               loginname = #{loginname},introduction = #{introduction},
+               identity = #{identity}
+        where uid = #{uid}
+    </update>
+
+    <update id="saveMasterDel">
+        update user
+           set isdel = '1',loginname = null,mphone = null
+        where uid = #{uid}
+    </update>
+
+    <select id="getAllAdminCount" resultType="dazhimen.bg.bean.SingleValueBean">
+        select count(uid) as valueinfo
+        from user
+        where type = '2'
+        and isdel = '0'
+    </select>
+    <select id="getAllAdminCountByParam" resultType="dazhimen.bg.bean.SingleValueBean"
+        parameterType="dazhimen.bg.bean.user.QueryMasterParamBean">
+        select count(uid) as valueinfo
+        from user
+        where type = '2'
+        and isdel = '0'
+        <if test="uidCondition != null and uidCondition != ''">
+            and uid like concat('%', #{uidCondition}, '%')
+        </if>
+        <if test="mphoneCondition != null and mphoneCondition != ''">
+            and mphone like concat('%', #{mphoneCondition}, '%')
+        </if>
+        <if test="nameCondition != null and nameCondition != ''">
+            and name like concat('%', #{nameCondition}, '%')
+        </if>
+        <if test="loginnameCondition != null and loginnameCondition != ''">
+            and loginname like concat('%', #{loginnameCondition}, '%')
+        </if>
+        <if test="genderCondition != null and genderCondition != 0">
+            and  gender = #{genderCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and createdate <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and createdate <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+    </select>
+
+    <select id="listAllAdmin" resultType="dazhimen.bg.bean.user.UserBean"
+            parameterType="dazhimen.bg.bean.PaginationParamBean">
+        select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,remarks,
+          date_format(createdate,'%Y-%m-%d %H:%i:%s') createDatestr
+        from user
+        where type = '2'
+          and isdel = '0'
+         order by createdate desc
+        limit #{startnum},#{getrows}
+    </select>
+    <select id="listAllAdminByParam" resultType="dazhimen.bg.bean.user.UserBean"
+            parameterType="dazhimen.bg.bean.PaginationParamBean">
+        select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,remarks,
+        date_format(createdate,'%Y-%m-%d %H:%i:%s') createDatestr
+        from user
+        where type = '2'
+        and isdel = '0'
+        <if test="uidCondition != null and uidCondition != ''">
+            and uid like concat('%', #{uidCondition}, '%')
+        </if>
+        <if test="mphoneCondition != null and mphoneCondition != ''">
+            and mphone like concat('%', #{mphoneCondition}, '%')
+        </if>
+        <if test="nameCondition != null and nameCondition != ''">
+            and name like concat('%', #{nameCondition}, '%')
+        </if>
+        <if test="loginnameCondition != null and loginnameCondition != ''">
+            and loginname like concat('%', #{loginnameCondition}, '%')
+        </if>
+        <if test="genderCondition != null and genderCondition != 0">
+            and  gender = #{genderCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and createdate <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and createdate <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+        order by createdate desc
+        limit #{startnum},#{getrows}
+    </select>
+
+    <insert id="saveAddAdmin" parameterType="dazhimen.bg.bean.user.UserBean">
+        insert into user(uid,    name,  mphone,   password,   gender,   type,  loginname,remarks,createdate)
+        values(#{uid}, #{name}, #{mphone},#{password},#{gender},#{type},#{loginname},#{remarks}, now())
+    </insert>
+
+    <update id="saveModifyAdmin" parameterType="dazhimen.bg.bean.user.UserBean">
+        update user
+        set name = #{name},mphone = #{mphone},gender = #{gender},
+        loginname = #{loginname},remarks = #{remarks}
+        where uid = #{uid}
+    </update>
+
+    <update id="saveDelAdmin">
+        update user
+        set isdel = '1',loginname = null,mphone = null
+        where uid = #{uid}
+    </update>
+
+</mapper>

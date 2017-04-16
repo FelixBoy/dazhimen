@@ -1,4 +1,4 @@
-package dazhimen.bg.bean;
+package dazhimen.bg.bean.customer;
 
 public class CustomerBean {
     private String cid = null;

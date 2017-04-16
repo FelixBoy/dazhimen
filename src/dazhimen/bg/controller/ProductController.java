@@ -3,8 +3,8 @@ package dazhimen.bg.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dazhimen.bg.bean.*;
+import dazhimen.bg.bean.user.UserBean;
 import dazhimen.bg.exception.BgException;
-import dazhimen.bg.service.UserService;
 import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,14 +16,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import util.Constant;
-import util.DateUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**

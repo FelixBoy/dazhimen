@@ -2,9 +2,9 @@ package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import dazhimen.bg.bean.UserBean;
+import dazhimen.bg.bean.user.QueryMasterParamBean;
+import dazhimen.bg.bean.user.UserBean;
 import dazhimen.bg.exception.BgException;
-import net.sf.morph.wrap.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,12 +13,12 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import util.Constant;
+import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,12 +46,12 @@ public class UserController {
 
     @RequestMapping("/fwdMasterManagePage")
     public String fowardMasterManagePage(){
-        return "/user/master/masterManage";
+        return "/user/master/manageMaster";
     }
 
     @RequestMapping("/fwdMasterAddPage")
     public String forwardMasterAddPage(){
-        return "user/master/masterAdd";
+        return "user/master/addMaster";
     }
     @RequestMapping("/saveMasterAdd")
     public ModelAndView saveMasterAdd(HttpServletRequest resq,HttpServletResponse resp) {
@@ -94,31 +94,46 @@ public class UserController {
     @RequestMapping("/fwdViewMasterPage")
     public String fwdViewMasterPage(@RequestParam("uid") String uid, HttpServletResponse resp, Map model){
         model.put("uid", uid);
-        return "/user/master/masterView";
+        return "/user/master/viewMaster";
     }
     @RequestMapping("/queryAllMasters")
     public void queryAllMasters(HttpServletRequest resq, HttpServletResponse resp) {
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             UserService userService = new UserService();
             String page = resq.getParameter("page");
             String rows = resq.getParameter("rows");
-            String result = userService.queryAllMasters(page, rows);;
-            resp.getWriter().write(result);
+            String result = null;
+            String queryByParamFlag = resq.getParameter("queryByParamFlag");
+            if(queryByParamFlag == null || queryByParamFlag.equals("")){
+                result = userService.queryAllMasters(page, rows);
+            }else{
+                String uidCondition = resq.getParameter("uidCondition");
+                String mphoneCondition = resq.getParameter("mphoneCondition");
+                String nameCondition = resq.getParameter("nameCondition");
+                String genderCondition = resq.getParameter("genderCondition");
+                String loginnameCondition = resq.getParameter("loginnameCondition");
+                String starttimeCondition = resq.getParameter("starttimeCondition");
+                String endtimeCondition = resq.getParameter("endtimeCondition");
+                QueryMasterParamBean paramBean = new QueryMasterParamBean();
+                paramBean.setUidCondition(uidCondition);
+                paramBean.setMphoneCondition(mphoneCondition);
+                paramBean.setNameCondition(nameCondition);
+                paramBean.setGenderCondition(genderCondition);
+                paramBean.setStarttimeCondition(starttimeCondition);
+                paramBean.setEndtimeCondition(endtimeCondition);
+                paramBean.setLoginnameCondition(loginnameCondition);
+                result = userService.queryAllMastersByParam(page, rows, paramBean);
+            }
+            ResponseUtil.writeMsg(resp, result);
         } catch (Exception e) {
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询所有掌门信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询所有掌门信息失败");
         }
     }
     @RequestMapping("/fwdMasterModifyPage")
     public String forwardMasterModifyPage(@RequestParam("uid") String uid, HttpServletResponse resp, Map model){
         model.put("uid", uid);
-        return "/user/master/masterModify";
+        return "/user/master/modifyMaster";
     }
     @RequestMapping("/getMasterData")
     public void getMasterData(@RequestParam("uid") String uid, HttpServletRequest resq, HttpServletResponse resp){
@@ -250,23 +265,34 @@ public class UserController {
             UserService userService = new UserService();
             String page = resq.getParameter("page");
             String rows = resq.getParameter("rows");
-            String result = userService.queryAllAdmin(page, rows);
-            resp.getWriter().write(result);
+            String result = null;
+            String queryByParamFlag = resq.getParameter("queryByParamFlag");
+            if(queryByParamFlag == null || queryByParamFlag.equals("")){
+                result = userService.queryAllAdmin(page, rows);
+            }else{
+                String uidCondition = resq.getParameter("uidCondition");
+                String mphoneCondition = resq.getParameter("mphoneCondition");
+                String nameCondition = resq.getParameter("nameCondition");
+                String genderCondition = resq.getParameter("genderCondition");
+                String loginnameCondition = resq.getParameter("loginnameCondition");
+                String starttimeCondition = resq.getParameter("starttimeCondition");
+                String endtimeCondition = resq.getParameter("endtimeCondition");
+                QueryMasterParamBean paramBean = new QueryMasterParamBean();
+                paramBean.setUidCondition(uidCondition);
+                paramBean.setMphoneCondition(mphoneCondition);
+                paramBean.setNameCondition(nameCondition);
+                paramBean.setGenderCondition(genderCondition);
+                paramBean.setStarttimeCondition(starttimeCondition);
+                paramBean.setEndtimeCondition(endtimeCondition);
+                paramBean.setLoginnameCondition(loginnameCondition);
+                result = userService.queryAllAdminByParam(page, rows, paramBean);
+            }
+            ResponseUtil.writeMsg(resp, result);
         } catch (BgException e) {
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write(e.getMessage());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }catch (Exception e){
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询所有掌门信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询所有管理员信息失败");
         }
     }
 

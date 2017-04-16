@@ -1,40 +1,56 @@
 <script type="text/javascript">
-    function forwardAddAdminPage(){
-        $('#addAdminDialog').dialog({
-            title: '新增管理员',
-            width: 500,
-            height: 420,
+    function forwardMasterAddPage(){
+        $('#masterAddDialog').dialog({
+            title: '新增掌门',
+            width: 580,
+            height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/user/fwdAddAdminPage",
+            href: "<%=request.getContextPath()%>/user/fwdMasterAddPage?random_id=" + Math.random(),
             modal: true
         });
-        $('#addAdminDialog').dialog("open");
+        $('#masterAddDialog').dialog("open");
     }
-    function fwdModifyAdminPage(index){
-        $('#adminList').datagrid('selectRow',index);// 关键在这里
-        var row = $('#adminList').datagrid('getSelected');
-        if (row){
-            $('#modifyAdminDialog').dialog({
-                title: '修改管理员信息',
-                width: 500,
-                height: 420,
+    function fwdViewMasterPage(index){
+        $('#masterList').datagrid('selectRow',index);// 关键在这里
+        var row = $('#masterList').datagrid('getSelected');
+        if (row) {
+            $('#viewMasterDialog').dialog({
+                title: '查看掌门详情',
+                width: 580,
+                height: 500,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/user/fwdModifyAdminPage?uid="+row.uid,
+                href: "<%=request.getContextPath()%>/user/fwdViewMasterPage?uid=" + row.uid + "&random_id=" + Math.random(),
                 modal: true
             });
-            $('#modifyAdminDialog').dialog("open");
+            $('#viewMasterDialog').dialog("open");
         }
     }
-    function saveDeleteAdmin(index){
-        $('#adminList').datagrid('selectRow',index);// 关键在这里
-        var row = $('#adminList').datagrid('getSelected');
+    function fwdMasterEditPage(index){
+        $('#masterList').datagrid('selectRow',index);// 关键在这里
+        var row = $('#masterList').datagrid('getSelected');
+        if (row){
+            $('#masterModifyDialog').dialog({
+                title: '修改掌门信息',
+                width: 580,
+                height: 600,
+                closed: true,
+                cache: false,
+                href: "<%=request.getContextPath()%>/user/fwdMasterModifyPage?uid=" + row.uid + "&random_id=" + Math.random(),
+                modal: true
+            });
+            $('#masterModifyDialog').dialog("open");
+        }
+    }
+    function saveMasterDel(index){
+        $('#masterList').datagrid('selectRow',index);// 关键在这里
+        var row = $('#masterList').datagrid('getSelected');
         if(row){
-            $.messager.confirm('确认','您确认想要删除管理员【' + row.name + '】吗？',function(r){
+            $.messager.confirm('确认','您确认想要删除掌门【' + row.name + '】吗？',function(r){
                 if (r){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/user/saveDeleteAdmin?uid=" + row.uid+"&random_id="+Math.random(),
+                        url:"<%=request.getContextPath()%>/user/saveMasterDel?uid=" + row.uid+"&random_id="+Math.random(),
                         type:'get',
                         async:false,
                         error:function(data){
@@ -42,44 +58,41 @@
                         },
                         success:function(data){
                             MsgBox.show(data);
-                            $('#adminList').datagrid('reload');
+                            $('#masterList').datagrid('reload');
                         }
                     });
                 }
             });
         }
     }
-    function formatOper(val,row,index){
-        return '<a href="javascript:void(0)" onclick="fwdModifyAdminPage('+index+')">修改</a>&nbsp&nbsp' +
-            '<a href="javascript:void(0)" onclick="saveDeleteAdmin('+index+')">删除</a>';
-    }
     $(function () {
-        $("#adminList").datagrid({
-            title:"管理员列表",
-            url:"<%=request.getContextPath()%>/user/queryAllAdmin?random_id="+Math.random(),
+        $("#masterList").datagrid({
+            title:"掌门列表",
+            url:"<%=request.getContextPath()%>/user/queryAllMasters?random_id="+Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,
-            loadMsg:"正在加载管理员数据...",
+            loadMsg:"正在加载掌门数据...",
             columns: [[
-                { field: 'uid', title: '管理员Id', width: '10%'},
-                { field: 'name', title: '姓名', width: '10%'},
+                { field: 'uid', title: '掌门Id', width: '10%'},
+                { field: 'name', title: '姓名', width: '15%'},
                 { field: 'mphone', title: '手机号码', width: '10%'},
                 { field: 'loginname', title: '登录名', width: '10%'},
                 { field: 'gender', title: '性别', width: '5%'},
-                { field: 'remarks', title: '介绍', width: '20%' },
-                { field: 'createDatestr', title: '创建时间', width: '15%' },
+                { field: 'introduction', title: '介绍', width: '20%' },
+                { field: 'createDatestr', title: '创建时间',width: '15%' },
                 {
-                    field: "operateID", title: '操作',width:'20%', align: 'center',
+                    field: "operateID", title: '操作',width:'15%', align: 'center',
                     formatter: function (value, rowData, rowIndex) {
-                        return '<a href="javascript:void(0)" onclick="fwdModifyAdminPage('+rowIndex+')">修改</a>&nbsp&nbsp' +
-                            '<a href="javascript:void(0)" onclick="saveDeleteAdmin('+rowIndex+')">删除</a>';
+                        return '<a href="javascript:void(0)" onclick="fwdViewMasterPage('+rowIndex+')">查看</a>&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdMasterEditPage('+rowIndex+')">修改</a>&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="saveMasterDel('+rowIndex+')">删除</a>';
                     }
                 }
             ]],
             pagination: true
         });
-        $('#adminList').datagrid('getPager').pagination({
+        $('#masterList').datagrid('getPager').pagination({
             pageSize: 10,
             pageNumber: 1,
             pageList: [10,20,30],
@@ -88,7 +101,7 @@
             displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
         });
     });
-    function SearchAdminByParams() {
+    function SearchMasterByParams() {
         var uidCondition = $("#uidCondition").val();
         var mphoneCondition = $("#mphoneCondition").val();
         var nameCondition = $("#nameCondition").val();
@@ -98,11 +111,11 @@
         var endtimeCondition = $('#endtimeCondition').datetimebox('getValue');
         if(!uidCondition && !mphoneCondition && !nameCondition && !loginnameCondition
             && genderCondition == '0' && !starttimeCondition && !endtimeCondition){
-            clearAdminSearchParams();
+            clearMasterSearchParams();
             return;
         }
 
-        var queryParameter = $('#adminList').datagrid("options").queryParams;
+        var queryParameter = $('#masterList').datagrid("options").queryParams;
         queryParameter.uidCondition = uidCondition;
         queryParameter.mphoneCondition = mphoneCondition;
         queryParameter.nameCondition = nameCondition;
@@ -111,10 +124,10 @@
         queryParameter.starttimeCondition = starttimeCondition;
         queryParameter.endtimeCondition = endtimeCondition;
         queryParameter.queryByParamFlag = Math.random();
-        $("#adminList").datagrid("reload");
+        $("#masterList").datagrid("reload");
     }
-    function clearAdminSearchParams(){
-        var queryParameter = $('#adminList').datagrid("options").queryParams;
+    function clearMasterSearchParams(){
+        var queryParameter = $('#masterList').datagrid("options").queryParams;
         queryParameter.uidCondition = null;
         queryParameter.mphoneCondition = null;
         queryParameter.nameCondition = null;
@@ -123,16 +136,17 @@
         queryParameter.starttimeCondition = null;
         queryParameter.endtimeCondition = null;
         queryParameter.queryByParamFlag = Math.random();
-        $("#queryAdminParamsForm").form('clear');
+        $("#queryMasterParamsForm").form('clear');
         $("#genderCondition").combobox('setValue','0');
-        $("#adminList").datagrid("reload");
+        $("#masterList").datagrid("reload");
     }
 </script>
-<div style="padding:5px 0;">
-    <div id="addAdminDialog" style="text-align: center;"></div>
-    <div id="modifyAdminDialog" style="text-align: center;"></div>
+<div style="padding:2px 0;">
+    <div id="viewMasterDialog" style="text-align: center;"></div>
+    <div id="masterAddDialog" style="text-align: center;"></div>
+    <div id="masterModifyDialog" style="text-align: center;"></div>
     <div style="margin:0px auto;width: 950px;">
-        <form id="queryAdminParamsForm">
+        <form id="queryMasterParamsForm">
             <table cellpadding="5">
                 <tr>
                     <td colspan="8" >
@@ -143,12 +157,12 @@
                     </td>
                 </tr>
                 <tr>
-                    <td  nowrap="nowrap">管理员Id:</td>
-                    <td><input class="easyui-textbox"  id="uidCondition" data-options="prompt:'管理员Id'" name="uidCondition"/></td>
+                    <td>掌门Id:</td>
+                    <td><input class="easyui-textbox"  id="uidCondition" data-options="prompt:'掌门Id'" name="uidCondition"/></td>
                     <td nowrap="nowrap">姓名:</td>
-                    <td><input class="easyui-textbox" data-options="prompt:'管理员姓名'" id="nameCondition" name="nameCondition"/></td>
+                    <td><input class="easyui-textbox" data-options="prompt:'掌门姓名'" id="nameCondition" name="nameCondition"/></td>
                     <td nowrap="nowrap">手机号码:</td>
-                    <td><input class="easyui-textbox" data-options="prompt:'管理员手机号码'" id="mphoneCondition" name="mphoneCondition"/></td>
+                    <td><input class="easyui-textbox" data-options="prompt:'掌门手机号码'" id="mphoneCondition" name="mphoneCondition"/></td>
                     <td nowrap="nowrap">登录名:</td>
                     <td><input class="easyui-textbox" data-options="prompt:'登录名'" id="loginnameCondition" name="loginnameCondition"/></td>
                 </tr>
@@ -169,14 +183,15 @@
                     <td><input id="endtimeCondition" name="endtimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'结束时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false" ></td>
                     <td align="right" colspan="2">
-                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="SearchAdminByParams()">检索</a>
-                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="clearAdminSearchParams()">清空条件</a>
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="SearchMasterByParams()">检索</a>
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="clearMasterSearchParams()">清空条件</a>
                     </td>
                 </tr>
             </table>
         </form>
     </div>
-    <table id="adminList" style="width: auto;height: auto;"></table>
+    <table id="masterList" style="width: auto;height: auto;">
+    </table>
     <br/>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddAdminPage()">新增管理员</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardMasterAddPage()">新增掌门</a>
 </div>

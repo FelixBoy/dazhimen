@@ -1,9 +1,9 @@
 package dazhimen.bg.service;
 
 import dazhimen.api.exception.ApiException;
-import dazhimen.bg.bean.CustomerBean;
+import dazhimen.bg.bean.customer.CustomerBean;
 import dazhimen.bg.bean.PaginationParamBean;
-import dazhimen.bg.bean.QueryCustomerParamBean;
+import dazhimen.bg.bean.customer.QueryCustomerParamBean;
 import dazhimen.bg.bean.SingleValueBean;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
@@ -67,20 +67,5 @@ public class CustomerService {
         jsonObject.put("total", totalCount);
         jsonObject.put("rows", customerBeans);
         return jsonObject.toString();
-    }
-
-    public void saveCustomerDel(String cid) throws BgException {
-        SqlSession sqlSession = null;
-        try{
-            sqlSession = MyBatisUtil.createSession();
-            sqlSession.update("dazhimen.bg.bean.Customer.saveCustomerDel", cid);
-            sqlSession.commit();
-        }catch (Exception e){
-            sqlSession.rollback();
-            e.printStackTrace();
-            throw new BgException("出现异常，删除会员信息出错");
-        }finally {
-            MyBatisUtil.closeSession(sqlSession);
-        }
     }
 }

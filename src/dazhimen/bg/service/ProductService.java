@@ -1,6 +1,7 @@
 package dazhimen.bg.service;
 
 import dazhimen.bg.bean.*;
+import dazhimen.bg.bean.user.UserBean;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import net.sf.json.JSONObject;

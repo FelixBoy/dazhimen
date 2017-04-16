@@ -42,7 +42,7 @@
         var endtimeCondition = $('#endtimeCondition').datetimebox('getValue');
         if(cidCondition.length == '0' && nicknameCondition.length == '0' && nameCondition.length == '0' && weixinCondition == '0'
             && !starttimeCondition && !endtimeCondition && startBalanceCondition.length == '0' && endBalanceCondition.length == '0'){
-            clearSearchParams();
+            clearCustomerSearchParams();
             return;
         }
 
@@ -58,7 +58,7 @@
         queryParameter.queryByParamFlag = Math.random();
         $("#customerList").datagrid("reload");
     }
-    function clearSearchParams(){
+    function clearCustomerSearchParams(){
         var queryParameter = $('#customerList').datagrid("options").queryParams;
         queryParameter.cidCondition = null;
         queryParameter.nicknameCondition = null;
@@ -68,8 +68,8 @@
         queryParameter.endtimeCondition = null;
         queryParameter.startBalanceCondition = null;
         queryParameter.endBalanceCondition = null;
-        queryParameter.queryByParamFlag = null
-        $("#queryCustomerParamsForm").form('clear');;
+        queryParameter.queryByParamFlag = null;
+        $("#queryCustomerParamsForm").form('clear');
         $("#weixinCondition").combobox('setValue','0');
         $("#customerList").datagrid("reload");
     }
@@ -123,7 +123,7 @@
                 <tr align="right">
                     <td colspan="8">
                         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="SearchCustomerByParams()">检索</a>
-                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="clearSearchParams()">清空条件</a>
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="clearCustomerSearchParams()">清空条件</a>
                     </td>
                 </tr>
             </table>

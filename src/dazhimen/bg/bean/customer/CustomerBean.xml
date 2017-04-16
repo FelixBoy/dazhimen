@@ -4,7 +4,7 @@
 <mapper namespace="dazhimen.bg.bean.Customer">
 
     <select id="getAllCustomerCountByParam" resultType="dazhimen.bg.bean.SingleValueBean"
-        parameterType="dazhimen.bg.bean.QueryCustomerParamBean">
+        parameterType="dazhimen.bg.bean.customer.QueryCustomerParamBean">
         select count(cid) as valueinfo from customer
         where isdel = '0'
         <if test="cidCondition != null and cidCondition != ''">
@@ -36,8 +36,8 @@
         </if>
     </select>
 
-    <select id="listAllCustomerByParam" resultType="dazhimen.bg.bean.CustomerBean"
-            parameterType="dazhimen.bg.bean.QueryCustomerParamBean">
+    <select id="listAllCustomerByParam" resultType="dazhimen.bg.bean.customer.CustomerBean"
+            parameterType="dazhimen.bg.bean.customer.QueryCustomerParamBean">
         select cid,name,nickname,gender,mphone,email,getcodetxt('education', education) education,
         qquid,weixinuid,accoutbalance,date_format(createdate,'%Y-%m-%d %H:%i:%s') createdate
         from customer
@@ -69,6 +69,7 @@
         <if test="endBalanceCondition != null and endBalanceCondition !=''">
             and accoutbalance <![CDATA[<=]]> #{endBalanceCondition}
         </if>
+        order by createdate desc
         limit #{startnum},#{getrows}
     </select>
 
@@ -76,17 +77,14 @@
         select count(cid) as valueinfo from customer where isdel = '0'
     </select>
 
-    <select id="listAllCustomer" resultType="dazhimen.bg.bean.CustomerBean"
+    <select id="listAllCustomer" resultType="dazhimen.bg.bean.customer.CustomerBean"
             parameterType="dazhimen.bg.bean.PaginationParamBean">
        select cid,name,nickname,gender,mphone,email,getcodetxt('education', education) education,
               qquid,weixinuid,accoutbalance,date_format(createdate,'%Y-%m-%d %H:%i:%s') createdate
          from customer
         where isdel = '0'
+        order by createdate desc
          limit #{startnum},#{getrows}
     </select>
 
-    <update id="saveCustomerDel">
-        update customer set isdel = '1',mphone = null,qquid = null,weixinuid = null
-          where cid = #{cid}
-    </update>
 </mapper>

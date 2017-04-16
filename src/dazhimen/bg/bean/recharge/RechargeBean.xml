@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.bg.bean.Recharge">
+    <select id="getAllRechargeCount" resultType="dazhimen.bg.bean.SingleValueBean">
+        select count(recid) as valueinfo from recharge where isdel = '0'
+    </select>
+    <select id="queryAllRecharge" resultType="dazhimen.bg.bean.recharge.ViewRechargeBean"
+           parameterType="dazhimen.bg.bean.PaginationParamBean">
+      select a.recid,a.recamount,b.cid,b.name cname,b.nickname cnickname,b.mphone,
+              getcodetxt('paymenttype', a.paymenttype) as paymenttype,
+              transaction_id,date_format(a.recdatetime,'%Y-%m-%d %H:%i:%s') recdatetime
+        from recharge a,customer b
+       where a.cid = b.cid
+         and a.isdel = '0'
+         order by a.recdatetime desc
+        limit #{startnum},#{getrows}
+    </select>
+    <select id="getAllRechargeCountByParam" resultType="dazhimen.bg.bean.SingleValueBean"
+            parameterType="dazhimen.bg.bean.recharge.QueryRechargeParamBean">
+        select count(a.recid) as valueinfo
+          from recharge a,customer b
+        where a.isdel = '0'
+          and a.cid = b.cid
+        <if test="cidCondition != null and cidCondition != ''">
+            and  b.cid like concat('%', #{cidCondition}, '%')
+        </if>
+        <if test="nicknameCondition != null and nicknameCondition != ''">
+            and  b.nickname like concat('%', #{nicknameCondition}, '%')
+        </if>
+        <if test="nameCondition != null and nameCondition != ''">
+            and  b.name like concat('%', #{nameCondition}, '%')
+        </if>
+        <if test="paymenttypeCondition != null and paymenttypeCondition != 0">
+            and a.paymenttype = #{paymenttypeCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and recdatetime <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and recdatetime <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+        <if test="startAmountCondition != null and startAmountCondition !=''">
+            and recamount <![CDATA[>=]]> #{startAmountCondition}
+        </if>
+        <if test="endAmountCondition != null and endAmountCondition !=''">
+            and recamount <![CDATA[<=]]> #{endAmountCondition}
+        </if>
+    </select>
+    <select id="queryAllRechargeByParam" resultType="dazhimen.bg.bean.recharge.ViewRechargeBean"
+            parameterType="dazhimen.bg.bean.recharge.QueryRechargeParamBean">
+        select a.recid,a.recamount,b.cid,b.name cname,b.nickname cnickname,b.mphone,
+        getcodetxt('paymenttype', a.paymenttype) as paymenttype,
+        transaction_id,date_format(a.recdatetime,'%Y-%m-%d %H:%i:%s') recdatetime
+        from recharge a,customer b
+        where a.cid = b.cid
+        and a.isdel = '0'
+        <if test="cidCondition != null and cidCondition != ''">
+            and  b.cid like concat('%', #{cidCondition}, '%')
+        </if>
+        <if test="nicknameCondition != null and nicknameCondition != ''">
+            and  b.nickname like concat('%', #{nicknameCondition}, '%')
+        </if>
+        <if test="nameCondition != null and nameCondition != ''">
+            and  b.name like concat('%', #{nameCondition}, '%')
+        </if>
+        <if test="paymenttypeCondition != null and paymenttypeCondition != 0">
+            and a.paymenttype = #{paymenttypeCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and recdatetime <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and recdatetime <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+        <if test="startAmountCondition != null and startAmountCondition !=''">
+            and recamount <![CDATA[>=]]> #{startAmountCondition}
+        </if>
+        <if test="endAmountCondition != null and endAmountCondition !=''">
+            and recamount <![CDATA[<=]]> #{endAmountCondition}
+        </if>
+        order by a.recdatetime desc
+        limit #{startnum},#{getrows}
+    </select>
+</mapper>

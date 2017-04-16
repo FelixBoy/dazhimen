@@ -1,17 +1,17 @@
-package dazhimen.bg.bean;
+package dazhimen.bg.bean.recharge;
 
 /**
- * Created by Administrator on 2017/4/11.
+ * Created by Administrator on 2017/4/16.
  */
-public class QueryCustomerParamBean {
+public class QueryRechargeParamBean {
     private String cidCondition = null;
     private String nicknameCondition = null;
     private String nameCondition = null;
-    private String weixinCondition = null;
+    private String paymenttypeCondition = null;
     private String starttimeCondition = null;
     private String endtimeCondition = null;
-    private String startBalanceCondition = null;
-    private String endBalanceCondition = null;
+    private String startAmountCondition = null;
+    private String endAmountCondition = null;
     private Integer startnum = null;
     private Integer getrows = null;
 
@@ -39,12 +39,12 @@ public class QueryCustomerParamBean {
         this.nameCondition = nameCondition;
     }
 
-    public String getWeixinCondition() {
-        return weixinCondition;
+    public String getPaymenttypeCondition() {
+        return paymenttypeCondition;
     }
 
-    public void setWeixinCondition(String weixinCondition) {
-        this.weixinCondition = weixinCondition;
+    public void setPaymenttypeCondition(String paymenttypeCondition) {
+        this.paymenttypeCondition = paymenttypeCondition;
     }
 
     public String getStarttimeCondition() {
@@ -63,20 +63,20 @@ public class QueryCustomerParamBean {
         this.endtimeCondition = endtimeCondition;
     }
 
-    public String getStartBalanceCondition() {
-        return startBalanceCondition;
+    public String getStartAmountCondition() {
+        return startAmountCondition;
     }
 
-    public void setStartBalanceCondition(String startBalanceCondition) {
-        this.startBalanceCondition = startBalanceCondition;
+    public void setStartAmountCondition(String startAmountCondition) {
+        this.startAmountCondition = startAmountCondition;
     }
 
-    public String getEndBalanceCondition() {
-        return endBalanceCondition;
+    public String getEndAmountCondition() {
+        return endAmountCondition;
     }
 
-    public void setEndBalanceCondition(String endBalanceCondition) {
-        this.endBalanceCondition = endBalanceCondition;
+    public void setEndAmountCondition(String endAmountCondition) {
+        this.endAmountCondition = endAmountCondition;
     }
 
     public Integer getStartnum() {

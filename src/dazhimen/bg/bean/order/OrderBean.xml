@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.bg.bean.Order">
+    <select id="getAllOrderCount" resultType="dazhimen.bg.bean.SingleValueBean">
+      select count(a.orid) as valueinfo
+        from orders a,
+             ir_order_product b
+      where a.orid = b.orid
+        and a.isdel = '0'
+    </select>
+    <select id="queryAllOrder" resultType="dazhimen.bg.bean.order.ViewOrderBean"
+            parameterType="dazhimen.bg.bean.PaginationParamBean">
+      select a.orid,date_format(a.ordatetime,'%Y-%m-%d %H:%i:%s') as ordatetime,
+              a.ordersum,getcodetxt('paymenttype', a.paymenttype) as paymenttype,
+              transaction_id,c.cid, c.name as cname,d.pid,d.pname,getcodetxt('producttype',d.type) as ptype
+        from orders a,
+             ir_order_product b,
+             customer c,
+             product d
+      where a.orid = b.orid
+        and a.cid = c.cid
+        and b.pid = d.pid
+        and a.isdel = '0'
+        order by ordatetime desc
+      limit #{startnum},#{getrows}
+    </select>
+    <select id="getAllOrderCountByParam" resultType="dazhimen.bg.bean.SingleValueBean"
+        parameterType="dazhimen.bg.bean.order.QueryOrderParamBean">
+       select count(a.orid) as valueinfo
+        from orders a,
+        ir_order_product b,
+        customer c,
+        product d
+        where a.orid = b.orid
+        and a.cid = c.cid
+        and b.pid = d.pid
+        and a.isdel = '0'
+        <if test="cidCondition != null and cidCondition != ''">
+            and  c.cid like concat('%', #{cidCondition}, '%')
+        </if>
+        <if test="mphoneCondition != null and mphoneCondition != ''">
+            and  b.mphone like concat('%', #{mphoneCondition}, '%')
+        </if>
+        <if test="producttypeCondition != null and producttypeCondition != 0">
+            and  d.type = #{producttypeCondition}
+        </if>
+        <if test="paymenttypeCondition != null and paymenttypeCondition != 0">
+            and a.paymenttype = #{paymenttypeCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and ordatetime <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and ordatetime <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+        <if test="startAmountCondition != null and startAmountCondition !=''">
+            and ordersum <![CDATA[>=]]> #{startAmountCondition}
+        </if>
+        <if test="endAmountCondition != null and endAmountCondition !=''">
+            and ordersum <![CDATA[<=]]> #{endAmountCondition}
+        </if>
+    </select>
+    <select id="queryAllOrderByParam" resultType="dazhimen.bg.bean.order.ViewOrderBean"
+            parameterType="dazhimen.bg.bean.order.QueryOrderParamBean">
+        select a.orid,date_format(a.ordatetime,'%Y-%m-%d %H:%i:%s') as ordatetime,
+        a.ordersum,getcodetxt('paymenttype', a.paymenttype) as paymenttype,
+        transaction_id,c.cid, c.name as cname,d.pid,d.pname,getcodetxt('producttype',d.type) as ptype
+        from orders a,
+        ir_order_product b,
+        customer c,
+        product d
+        where a.orid = b.orid
+        and a.cid = c.cid
+        and b.pid = d.pid
+        and a.isdel = '0'
+        <if test="cidCondition != null and cidCondition != ''">
+            and  c.cid like concat('%', #{cidCondition}, '%')
+        </if>
+        <if test="mphoneCondition != null and mphoneCondition != ''">
+            and  b.mphone like concat('%', #{mphoneCondition}, '%')
+        </if>
+        <if test="producttypeCondition != null and producttypeCondition != 0">
+            and  d.type = #{producttypeCondition}
+        </if>
+        <if test="paymenttypeCondition != null and paymenttypeCondition != 0">
+            and a.paymenttype = #{paymenttypeCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and ordatetime <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and ordatetime <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+        <if test="startAmountCondition != null and startAmountCondition !=''">
+            and ordersum <![CDATA[>=]]> #{startAmountCondition}
+        </if>
+        <if test="endAmountCondition != null and endAmountCondition !=''">
+            and ordersum <![CDATA[<=]]> #{endAmountCondition}
+        </if>
+        order by ordatetime desc
+        limit #{startnum},#{getrows}
+    </select>
+</mapper>

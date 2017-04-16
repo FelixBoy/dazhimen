@@ -1,27 +1,26 @@
 <script type="text/javascript">
     $(function () {
-        $("#orderList").datagrid({
-            title:"订单列表",
-            url:"<%=request.getContextPath()%>/order/queryAllOrder?random_id="+Math.random(),
+        $("#rechargeList").datagrid({
+            title:"充值列表",
+            url:"<%=request.getContextPath()%>/recharge/queryAllRecharge?random_id="+Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,
-            loadMsg:"正在加载订单数据...",
+            loadMsg:"正在加载充值数据...",
             columns: [[
-                { field: 'orid', title: '订单Id', width: '10%'},
-                { field: 'ordersum', title: '金额', width: '5%'},
-                { field: 'ordatetime', title: '下单时间', width: '15%'},
-                { field: 'paymenttype', title: '支付类型', width: '7%'},
-                { field: 'transaction_id', title: '支付订单号', width: '18%'},
-                { field: 'cid', title: '会员Id', width: '10%'},
+                { field: 'recid', title: '充值Id', width: '10%'},
+                { field: 'recamount', title: '充值金额', width: '5%'},
+                { field: 'recdatetime', title: '充值时间', width: '15%'},
+                { field: 'paymenttype', title: '支付类型', width: '10%'},
+                { field: 'transaction_id', title: '支付订单号', width: '20%'},
+                { field: 'cid', title: '会员ID', width: '10%'},
                 { field: 'cname', title: '会员姓名', width: '10%' },
-                { field: 'pid', title: '产品Id', width: '10%' },
-                { field: 'pname', title: '产品名称', width: '10%' },
-                { field: 'ptype', title: '产品类型', width: '5%' }
+                { field: 'cnickname', title: '会员昵称', width: '10%' },
+                { field: 'mphone', title: '会员手机号码', width: '10%' }
             ]],
             pagination: true
         });
-        $('#orderList').datagrid('getPager').pagination({
+        $('#rechargeList').datagrid('getPager').pagination({
             pageSize: 10,
             pageNumber: 1,
             pageList: [10,20,30],
@@ -30,53 +29,52 @@
             displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
         });
     });
-    function SearchOrderByParams() {
+    function SearchRechargeByParams() {
         var cidCondition = $("#cidCondition").val();
-        var mphoneCondition = $("#mphoneCondition").val();
-        var producttypeCondition = $("#producttypeCondition").val();
+        var nicknameCondition = $("#nicknameCondition").val();
+        var nameCondition = $("#nameCondition").val();
         var paymenttypeCondition = $("#paymenttypeCondition").val();
         var startAmountCondition = $("#startAmountCondition").val();
         var endAmountCondition = $("#endAmountCondition").val();
         var starttimeCondition = $('#starttimeCondition').datetimebox('getValue');
         var endtimeCondition = $('#endtimeCondition').datetimebox('getValue');
-        if(!cidCondition && !mphoneCondition && producttypeCondition == '0' && paymenttypeCondition == '0'
+        if(!cidCondition && !nicknameCondition && !nameCondition && paymenttypeCondition == '0'
             && !starttimeCondition && !endtimeCondition && !startAmountCondition && !endAmountCondition){
-            clearOrderSearchParams();
+            clearRechargeSearchParams();
             return;
         }
 
-        var queryParameter = $('#orderList').datagrid("options").queryParams;
+        var queryParameter = $('#rechargeList').datagrid("options").queryParams;
         queryParameter.cidCondition = cidCondition;
-        queryParameter.mphoneCondition = mphoneCondition;
-        queryParameter.producttypeCondition = producttypeCondition;
+        queryParameter.nicknameCondition = nicknameCondition;
+        queryParameter.nameCondition = nameCondition;
         queryParameter.paymenttypeCondition = paymenttypeCondition;
         queryParameter.starttimeCondition = starttimeCondition;
         queryParameter.endtimeCondition = endtimeCondition;
         queryParameter.startAmountCondition = startAmountCondition;
         queryParameter.endAmountCondition = endAmountCondition;
         queryParameter.queryByParamFlag = Math.random();
-        $("#orderList").datagrid("reload");
+        $("#rechargeList").datagrid("reload");
     }
-    function clearOrderSearchParams(){
-        var queryParameter = $('#orderList').datagrid("options").queryParams;
+    function clearRechargeSearchParams(){
+        var queryParameter = $('#rechargeList').datagrid("options").queryParams;
         queryParameter.cidCondition = null;
-        queryParameter.mphoneCondition = null;
-        queryParameter.producttypeCondition = null;
+        queryParameter.nicknameCondition = null;
+        queryParameter.nameCondition = null;
         queryParameter.paymenttypeCondition = null;
         queryParameter.starttimeCondition = null;
         queryParameter.endtimeCondition = null;
         queryParameter.startAmountCondition = null;
         queryParameter.endAmountCondition = null;
         queryParameter.queryByParamFlag = null;
-        $("#queryOrderParamsForm").form('clear');
+        $("#queryRechargeParamsForm").form('clear');
         $("#paymenttypeCondition").combobox('setValue','0');
-        $("#producttypeCondition").combobox('setValue','0');
-        $("#orderList").datagrid("reload");
+        $("#rechargeList").datagrid("reload");
     }
 </script>
 <div style="padding:5px 0;">
     <div style="margin:0px auto;width: 950px;">
-        <form id="queryOrderParamsForm">
+        <form id="queryRechargeParamsForm">
             <table cellpadding="5">
                 <tr>
                     <td colspan="8" >
@@ -89,36 +87,29 @@
                 <tr>
                     <td>会员Id:</td>
                     <td><input class="easyui-textbox"  id="cidCondition" data-options="prompt:'会员Id'" name="cidCondition"/></td>
-                    <td nowrap="nowrap">手机号码:</td>
-                    <td><input class="easyui-textbox" data-options="prompt:'会员手机号码'" id="mphoneCondition" name="mphoneCondition"/></td>
+                    <td nowrap="nowrap">会员姓名:</td>
+                    <td><input class="easyui-textbox" data-options="prompt:'会员姓名'" id="nameCondition" name="nameCondition"/></td>
+                    <td nowrap="nowrap">会员昵称:</td>
+                    <td><input class="easyui-textbox" data-options="prompt:'会员昵称'" id="nicknameCondition" name="nicknameCondition"/></td>
                     <td>支付类型:</td>
                     <td>
                         <select name="paymenttypeCondition" id="paymenttypeCondition" class="easyui-combobox"
                                 editable="false"  style="width:100%">
                             <option value="0" selected>全部</option>
-                            <option value="1">余额支付</option>
                             <option value="2">微信支付</option>
                             <option value="3">支付宝支付</option>
                         </select>
                     </td>
-                    <td>产品类型:</td>
-                    <td>
-                        <select name="producttypeCondition" id="producttypeCondition" class="easyui-combobox"
-                                editable="false"  style="width:100%">
-                            <option value="0" selected>全部</option>
-                            <option value="1">技能包</option>
-                            <option value="2">经验包</option>
-                        </select>
-                    </td>
+
                 </tr>
                 <tr>
-                    <td>下单时间:</td>
+                    <td>充值时间:</td>
                     <td><input id="starttimeCondition" name="starttimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'起始时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false"></td>
                     <td>至</td>
                     <td><input id="endtimeCondition" name="endtimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'结束时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false" ></td>
-                    <td>订单金额:</td>
+                    <td>充值金额:</td>
                     <td>
                         <input class="easyui-textbox"  id="startAmountCondition" data-options="prompt:'金额下限'" name="startAmountCondition"/>
                     </td>
@@ -129,13 +120,13 @@
                 </tr>
                 <tr align="right">
                     <td colspan="8">
-                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="SearchOrderByParams()">检索</a>
-                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="clearOrderSearchParams()">清空条件</a>
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="SearchRechargeByParams()">检索</a>
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="clearRechargeSearchParams()">清空条件</a>
                     </td>
                 </tr>
             </table>
         </form>
     </div>
-    <table id="orderList" style="width: auto;height: auto;">
+    <table id="rechargeList" style="width: auto;height: auto;">
     </table>
 </div>

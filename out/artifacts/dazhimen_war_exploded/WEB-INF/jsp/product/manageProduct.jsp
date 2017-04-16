@@ -179,8 +179,8 @@
         queryParameter.starttimeCondition = null;
         queryParameter.endtimeCondition = null;
         queryParameter.statusCondition = null;
-        queryParameter.queryByParamFlag = null
-        $("#queryProductParamsForm").form('clear');;
+        queryParameter.queryByParamFlag = null;
+        $("#queryProductParamsForm").form('clear');
         $("#typeCondition").combobox('setValue','0');
         $("#statusCondition").combobox('setValue','0');
         $("#productList").datagrid("reload");

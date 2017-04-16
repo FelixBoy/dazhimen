@@ -157,7 +157,7 @@
         limit #{startnum},#{getrows}
     </select>
 
-    <select id="getMasterDataByUid" resultType="dazhimen.bg.bean.UserBean">
+    <select id="getMasterDataByUid" resultType="dazhimen.bg.bean.user.UserBean">
         select uid,name,mphone,gender,loginname,date_format(createdate,'%Y-%m-%d %H:%i:%s') as createDatestr,remarks
           from user
         where uid = #{uid}
@@ -168,7 +168,7 @@
         from user where type = '1' and isdel = '0'
     </select>
 
-    <select id="listAllMasters" resultType="dazhimen.bg.bean.UserBean"
+    <select id="listAllMasters" resultType="dazhimen.bg.bean.user.UserBean"
             parameterType="dazhimen.bg.bean.PaginationParamBean">
         select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,introduction
           from user where type = '1' and isdel = '0'
