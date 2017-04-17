@@ -130,8 +130,10 @@ public class ApiNewsController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             if(newsBeans == null || newsBeans.size() == 0){
+                jsonObj.put("totalCount", newsBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
+                jsonObj.put("totalCount", newsBeans.size());
                 JSONArray newsResult = dealApiMoreNewsBean(resq, newsBeans);
                 jsonObj.put("data",newsResult);
             }
@@ -154,8 +156,10 @@ public class ApiNewsController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             if(newsBeans == null || newsBeans.size() == 0){
+                jsonObj.put("totalCount", newsBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
+                jsonObj.put("totalCount", newsBeans.size());
                 JSONArray newsResult = dealApiMoreNewsBean(resq, newsBeans);
                 jsonObj.put("data",newsResult);
             }
@@ -214,6 +218,8 @@ public class ApiNewsController {
                 contentBeans = dealNewsContentBean(resq,contentBeans);
                 dataObject.put("contentlist", new Gson().toJson(contentBeans));
             }
+            String iscollection = newsService.getNewsIsCollection(resq.getParameter("nid"), resq.getParameter("cid"));
+            jsonObject.put("iscollection", iscollection);
             jsonObject.put("data", dataObject.toString());
             ResponseUtil.writeMsg(resp, jsonObject.toString());
         }catch (ParameterCheckException e){

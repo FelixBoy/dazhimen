@@ -137,6 +137,27 @@ public class ApiNewsService {
         }
         return contentBeans;
     }
+    public String getNewsIsCollection(String nid, String cid) throws ApiException {
+
+        SqlSession sqlSession = null;
+        try{
+            if(cid != null && !cid.equals("")){
+                ApiQueryNewsCollectionParamBean paramBean = new ApiQueryNewsCollectionParamBean();
+                paramBean.setCid(cid);
+                paramBean.setNid(nid);
+                SingleValueBean value = sqlSession.selectOne("dazhimen.api.bean.ApiNews.getNewsIsCollection", paramBean);
+                if(value != null && value.getValueInfo()!= null && value.getValueInfo().equals("1")){
+                    return "1";
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，查询新闻收藏状态出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return "0";
+    }
     public List<ApiHomePageNewsBean> getHomePageNews(String getcount) throws ParameterCheckException, ApiException {
         int getCountInt = 0;
         if(getcount == null || getcount.equals("")){

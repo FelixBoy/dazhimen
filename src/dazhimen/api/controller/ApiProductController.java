@@ -107,9 +107,11 @@ public class ApiProductController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             if(productBeans == null || productBeans.size() == 0){
+                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
+                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
             ResponseUtil.writeMsg(resp, jsonObj.toString());
@@ -131,9 +133,11 @@ public class ApiProductController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             if(productBeans == null || productBeans.size() == 0){
+                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
+                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
             ResponseUtil.writeMsg(resp, jsonObj.toString());
@@ -156,9 +160,11 @@ public class ApiProductController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             if(productBeans == null || productBeans.size() == 0){
+                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
+                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
             ResponseUtil.writeMsg(resp, jsonObj.toString());
@@ -181,8 +187,10 @@ public class ApiProductController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             if(productBeans == null || productBeans.size() == 0){
+                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
+                jsonObj.put("totalCount", productBeans.size());
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
