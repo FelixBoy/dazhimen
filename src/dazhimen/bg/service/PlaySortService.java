@@ -322,12 +322,17 @@ public class PlaySortService {
         return indexPlayBeans;
     }
 
-    public boolean saveAddIndexPlay(String pid) throws BgException {
+    public boolean saveAddIndexPlay(String id, String type) throws BgException {
         SqlSession sqlSession = null;
         int result = 0;
         try{
             sqlSession = MyBatisUtil.createSession();
-            result = sqlSession.update("dazhimen.bg.bean.PlaySort.saveAddIndexPlay", pid);
+            if(type.equals("1") || type.equals("2")){
+                result = sqlSession.update("dazhimen.bg.bean.PlaySort.saveAddProductIndexPlay", id);
+            }else{
+                result = sqlSession.update("dazhimen.bg.bean.PlaySort.saveAddNewsIndexPlay", id);
+            }
+
             sqlSession.commit();
         }catch (Exception e){
             sqlSession.rollback();
@@ -338,12 +343,16 @@ public class PlaySortService {
         }
         return result == 1;
     }
-    public boolean saveDeleteIndexPlay(String pid) throws BgException {
+    public boolean saveDeleteIndexPlay(String id, String type) throws BgException {
         SqlSession sqlSession = null;
         int result = 0;
         try{
             sqlSession = MyBatisUtil.createSession();
-            result = sqlSession.update("dazhimen.bg.bean.PlaySort.saveDeleteIndexPlay", pid);
+            if(type.equals("1") || type.equals("2")){
+                result = sqlSession.update("dazhimen.bg.bean.PlaySort.saveDeleteProductIndexPlay", id);
+            }else{
+                result = sqlSession.update("dazhimen.bg.bean.PlaySort.saveDeleteNewsIndexPlay", id);
+            }
             sqlSession.commit();
         }catch (Exception e){
             sqlSession.rollback();

@@ -249,6 +249,23 @@ public class ApiProductService {
         }
         return "0";
     }
+    public String getProductTotalCountByType(String type) throws ApiException {
+        SqlSession sqlSession = null;
+        String totalCount = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            totalCount = sqlSession.selectOne("dazhimen.api.bean.ApiProduct.getProductTotalCountByType", type);
+            if(totalCount == null || totalCount.equals("")){
+                return "0";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("获取产品总条数出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return totalCount;
+    }
     public String getProductIsCollection(String cid, String pid) throws ApiException {
 
         SqlSession sqlSession = null;

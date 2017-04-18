@@ -41,4 +41,11 @@
         and name like #{keyword}
         order by createdate desc
     </select>
+
+    <select id="getMasterTotalCount" resultType="java.lang.String">
+        select count(uid)
+        from user
+        where type = '1'
+        and isdel = '0'
+    </select>
 </mapper>

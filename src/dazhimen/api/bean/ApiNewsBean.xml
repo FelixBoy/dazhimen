@@ -65,4 +65,8 @@
         where a.nid = b.nid
          and b.cid = #{cid}
     </select>
+    <select id="getNewsTotalCount" resultType="java.lang.String">
+        select count(nid)
+        from news where isdel = '0' and status = '1'
+    </select>
 </mapper>

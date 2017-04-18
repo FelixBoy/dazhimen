@@ -141,6 +141,7 @@ public class ApiNewsService {
 
         SqlSession sqlSession = null;
         try{
+            sqlSession = MyBatisUtil.createSession();
             if(cid != null && !cid.equals("")){
                 ApiQueryNewsCollectionParamBean paramBean = new ApiQueryNewsCollectionParamBean();
                 paramBean.setCid(cid);
@@ -157,6 +158,22 @@ public class ApiNewsService {
             MyBatisUtil.closeSession(sqlSession);
         }
         return "0";
+    }
+    public String getNewsTotalCount(){
+        SqlSession sqlSession = null;
+        String totalCount = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            totalCount = sqlSession.selectOne("dazhimen.api.bean.ApiNews.getNewsTotalCount");
+            if(totalCount == null || totalCount.equals("")){
+                return "0";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return totalCount;
     }
     public List<ApiHomePageNewsBean> getHomePageNews(String getcount) throws ParameterCheckException, ApiException {
         int getCountInt = 0;

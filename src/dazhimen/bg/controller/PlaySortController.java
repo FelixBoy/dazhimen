@@ -272,10 +272,10 @@ public class PlaySortController {
         }
     }
     @RequestMapping("/saveAddIndexPlay")
-    public void saveAddIndexPlay(@RequestParam("pid") String pid,HttpServletResponse resp){
+    public void saveAddIndexPlay(@RequestParam("id") String id,@RequestParam("type") String type,HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try{
-            boolean result = playSortService.saveAddIndexPlay(pid);
+            boolean result = playSortService.saveAddIndexPlay(id, type);
             if(result){
                 ResponseUtil.writeMsg(resp, "新增轮播成功");
             }else{
@@ -287,10 +287,10 @@ public class PlaySortController {
         }
     }
     @RequestMapping("/saveDeleteIndexPlay")
-    public void saveDeleteIndexPlay(@RequestParam("pid") String pid,HttpServletResponse resp){
+    public void saveDeleteIndexPlay(@RequestParam("id") String id, @RequestParam("type") String type, HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try{
-            boolean result = playSortService.saveDeleteIndexPlay(pid);
+            boolean result = playSortService.saveDeleteIndexPlay(id, type);
             if(result){
                 ResponseUtil.writeMsg(resp, "取消轮播成功");
             }else{

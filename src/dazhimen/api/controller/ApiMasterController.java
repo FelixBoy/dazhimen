@@ -60,11 +60,11 @@ public class ApiMasterController {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
+            String totalCount = masterService.getMasterTotalCount();
+            jsonObj.put("totalCount", totalCount);
             if(masterBeans != null && masterBeans.size() == 0){
-                jsonObj.put("totalCount", masterBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
-                jsonObj.put("totalCount", masterBeans.size());
                 masterBeans = dealApiHomePageMasterBean(resq, masterBeans);
                 jsonObj.put("data",new Gson().toJson(masterBeans));
             }
@@ -87,11 +87,11 @@ public class ApiMasterController {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
+            String totalCount = masterService.getMasterTotalCount();
+            jsonObj.put("totalCount", totalCount);
             if(masterBeans != null && masterBeans.size() == 0){
-                jsonObj.put("totalCount", masterBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
-                jsonObj.put("totalCount", masterBeans.size());
                 masterBeans = dealApiHomePageMasterBean(resq, masterBeans);
                 jsonObj.put("data",new Gson().toJson(masterBeans));
             }

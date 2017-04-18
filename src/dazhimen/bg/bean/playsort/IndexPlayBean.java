@@ -4,33 +4,24 @@ package dazhimen.bg.bean.playsort;
  * Created by Administrator on 2017/4/1.
  */
 public class IndexPlayBean {
-    private String pid = null;
-    private String pname = null;
+    private String id = null;
+    private String name = null;
     private String type = null;
-
-    @Override
-    public String toString() {
-        return "IndexPlayBean{" +
-                "pid='" + pid + '\'' +
-                ", pname='" + pname + '\'' +
-                ", type='" + type + '\'' +
-                '}';
+    private String typenum = null;
+    public String getId() {
+        return id;
     }
 
-    public String getPid() {
-        return pid;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setPid(String pid) {
-        this.pid = pid;
+    public String getName() {
+        return name;
     }
 
-    public String getPname() {
-        return pname;
-    }
-
-    public void setPname(String pname) {
-        this.pname = pname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getType() {
@@ -39,5 +30,13 @@ public class IndexPlayBean {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getTypenum() {
+        return typenum;
+    }
+
+    public void setTypenum(String typenum) {
+        this.typenum = typenum;
     }
 }

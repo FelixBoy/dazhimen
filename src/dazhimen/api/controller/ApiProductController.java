@@ -106,12 +106,12 @@ public class ApiProductController {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
+            String totalCount = productService.getProductTotalCountByType(Constant.SkillPack);
+            jsonObj.put("totalCount", totalCount);
             if(productBeans == null || productBeans.size() == 0){
-                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
-                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
             ResponseUtil.writeMsg(resp, jsonObj.toString());
@@ -132,12 +132,12 @@ public class ApiProductController {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
+            String totalCount = productService.getProductTotalCountByType(Constant.ExperiencePack);
+            jsonObj.put("totalCount", totalCount);
             if(productBeans == null || productBeans.size() == 0){
-                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
-                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
             ResponseUtil.writeMsg(resp, jsonObj.toString());
@@ -159,12 +159,12 @@ public class ApiProductController {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
+            String totalCount = productService.getProductTotalCountByType(Constant.SkillPack);
+            jsonObj.put("totalCount", totalCount);
             if(productBeans == null || productBeans.size() == 0){
-                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
-                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }
             ResponseUtil.writeMsg(resp, jsonObj.toString());
@@ -186,11 +186,11 @@ public class ApiProductController {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
+            String totalCount = productService.getProductTotalCountByType(Constant.ExperiencePack);
+            jsonObj.put("totalCount", totalCount);
             if(productBeans == null || productBeans.size() == 0){
-                jsonObj.put("totalCount", productBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
-                jsonObj.put("totalCount", productBeans.size());
                 productBeans = dealApiHomePageProductBean(resq, productBeans);
                 jsonObj.put("data",new Gson().toJson(productBeans));
             }

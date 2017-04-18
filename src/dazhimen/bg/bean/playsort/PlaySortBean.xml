@@ -3,27 +3,43 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.PlaySort">
     <select id="listAllIndexPlay" resultType="dazhimen.bg.bean.playsort.IndexPlayBean">
-        select a.pid,a.pname,getcodetxt('producttype',a.type) type
+        select a.pid as id,a.pname as name,getcodetxt('producttype',a.type) type,a.type as typenum
           from product a
         where a.status != '3' and a.isdel = '0' and a.indexplay = '1'
-        <!--未来要 重新梳理一下字段，并拼接上 新闻模块-->
+        union
+        select b.nid as id,b.title as name,'新闻' as type,'3' as typenum
+          from news b
+        where b.status = '1' and isdel = '0' and indexplay = '1'
     </select>
 
     <select id="getAddIndexPlayData" resultType="dazhimen.bg.bean.playsort.IndexPlayBean">
-          select a.pid,a.pname,getcodetxt('producttype',a.type) type
+          select a.pid as id,a.pname as name,getcodetxt('producttype',a.type) type,a.type as typenum
           from product a
         where a.status != '3' and a.isdel = '0' and a.indexplay = '0'
-        <!--未来要 重新梳理一下字段，并拼接上 新闻模块-->
+        union
+        select b.nid as id,b.title as name,'新闻' as type,'3' as typenum
+        from news b
+        where b.status = '1' and isdel = '0' and indexplay = '0'
     </select>
-    <update id="saveAddIndexPlay">
+    <update id="saveAddProductIndexPlay">
         update product
           set indexplay = '1'
-        where pid = #{pid}
+        where pid = #{id}
     </update>
-    <update id="saveDeleteIndexPlay">
+    <update id="saveAddNewsIndexPlay">
+        update news
+        set indexplay = '1'
+        where nid = #{id}
+    </update>
+    <update id="saveDeleteProductIndexPlay">
         update product
         set indexplay = '0'
-        where pid = #{pid}
+        where pid = #{id}
+    </update>
+    <update id="saveDeleteNewsIndexPlay">
+        update news
+        set indexplay = '0'
+        where nid = #{id}
     </update>
     <select id="getAddSkillPackIndexSortData" resultType="dazhimen.bg.bean.playsort.ProductIndexSortBean">
         select a.pid,a.pname,getcodetxt('producttype',a.type) type

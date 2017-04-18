@@ -129,11 +129,11 @@ public class ApiNewsController {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
+            String totalCount = newsService.getNewsTotalCount();
+            jsonObj.put("totalCount", totalCount);
             if(newsBeans == null || newsBeans.size() == 0){
-                jsonObj.put("totalCount", newsBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
-                jsonObj.put("totalCount", newsBeans.size());
                 JSONArray newsResult = dealApiMoreNewsBean(resq, newsBeans);
                 jsonObj.put("data",newsResult);
             }
@@ -155,11 +155,11 @@ public class ApiNewsController {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
+            String totalCount = newsService.getNewsTotalCount();
+            jsonObj.put("totalCount", totalCount);
             if(newsBeans == null || newsBeans.size() == 0){
-                jsonObj.put("totalCount", newsBeans.size());
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
-                jsonObj.put("totalCount", newsBeans.size());
                 JSONArray newsResult = dealApiMoreNewsBean(resq, newsBeans);
                 jsonObj.put("data",newsResult);
             }

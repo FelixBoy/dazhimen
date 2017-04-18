@@ -12,6 +12,22 @@ import java.util.List;
  * Created by Administrator on 2017/3/31.
  */
 public class ApiMasterService {
+    public String getMasterTotalCount(){
+        SqlSession sqlSession = null;
+        String totalCount = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            totalCount = sqlSession.selectOne("dazhimen.api.bean.ApiMaster.getMasterTotalCount");
+            if(totalCount == null || totalCount.equals("")){
+                return "0";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return totalCount;
+    }
     public List<ApiMasterBean> getHomePageMasterInfo(String getCount) throws ApiException, ParameterCheckException {
         int getCountInt = 0;
         if(getCount == null || getCount.equals("")){
