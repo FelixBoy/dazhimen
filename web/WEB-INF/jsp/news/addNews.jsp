@@ -186,27 +186,35 @@
 <div style="margin:0px auto;width: 900px;text-align: center;">
 <form id="addNewsForm" action="<%=request.getContextPath()%>/news/saveAddNews"
       enctype="multipart/form-data" method="post">
-    <table cellpadding="5">
+    <table id="newsTitleTable" cellpadding="5">
         <tr>
             <td colspan="6" >
                 <div class="formTitle" style="background-color:#f2f2f2;">
-                    <div class="formTitle-icon">
-                    </div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">请选择掌门<span style="color:red">*</span></div>
+                    <div class="formTitle-icon"></div>
+                    <div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">
+                        请填写新闻标题
+                    </div>
                 </div>
             </td>
         </tr>
         <tr>
-            <td nowrap="nowrap">新闻标题:<span style="color:red">*</span></td>
-            <td colspan="5"><input class="easyui-textbox" id="newstitle" style="width: 750px;" name="newstitle" /></td>
+            <td>新闻标题:<span style="color:red">*</span></td>
+            <td colspan="5">
+                <input class="easyui-textbox" style="width:750px" id="newstitle" name="newstitle"/>
+            </td>
         </tr>
         <tr>
-            <td nowrap="nowrap">列表图片:<span style="color:red">*</span></td>
-            <td colspan="2"><input class="easyui-filebox" id="newslistimg" name="newslistimg" style="width:300px" accept="image/jpeg,image/png"
-                        data-options="prompt:'用于新闻列表展示，(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'"/>
+            <td>列表图片:<span style="color:red">*</span></td>
+            <td colspan="5">
+                <input class="easyui-filebox" data-options="prompt:'用于新闻列表展示，(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'"
+                       style="width:100%" id="newslistimg" name="newslistimg"/>
             </td>
-            <td nowrap="nowrap">新闻主图:<span style="color:red">*</span></td>
-            <td colspan="2"><input class="easyui-filebox" id="newsmainimg" name="newsmainimg" style="width:300px" accept="image/jpeg,image/png"
-                       data-options="prompt:'用于首页轮播，(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'"/>
+        </tr>
+        <tr>
+            <td>新闻主图:<span style="color:red">*</span></td>
+            <td colspan="5">
+                <input class="easyui-filebox" data-options="prompt:'用于首页轮播，(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'"
+                       style="width:100%" id="newsmainimg" name="newsmainimg"/>
             </td>
         </tr>
     </table>
