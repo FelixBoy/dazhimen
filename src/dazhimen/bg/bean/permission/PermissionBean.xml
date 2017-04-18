@@ -21,4 +21,12 @@
     <delete id="deleteRole">
         delete from role where rid = #{rid}
     </delete>
+    <insert id="saveAddRole" parameterType="dazhimen.bg.bean.permission.AddRoleBean">
+        insert into role(rid,name,introduction,ismastercanown)
+           values(#{rid}, #{name}, #{introduction}, #{ismastercanown})
+    </insert>
+    <insert id="saveAddIrRoleModule" parameterType="dazhimen.bg.bean.permission.AddIrRoleModuleBean">
+        insert into ir_role_module(rid,mid)
+        values(#{rid}, #{mid})
+    </insert>
 </mapper>

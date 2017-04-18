@@ -1,13 +1,17 @@
 package dazhimen.bg.service;
 
 import dazhimen.bg.bean.PaginationParamBean;
+import dazhimen.bg.bean.permission.AddIrRoleModuleBean;
+import dazhimen.bg.bean.permission.AddRoleBean;
 import dazhimen.bg.bean.permission.ListViewRoleBean;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import net.sf.json.JSONObject;
 import org.apache.ibatis.session.SqlSession;
+import util.IdUtils;
 import util.PaginationUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,5 +58,29 @@ public class PermissionService {
             MyBatisUtil.closeSession(sqlSession);
         }
     }
-
+    public void saveAddRole(AddRoleBean addRoleBean) throws BgException {
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            String rid = new IdUtils().getRoleId();
+            addRoleBean.setRid(rid);
+            sqlSession.insert("dazhimen.bg.bean.Permission.saveAddRole", addRoleBean);
+            ArrayList<String> permissionList = addRoleBean.getPermissionList();
+            AddIrRoleModuleBean irRoleModuleBean = new AddIrRoleModuleBean();
+            if(permissionList != null && permissionList.size() > 0){
+                for(int i = 0 ; i < permissionList.size(); i++){
+                    irRoleModuleBean.setRid(rid);
+                    irRoleModuleBean.setMid(permissionList.get(i));
+                    sqlSession.insert("dazhimen.bg.bean.Permission.saveAddIrRoleModule", irRoleModuleBean);
+                }
+            }
+            sqlSession.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，新增角色失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
 }

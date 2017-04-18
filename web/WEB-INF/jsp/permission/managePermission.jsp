@@ -33,6 +33,18 @@
             displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
         });
     });
+    function forwardAddRolePage(){
+        $('#addRoleDialog').dialog({
+            title: '新增角色',
+            width: 500,
+            height: 550,
+            closed: true,
+            cache: false,
+            href: "<%=request.getContextPath()%>/permission/forwardAddRolePage",
+            modal: true
+        });
+        $('#addRoleDialog').dialog("open");
+    }
     function saveDeleteRole(index){
         $('#roleList').datagrid('selectRow',index);
         var row = $('#roleList').datagrid('getSelected');
@@ -57,6 +69,7 @@
     }
 </script>
 <div style="padding:5px 0;">
+    <div id="addRoleDialog"></div>
     <table id="roleList" style="width: auto;height: auto;"></table>
     <br/>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddRolePage()">新增角色</a>

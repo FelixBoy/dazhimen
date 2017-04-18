@@ -1,16 +1,20 @@
 package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+import dazhimen.bg.bean.permission.AddRoleBean;
 import dazhimen.bg.bean.permission.ListViewRoleBean;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.PermissionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import util.Constant;
 import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,5 +55,43 @@ public class PermissionController {
             e.printStackTrace();
             ResponseUtil.writeFailMsgToBrowse(resp,e.getMessage());
         }
+    }
+
+    @RequestMapping("/forwardAddRolePage")
+    public String forwardAddRolePage(){
+        return "/permission/addRole";
+    }
+    @RequestMapping("/saveAddRole")
+    public void saveAddRole(HttpServletRequest resq, HttpServletResponse resp){
+        AddRoleBean addRoleBean = getAddRoleBean(resq);
+        PermissionService permissionService = new PermissionService();
+        try {
+            permissionService.saveAddRole(addRoleBean);
+            ResponseUtil.writeMsg(resp, "新增角色成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    private AddRoleBean getAddRoleBean(HttpServletRequest resq){
+        AddRoleBean addRoleBean = new AddRoleBean();
+        addRoleBean.setName(resq.getParameter("name"));
+        String isMasterCanOwn = resq.getParameter("ismastercanown");
+        if(isMasterCanOwn == null || isMasterCanOwn.equals("")){
+            addRoleBean.setIsmastercanown("0");
+        }else{
+            addRoleBean.setIsmastercanown(isMasterCanOwn);
+        }
+        String introduction = resq.getParameter("introduction");
+        addRoleBean.setIntroduction(introduction);
+        ArrayList<String> permissionList = new ArrayList<String>();
+        String[] rolePermission = resq.getParameterValues("rolepermission");
+        for(int i = 0; i < rolePermission.length; i++){
+            if(rolePermission[i] != null && !rolePermission[i].equals("")){
+                permissionList.add(rolePermission[i]);
+            }
+        }
+        addRoleBean.setPermissionList(permissionList);
+        return addRoleBean;
     }
 }

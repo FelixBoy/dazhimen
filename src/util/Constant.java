@@ -4,12 +4,20 @@ package util;
  * Created by Administrator on 2017/3/15.
  * 系统中用到的常量定义
  */
+
 public class Constant {
-    //首页各类实体排序的个数
-    public static final Integer IndexSortNumber_SkillPack = 3;
-    public static final Integer IndexSortNumber_ExperiencePack = 3;
-    public static final Integer IndexSortNumber_NewsPack = 3;
-    public static final Integer IndexSortNumber_Master = 3;
+    //各模块用于控制权限的id
+    public static final String Per_Product = "product_manage";
+    public static final String Per_News = "news_manage";
+    public static final String Per_Customer = "customer_query";
+    public static final String Per_Recharge= "recharge_query";
+    public static final String Per_Order = "order_query";
+    public static final String Per_Indexplay = "indexplay_manage";
+    public static final String Per_Indexsort = "indexsort_manange";
+    public static final String Per_Master = "master_manage";
+    public static final String Per_Admin = "admin_manage";
+    public static final String Per_Permission = "permission_manage";
+
     //文件后缀名常量
     public static final String FileSuffix_JPG = ".jpg";
     public static final String FileSuffix_PNG = ".png";
@@ -22,7 +30,10 @@ public class Constant {
     public static final String LoginUserKey = "loginuser";
     //字符集
     public static final String CharSet = "utf-8";
-
+    //数据库中rid（新角色id)的序列名称
+    public static final String roleSeqName = "role_seq";
+    //rid中编码中，最后面部分的，数字序列的长度
+    public static final int roleSeqLength = 3;
     //数据库中nid（新闻id)的序列名称
     public static final String newsSeqName = "news_seq";
     //nid中编码中，最后面部分的，数字序列的长度
