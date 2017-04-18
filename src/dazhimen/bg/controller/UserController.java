@@ -260,7 +260,6 @@ public class UserController {
     }
     @RequestMapping("/queryAllAdmin")
     public void queryAllAdmin(HttpServletRequest resq, HttpServletResponse resp) {
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             UserService userService = new UserService();
             String page = resq.getParameter("page");

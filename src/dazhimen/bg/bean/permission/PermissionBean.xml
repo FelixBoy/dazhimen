@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.bg.bean.Permission">
+    <select id="queryAllRole" resultType="dazhimen.bg.bean.permission.ListViewRoleBean"
+        parameterType="dazhimen.bg.bean.PaginationParamBean">
+        select rid,name,introduction,getcodetxt('rightorwrong',ismastercanown) ismastercanown
+         from role
+        order by rid desc
+        limit #{startnum},#{getrows}
+    </select>
+    <select id="getAllRoleCount" resultType="java.lang.String">
+      select count(rid) from role;
+    </select>
+    <delete id="deleteIrUserRole">
+        delete from ir_user_role where rid = #{rid}
+    </delete>
+    <delete id="deleteIrRoleModule">
+        delete from ir_role_module where rid = #{rid}
+    </delete>
+    <delete id="deleteRole">
+        delete from role where rid = #{rid}
+    </delete>
+</mapper>

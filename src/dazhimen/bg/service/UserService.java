@@ -167,7 +167,7 @@ public class UserService {
             sqlSession = MyBatisUtil.createSession();
             SingleValueBean allAdminCountValue = sqlSession.selectOne("dazhimen.bg.bean.User.getAllAdminCount");
             if(allAdminCountValue == null || allAdminCountValue.getValueInfo() == null){
-                throw new ApiException("获取管理员数据总条数出错");
+                throw new BgException("获取管理员数据总条数出错");
             }
             totalCount = Integer.parseInt(allAdminCountValue.getValueInfo());
             PaginationParamBean paramBean = PaginationUtil.getPaginationParamBean(page,rows);

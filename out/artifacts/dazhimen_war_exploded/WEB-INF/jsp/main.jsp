@@ -74,7 +74,7 @@
                         }
                     });
                     break;
-                case 'customer_manage':
+                case 'customer_query':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/customer/fwdCustomerManagePage?random_id="+Math.random(),
                         onLoad:function(){
@@ -93,14 +93,14 @@
                         }
                     });
                     break;
-                case 'recharge_manage':
+                case 'recharge_query':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/recharge/fwdManageRechargePage?random_id="+Math.random(),
                         onLoad:function(){
                         }
                     });
                     break;
-                case 'order_manage':
+                case 'order_query':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/order/fwdManageOrderPage?random_id="+Math.random(),
                         onLoad:function(){
@@ -117,6 +117,11 @@
                 case 'news_manage':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/news/fwdManageNewsPage?random_id="+Math.random()
+                    });
+                    break;
+                case 'permission_manage':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/permission/fwdManagePermissionPage?random_id="+Math.random()
                     });
                     break;
                 default:
@@ -149,9 +154,9 @@
             <li id="customer_recharge_order" data-options="state:'open'">
                 <span>会员/充值/订单</span>
                 <ul>
-                    <li id="customer_manage">会员查询</li>
-                    <li id="recharge_manage">充值查询</li>
-                    <li id="order_manage">订单查询</li>
+                    <li id="customer_query">会员查询</li>
+                    <li id="recharge_query">充值查询</li>
+                    <li id="order_query">订单查询</li>
                 </ul>
             </li>
             <li id="play_sort_right" data-options="state:'open'">
