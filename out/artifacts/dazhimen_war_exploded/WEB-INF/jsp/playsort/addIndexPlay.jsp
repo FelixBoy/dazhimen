@@ -11,7 +11,7 @@
             onDblClickRow:function(index, row){
                 if(row){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/playsort/saveAddIndexPlay?pid=" + row.pid
+                        url:"<%=request.getContextPath()%>/playsort/saveAddIndexPlay?id=" + row.id + "&type=" + row.typenum
                         + "&random_id="+Math.random(),
                         type:'get',
                         async:false,
@@ -33,7 +33,7 @@
         var row = $('#addIndexPlayList').datagrid('getSelected');
         if(row){
             $.ajax({
-                url:"<%=request.getContextPath()%>/playsort/saveAddIndexPlay?pid=" + row.pid
+                url:"<%=request.getContextPath()%>/playsort/saveAddIndexPlay?id=" + row.id + "&type=" + row.typenum
                 + "&random_id="+Math.random(),
                 type:'get',
                 async:false,
@@ -56,9 +56,10 @@
            rownumbers="true" fitColumns="true" singleSelect="true" >
         <thead>
         <tr>
-            <th data-options="field:'pid'" width="30%">Id</th>
-            <th data-options="field:'pname'" width="40%">名称</th>
+            <th data-options="field:'id'" width="30%">Id</th>
+            <th data-options="field:'name'" width="40%">名称</th>
             <th data-options="field:'type'" width="30%">类型</th>
+            <th data-options="field:'typenum',hidden:true"></th>
         </tr>
         </thead>
     </table>

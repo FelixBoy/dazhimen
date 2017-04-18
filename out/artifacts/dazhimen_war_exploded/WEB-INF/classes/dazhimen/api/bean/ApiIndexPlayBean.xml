@@ -8,6 +8,10 @@
                product_image b
         where a.status != '3' and a.isdel = '0' and a.indexplay = '1'
           and a.pid = b.pid
+        union
+      select a.nid as id,a.mainimgurl as imgurl, '2' as contenttype, '0' as producttype, '1' as isstart
+        from news a
+      where a.status = '1' and isdel = '0' and indexplay = '1'
         limit 6
         <!--将来要补上，关于新闻的-->
     </select>

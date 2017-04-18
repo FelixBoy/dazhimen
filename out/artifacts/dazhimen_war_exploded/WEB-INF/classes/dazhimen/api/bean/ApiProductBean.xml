@@ -26,7 +26,13 @@
           from course
          where courseid = #{courseid}
     </select>
-
+    <select id="getProductTotalCountByType" resultType="java.lang.String">
+        select count(pid)
+          from product
+         where isdel = '0'
+           and status != '3'
+           and type = #{type}
+    </select>
     <select id="searchProductByTypeAndKeyword" parameterType="dazhimen.api.bean.ApiQueryProductByTypeAndKeyword"
             resultType="dazhimen.api.bean.ApiProductBean">
         select pid,pname,listimage as listimgurl,updatedatetime as updatetimeo,price,status as isstart
