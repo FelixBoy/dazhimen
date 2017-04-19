@@ -17,7 +17,7 @@
                     formatter: function (value, rowData, rowIndex) {
                         return '<a href="javascript:void(0)" onclick="fwdViewRolePage('+rowIndex+')">查看</a>&nbsp&nbsp&nbsp&nbsp' +
                                 '<a href="javascript:void(0)" onclick="fwdModifyRole('+rowIndex+')">修改角色</a>&nbsp&nbsp&nbsp&nbsp' +
-                                '<a href="javascript:void(0)" onclick="fwdAdjustRoleUser('+rowIndex+')">调整拥有角色的人员</a>&nbsp&nbsp&nbsp&nbsp' +
+                                '<a href="javascript:void(0)" onclick="fwdAdjustRoleUserPage('+rowIndex+')">调整拥有角色的人员</a>&nbsp&nbsp&nbsp&nbsp' +
                                 '<a href="javascript:void(0)" onclick="saveDeleteRole('+rowIndex+')">删除</a>';
                     }
                 }
@@ -33,6 +33,17 @@
             displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
         });
     });
+    function fwdAdjustRoleUserPage(rowIndex){
+        $('#roleList').datagrid('selectRow',rowIndex);
+        var row = $('#roleList').datagrid('getSelected');
+        if(row){
+            $('#content_panel').panel({
+                href:"<%=request.getContextPath() %>/permission/fwdAdjustRoleUserPage?random_id="+Math.random() + "&rid=" + row.rid,
+                onLoad:function(){
+                }
+            });
+        }
+    }
     function fwdModifyRole(index) {
         $('#roleList').datagrid('selectRow',index);
         var row = $('#roleList').datagrid('getSelected');

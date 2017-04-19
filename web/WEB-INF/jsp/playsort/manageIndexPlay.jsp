@@ -6,23 +6,23 @@
         $("#indexPlayList").datagrid("selectRow", index);
         var row = $('#indexPlayList').datagrid('getSelected');
         if(row){
-                $.messager.confirm('确认','您确认取消【'+ row.pname + '】的首页轮播吗？',function(r) {
-                    if (r) {
-                        $.ajax({
-                            url:"<%=request.getContextPath()%>/playsort/saveDeleteIndexPlay?id=" + row.id + "&type="+row.typenum
-                            + "&random_id="+Math.random(),
-                            type:'get',
-                            async:false,
-                            error:function(data){
-                                MsgBox.show(data.responseText);
-                            },
-                            success:function(data){
-                                MsgBox.show(data);
-                                $('#indexPlayList').datagrid('reload');
-                            }
-                        });
-                    }
-                });
+            $.messager.confirm('确认','您确认取消【'+ row.pname + '】的首页轮播吗？',function(r) {
+                if (r) {
+                    $.ajax({
+                        url:"<%=request.getContextPath()%>/playsort/saveDeleteIndexPlay?id=" + row.id + "&type="+row.typenum
+                        + "&random_id="+Math.random(),
+                        type:'get',
+                        async:false,
+                        error:function(data){
+                            MsgBox.show(data.responseText);
+                        },
+                        success:function(data){
+                            MsgBox.show(data);
+                            $('#indexPlayList').datagrid('reload');
+                        }
+                    });
+                }
+            });
         }
     }
     function forwardAddIndexPlayPage(){

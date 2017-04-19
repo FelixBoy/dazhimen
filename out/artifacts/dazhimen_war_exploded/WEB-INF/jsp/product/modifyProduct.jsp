@@ -143,7 +143,6 @@
                 <td>介绍:</td>
                 <td colspan="6"><input class="easyui-textbox" name="introduction" data-options="multiline:true" style="width:90%;height:80px;"/></td>
             </tr>
-
         </table>
 
         <div style="text-align: center;">

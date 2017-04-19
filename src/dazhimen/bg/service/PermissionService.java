@@ -7,6 +7,7 @@ import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import net.sf.json.JSONObject;
 import org.apache.ibatis.session.SqlSession;
+import util.CheckIsExistsUtils;
 import util.IdUtils;
 import util.PaginationUtil;
 
@@ -116,7 +117,49 @@ public class PermissionService {
         }
         return irRoleModuleBeans;
     }
+    public List<ViewIrRoleUserBean> queryIrRoleUser(String rid) throws BgException {
+        if(rid == null || rid.equals("")){
+            throw new BgException("传入的rid参数为空，无法查询");
+        }
+        SqlSession sqlSession = null;
+        List<ViewIrRoleUserBean> irRoleUserBeans = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            irRoleUserBeans = sqlSession.selectList("dazhimen.bg.bean.Permission.queryIrRoleUser", rid);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BgException("出现异常，查询角色对应人员信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return irRoleUserBeans;
+    }
 
+    public String getRoleInforInAdjustUser(String rid) throws BgException {
+        if(rid == null || rid.equals("")){
+            throw new BgException("传入的rid参数为空，无法查询");
+        }
+        SqlSession sqlSession = null;
+        ViewRoleInforBean roleInforBean = null;
+        List<ViewIrRoleModuleBean> irRoleModuleBeans = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            roleInforBean = sqlSession.selectOne("dazhimen.bg.bean.Permission.getModifyRoleInfor", rid);
+            irRoleModuleBeans = sqlSession.selectList("dazhimen.bg.bean.Permission.queryIrRoleModule", rid);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BgException("出现异常，查询角色信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("rid", roleInforBean.getRid());
+        jsonObject.put("name", roleInforBean.getName());
+        jsonObject.put("ismastercanown", roleInforBean.getIsmastercanown());
+        jsonObject.put("introduction", roleInforBean.getIntroduction());
+        jsonObject.put("rolepermissionstr", getRolePermissionStr(irRoleModuleBeans));
+        return jsonObject.toString();
+    }
     public String getModifyRoleInfor(String rid) throws BgException {
         if(rid == null || rid.equals("")){
             throw new BgException("传入的rid参数为空，无法查询");
@@ -129,7 +172,8 @@ public class PermissionService {
             roleInforBean = sqlSession.selectOne("dazhimen.bg.bean.Permission.getModifyRoleInfor", rid);
             irRoleModuleBeans = sqlSession.selectList("dazhimen.bg.bean.Permission.queryIrRoleModuleInModifyRole", rid);
         }catch (Exception e){
-
+            e.printStackTrace();
+            throw new BgException("出现异常，查询角色信息出错");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }
@@ -138,7 +182,6 @@ public class PermissionService {
         jsonObject.put("name", roleInforBean.getName());
         jsonObject.put("ismastercanown", roleInforBean.getIsmastercanown());
         jsonObject.put("introduction", roleInforBean.getIntroduction());
-        //这里不用tojson，而选择使用 a,b,c,d的方法，拼接一个字符串。
         jsonObject.put("rolepermissionstr", getRolePermissionStr(irRoleModuleBeans));
         return jsonObject.toString();
     }
@@ -166,6 +209,109 @@ public class PermissionService {
             MyBatisUtil.closeSession(sqlSession);
         }
     }
+
+    /**
+     *  获取添加角色下人员列表的数据
+     * @param rid 要查询角色下人员的角色id
+     * @return  人员列表的数据
+     */
+    public List<ViewIrRoleUserBean> getAddIrRoleUserData(String rid) throws BgException {
+        if(rid == null || rid.equals("")){
+            throw new BgException("传入的rid参数为空，无法查询");
+        }
+        SqlSession sqlSession = null;
+        List<ViewIrRoleUserBean> irRoleUserBeans = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            String isMasterCanOwn = sqlSession.selectOne("dazhimen.bg.bean.Permission.getIsMasterCanOwn", rid);
+            if(isMasterCanOwn == null || isMasterCanOwn.equals("")){
+                throw new BgException("获取当前角色的基本信息出错");
+            }
+            if(isMasterCanOwn.equals("1")){
+                irRoleUserBeans = sqlSession.selectList("dazhimen.bg.bean.Permission.getAddIrRoleUserDataAll", rid);
+            }else{
+                irRoleUserBeans = sqlSession.selectList("dazhimen.bg.bean.Permission.getAddIrRoleUserDataAdminOnly", rid);
+            }
+
+        }catch (BgException e){
+            e.printStackTrace();
+            throw new BgException(e.getMessage());
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new BgException("出现异常，查询角色对应人员信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return irRoleUserBeans;
+    }
+
+    /**
+     * 添加角色下的有权人员
+     * @param rid 角色id
+     * @param uid 人员id
+     * @return 添加是否成功
+     * @throws BgException
+     */
+    public boolean saveAddIrRoleUser(String rid, String uid) throws BgException {
+        if(!CheckIsExistsUtils.checkUidIsExists(uid)){
+            throw new BgException("传入的参数[uid]不存在，添加拥有角色人员失败");
+        }
+        if(!CheckIsExistsUtils.checkRidIsExists(rid)){
+            throw new BgException("传入的参数[rid]不存在，添加拥有角色人员失败");
+        }
+        SqlSession sqlSession = null;
+        int result = 0;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            AddIrRoleUserBean roleUserBean = new AddIrRoleUserBean();
+            roleUserBean.setUid(uid);
+            roleUserBean.setRid(rid);
+            result = sqlSession.insert("dazhimen.bg.bean.Permission.saveAddIrRoleUser", roleUserBean);
+            sqlSession.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，添加拥有角色人员失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return result == 1;
+    }
+
+    /**
+     * 移除角色下的有权人员
+     * @param rid 角色id
+     * @param uid 人员id
+     * @throws BgException
+     */
+    public void saveRemoveRoleUser(String rid, String uid) throws BgException {
+        if(!CheckIsExistsUtils.checkUidIsExists(uid)){
+            throw new BgException("传入的参数[uid]不存在，移除角色下人员失败");
+        }
+        if(!CheckIsExistsUtils.checkRidIsExists(rid)){
+            throw new BgException("传入的参数[rid]不存在，移除角色下人员失败");
+        }
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            AddIrRoleUserBean roleUserBean = new AddIrRoleUserBean();
+            roleUserBean.setUid(uid);
+            roleUserBean.setRid(rid);
+            sqlSession.insert("dazhimen.bg.bean.Permission.saveRemoveRoleUser", roleUserBean);
+            sqlSession.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，移除角色下人员失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+    /**
+     *  将权限模块列表，转化为对应的字符串
+     * @param irRoleModuleBeans
+     * @return
+     */
     private String getRolePermissionStr(List<ViewIrRoleModuleBean> irRoleModuleBeans){
         StringBuffer strBF = new StringBuffer();
         if(irRoleModuleBeans == null || irRoleModuleBeans.size() == 0){

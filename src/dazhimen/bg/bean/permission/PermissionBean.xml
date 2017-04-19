@@ -41,6 +41,7 @@
       where a.rid = b.rid
         and b.mid = c.mid
         and a.rid = #{rid}
+      order by c.sort
     </select>
 
     <select id="getModifyRoleInfor" resultType="dazhimen.bg.bean.permission.ViewRoleInforBean">
@@ -56,4 +57,44 @@
     <update id="saveModifyRole" parameterType="dazhimen.bg.bean.permission.ModifyRoleBean">
         update role set name = #{name},introduction = #{introduction} where rid = #{rid};
     </update>
+    <select id="queryIrRoleUser" resultType="dazhimen.bg.bean.permission.ViewIrRoleUserBean">
+      select b.uid,b.name,b.mphone,b.loginname,getcodetxt('gender', gender) gender,getcodetxt('usertype', type) typestr
+        from ir_user_role a,
+             user b
+      where a.uid = b.uid
+        and a.rid = #{rid}
+        and b.isdel = '0'
+      order by type desc
+    </select>
+    <select id="getAddIrRoleUserDataAll" resultType="dazhimen.bg.bean.permission.ViewIrRoleUserBean">
+        select b.uid,b.name,b.mphone,b.loginname,getcodetxt('gender', gender) gender,getcodetxt('usertype', type) typestr
+        from user b
+      where b.isdel = '0'
+        and not exists(select 1 from ir_user_role a where b.uid = a.uid and a.rid = #{rid})
+        order by type desc
+    </select>
+    <select id="checkRidIsExists" resultType="dazhimen.api.bean.SingleValueBean">
+        select 1 as valueinfo
+         from role
+        where rid = #{rid}
+    </select>
+    <insert id="saveAddIrRoleUser" parameterType="dazhimen.bg.bean.permission.AddIrRoleUserBean">
+        insert into ir_user_role(rid, uid)
+          values(#{rid}, #{uid})
+    </insert>
+    <delete id="saveRemoveRoleUser" parameterType="dazhimen.bg.bean.permission.AddIrRoleUserBean">
+        delete from ir_user_role
+         where rid = #{rid} and uid = #{uid}
+    </delete>
+    <select id="getAddIrRoleUserDataAdminOnly"  resultType="dazhimen.bg.bean.permission.ViewIrRoleUserBean">
+   select b.uid,b.name,b.mphone,b.loginname,getcodetxt('gender', gender) gender,getcodetxt('usertype', type) typestr
+        from user b
+      where b.isdel = '0'
+        and b.type = '2'
+        and not exists(select 1 from ir_user_role a where b.uid = a.uid and a.rid = #{rid})
+        order by type desc
+    </select>
+    <select id="getIsMasterCanOwn" resultType="java.lang.String">
+        select ismastercanown from role where rid = #{rid}
+    </select>
 </mapper>

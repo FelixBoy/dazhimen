@@ -8,6 +8,7 @@ import dazhimen.bg.service.PermissionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import util.Constant;
 import util.web.ResponseUtil;
 
@@ -125,6 +126,95 @@ public class PermissionController {
         try {
             permissionService.saveModifyRole(modifyRoleBean);
             ResponseUtil.writeMsg(resp, "修改角色成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/fwdAdjustRoleUserPage")
+    public String fwdAdjustRoleUserPage(HttpServletRequest resq){
+        resq.setAttribute("rid", resq.getParameter("rid"));
+        return "/permission/adjustRoleUser";
+    }
+    @RequestMapping("/getRoleInforInAdjustUser")
+    public void getRoleInforInAdjustUser(HttpServletRequest resq, HttpServletResponse resp){
+        String rid = resq.getParameter("rid");
+        PermissionService permissionService = new PermissionService();
+        try {
+            String result = permissionService.getRoleInforInAdjustUser(rid);
+            ResponseUtil.writeMsg(resp, result);
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/queryIrRoleUser")
+    public void queryIrRoleUser(HttpServletRequest resq, HttpServletResponse resp){
+        String rid = resq.getParameter("rid");
+        PermissionService permissionService = new PermissionService();
+        try {
+            List<ViewIrRoleUserBean> irRoleUserBeans = permissionService.queryIrRoleUser(rid);
+            ResponseUtil.writeMsg(resp, new Gson().toJson(irRoleUserBeans));
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/forwardAddIrRoleUserPage")
+    public ModelAndView forwardAddIrRoleUserPage(@RequestParam("rid") String rid){
+        ModelAndView mav = new ModelAndView("/permission/addIrRoleUser");
+        mav.addObject("rid", rid);
+        return mav;
+    }
+    @RequestMapping("/getAddIrRoleUserData")
+    public void getAddIrRoleUserData(HttpServletRequest resq, HttpServletResponse resp){
+        String rid = resq.getParameter("rid");
+        PermissionService permissionService = new PermissionService();
+        try {
+            List<ViewIrRoleUserBean> irRoleUserBeans = permissionService.getAddIrRoleUserData(rid);
+            ResponseUtil.writeMsg(resp, new Gson().toJson(irRoleUserBeans));
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+
+    /**
+     * 添加角色下的有权人员
+     * @param resq
+     * @param resp
+     */
+    @RequestMapping("/saveAddIrRoleUser")
+    public void saveAddIrRoleUser(HttpServletRequest resq, HttpServletResponse resp){
+        String rid = resq.getParameter("rid");
+        String uid = resq.getParameter("uid");
+        PermissionService permissionService = new PermissionService();
+        try {
+            boolean result = permissionService.saveAddIrRoleUser(rid, uid);
+            if(result){
+                ResponseUtil.writeMsg(resp, "添加人员成功");
+            }else{
+                ResponseUtil.writeFailMsgToBrowse(resp, "添加人员失败");
+            }
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+
+    /**
+     * 移除角色下的有权人员
+     * @param resq
+     * @param resp
+     */
+    @RequestMapping("/saveRemoveRoleUser")
+    public void saveRemoveRoleUser(HttpServletRequest resq, HttpServletResponse resp){
+        String rid = resq.getParameter("rid");
+        String uid = resq.getParameter("uid");
+        PermissionService permissionService = new PermissionService();
+        try {
+            permissionService.saveRemoveRoleUser(rid, uid);
+            ResponseUtil.writeMsg(resp, "移除人员成功");
         } catch (BgException e) {
             e.printStackTrace();
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());

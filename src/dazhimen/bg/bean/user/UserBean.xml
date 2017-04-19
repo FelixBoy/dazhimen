@@ -211,5 +211,10 @@
         set isdel = '1',loginname = null,mphone = null
         where uid = #{uid}
     </update>
-
+    <select id="checkUidIsExists" resultType="dazhimen.api.bean.SingleValueBean">
+        select 1 as valueinfo
+        from user
+        where uid = #{uid}
+        and isdel = '0'
+    </select>
 </mapper>
