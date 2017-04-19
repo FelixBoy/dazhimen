@@ -1,24 +1,38 @@
 <script type="text/javascript">
-    function selectAllPermission(){
+    function selectAllPermissionInModify(){
         $("input[id^='per_']").prop("checked", true);
     }
-    function cancelSelectAllPermission(){
+    function cancelSelectAllPermissionInModify(){
         $("input[id^='per_']").prop("checked", false);
     }
-    function checkAddRoleFormBeforeSubmit(){
-        if($.trim($("#roleNameInAddRole").val()).length == 0){
+    $('#modifyRoleForm').form({onLoadSuccess:function(){
+        var rolepermissionstr = $("#rolepermissionstr").val();
+        if(!rolepermissionstr){
+            return;
+        }
+        var rolepermissionArr = rolepermissionstr.split(",");
+        for(var i = 0; i < rolepermissionArr.length; i++){
+            $("#per_" + rolepermissionArr[i]).prop("checked", true);
+        }
+    }});
+    $(function(){
+        $("#modifyRoleForm").form("load", "<%=request.getContextPath()%>/permission/getModifyRoleInfor" +
+            "?rid=<%=request.getAttribute("rid").toString()%>&randomid=" + Math.random());
+    });
+    function checkModifyRoleFormBeforeSubmit(){
+        if($.trim($("#roleNameInModifyRole").val()).length == 0){
             MsgBox.show("请填写角色名称");
             return false;
         }
         return true;
     }
-    function submitAddRoleForm(){
-        if(!checkAddRoleFormBeforeSubmit()){
+    function submitModifyRoleForm(){
+        if(!checkModifyRoleFormBeforeSubmit()){
             return;
         }
         $.ajax({
-            url:"<%=request.getContextPath()%>/permission/saveAddRole",
-            data:$('#addRoleForm').serialize(),
+            url:"<%=request.getContextPath()%>/permission/saveModifyRole",
+            data:$('#modifyRoleForm').serialize(),
             type:'post',
             async:false,
             error:function(data){
@@ -26,14 +40,14 @@
             },
             success:function(data){
                 MsgBox.show(data);
-                $('#addRoleDialog').dialog('close');
+                $('#modifyRoleDialog').dialog('close');
                 $('#roleList').datagrid('reload');
             }
         });
     }
 </script>
 <div style="width: 480px;margin: 0 auto;">
-    <form id="addRoleForm">
+    <form id="modifyRoleForm">
         <table cellpadding="5">
             <tr>
                 <td colspan="2" >
@@ -47,13 +61,17 @@
                 </td>
             </tr>
             <tr>
+                <td style="text-align: right">角色Id:</td>
+                <td><input class="dzm-noBorder-text" readonly name="rid" style="width:300px" /></td>
+            </tr>
+            <tr>
                 <td style="text-align: right">角色名称:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" id="roleNameInAddRole" name="name"
+                <td><input class="easyui-textbox" id="roleNameInModifyRole" name="name"
                            style="width:300px" data-options="prompt:'请输入角色名称'" /></td>
             </tr>
             <tr>
                 <td style="text-align: right">可以分配给掌门:</td>
-                <td><input type="checkbox" id="ismastercanown" name="ismastercanown" style="width: 100%;" value="1"/></td>
+                <td><input class="dzm-noBorder-text" readonly name="ismastercanown" style="width:300px" /></td>
             </tr>
             <tr>
                 <td style="text-align: right">介绍:</td>
@@ -68,13 +86,14 @@
                         <div class="formTitle-icon">
                         </div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">配置权限</div>
                         <div style="float: left;height: 100%;font: bold 14px/45px '宋体';margin-left: 10px;">
-                            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="selectAllPermission()">全选</a>
-                            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="cancelSelectAllPermission()">取消全选</a>
+                            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="selectAllPermissionInModify()">全选</a>
+                            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="cancelSelectAllPermissionInModify()">取消全选</a>
                         </div>
                     </div>
                 </td>
             </tr>
             <tr>
+                <input type="hidden" id="rolepermissionstr" name="rolepermissionstr" />
                 <td style="text-align: right" nowrap="nowrap">产品管理:</td>
                 <td><input type="checkbox" id="per_product_manage" name="rolepermission" style="width: 120px;" value="product_manage"/></td>
                 <td style="text-align: right"  nowrap="nowrap">新闻管理:</td>
@@ -107,6 +126,6 @@
         </table>
     </form>
     <div style="text-align:center;padding:5px">
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submitAddRoleForm()">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submitModifyRoleForm()">保存</a>
     </div>
 </div>

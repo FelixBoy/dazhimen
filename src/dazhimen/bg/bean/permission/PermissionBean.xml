@@ -29,4 +29,31 @@
         insert into ir_role_module(rid,mid)
         values(#{rid}, #{mid})
     </insert>
+
+    <select id="getRoleInfor" resultType="dazhimen.bg.bean.permission.ViewRoleInforBean">
+       select rid,name,introduction,getcodetxt('rightorwrong',ismastercanown) ismastercanown
+         from role
+         where rid = #{rid}
+    </select>
+    <select id="queryIrRoleModule" resultType="dazhimen.bg.bean.permission.ViewIrRoleModuleBean">
+      select c.name
+       from role a, ir_role_module b,module c
+      where a.rid = b.rid
+        and b.mid = c.mid
+        and a.rid = #{rid}
+    </select>
+
+    <select id="getModifyRoleInfor" resultType="dazhimen.bg.bean.permission.ViewRoleInforBean">
+        select rid,name,introduction,getcodetxt('rightorwrong',ismastercanown) ismastercanown
+        from role
+        where rid = #{rid}
+    </select>
+    <select id="queryIrRoleModuleInModifyRole" resultType="dazhimen.bg.bean.permission.ViewIrRoleModuleBean">
+        select a.mid as name
+        from ir_role_module a
+        where a.rid = #{rid}
+    </select>
+    <update id="saveModifyRole" parameterType="dazhimen.bg.bean.permission.ModifyRoleBean">
+        update role set name = #{name},introduction = #{introduction} where rid = #{rid};
+    </update>
 </mapper>

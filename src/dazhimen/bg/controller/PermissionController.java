@@ -2,8 +2,7 @@ package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
-import dazhimen.bg.bean.permission.AddRoleBean;
-import dazhimen.bg.bean.permission.ListViewRoleBean;
+import dazhimen.bg.bean.permission.*;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.PermissionService;
 import org.springframework.stereotype.Controller;
@@ -73,6 +72,64 @@ public class PermissionController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
+    @RequestMapping("/fwdViewRolePage")
+    public String fwdViewRolePage(HttpServletRequest resq){
+        resq.setAttribute("rid", resq.getParameter("rid"));
+        return "/permission/viewRole";
+    }
+    @RequestMapping("/getRoleInfor")
+    public void getRoleInfor(HttpServletRequest resq, HttpServletResponse resp){
+        String rid = resq.getParameter("rid");
+        PermissionService permissionService = new PermissionService();
+        try {
+            ViewRoleInforBean roleInforBean = permissionService.getRoleInfor(rid);
+            ResponseUtil.writeMsg(resp, new Gson().toJson(roleInforBean));
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/queryIrRoleModule")
+    public void queryIrRoleModule(HttpServletRequest resq, HttpServletResponse resp){
+        String rid = resq.getParameter("rid");
+        PermissionService permissionService = new PermissionService();
+        try {
+            List<ViewIrRoleModuleBean> irRoleModuleBeans = permissionService.queryIrRoleModule(rid);
+            ResponseUtil.writeMsg(resp, new Gson().toJson(irRoleModuleBeans));
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/fwdModifyRolePage")
+    public String fwdModifyRolePage(HttpServletRequest resq){
+        resq.setAttribute("rid", resq.getParameter("rid"));
+        return "/permission/modifyRole";
+    }
+    @RequestMapping("/getModifyRoleInfor")
+    public void getModifyRoleInfor(HttpServletRequest resq, HttpServletResponse resp){
+        String rid = resq.getParameter("rid");
+        PermissionService permissionService = new PermissionService();
+        try {
+            String result = permissionService.getModifyRoleInfor(rid);
+            ResponseUtil.writeMsg(resp, result);
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/saveModifyRole")
+    public void saveModifyRole(HttpServletRequest resq, HttpServletResponse resp){
+        ModifyRoleBean modifyRoleBean = getModifyRoleBean(resq);
+        PermissionService permissionService = new PermissionService();
+        try {
+            permissionService.saveModifyRole(modifyRoleBean);
+            ResponseUtil.writeMsg(resp, "修改角色成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
     private AddRoleBean getAddRoleBean(HttpServletRequest resq){
         AddRoleBean addRoleBean = new AddRoleBean();
         addRoleBean.setName(resq.getParameter("name"));
@@ -86,12 +143,33 @@ public class PermissionController {
         addRoleBean.setIntroduction(introduction);
         ArrayList<String> permissionList = new ArrayList<String>();
         String[] rolePermission = resq.getParameterValues("rolepermission");
-        for(int i = 0; i < rolePermission.length; i++){
-            if(rolePermission[i] != null && !rolePermission[i].equals("")){
-                permissionList.add(rolePermission[i]);
+        if(rolePermission != null && rolePermission.length != 0){
+            for(int i = 0; i < rolePermission.length; i++){
+                if(rolePermission[i] != null && !rolePermission[i].equals("")){
+                    permissionList.add(rolePermission[i]);
+                }
             }
         }
         addRoleBean.setPermissionList(permissionList);
         return addRoleBean;
+    }
+
+    private ModifyRoleBean getModifyRoleBean(HttpServletRequest resq){
+        ModifyRoleBean modifyRoleBean = new ModifyRoleBean();
+        modifyRoleBean.setRid(resq.getParameter("rid"));
+        modifyRoleBean.setName(resq.getParameter("name"));
+        String introduction = resq.getParameter("introduction");
+        modifyRoleBean.setIntroduction(introduction);
+        ArrayList<String> permissionList = new ArrayList<String>();
+        String[] rolePermission = resq.getParameterValues("rolepermission");
+        if(rolePermission != null && rolePermission.length != 0){
+            for(int i = 0; i < rolePermission.length; i++){
+                if(rolePermission[i] != null && !rolePermission[i].equals("")){
+                    permissionList.add(rolePermission[i]);
+                }
+            }
+        }
+        modifyRoleBean.setPermissionList(permissionList);
+        return modifyRoleBean;
     }
 }

@@ -33,6 +33,38 @@
             displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
         });
     });
+    function fwdModifyRole(index) {
+        $('#roleList').datagrid('selectRow',index);
+        var row = $('#roleList').datagrid('getSelected');
+        if (row){
+            $('#modifyRoleDialog').dialog({
+                title: '修改角色',
+                width: 500,
+                height: 600,
+                closed: true,
+                cache: false,
+                href: "<%=request.getContextPath()%>/permission/fwdModifyRolePage?randomid="+Math.random() + "&rid=" + row.rid,
+                modal: true
+            });
+            $('#modifyRoleDialog').dialog("open");
+        }
+    }
+    function fwdViewRolePage(index){
+        $('#roleList').datagrid('selectRow',index);
+        var row = $('#roleList').datagrid('getSelected');
+        if (row){
+            $('#viewRoleDialog').dialog({
+                title: '查看角色信息',
+                width: 500,
+                height: 610,
+                closed: true,
+                cache: false,
+                href: "<%=request.getContextPath()%>/permission/fwdViewRolePage?randomid="+Math.random() + "&rid=" + row.rid,
+                modal: true
+            });
+            $('#viewRoleDialog').dialog("open");
+        }
+    }
     function forwardAddRolePage(){
         $('#addRoleDialog').dialog({
             title: '新增角色',
@@ -40,7 +72,7 @@
             height: 550,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/permission/forwardAddRolePage",
+            href: "<%=request.getContextPath()%>/permission/forwardAddRolePage?randomid="+Math.random(),
             modal: true
         });
         $('#addRoleDialog').dialog("open");
@@ -69,7 +101,9 @@
     }
 </script>
 <div style="padding:5px 0;">
+    <div id="viewRoleDialog"></div>
     <div id="addRoleDialog"></div>
+    <div id="modifyRoleDialog"></div>
     <table id="roleList" style="width: auto;height: auto;"></table>
     <br/>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="forwardAddRolePage()">新增角色</a>
