@@ -6,6 +6,10 @@ import dazhimen.bg.bean.login.LoginUserBean;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
+import util.CheckIsExistsUtils;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/3/17.
@@ -70,5 +74,38 @@ public class LoginService {
             MyBatisUtil.closeSession(sqlSession);
         }
         return userBean;
+    }
+
+    /**
+     *  获取当前登录用户拥有的权限信息
+     * @param uid  要获取权限的 用户
+     * @return  存储了用户权限的map
+     */
+    public HashMap<String, String> getUserPermission(String uid) throws BgException {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        SqlSession sqlSession = null;
+        try{
+            if(!CheckIsExistsUtils.checkUidIsExists(uid)){
+                throw new BgException("出现异常，传入的uid不存在");
+            }
+            sqlSession = MyBatisUtil.createSession();
+            List<String> permissionList = sqlSession.selectList("dazhimen.bg.bean.Login.getUserPermission", uid);
+            if(permissionList == null || permissionList.size() == 0){
+                return hashMap;
+            }else{
+                for(int i = 0 ; i < permissionList.size(); i++){
+                    hashMap.put(permissionList.get(i), null);
+                }
+            }
+        }catch(BgException e){
+            e.printStackTrace();
+            throw new BgException(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BgException("出现异常，查询用户对应的权限出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return hashMap;
     }
 }

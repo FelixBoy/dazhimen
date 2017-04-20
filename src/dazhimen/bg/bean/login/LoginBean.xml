@@ -23,4 +23,11 @@
         where loginname = #{loginname}
           and isdel = '0'
     </select>
+    <select id="getUserPermission" resultType="java.lang.String">
+        select b.mid
+          from ir_user_role a,
+                ir_role_module b
+        where a.rid = b.rid
+          and a.uid = #{uid}
+    </select>
 </mapper>

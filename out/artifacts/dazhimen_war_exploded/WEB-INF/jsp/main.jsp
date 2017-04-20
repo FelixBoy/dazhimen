@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="util.Constant" %>
 <%@ page import="dazhimen.bg.bean.login.LoginUserBean" %>
+<%@ page import="util.GlobalUtils" %>
 <%
     HttpSession sessionObj = request.getSession(false);
     LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
@@ -39,34 +40,6 @@
                         }
                     });
                     break;
-                case 'customer_recharge_order':
-                    $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&tipinfo=会员、充值、订单查询<br/>请点击相应子菜单",
-                        onLoad:function(){
-                        }
-                    });
-                    break;
-                case 'play_sort_right':
-                    $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&tipinfo=首页轮播与首页排序配置<br/>请点击相应子菜单",
-                        onLoad:function(){
-                        }
-                    });
-                    break;
-                case 'master_admin_right':
-                    $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&tipinfo=掌门、管理员、权限管理<br/>请点击相应子菜单",
-                        onLoad:function(){
-                        }
-                    });
-                    break;
-                case 'master_manage':
-                    $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdMasterManagePage?random_id="+Math.random(),
-                        onLoad:function(){
-                        }
-                    });
-                    break;
                 case 'product_manage':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/product/fwdManageProductPage?random_id="+Math.random(),
@@ -74,21 +47,21 @@
                         }
                     });
                     break;
-                case 'customer_query':
+                case 'news_manage':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/customer/fwdCustomerManagePage?random_id="+Math.random(),
+                        href:"<%=request.getContextPath() %>/news/fwdManageNewsPage?random_id="+Math.random()
+                    });
+                    break;
+                case 'customer_recharge_order':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&tipinfo=会员、充值、订单查询<br/>请点击相应子菜单",
                         onLoad:function(){
                         }
                     });
                     break;
-                case 'indexplay_manage':
+                case 'customer_query':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/playsort/fwdIndexPlayManagePage?random_id="+Math.random()
-                    });
-                    break;
-                case 'admin_manage':
-                    $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdManageAdminPage?random_id="+Math.random(),
+                        href:"<%=request.getContextPath() %>/customer/fwdCustomerManagePage?random_id="+Math.random(),
                         onLoad:function(){
                         }
                     });
@@ -107,6 +80,18 @@
                         }
                     });
                     break;
+                case 'play_sort_right':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&tipinfo=首页轮播与首页排序配置<br/>请点击相应子菜单",
+                        onLoad:function(){
+                        }
+                    });
+                    break;
+                case 'indexplay_manage':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/playsort/fwdIndexPlayManagePage?random_id="+Math.random()
+                    });
+                    break;
                 case 'indexsort_manange':
                     $('#content_panel').panel({
                         href:"<%=request.getContextPath() %>/playsort/fwdIndexSortManagePage?random_id="+Math.random(),
@@ -114,9 +99,25 @@
                         }
                     });
                     break;
-                case 'news_manage':
+                case 'master_admin_permission':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/news/fwdManageNewsPage?random_id="+Math.random()
+                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&tipinfo=掌门、管理员、权限管理<br/>请点击相应子菜单",
+                        onLoad:function(){
+                        }
+                    });
+                    break;
+                case 'master_manage':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/user/fwdMasterManagePage?random_id="+Math.random(),
+                        onLoad:function(){
+                        }
+                    });
+                    break;
+                case 'admin_manage':
+                    $('#content_panel').panel({
+                        href:"<%=request.getContextPath() %>/user/fwdManageAdminPage?random_id="+Math.random(),
+                        onLoad:function(){
+                        }
                     });
                     break;
                 case 'permission_manage':
@@ -131,49 +132,98 @@
                     });
             }
         }
+        function modifyPassword(){
+            $('#modifyPasswordDialog').dialog({
+                title: '修改密码',
+                width: 600,
+                height: 400,
+                closed: true,
+                cache: false,
+                href: "<%=request.getContextPath()%>/user/fwdModifyPasswordPage?randomid="+Math.random(),
+                modal: true
+            });
+            $('#modifyPasswordDialog').dialog("open");
+        }
     </script>
 </head>
 <body class="easyui-layout">
 <div data-options="region:'north',border:false" style="height:60px;background:#B3DFDA;padding:10px;text-align: center">
     <div style="font-size: 30px;float:left;">大职门后台管理系统</div>
-    <div style="height:40px;font-size: 16px;line-height:40px;float: right;">
-        <%=userBean.getUname()%>，<%=userBean.getUtypeStr()%>&nbsp&nbsp<a href="<%=request.getContextPath()%>/login/exitLogin">退出登录</a>
+    <div style="height:40px;font-size: 16px;line-height:20px;float: right;">
+        <%=userBean.getUname()%>|<%=userBean.getUtypeStr()%><br/>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit'" onclick="modifyPassword()" >修改密码</a>
+        <a href="<%=request.getContextPath()%>/login/exitLogin" class="easyui-linkbutton" data-options="iconCls:'icon-redo'" >退出</a>
     </div>
 </div>
 <div data-options="region:'west',split:false,title:'导航菜单'" style="width:240px;padding:10px;">
     <div style="margin:20px 0;"></div>
+    <div id="modifyPasswordDialog"></div>
     <div class="easyui-panel" style="padding:5px">
         <ul id="menu-tree" class="easyui-tree">
+            <%
+                if(GlobalUtils.checkUserPermission(Constant.Per_Product, userBean) || GlobalUtils.checkUserPermission(Constant.Per_News, userBean)){
+            %>
             <li id="product_news" data-options="state:'open'">
                 <span>产品/新闻</span>
                 <ul>
+                    <% if(GlobalUtils.checkUserPermission(Constant.Per_Product, userBean)){%>
                     <li id="product_manage">产品管理</li>
+                    <%}%>
+                    <% if(GlobalUtils.checkUserPermission(Constant.Per_News, userBean)){%>
                     <li id="news_manage">新闻管理</li>
+                    <%}%>
                 </ul>
             </li>
+            <%
+                }
+            %>
+            <% if(GlobalUtils.checkUserPermission(Constant.Per_Customer, userBean) || GlobalUtils.checkUserPermission(Constant.Per_Recharge, userBean)
+                    || GlobalUtils.checkUserPermission(Constant.Per_Order, userBean)){%>
             <li id="customer_recharge_order" data-options="state:'open'">
                 <span>会员/充值/订单</span>
                 <ul>
+                    <%if(GlobalUtils.checkUserPermission(Constant.Per_Customer, userBean)){%>
                     <li id="customer_query">会员查询</li>
+                    <%}%>
+                    <%if(GlobalUtils.checkUserPermission(Constant.Per_Recharge, userBean)){%>
                     <li id="recharge_query">充值查询</li>
+                    <%}%>
+                    <%if(GlobalUtils.checkUserPermission(Constant.Per_Order, userBean)){%>
                     <li id="order_query">订单查询</li>
+                    <%}%>
                 </ul>
             </li>
+            <%}%>
+            <%if(GlobalUtils.checkUserPermission(Constant.Per_Indexplay, userBean) || GlobalUtils.checkUserPermission(Constant.Per_Indexsort, userBean)){%>
             <li id="play_sort_right" data-options="state:'open'">
                 <span>轮播/排序</span>
                 <ul>
+                    <%if(GlobalUtils.checkUserPermission(Constant.Per_Indexplay, userBean)){%>
                     <li id="indexplay_manage">首页轮播</li>
+                    <%}%>
+                    <%if(GlobalUtils.checkUserPermission(Constant.Per_Indexsort, userBean)){%>
                     <li id="indexsort_manange">首页排序</li>
+                    <%}%>
                 </ul>
             </li>
-            <li id="master_admin_right" data-options="state:'open'">
+            <%}%>
+            <%if(GlobalUtils.checkUserPermission(Constant.Per_Master, userBean) || GlobalUtils.checkUserPermission(Constant.Per_Admin, userBean)
+                    || GlobalUtils.checkUserPermission(Constant.Per_Permission, userBean)){%>
+            <li id="master_admin_permission" data-options="state:'open'">
                 <span>掌门/管理员/权限</span>
                 <ul>
+                    <%if(GlobalUtils.checkUserPermission(Constant.Per_Master, userBean)){%>
                     <li id="master_manage">掌门管理</li>
+                    <%}%>
+                    <%if(GlobalUtils.checkUserPermission(Constant.Per_Admin, userBean)){%>
                     <li id="admin_manage">管理员管理</li>
+                    <%}%>
+                    <%if(GlobalUtils.checkUserPermission(Constant.Per_Permission, userBean)){%>
                     <li id="permission_manage">权限管理</li>
+                    <%}%>
                 </ul>
             </li>
+            <%}%>
         </ul>
     </div>
 </div>

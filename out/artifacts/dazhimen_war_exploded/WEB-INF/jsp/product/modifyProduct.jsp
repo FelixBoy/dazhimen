@@ -105,7 +105,7 @@
     }
 </script>
 <div style="text-align: left;">
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="returnManageProductInModifyProduct()">返回</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-back'" onclick="returnManageProductInModifyProduct()">返回</a>
 </div>
 <div id="modifyProductListImgDialog"></div>
 <div id="modifyProductMainImgDialog"></div>

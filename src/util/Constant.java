@@ -6,6 +6,24 @@ package util;
  */
 
 public class Constant {
+    //各模块用于控制权限的id
+    public static final String Per_Product = "product_manage";
+    public static final String Per_News = "news_manage";
+    public static final String Per_Customer = "customer_query";
+    public static final String Per_Recharge= "recharge_query";
+    public static final String Per_Order = "order_query";
+    public static final String Per_Indexplay = "indexplay_manage";
+    public static final String Per_Indexsort = "indexsort_manange";
+    public static final String Per_Master = "master_manage";
+    public static final String Per_Admin = "admin_manage";
+    public static final String Per_Permission = "permission_manage";
+
+    //首页各类实体排序的个数
+    public static final Integer IndexSortNumber_SkillPack = 2;
+    public static final Integer IndexSortNumber_ExperiencePack = 2;
+    public static final Integer IndexSortNumber_NewsPack = 2;
+    public static final Integer IndexSortNumber_Master = 2;
+
     //文件后缀名常量
     public static final String FileSuffix_JPG = ".jpg";
     public static final String FileSuffix_PNG = ".png";

@@ -23,7 +23,6 @@ public class DazhimenListener  implements ServletContextListener {
         System.out.println("======dazhimenListener   init===");
 
         String configFilePath = getConfigFilePath();
-        System.out.println(configFilePath);
         File configFile = new File(configFilePath);
         Document configFileDocument = null;
         SAXReader reader = new SAXReader();

@@ -2,9 +2,11 @@ package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import dazhimen.bg.bean.login.LoginUserBean;
 import dazhimen.bg.bean.user.QueryMasterParamBean;
 import dazhimen.bg.bean.user.UserBean;
 import dazhimen.bg.exception.BgException;
+import dazhimen.bg.service.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,8 +19,10 @@ import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -39,8 +43,22 @@ public class UserController {
         resq.setAttribute("info", tipinfo);
         return "tipsInfo";
     }
+    @RequestMapping("/fwdModifyPasswordPage")
+    public String fwdModifyPasswordPage(HttpServletRequest resq){
+        return "/user/modifyPassword";
+    }
     @RequestMapping("/fwdMainPage")
-    public String forwardMainPage(){
+    public String forwardMainPage(HttpServletRequest resq){
+        HttpSession sessionObj = resq.getSession(false);
+        LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
+        LoginService loginService = new LoginService();
+        HashMap<String, String> permissionMap = null;
+        try {
+            permissionMap = loginService.getUserPermission(userBean.getUid());
+        } catch (BgException e) {
+            e.printStackTrace();
+        }
+        userBean.setUserPermissionMap(permissionMap);
         return "main";
     }
 

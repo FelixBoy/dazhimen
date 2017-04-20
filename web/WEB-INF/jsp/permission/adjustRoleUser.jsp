@@ -66,7 +66,7 @@
     }
 </script>
 <div style="text-align: left;">
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="returnManageRole()">返回</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-back'" onclick="returnManageRole()">返回</a>
 </div>
 <div style="margin:0px auto;width: 800px">
     <form id="adjustRoleUserForm">
