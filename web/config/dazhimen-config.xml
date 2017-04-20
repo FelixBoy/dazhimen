@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <!--begin  阿里云部署配置  begin-->
+        <!--isDeployInAliyun 是否部署在阿里云，true是，false否-->
+        <config name="isDeployInAliyun" value="true"></config>
+        <!--当部署在阿里云时，AliyunIP 阿里云服务器的IP地址-->
+        <config name="AliyunIP" value="47.92.73.1491"></config>
+    <!--end 阿里云部署配置  end-->
+
+    <!--begin  默认管理员账户配置 begin-->
+        <!-- 配置的是登录名，-->
+        <!--例如默认账户配置为 dzm，则登录名为dzm的用户 是默认管理员-->
+        <config name="defaultAdministrator" value="dzm1"></config>
+    <!--end  默认管理员账户配置 end-->
+
+
+</config>

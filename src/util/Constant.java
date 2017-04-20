@@ -6,18 +6,6 @@ package util;
  */
 
 public class Constant {
-    //各模块用于控制权限的id
-    public static final String Per_Product = "product_manage";
-    public static final String Per_News = "news_manage";
-    public static final String Per_Customer = "customer_query";
-    public static final String Per_Recharge= "recharge_query";
-    public static final String Per_Order = "order_query";
-    public static final String Per_Indexplay = "indexplay_manage";
-    public static final String Per_Indexsort = "indexsort_manange";
-    public static final String Per_Master = "master_manage";
-    public static final String Per_Admin = "admin_manage";
-    public static final String Per_Permission = "permission_manage";
-
     //文件后缀名常量
     public static final String FileSuffix_JPG = ".jpg";
     public static final String FileSuffix_PNG = ".png";
@@ -97,18 +85,22 @@ public class Constant {
     public static final String SkillPack = "1";
     //经验包的code值
     public static final String ExperiencePack = "2";
+
     //验证码长度
     public static final int verifyCodeLength = 4;
 
-    //
+    //支付类型常量
     public static final String paymentType_Balance = "1";
     public static final String paymentType_WXPay = "2";
     public static final String paymentType_AliPay = "3";
 
-    //是否部署在阿里云
-    public static final boolean isDeployInAliyun = true;
-    //阿里云Ip
-    public static final String AliyunIP = "47.92.73.149";
-
     public static final String FrontEndVersion = "v1.4";
+
+    //=====以下这些变量，是从配置文件中加载的
+    //是否部署在阿里云
+    public static boolean isDeployInAliyun = false;
+    //阿里云Ip
+    public static String AliyunIP = null;
+    //默认管理员账户的登录名
+    public static String defaultAdministrator = null;
 }
