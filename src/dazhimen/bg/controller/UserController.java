@@ -3,6 +3,7 @@ package dazhimen.bg.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dazhimen.bg.bean.login.LoginUserBean;
+import dazhimen.bg.bean.user.ModifyPasswordBean;
 import dazhimen.bg.bean.user.QueryMasterParamBean;
 import dazhimen.bg.bean.user.UserBean;
 import dazhimen.bg.exception.BgException;
@@ -43,9 +44,36 @@ public class UserController {
         resq.setAttribute("info", tipinfo);
         return "tipsInfo";
     }
+
+    /**
+     * 转向修改密码页面
+     * @param resq
+     * @return
+     */
     @RequestMapping("/fwdModifyPasswordPage")
     public String fwdModifyPasswordPage(HttpServletRequest resq){
         return "/user/modifyPassword";
+    }
+
+    /**
+     * 保存用户修改密码
+     * @param resq
+     * @param resp
+     */
+    @RequestMapping("/saveModifyPassword")
+    public void saveModifyPassword(HttpServletRequest resq, HttpServletResponse resp){
+        try {
+            ModifyPasswordBean modifyPasswordBean = getModifyPasswordBean(resq);
+            UserService userService = new UserService();
+            boolean result = userService.saveModifyPassword(modifyPasswordBean);
+            if(result)
+                ResponseUtil.writeMsg(resp, "修改成功");
+            else
+                ResponseUtil.writeFailMsgToBrowse(resp, "修改失败");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
     }
     @RequestMapping("/fwdMainPage")
     public String forwardMainPage(HttpServletRequest resq){
@@ -450,5 +478,37 @@ public class UserController {
         String basePath = resq.getSession().getServletContext().getRealPath("/");
         user.setBasepath(basePath);
         return user;
+    }
+    private ModifyPasswordBean getModifyPasswordBean(HttpServletRequest resq) throws BgException {
+        String uid = resq.getParameter("uid");
+        if(uid == null || uid.trim().equals("")){
+            throw new BgException("传入的uid值为空，修改密码失败");
+        }
+        String oldPassword = resq.getParameter("oldpassword");
+        if(oldPassword == null || oldPassword.trim().equals("")){
+            throw new BgException("传入的oldpassword值为空，修改密码失败");
+        }
+        String newPassword = resq.getParameter("newpassword");
+        if(newPassword == null || newPassword.trim().equals("")){
+            throw new BgException("传入的newpassword值为空，修改密码失败");
+        }
+        String newPasswordcheck = resq.getParameter("newpasswordcheck");
+        if(newPasswordcheck == null || newPasswordcheck.trim().equals("")){
+            throw new BgException("传入的newpasswordcheck值为空，修改密码失败");
+        }
+        if(!newPassword.trim().equals(newPasswordcheck.trim())){
+            throw new BgException("新密码两次输入不一致，修改密码失败");
+        }
+        String loginname = resq.getParameter("loginname");
+        if(loginname == null || loginname.trim().equals("")){
+            throw new BgException("传入的loginname值为空，修改密码失败");
+        }
+        ModifyPasswordBean modifyPasswordBean = new ModifyPasswordBean();
+        modifyPasswordBean.setUid(uid);
+        modifyPasswordBean.setOldpassword(oldPassword.trim());
+        modifyPasswordBean.setNewpassword(newPassword.trim());
+        modifyPasswordBean.setNewpasswordcheck(newPasswordcheck.trim());
+        modifyPasswordBean.setLoginname(loginname);
+        return modifyPasswordBean;
     }
 }

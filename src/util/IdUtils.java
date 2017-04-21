@@ -12,9 +12,10 @@ import java.util.TimeZone;
  */
 public class IdUtils {
     public String getRoleId() throws BgException {
+        String curDateStr = getCurrentDate();
         String n_seq = new SeqUtils().getSeqNextVal(Constant.roleSeqName);
         n_seq = SeqUtils.autoAttachZeroFromStart(n_seq, Constant.roleSeqLength);
-        return "r" + n_seq;
+        return "r" + curDateStr + n_seq;
     }
     public String getNewsId() throws BgException {
         String curDateStr = getCurrentDate();

@@ -15,8 +15,8 @@ public class CheckIsExistsUtils {
         SqlSession sqlSession = null;
         try{
             sqlSession = MyBatisUtil.createSession();
-            SingleValueBean value = sqlSession.selectOne("dazhimen.bg.bean.Permission.checkRidIsExists", rid);
-            if(value != null && value.getValueInfo()!= null && value.getValueInfo().equals("1")){
+            String value = sqlSession.selectOne("dazhimen.bg.bean.Permission.checkRidIsExists", rid);
+            if(value != null && !value.equals("") && value.equals("1")){
                 return true;
             }
         }catch (Exception e){
@@ -31,8 +31,8 @@ public class CheckIsExistsUtils {
         SqlSession sqlSession = null;
         try{
             sqlSession = MyBatisUtil.createSession();
-            SingleValueBean value = sqlSession.selectOne("dazhimen.bg.bean.User.checkUidIsExists", uid);
-            if(value != null && value.getValueInfo()!= null && value.getValueInfo().equals("1")){
+            String value = sqlSession.selectOne("dazhimen.bg.bean.User.checkUidIsExists", uid);
+            if(value != null && !value.equals("") && value.equals("1")){
                 return true;
             }
         }catch (Exception e){

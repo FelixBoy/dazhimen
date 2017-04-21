@@ -211,10 +211,23 @@
         set isdel = '1',loginname = null,mphone = null
         where uid = #{uid}
     </update>
-    <select id="checkUidIsExists" resultType="dazhimen.api.bean.SingleValueBean">
+    <select id="checkUidIsExists" resultType="java.lang.String">
         select 1 as valueinfo
         from user
         where uid = #{uid}
         and isdel = '0'
     </select>
+    <select id="checkOldPassword" parameterType="dazhimen.bg.bean.user.CheckOldPasswordBean"
+     resultType="java.lang.String">
+        select 1 as valueinfo
+        from user
+        where uid = #{uid}
+          and password = #{oldpassword}
+          and isdel = '0';
+    </select>
+    <update id="saveModifyPassword" parameterType="dazhimen.bg.bean.user.ModifyPasswordBean">
+        update user
+        set password = #{newpassword}
+        where uid = #{uid}
+    </update>
 </mapper>

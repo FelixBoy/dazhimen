@@ -3,6 +3,8 @@ package dazhimen.bg.service;
 import dazhimen.api.exception.ApiException;
 import dazhimen.bg.bean.PaginationParamBean;
 import dazhimen.bg.bean.SingleValueBean;
+import dazhimen.bg.bean.user.CheckOldPasswordBean;
+import dazhimen.bg.bean.user.ModifyPasswordBean;
 import dazhimen.bg.bean.user.QueryMasterParamBean;
 import dazhimen.bg.bean.user.UserBean;
 import dazhimen.bg.exception.BgException;
@@ -10,10 +12,7 @@ import db.MyBatisUtil;
 import net.sf.json.JSONObject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import util.Constant;
-import util.GlobalUtils;
-import util.IdUtils;
-import util.PaginationUtil;
+import util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -25,6 +24,48 @@ import java.util.List;
  * Created by zhj on 2017/3/13.
  */
 public class UserService {
+    /**
+     *  修改用户密码
+     * @param modifyPasswordBean 修改用户密码的JavaBean
+     * @return 修改是否成功 true/false
+     */
+    public boolean saveModifyPassword(ModifyPasswordBean modifyPasswordBean) throws BgException {
+        int result = 0;
+        if(!CheckIsExistsUtils.checkUidIsExists(modifyPasswordBean.getUid())){
+            throw new BgException("传入的uid不存在，修改密码失败");
+        }
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            CheckOldPasswordBean oldPasswordBean = new CheckOldPasswordBean();
+            String uid = modifyPasswordBean.getUid();
+            String oldPassword = modifyPasswordBean.getOldpassword();
+            String loginname = modifyPasswordBean.getLoginname();
+            String md5_oldPassword = GlobalUtils.hex_md5(loginname + oldPassword);
+            oldPasswordBean.setUid(uid);
+            oldPasswordBean.setOldpassword(md5_oldPassword);
+            String value = sqlSession.selectOne("dazhimen.bg.bean.User.checkOldPassword", oldPasswordBean);
+            if(value == null || value.equals("")){
+                throw new BgException("原始密码错误，修改密码失败");
+            }
+            String newPassword = modifyPasswordBean.getNewpassword();
+            String md5_newPassword = GlobalUtils.hex_md5(loginname + newPassword);
+            modifyPasswordBean.setNewpassword(md5_newPassword);
+            result = sqlSession.update("dazhimen.bg.bean.User.saveModifyPassword", modifyPasswordBean);
+            sqlSession.commit();
+        }catch (BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，修改密码失败");
+        } finally{
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return result == 1;
+    }
     /**
      * 保存掌门新增
      * @param userBean 要保存的掌门信息

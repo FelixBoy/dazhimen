@@ -73,7 +73,7 @@
         and not exists(select 1 from ir_user_role a where b.uid = a.uid and a.rid = #{rid})
         order by type desc
     </select>
-    <select id="checkRidIsExists" resultType="dazhimen.api.bean.SingleValueBean">
+    <select id="checkRidIsExists" resultType="java.lang.String">
         select 1 as valueinfo
          from role
         where rid = #{rid}
