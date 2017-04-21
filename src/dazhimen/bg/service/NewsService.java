@@ -9,11 +9,15 @@ import net.sf.json.JSONObject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import util.Constant;
+import util.GenNewsHtmlUtil;
 import util.IdUtils;
 import util.PaginationUtil;
 
-import java.io.File;
-import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -138,19 +142,31 @@ public class NewsService {
             throw new BgException("出现异常,保存新闻主图失败");
         }
         SqlSession sqlSession = null;
+        FileOutputStream fileOutputStream = null;
         try{
             sqlSession = MyBatisUtil.createSession();
             addNewsBean.setNid(nid);
             addNewsBean.setListimgurl(listImageFileRelPath);
             addNewsBean.setMainimgurl(mainImageFileRelPath);
+
+            String newsContentFileName = nid + "_newscontent.html";
+
+            String newsContentFileRelPath = Constant.uploadNewsDbPrefixPath +  nid +  "/" + newsContentFileName;
+            addNewsBean.setHtmlfileurl(newsContentFileRelPath);
             int result = sqlSession.insert("dazhimen.bg.bean.News.saveAddNews", addNewsBean);
-            List<NewsContentBean> newContentBeans = addNewsBean.getContentBeans();
-            for(int i = 0; i < newContentBeans.size(); i++){
-                NewsContentBean contentBean = newContentBeans.get(i);
+            List<NewsContentBean> newsContentBeans = addNewsBean.getContentBeans();
+            List<GenNewsContentBean> genNewsContentBeans = new ArrayList<GenNewsContentBean>();
+            for(int i = 0; i < newsContentBeans.size(); i++){
+                NewsContentBean contentBean = newsContentBeans.get(i);
                 String contentId = idUtils.getNesContentId();
                 String contenteType = contentBean.getContenttype();
+
+                GenNewsContentBean genNewsContentBean = new GenNewsContentBean();
+                genNewsContentBean.setContenttype(contenteType);
+                genNewsContentBean.setContentSort(contentBean.getContentsort());
                 if(contenteType.equals("1")){
                     contentBean.setContentvalue(contentBean.getContentsubtitle());
+                    genNewsContentBean.setContentvalue(contentBean.getContentsubtitle());
                 }else if(contenteType.equals("2")){
                     CommonsMultipartFile contentFile = contentBean.getContentfile();
                     //获得列表图片文件的原始名称
@@ -172,20 +188,92 @@ public class NewsService {
                     //计算列表图片在工程中的相对路径，用于记录到数据库
                     String contentFileRelPath = Constant.uploadNewsDbPrefixPath + nid + "/" + contentFileNewName;
                     contentBean.setContentvalue(contentFileRelPath);
+                    genNewsContentBean.setContentvalue(contentFileNewName);
                 }else{
                     contentBean.setContentvalue(contentBean.getContenttext());
+                    genNewsContentBean.setContentvalue(contentBean.getContenttext());
                 }
                 contentBean.setContentid(contentId);
                 contentBean.setNid(nid);
                 sqlSession.insert("dazhimen.bg.bean.News.saveAddNewContents", contentBean);
+                genNewsContentBeans.add(genNewsContentBean);
             }
+            String newsContentFilePath = newsMainFolderPath + newsContentFileName;
+            File newContentFile = new File(newsContentFilePath);
+
+            fileOutputStream = new FileOutputStream(newContentFile);
+            Collections.sort(genNewsContentBeans, new SortNewsContent());
+            String newsHtml = GenNewsHtmlUtil.genMobileNewsHtml(addNewsBean.getTitle(), genNewsContentBeans);
+            fileOutputStream.write(newsHtml.getBytes("UTF-8"));
+
+            sqlSession.commit();
+        }catch (BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            fileService.deleteFolder(newsMainFolderPath);
+            throw new BgException(e.getMessage());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            fileService.deleteFolder(newsMainFolderPath);
+            throw new BgException("生成新闻html文件时，字符集编码不支持");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            fileService.deleteFolder(newsMainFolderPath);
+            throw new BgException("找不到新闻html文件");
+        } catch (IOException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            fileService.deleteFolder(newsMainFolderPath);
+            throw new BgException("生成新闻html文件时，出现读写错误");
+        } catch (Exception e){
+            sqlSession.rollback();
+            fileService.deleteFolder(newsMainFolderPath);
+            throw new BgException("出现异常，添加新闻失败");
+        } finally{
+            MyBatisUtil.closeSession(sqlSession);
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void saveDeleteNews(HttpServletRequest resq) throws BgException {
+        String nid = resq.getParameter("nid");
+        if(nid == null || nid.equals("")){
+            throw new BgException("传入的nid为空，删除新闻失败");
+        }
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            sqlSession.delete("dazhimen.bg.bean.News.saveDeleteNewsContent", nid);
+            sqlSession.delete("dazhimen.bg.bean.News.saveDeleteNewsInfor", nid);
+            sqlSession.update("dazhimen.bg.bean.News.saveDeleteNewsCollection", nid);
+            String newsMainFolderPath = resq.getSession().getServletContext().getRealPath("/") + Constant.newsPrefixPath  + nid + "\\";
+            FileManageService fileService = new FileManageService();
+            fileService.deleteFolder(newsMainFolderPath);
             sqlSession.commit();
         }catch (Exception e){
             e.printStackTrace();
             sqlSession.rollback();
-            fileService.deleteFolder(newsMainFolderPath);
+            throw new BgException("出现异常，删除新闻失败");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+    private class SortNewsContent implements Comparator {
+        public int compare(Object o1, Object o2) {
+            GenNewsContentBean newsContent1 = (GenNewsContentBean)o1;
+            GenNewsContentBean newsContent2 = (GenNewsContentBean)o2;
+            Integer contentSort1 = Integer.parseInt(newsContent1.getContentSort());
+            Integer contentSort2 = Integer.parseInt(newsContent2.getContentSort());
+            if(contentSort1 > contentSort2)
+                return 1;
+            else{
+                return -1;
+            }
         }
     }
 }

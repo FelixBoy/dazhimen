@@ -15,6 +15,7 @@ public class AddNewsBean {
     private CommonsMultipartFile mainImgFile = null;
     private String listimgurl = null;
     private String mainimgurl = null;
+    private String htmlfileurl = null;
     private List<NewsContentBean> contentBeans = null;
 
     @Override
@@ -82,5 +83,13 @@ public class AddNewsBean {
 
     public void setContentBeans(List<NewsContentBean> contentBeans) {
         this.contentBeans = contentBeans;
+    }
+
+    public String getHtmlfileurl() {
+        return htmlfileurl;
+    }
+
+    public void setHtmlfileurl(String htmlfileurl) {
+        this.htmlfileurl = htmlfileurl;
     }
 }

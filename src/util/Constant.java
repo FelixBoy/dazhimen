@@ -24,6 +24,11 @@ public class Constant {
     public static final Integer IndexSortNumber_NewsPack = 2;
     public static final Integer IndexSortNumber_Master = 2;
 
+    public static final String NewsContentType_SubTitle = "1";
+    public static final String NewsContentType_Img = "2";
+    public static final String NewsContentType_Text = "3";
+
+
     //文件后缀名常量
     public static final String FileSuffix_JPG = ".jpg";
     public static final String FileSuffix_PNG = ".png";

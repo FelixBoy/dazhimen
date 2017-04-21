@@ -3,8 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.News">
     <insert id="saveAddNews" parameterType="dazhimen.bg.bean.news.AddNewsBean">
-        insert into news(nid,title,mainimgurl,listimgurl,createdatetime,createdate)
-        values(#{nid}, #{title}, #{mainimgurl}, #{listimgurl}, now(), now())
+        insert into news(nid,title,mainimgurl,listimgurl,htmlfileurl,createdatetime,createdate)
+        values(#{nid}, #{title}, #{mainimgurl}, #{listimgurl},#{htmlfileurl}, now(), now())
     </insert>
     <insert id="saveAddNewContents" parameterType="dazhimen.bg.bean.news.NewsContentBean">
        insert into news_content(contentid, contenttype, contentvalue, contentsort, nid)
@@ -72,4 +72,24 @@
     <update id="saveModifyNewsStatus" parameterType="dazhimen.bg.bean.news.ModifyNewsStatusBean">
         update news set status = #{status} where nid = #{nid}
     </update>
+    <select id="getNewsContentById" resultType="dazhimen.bg.bean.news.GenNewsContentBean">
+        select contentvalue,contenttype
+        from news_content where nid = #{nid}
+        order by contentsort
+    </select>
+    <select id="getNewsInforById" resultType="java.lang.String">
+        select title
+        from news where isdel = '0'
+        and status = '1'
+        and nid = #{nid}
+    </select>
+    <delete id="saveDeleteNewsContent">
+        delete from news_content where nid = #{nid}
+    </delete>
+    <delete id="saveDeleteNewsInfor">
+        delete from news where nid = #{nid}
+    </delete>
+    <delete id="saveDeleteNewsCollection">
+        delete from ir_customer_news where nid = #{nid}
+    </delete>
 </mapper>

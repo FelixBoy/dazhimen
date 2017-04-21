@@ -109,6 +109,23 @@ public class NewsController {
         mav.addObject("parameters", jsonObj.toString());
         return mav;
     }
+
+    /**
+     * 删除新闻
+     * @param resq
+     * @param resp
+     */
+    @RequestMapping("/saveDeleteNews")
+    public void saveDeleteNews(HttpServletRequest resq, HttpServletResponse resp){
+        NewsService newsService = new NewsService();
+        try {
+            newsService.saveDeleteNews(resq);
+            ResponseUtil.writeMsg(resp, "删除成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
     private AddNewsBean getAddNewsBean(HttpServletRequest resq){
         AddNewsBean addNewsBean = new AddNewsBean();
         MultipartRequest multipartRequest = (MultipartRequest)resq;
