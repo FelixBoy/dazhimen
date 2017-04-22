@@ -1,10 +1,8 @@
 package dazhimen.bg.controller;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import dazhimen.bg.bean.news.AddNewsBean;
-import dazhimen.bg.bean.news.NewsContentBean;
-import dazhimen.bg.bean.news.QueryNewsParamBean;
-import dazhimen.bg.bean.news.ViewNewsBean;
+import dazhimen.bg.bean.news.*;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.NewsService;
 import net.sf.json.JSONObject;
@@ -150,7 +148,7 @@ public class NewsController {
         String nid = resq.getParameter("nid");
         NewsService newsService = new NewsService();
         try {
-            ViewNewsBean newsBean = newsService.getNewsContentHtml(nid);
+            ViewNewsBean newsBean = newsService.getViewNewsData(nid);
             JSONObject jsonObject =  new JSONObject();
             jsonObject.put("listimgurl", resq.getContextPath() + "/" +newsBean.getListimgurl());
             jsonObject.put("mainimgurl", resq.getContextPath() + "/" +newsBean.getMainimgurl());
@@ -160,6 +158,62 @@ public class NewsController {
             e.printStackTrace();
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
+    }
+
+    /**
+     * 转向修改新闻页面
+     * @param resq
+     * @return
+     */
+    @RequestMapping("/fwdModifyNewsTitlePage")
+    public String fwdModifyNewsPage(HttpServletRequest resq){
+        resq.setAttribute("nid", resq.getParameter("nid"));
+        return "/news/modifyNewsTitle";
+    }
+
+    /**
+     * 获取修改新闻页面的数据
+     * @param resq
+     * @param resp
+     */
+    @RequestMapping("/getModifyNewsTitleData")
+    public void getModifyNewsTitleData(HttpServletRequest resq, HttpServletResponse resp){
+        String nid = resq.getParameter("nid");
+        NewsService newsService = new NewsService();
+        try {
+            ModifyNewsDataBean newsBean = newsService.getModifyNewsTitleData(nid);
+            newsBean.setListimgurl(resq.getContextPath() + "/" + newsBean.getListimgurl());
+            newsBean.setMainimgurl(resq.getContextPath() + "/" + newsBean.getMainimgurl());
+            ResponseUtil.writeMsg(resp, new Gson().toJson(newsBean));
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/saveModifyNewsTitle")
+    public void saveModifyNewsTitle(HttpServletRequest resq, HttpServletResponse resp){
+        String newsTitle = resq.getParameter("newstitle");
+        String nid = resq.getParameter("nid");
+        NewsService newsService = new NewsService();
+        try {
+            newsService.saveModifyNewsTitle(nid, newsTitle);
+            ResponseUtil.writeMsg(resp, "修改标题成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    private List<ViewNewsContentBean> dealModifynewsDataBean(List<ViewNewsContentBean> newsContentBeans, HttpServletRequest resq){
+
+        if(newsContentBeans != null && newsContentBeans.size() > 0){
+            for(int i = 0; i < newsContentBeans.size(); i++){
+                ViewNewsContentBean newsContentBean = newsContentBeans.get(i);
+                if(newsContentBean.getContenttype().equals("2")){
+                    newsContentBean.setContentvalue(resq.getContextPath() + "/" + newsContentBean.getContentvalue());
+                }
+            }
+        }
+        return newsContentBeans;
     }
     private AddNewsBean getAddNewsBean(HttpServletRequest resq){
         AddNewsBean addNewsBean = new AddNewsBean();

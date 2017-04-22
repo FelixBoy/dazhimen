@@ -3,10 +3,7 @@ package dazhimen.bg.service;
 import dazhimen.api.exception.ApiException;
 import dazhimen.bg.bean.PaginationParamBean;
 import dazhimen.bg.bean.SingleValueBean;
-import dazhimen.bg.bean.user.CheckOldPasswordBean;
-import dazhimen.bg.bean.user.ModifyPasswordBean;
-import dazhimen.bg.bean.user.QueryMasterParamBean;
-import dazhimen.bg.bean.user.UserBean;
+import dazhimen.bg.bean.user.*;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import net.sf.json.JSONObject;
@@ -318,6 +315,11 @@ public class UserService {
             result = sqlSession.update("dazhimen.bg.bean.User.saveMasterModify", user);
             CommonsMultipartFile headerFile = user.getHeaderimgFile();
             if(headerFile != null && !headerFile.isEmpty()){
+                String headerImgPath = sqlSession.selectOne("dazhimen.bg.bean.User.getHeaderImgUrl", user.getUid());
+                if(headerImgPath == null || headerImgPath.equals("")){
+                    throw new BgException("出现异常，查询查询原头像路径时出错");
+                }
+                String headerImgFileOldName = headerImgPath.substring(headerImgPath.lastIndexOf("/") + 1);
                 String userMainFolderPath = user.getBasepath() + Constant.masterPrefixPath  + user.getUid() + "\\";
                 //获得文件的原始名称
                 String headerFileOrginalName = headerFile.getOriginalFilename();
@@ -332,6 +334,17 @@ public class UserService {
                 } catch (IOException e) {
                     e.printStackTrace();
                     throw new BgException("出现异常，保存掌门头像失败");
+                }
+                if(!headerImgFileOldName.equals(headerFileNewName)){
+                    FileManageService fileManageService = new FileManageService();
+                    fileManageService.deleteFile(userMainFolderPath + headerImgFileOldName);
+
+                    //计算列表图片在工程中的相对路径，用于记录到数据库
+                    String headerImageNewFileRelPath = Constant.uploadMasterDbPrefixPath + user.getUid() + "/" + headerFileNewName;
+                    UpdateMasterHeaderFIlePathBean filePathBean = new UpdateMasterHeaderFIlePathBean();
+                    filePathBean.setUid(user.getUid());
+                    filePathBean.setHeaderpath(headerImageNewFileRelPath);
+                    sqlSession.update("dazhimen.bg.bean.User.updateMasterHeaderFilePath",filePathBean);
                 }
             }
             sqlSession.commit();

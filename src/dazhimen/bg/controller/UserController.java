@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import util.Constant;
+import util.GlobalUtils;
 import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,14 +35,90 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
     @RequestMapping("/fwdTipsInforPage")
-    public String fwdTipsInforPage(HttpServletRequest resq){
-        try {
-            resq.setCharacterEncoding("utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+    public String fwdTipsInforPage(HttpServletRequest resq, HttpServletResponse resp){
+        String menuid = resq.getParameter("menuid");
+        String tipsInfor = "欢迎使用大职门系统";
+        HttpSession sessionObj = resq.getSession(false);
+        LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
+        if(menuid.equals("product_news")){
+            boolean hasPerProduct = GlobalUtils.checkUserPermission(Constant.Per_Product, userBean);
+            boolean hasPerNews =  GlobalUtils.checkUserPermission(Constant.Per_News, userBean);
+            if(hasPerProduct && hasPerNews){
+                tipsInfor = "产品与新闻管理<br/>请点击相应子菜单";
+            }
+            if(!hasPerNews && hasPerProduct){
+                tipsInfor = "产品管理<br/>请点击相应子菜单";
+            }
+            if(hasPerNews && !hasPerProduct){
+                tipsInfor = "新闻管理<br/>请点击相应子菜单";
+            }
         }
-        String tipinfo = resq.getParameter("tipinfo");
-        resq.setAttribute("info", tipinfo);
+        if(menuid.equals("customer_recharge_order")){
+            boolean hasPerCustomer = GlobalUtils.checkUserPermission(Constant.Per_Customer, userBean);
+            boolean hasPerRecharge = GlobalUtils.checkUserPermission(Constant.Per_Recharge, userBean);
+            boolean hasPerOrder = GlobalUtils.checkUserPermission(Constant.Per_Order, userBean);
+            if(hasPerCustomer && hasPerRecharge && hasPerOrder){
+                tipsInfor = "会员、充值、订单查询<br/>请点击相应子菜单";
+            }
+            if(hasPerCustomer && !hasPerRecharge && hasPerOrder){
+                tipsInfor = "会员、订单查询<br/>请点击相应子菜单";
+            }
+            if(hasPerCustomer && hasPerRecharge && !hasPerOrder){
+                tipsInfor = "会员、充值查询<br/>请点击相应子菜单";
+            }
+            if(!hasPerCustomer && hasPerRecharge && hasPerOrder){
+                tipsInfor = "充值、订单查询<br/>请点击相应子菜单";
+            }
+            if(hasPerCustomer && !hasPerRecharge && !hasPerOrder){
+                tipsInfor = "会员查询<br/>请点击相应子菜单";
+            }
+            if(!hasPerCustomer && hasPerRecharge && !hasPerOrder){
+                tipsInfor = "充值查询<br/>请点击相应子菜单";
+            }
+            if(!hasPerCustomer && !hasPerRecharge && hasPerOrder){
+                tipsInfor = "订单查询<br/>请点击相应子菜单";
+            }
+        }
+        if(menuid.equals("play_sort")){
+            boolean hasPerIndexPlay = GlobalUtils.checkUserPermission(Constant.Per_Indexplay, userBean);
+            boolean hasPerIndexSort = GlobalUtils.checkUserPermission(Constant.Per_Indexsort, userBean);
+            if(hasPerIndexPlay && hasPerIndexSort){
+                tipsInfor = "首页轮播与首页排序配置<br/>请点击相应子菜单";
+            }
+            if(hasPerIndexPlay && !hasPerIndexSort){
+                tipsInfor = "首页轮播配置<br/>请点击相应子菜单";
+            }
+            if(!hasPerIndexPlay && hasPerIndexSort){
+                tipsInfor = "首页排序配置<br/>请点击相应子菜单";
+            }
+        }
+        if(menuid.equals("master_admin_permission")){
+            boolean hasPerMaster = GlobalUtils.checkUserPermission(Constant.Per_Master, userBean);
+            boolean hasPerAdmin =  GlobalUtils.checkUserPermission(Constant.Per_Admin, userBean);
+            boolean hasPerPermission = GlobalUtils.checkUserPermission(Constant.Per_Permission, userBean);
+            if(hasPerMaster && hasPerAdmin && hasPerPermission){
+                tipsInfor = "掌门、管理员、权限管理<br/>请点击相应子菜单";
+            }
+            if(hasPerMaster && hasPerAdmin && !hasPerPermission){
+                tipsInfor = "掌门、管理员管理<br/>请点击相应子菜单";
+            }
+            if(hasPerMaster && !hasPerAdmin && hasPerPermission){
+                tipsInfor = "掌门、权限管理<br/>请点击相应子菜单";
+            }
+            if(!hasPerMaster && hasPerAdmin && hasPerPermission){
+                tipsInfor = "管理员、权限管理<br/>请点击相应子菜单";
+            }
+            if(hasPerMaster && !hasPerAdmin && !hasPerPermission){
+                tipsInfor = "掌门管理<br/>请点击相应子菜单";
+            }
+            if(!hasPerMaster && hasPerAdmin && !hasPerPermission){
+                tipsInfor = "管理员管理<br/>请点击相应子菜单";
+            }
+            if(!hasPerMaster && !hasPerAdmin && hasPerPermission){
+                tipsInfor = "权限管理<br/>请点击相应子菜单";
+            }
+        }
+        resq.setAttribute("info", tipsInfor);
         return "tipsInfo";
     }
 

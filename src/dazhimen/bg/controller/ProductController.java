@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import util.Constant;
+import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,52 +29,81 @@ import java.util.List;
 @Controller
 @RequestMapping("/product")
 public class ProductController {
+    /**
+     * 转向修改产品主图页面
+     * @param pid 产品id
+     * @return
+     */
     @RequestMapping("/fwdModifyProductMainImgPage")
     public ModelAndView fwdModifyProductMainImgPage(@RequestParam("pid") String pid){
         ModelAndView mav = new ModelAndView("/product/modifyProductMainImg");
         mav.addObject("pid", pid);
         return mav;
     }
+    /**
+     * 转向修改产品列表图片页面
+     * @param pid 产品id
+     * @return
+     */
     @RequestMapping("/fwdModifyProductListImgPage")
     public ModelAndView fwdModifyProductListImgPage(@RequestParam("pid") String pid){
         ModelAndView mav = new ModelAndView("/product/modifyProductListImg");
         mav.addObject("pid", pid);
         return mav;
     }
+    /**
+     * 转向修改产品信息页面
+     * @param pid 产品id
+     * @return
+     */
     @RequestMapping("/fwdModifyProductPage")
     public ModelAndView fwdModifyProductPage(@RequestParam("pid") String pid){
         ModelAndView mav = new ModelAndView("/product/modifyProduct");
         mav.addObject("pid", pid);
         return mav;
     }
+    /**
+     * 转向新增（上传）产品页面
+     * @return
+     */
     @RequestMapping("/fwdAddProductPage")
     public String forwardAddProductPage(){
         return "/product/addProduct";
     }
+    /**
+     * 转向上传产品时，选择掌门页面
+     * @return
+     */
     @RequestMapping("/fwdSelectMasterPage")
     public String forwardSelectMasterPage(){
         return "product/selectMaster";
     }
+
+    /**
+     * 转向上传产品时，获取掌门页面数据
+     * @param resq
+     * @param resp
+     */
     @RequestMapping("/getSelectMasterData")
     public void getSelectMasterData(HttpServletRequest resq, HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             ProductService productService = new ProductService();
             String page = resq.getParameter("page");
             String rows = resq.getParameter("rows");
             String result = productService.queryAllMasters(page, rows);
-            resp.getWriter().write(result);
+            ResponseUtil.writeMsg(resp, result);
         } catch (Exception e) {
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询所有掌门信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询所有掌门信息失败");
         }
     }
 
+    /**
+     * 保存新增产品
+     * @param resq
+     * @param resp
+     * @return
+     */
     @RequestMapping("/saveAddProduct")
     public ModelAndView saveAddProduct(HttpServletRequest resq, HttpServletResponse resp){
         UploadProductBean productBean = getUploadProductBean(resq);
@@ -98,89 +128,93 @@ public class ProductController {
         mav.addObject("parameters", jsonObj.toString());
         return mav;
     }
+
+    /**
+     * 转向查看产品页面
+     * @param pid
+     * @return
+     */
     @RequestMapping("/fwdProductInfoPage")
-    public ModelAndView fwdProductInfoPage(@RequestParam("pid") String pid, HttpServletResponse resp){
+    public ModelAndView fwdProductInfoPage(@RequestParam("pid") String pid){
         ModelAndView mav = new ModelAndView("product/viewProductInfor");
         mav.addObject("pid", pid);
         return mav;
     }
+
+    /**
+     * 通过产品id获取产品信息
+     * @param pid
+     * @param resq
+     * @param resp
+     */
     @RequestMapping("/getProductInforById")
-    public void getProductInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
-                                    HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void getProductInforById(@RequestParam("pid") String pid, HttpServletRequest resq, HttpServletResponse resp){
         try{
             ProductService productService = new ProductService();
             ViewProductBean productBean = productService.getProductInforById(pid);
             productBean = dealListImgUrlPrefix(resq.getContextPath() , productBean);
             Gson gson = new Gson();
             String productJson = gson.toJson(productBean);
-            resp.getWriter().write(productJson);
+            ResponseUtil.writeMsg(resp, productJson);
         }catch (Exception e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询指定产品信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询指定产品信息失败");
         }
 
     }
+    /**
+     * 通过产品id获取修改产品时的初始信息
+     * @param pid
+     * @param resq
+     * @param resp
+     */
     @RequestMapping("/getModifyProductInforById")
-    public void getModifyProductInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
-                                    HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void getModifyProductInforById(@RequestParam("pid") String pid, HttpServletRequest resq, HttpServletResponse resp){
         try{
             ProductService productService = new ProductService();
             ViewProductBean productBean = productService.getModifyProductInforById(pid);
             productBean = dealListImgUrlPrefix(resq.getContextPath() , productBean);
             Gson gson = new Gson();
             String productJson = gson.toJson(productBean);
-            resp.getWriter().write(productJson);
+            ResponseUtil.writeMsg(resp, productJson);
         }catch (Exception e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询指定产品信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询指定产品信息失败");
         }
-
     }
 
+    /**
+     * 保存修改产品基本信息
+     * @param resq
+     * @param resp
+     */
     @RequestMapping(value="/saveModifyProductBasicInfo",method = RequestMethod.POST)
-    public void saveModifyProductBasicInfo(HttpServletRequest resq,
-                                       HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
+    public void saveModifyProductBasicInfo(HttpServletRequest resq, HttpServletResponse resp){
         ModifyProductBasicInfoBean productBean = getSaveModifyProductionBasicInfoBean(resq);
         ProductService productService = new ProductService();
         try {
            boolean result = productService.saveModifyProductBasicInfo(productBean);
            if(result){
-               resp.getWriter().write("修改产品基本信息成功");
+               ResponseUtil.writeMsg(resp, "修改产品基本信息成功");
            }else{
-               resp.getWriter().write("修改产品基本信息失败");
+               ResponseUtil.writeMsg(resp, "修改产品基本信息失败");
            }
 
         } catch (BgException e) {
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write(e.getMessage());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，修改产品基本信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，修改产品基本信息失败");
         }
     }
+
+    /**
+     * 保存修改 产品列表图片
+     * @param resq
+     * @param resp
+     * @return
+     */
     @RequestMapping("/saveModifyProductListImg")
     public ModelAndView saveModifyProductListImg(HttpServletRequest resq, HttpServletResponse resp){
         ProductService productService = new ProductService();
@@ -206,6 +240,12 @@ public class ProductController {
         return mav;
     }
 
+    /**
+     * 保存修改产品主图
+     * @param resq
+     * @param resp
+     * @return
+     */
     @RequestMapping("/saveModifyProductMainImg")
     public ModelAndView saveModifyProductMainImg(HttpServletRequest resq, HttpServletResponse resp){
         ProductService productService = new ProductService();
@@ -230,6 +270,13 @@ public class ProductController {
         mav.addObject("parameters", jsonObj.toString());
         return mav;
     }
+
+    /**
+     * 获取产品主图信息
+     * @param pid 要获取主图信息的产品id
+     * @param resq
+     * @param resp
+     */
     @RequestMapping("/getMainImagesInforById")
     public void getMainImagesInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
                                        HttpServletResponse resp){
@@ -240,15 +287,10 @@ public class ProductController {
             mainImageBeans = dealMainImageUrlPrefix(resq.getContextPath(), mainImageBeans);
             Gson gson = new Gson();
             String mainImagesJson = gson.toJson(mainImageBeans);
-            resp.getWriter().write(mainImagesJson);
+            ResponseUtil.writeMsg(resp, mainImagesJson);
         } catch (Exception e) {
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询产品主图信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询产品主图信息失败");
         }
     }
     @RequestMapping("/fwdViewMasterInforPage")

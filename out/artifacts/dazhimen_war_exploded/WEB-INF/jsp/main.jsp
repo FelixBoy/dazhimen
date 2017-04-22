@@ -8,7 +8,7 @@
 %>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
     <title>大职门后台管理</title>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/default/easyui.css?_=<%=Constant.FrontEndVersion%>">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/easyui/themes/icon.css?_=<%=Constant.FrontEndVersion%>">
@@ -23,6 +23,7 @@
     <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/MsgBox.js?_=<%=Constant.FrontEndVersion%>"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/javascript/LoadingMaskLayer.js?_=<%=Constant.FrontEndVersion%>"></script>
     <script>
+        <%if(userBean.getUserPermissionMap().size() > 0 || userBean.getLoginname().equals(Constant.defaultAdministrator)){%>
         $(function(){
             $('#menu-tree').tree({
                 onClick: function(node){
@@ -35,7 +36,7 @@
             switch (nodeid){
                 case 'product_news':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&tipinfo=产品与新闻管理<br/>请点击相应子菜单",
+                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&menuid=product_news",
                         onLoad:function(){
                         }
                     });
@@ -54,7 +55,7 @@
                     break;
                 case 'customer_recharge_order':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&tipinfo=会员、充值、订单查询<br/>请点击相应子菜单",
+                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&menuid=customer_recharge_order",
                         onLoad:function(){
                         }
                     });
@@ -80,9 +81,9 @@
                         }
                     });
                     break;
-                case 'play_sort_right':
+                case 'play_sort':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&tipinfo=首页轮播与首页排序配置<br/>请点击相应子菜单",
+                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&menuid=play_sort",
                         onLoad:function(){
                         }
                     });
@@ -101,7 +102,7 @@
                     break;
                 case 'master_admin_permission':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&tipinfo=掌门、管理员、权限管理<br/>请点击相应子菜单",
+                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() +  "&menuid=master_admin_permission",
                         onLoad:function(){
                         }
                     });
@@ -132,6 +133,7 @@
                     });
             }
         }
+        <%}%>
         function modifyPassword(){
             $('#modifyPasswordDialog').dialog({
                 title: '修改密码',
@@ -158,18 +160,29 @@
 <div data-options="region:'west',split:false,title:'导航菜单'" style="width:240px;padding:10px;">
     <div style="margin:20px 0;"></div>
     <div id="modifyPasswordDialog"></div>
+    <%if(userBean.getUserPermissionMap().size() > 0 || userBean.getLoginname().equals(Constant.defaultAdministrator)){%>
     <div class="easyui-panel" style="padding:5px">
         <ul id="menu-tree" class="easyui-tree">
             <%
-                if(GlobalUtils.checkUserPermission(Constant.Per_Product, userBean) || GlobalUtils.checkUserPermission(Constant.Per_News, userBean)){
+                boolean hasPerProduct = GlobalUtils.checkUserPermission(Constant.Per_Product, userBean);
+                boolean hasPerNews =  GlobalUtils.checkUserPermission(Constant.Per_News, userBean);
+                if(hasPerProduct || hasPerNews){
             %>
             <li id="product_news" data-options="state:'open'">
-                <span>产品/新闻</span>
+                <%if(hasPerNews && hasPerProduct){%>
+                    <span>产品/新闻</span>
+                <%}%>
+                <%if(hasPerProduct && !hasPerNews){%>
+                    <span>产品</span>
+                <%}%>
+                <%if(!hasPerProduct && hasPerNews){%>
+                <span>新闻</span>
+                <%}%>
                 <ul>
-                    <% if(GlobalUtils.checkUserPermission(Constant.Per_Product, userBean)){%>
+                    <% if(hasPerProduct){%>
                     <li id="product_manage">产品管理</li>
                     <%}%>
-                    <% if(GlobalUtils.checkUserPermission(Constant.Per_News, userBean)){%>
+                    <% if(hasPerNews){%>
                     <li id="news_manage">新闻管理</li>
                     <%}%>
                 </ul>
@@ -177,26 +190,60 @@
             <%
                 }
             %>
-            <% if(GlobalUtils.checkUserPermission(Constant.Per_Customer, userBean) || GlobalUtils.checkUserPermission(Constant.Per_Recharge, userBean)
-                    || GlobalUtils.checkUserPermission(Constant.Per_Order, userBean)){%>
+            <%
+                boolean hasPerCustomer = GlobalUtils.checkUserPermission(Constant.Per_Customer, userBean);
+                boolean hasPerRecharge = GlobalUtils.checkUserPermission(Constant.Per_Recharge, userBean);
+                boolean hasPerOrder = GlobalUtils.checkUserPermission(Constant.Per_Order, userBean);
+                if(hasPerCustomer || hasPerRecharge|| hasPerOrder ){%>
             <li id="customer_recharge_order" data-options="state:'open'">
-                <span>会员/充值/订单</span>
+                <%if(hasPerCustomer && hasPerRecharge && hasPerOrder) {%>
+                    <span>会员/充值/订单</span>
+                <%}%>
+                <%if(!hasPerCustomer && hasPerRecharge && hasPerOrder){%>
+                    <span>充值/订单</span>
+                <%}%>
+                <%if(!hasPerRecharge && hasPerCustomer && hasPerOrder){%>
+                    <span>会员/订单</span>
+                <%}%>
+                <%if(hasPerRecharge && hasPerCustomer && !hasPerOrder){%>
+                    <span>会员/充值</span>
+                <%}%>
+                <%if(!hasPerRecharge && hasPerCustomer && !hasPerOrder){%>
+                    <span>会员</span>
+                <%}%>
+                <%if(hasPerRecharge && !hasPerCustomer && !hasPerOrder){%>
+                <span>充值</span>
+                <%}%>
+                <%if(!hasPerRecharge && !hasPerCustomer && hasPerOrder){%>
+                    <span>订单</span>
+                <%}%>
                 <ul>
                     <%if(GlobalUtils.checkUserPermission(Constant.Per_Customer, userBean)){%>
-                    <li id="customer_query">会员查询</li>
+                        <li id="customer_query">会员查询</li>
                     <%}%>
                     <%if(GlobalUtils.checkUserPermission(Constant.Per_Recharge, userBean)){%>
-                    <li id="recharge_query">充值查询</li>
+                         <li id="recharge_query">充值查询</li>
                     <%}%>
                     <%if(GlobalUtils.checkUserPermission(Constant.Per_Order, userBean)){%>
-                    <li id="order_query">订单查询</li>
+                        <li id="order_query">订单查询</li>
                     <%}%>
                 </ul>
             </li>
             <%}%>
-            <%if(GlobalUtils.checkUserPermission(Constant.Per_Indexplay, userBean) || GlobalUtils.checkUserPermission(Constant.Per_Indexsort, userBean)){%>
-            <li id="play_sort_right" data-options="state:'open'">
-                <span>轮播/排序</span>
+            <%
+                boolean hasPerIndexPlay = GlobalUtils.checkUserPermission(Constant.Per_Indexplay, userBean);
+                boolean hasPerIndexSort = GlobalUtils.checkUserPermission(Constant.Per_Indexsort, userBean);
+                if(hasPerIndexPlay || hasPerIndexSort){%>
+            <li id="play_sort" data-options="state:'open'">
+                <%if(hasPerIndexPlay && hasPerIndexSort){%>
+                    <span>轮播/排序</span>
+                <%}%>
+                <%if(hasPerIndexPlay && !hasPerIndexSort){%>
+                    <span>轮播</span>
+                <%}%>
+                <%if(!hasPerIndexPlay && hasPerIndexSort){%>
+                <span>排序</span>
+                <%}%>
                 <ul>
                     <%if(GlobalUtils.checkUserPermission(Constant.Per_Indexplay, userBean)){%>
                     <li id="indexplay_manage">首页轮播</li>
@@ -207,10 +254,33 @@
                 </ul>
             </li>
             <%}%>
-            <%if(GlobalUtils.checkUserPermission(Constant.Per_Master, userBean) || GlobalUtils.checkUserPermission(Constant.Per_Admin, userBean)
-                    || GlobalUtils.checkUserPermission(Constant.Per_Permission, userBean)){%>
+            <%
+                boolean hasPerMaster = GlobalUtils.checkUserPermission(Constant.Per_Master, userBean);
+                boolean hasPerAdmin =  GlobalUtils.checkUserPermission(Constant.Per_Admin, userBean);
+                boolean hasPerPermission = GlobalUtils.checkUserPermission(Constant.Per_Permission, userBean);
+                if(hasPerMaster || hasPerAdmin || hasPerPermission){%>
             <li id="master_admin_permission" data-options="state:'open'">
-                <span>掌门/管理员/权限</span>
+                <%if(hasPerMaster && hasPerAdmin && hasPerPermission){%>
+                    <span>掌门/管理员/权限</span>
+                <%}%>
+                <%if(hasPerMaster && hasPerAdmin && !hasPerPermission){%>
+                    <span>掌门/管理员</span>
+                <%}%>
+                <%if(hasPerMaster && !hasPerAdmin && hasPerPermission){%>
+                    <span>掌门/权限</span>
+                <%}%>
+                <%if(!hasPerMaster && hasPerAdmin && hasPerPermission){%>
+                    <span>管理员/权限</span>
+                <%}%>
+                <%if(hasPerMaster && !hasPerAdmin && !hasPerPermission){%>
+                    <span>掌门</span>
+                <%}%>
+                <%if(!hasPerMaster && hasPerAdmin && !hasPerPermission){%>
+                    <span>管理员</span>
+                <%}%>
+                <%if(!hasPerMaster && !hasPerAdmin && hasPerPermission){%>
+                <span>权限</span>
+                <%}%>
                 <ul>
                     <%if(GlobalUtils.checkUserPermission(Constant.Per_Master, userBean)){%>
                     <li id="master_manage">掌门管理</li>
@@ -226,6 +296,10 @@
             <%}%>
         </ul>
     </div>
+    <%}else{%>
+        <div style="height: 200px;"></div>
+        <div style="height:100px;font-size: 30px;line-height: 60px;">您没有权限，请向管理员申请权限后重试</div>
+    <%}%>
 </div>
 <div id="center_oper_area" data-options="region:'center',title:' '">
     <div id="content_panel" class="easyui-panel"style="padding:10px;text-align: center"

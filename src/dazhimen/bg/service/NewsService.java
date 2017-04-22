@@ -24,14 +24,60 @@ import java.util.List;
  * Created by Administrator on 2017/4/12.
  */
 public class NewsService {
-    public ViewNewsBean getNewsContentHtml(String nid) throws BgException {
+    public void saveModifyNewsTitle(String nid, String newstitle) throws BgException {
+        if(nid == null || nid.equals("")){
+            throw new BgException("传入的nid为空，修改标题失败");
+        }
+        if(newstitle == null || newstitle.equals("")){
+            throw new BgException("传入的newstitle为空，修改标题失败");
+        }
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            ModifyNewsTitleBean newsTitleBean = new ModifyNewsTitleBean();
+            newsTitleBean.setNid(nid);
+            newsTitleBean.setNewstitle(newstitle);
+            sqlSession.update("dazhimen.bg.bean.News.saveModifyNewsTitle", newsTitleBean);
+            sqlSession.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，修改标题失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+    public ModifyNewsDataBean getModifyNewsTitleData(String nid) throws BgException {
+        SqlSession sqlSession = null;
+        ModifyNewsDataBean newsBean = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            newsBean = sqlSession.selectOne("dazhimen.bg.bean.News.getModifyNewsTitleData" ,nid);
+            if(newsBean == null){
+                throw new Exception("获取新闻信息异常");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BgException(e.getMessage());
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return newsBean;
+    }
+    /**
+     * 获取新闻的数据，用于查看
+     * @param nid 新闻id
+     * @return  新闻信息
+     * @throws BgException
+     */
+    public ViewNewsBean getViewNewsData(String nid) throws BgException {
         SqlSession sqlSession = null;
         ViewNewsBean newsBean = null;
         try{
             sqlSession = MyBatisUtil.createSession();
             newsBean = sqlSession.selectOne("dazhimen.bg.bean.News.getNewsInforById" ,nid);
             if(newsBean == null){
-                throw new Exception("新闻信息异常");
+                throw new Exception("获取新闻信息异常");
             }
             List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.News.getNewsContentById", nid);
            String newsHtml = GenNewsHtmlUtil.genBrowseNewsHtml(newsBean.getTitle(), contentBeans);
@@ -44,6 +90,13 @@ public class NewsService {
         }
         return newsBean;
     }
+
+    /**
+     * 修改新闻状态
+     * @param nid 新闻id
+     * @param status  要修改的状态
+     * @throws BgException
+     */
     public void saveModifyNewsStatus(String nid, String status) throws BgException {
         SqlSession sqlSession = null;
         try {
@@ -61,6 +114,14 @@ public class NewsService {
             MyBatisUtil.closeSession(sqlSession);
         }
     }
+
+    /**
+     *  查询所有新闻信息
+     * @param page
+     * @param rows
+     * @return
+     * @throws BgException
+     */
     public String queryAllNews(String page, String rows) throws BgException {
         List<ListViewNewsBean> newsBeans = null;
         SqlSession sqlSession = null;
@@ -87,6 +148,14 @@ public class NewsService {
         return jsonObject.toString();
     }
 
+    /**
+     * 按条件查询信息信息
+     * @param page
+     * @param rows
+     * @param paramBean
+     * @return
+     * @throws BgException
+     */
     public String queryAllNewsByParams(String page, String rows, QueryNewsParamBean paramBean) throws BgException {
         List<ListViewNewsBean> newsBeans = null;
         SqlSession sqlSession = null;
@@ -114,6 +183,13 @@ public class NewsService {
         jsonObject.put("rows", newsBeans);
         return jsonObject.toString();
     }
+
+    /**
+     * 保存新增新闻信息
+     * @param addNewsBean
+     * @param basePath
+     * @throws BgException
+     */
     public void saveAddNews(AddNewsBean addNewsBean, String basePath) throws BgException {
         //1 生成nid
         IdUtils idUtils = new IdUtils();

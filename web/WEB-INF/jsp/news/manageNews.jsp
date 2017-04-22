@@ -18,7 +18,8 @@
                     formatter: function (value, rowData, rowIndex) {
                         return '<a href="javascript:void(0)" onclick="fwdViewNewsPage('+rowIndex+')">查看</a>&nbsp&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="fwdModifyNewsStatusPage('+rowIndex+')">修改状态</a>&nbsp&nbsp&nbsp'+
-                            '<a href="javascript:void(0)" onclick="fwdEditNewsPage('+rowIndex+')">编辑信息</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdModifyNewsTitlePage('+rowIndex+')">修改标题</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdModifyNewsContentPage('+rowIndex+')">修改内容</a>&nbsp&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="saveNewsDel('+rowIndex+')">删除</a>';
                     }
                 }
@@ -74,8 +75,16 @@
             }
         });
     }
-    function fwdEditNewsPage(index){
-        MsgBox.show("功能正在开发，敬请期待");
+    function fwdModifyNewsTitlePage(index){
+        $('#newsList').datagrid('selectRow',index);
+        var row = $('#newsList').datagrid('getSelected');
+        if (row){
+            $('#content_panel').panel({
+                href:"<%=request.getContextPath() %>/news/fwdModifyNewsTitlePage?nid=" + row.nid + "&random_id="+Math.random(),
+                onLoad:function(){
+                }
+            });
+        }
     }
     function fwdViewNewsPage(index){
         $('#newsList').datagrid('selectRow',index);
@@ -130,7 +139,6 @@
 </script>
 <div id="modifyNewsStatusDialog"></div>
 <div style="padding:5px 0;">
-    <%--<div style="height:30px;font-size: 20px;line-height: 30px;color:red;font-weight:bold;">新闻模块，正在使用富文本编辑器重写，暂时仅提供【添加新闻，修改状态】</div>--%>
     <div style="margin:0px auto;width: 950px;">
         <form id="queryNewsParamsForm">
             <table cellpadding="5">

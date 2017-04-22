@@ -198,9 +198,13 @@
         });
     }
     function deleteNewsContent(trcontentid){
-        var trcontent = $("#" + trcontentid);
-        trcontent.remove();
-        dealSortValue();
+        $.messager.confirm('确认','您确认删除吗？',function(r){
+            if (r){
+                var trcontent = $("#" + trcontentid);
+                trcontent.remove();
+                dealSortValue();
+            }
+        });
     }
 </script>
 <div style="text-align: left;">
@@ -244,7 +248,7 @@
     <table id="newsContentTable" cellpadding="5">
         <tr>
             <td colspan="7" >
-                <div class="formTitle" style="background-color:#f2f2f2;width: 850px;">
+                <div class="formTitle" style="background-color:#f2f2f2;">
                     <div class="formTitle-icon"></div>
                     <div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">
                         编辑新闻内容（请点击相应按钮，添加内容）
@@ -253,7 +257,7 @@
             </td>
         </tr>
         <tr id="trcontent1">
-            <td>副标题:<span style="color:red">*</span></td>
+            <td >副标题:<span style="color:red">*</span></td>
             <td colspan="5">
                 <input class="easyui-textbox" style="width:700px;" id="newscontent1" name="newscontent1"/>
                 <input type="hidden" id="sort_newscontent1" name="sort_newscontent1"/>

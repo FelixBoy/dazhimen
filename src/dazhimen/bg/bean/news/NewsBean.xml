@@ -82,6 +82,16 @@
         from news where isdel = '0'
         and nid = #{nid}
     </select>
+    <select id="getModifyNewsTitleData" resultType="dazhimen.bg.bean.news.ModifyNewsDataBean">
+        select nid,title,mainimgurl,listimgurl
+        from news where isdel = '0'
+        and nid = #{nid}
+    </select>
+    <select id="getModifyNewsContentData" resultType="dazhimen.bg.bean.news.ViewNewsContentBean">
+        select contentid,contentvalue,contenttype
+        from news_content where nid = #{nid}
+        order by contentsort
+    </select>
     <delete id="saveDeleteNewsContent">
         delete from news_content where nid = #{nid}
     </delete>
@@ -91,4 +101,7 @@
     <delete id="saveDeleteNewsCollection">
         delete from ir_customer_news where nid = #{nid}
     </delete>
+    <update id="saveModifyNewsTitle" parameterType="dazhimen.bg.bean.news.ModifyNewsTitleBean">
+        update news set title = #{newstitle} where nid = #{nid}
+    </update>
 </mapper>

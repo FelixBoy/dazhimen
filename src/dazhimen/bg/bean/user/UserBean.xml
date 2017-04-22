@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.User">
+    <select id="getHeaderImgUrl" resultType="java.lang.String">
+        select headerimg from user where uid = #{uid}
+    </select>
+    <update id="updateMasterHeaderFilePath" parameterType="dazhimen.bg.bean.user.UpdateMasterHeaderFIlePathBean">
+        update user set headerimg = #{headerpath} where uid = #{uid}
+    </update>
     <select id="getAllMasterCount" resultType="dazhimen.bg.bean.SingleValueBean">
        select count(uid) as valueinfo
           from user
