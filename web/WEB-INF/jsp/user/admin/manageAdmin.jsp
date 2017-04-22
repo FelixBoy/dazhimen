@@ -1,3 +1,8 @@
+<%@ page import="dazhimen.bg.bean.login.LoginUserBean" %>
+<%@ page import="util.Constant" %><%
+    HttpSession sessionObj = request.getSession(false);
+    LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
+%>
 <script type="text/javascript">
     function forwardAddAdminPage(){
         $('#addAdminDialog').dialog({
@@ -72,7 +77,11 @@
                 {
                     field: "operateID", title: '操作',width:'20%', align: 'center',
                     formatter: function (value, rowData, rowIndex) {
-                        return '<a href="javascript:void(0)" onclick="fwdModifyAdminPage('+rowIndex+')">修改</a>&nbsp&nbsp' +
+                        return
+                            <%if(userBean.getLoginname().equals(Constant.defaultAdministrator)){%>
+                                '<a href="javascript:void(0)" onclick="saveResetAdminPassword('+rowIndex+')">重置密码</a>&nbsp&nbsp' +
+                            <%}%>
+                            '<a href="javascript:void(0)" onclick="fwdModifyAdminPage('+rowIndex+')">修改</a>&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="saveDeleteAdmin('+rowIndex+')">删除</a>';
                     }
                 }
