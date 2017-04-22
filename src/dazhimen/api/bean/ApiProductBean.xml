@@ -91,6 +91,7 @@
          where a.orid = b.orid
            and a.cid = #{cid}
            and b.pid = #{pid}
+           and datediff(now(), ordatetime) <![CDATA[<=]]> 365
     </select>
 
     <select id="checkPidIsExists" resultType="dazhimen.api.bean.SingleValueBean">
