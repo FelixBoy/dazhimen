@@ -24,6 +24,26 @@ import java.util.List;
  * Created by Administrator on 2017/4/12.
  */
 public class NewsService {
+    public ViewNewsBean getNewsContentHtml(String nid) throws BgException {
+        SqlSession sqlSession = null;
+        ViewNewsBean newsBean = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            newsBean = sqlSession.selectOne("dazhimen.bg.bean.News.getNewsInforById" ,nid);
+            if(newsBean == null){
+                throw new Exception("新闻信息异常");
+            }
+            List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.News.getNewsContentById", nid);
+           String newsHtml = GenNewsHtmlUtil.genBrowseNewsHtml(newsBean.getTitle(), contentBeans);
+           newsBean.setNewscontenthtml(newsHtml);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BgException(e.getMessage());
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return newsBean;
+    }
     public void saveModifyNewsStatus(String nid, String status) throws BgException {
         SqlSession sqlSession = null;
         try {

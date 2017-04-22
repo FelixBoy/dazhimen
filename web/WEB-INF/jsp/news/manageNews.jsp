@@ -78,7 +78,15 @@
         MsgBox.show("功能正在开发，敬请期待");
     }
     function fwdViewNewsPage(index){
-        MsgBox.show("功能正在开发，敬请期待");
+        $('#newsList').datagrid('selectRow',index);
+        var row = $('#newsList').datagrid('getSelected');
+        if (row){
+            $('#content_panel').panel({
+                href:"<%=request.getContextPath() %>/news/fwdViewNewsPage?nid=" + row.nid + "&random_id="+Math.random(),
+                onLoad:function(){
+                }
+            });
+        }
     }
     function saveNewsDel(index){
         $('#newsList').datagrid('selectRow',index);
@@ -87,7 +95,7 @@
             $.messager.confirm('确认','您确认删除新闻【'+ row.title + '】吗？',function(r){
                 if (r){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/news/saveDeleteNews?nid=" + row.nid+"&random_id="+Math.random(),
+                        url:"<%=request.getContextPath()%>/news/saveDeleteNews?nid=" + row.nid +"&random_id="+Math.random(),
                         type:'get',
                         async:false,
                         error:function(data){

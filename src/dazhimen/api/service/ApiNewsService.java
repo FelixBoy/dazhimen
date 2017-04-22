@@ -214,4 +214,31 @@ public class ApiNewsService {
         }
         return newsBean;
     }
+
+    /**
+     * 获取指定新闻对应的html文件的url
+     * @param nid 新闻id
+     * @return 内容文件url
+     */
+    public String getNewsURLById(String nid) throws ApiException {
+        CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();
+        if(!checkUtil.checkNidIsExists(nid)){
+            throw new ApiException("传入的[nid]值，无效。在数据库中不存在。");
+        }
+        SqlSession sqlSession = null;
+        String fileUrl = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            fileUrl = sqlSession.selectOne("dazhimen.api.bean.ApiNews.getNewsURLById", nid);
+            if(fileUrl == null || fileUrl.equals("")){
+                throw new ApiException("出现异常，获取新闻URL出错");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，获取新闻URL出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return fileUrl;
+    }
 }

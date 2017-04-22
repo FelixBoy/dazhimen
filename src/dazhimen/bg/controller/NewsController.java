@@ -4,8 +4,10 @@ import com.google.gson.JsonObject;
 import dazhimen.bg.bean.news.AddNewsBean;
 import dazhimen.bg.bean.news.NewsContentBean;
 import dazhimen.bg.bean.news.QueryNewsParamBean;
+import dazhimen.bg.bean.news.ViewNewsBean;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.NewsService;
+import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -121,6 +123,39 @@ public class NewsController {
         try {
             newsService.saveDeleteNews(resq);
             ResponseUtil.writeMsg(resp, "删除成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+
+    /**
+     * 转向查看新闻页面
+     * @param resq
+     * @return
+     */
+    @RequestMapping("/fwdViewNewsPage")
+    public String fwdViewNewsPage(HttpServletRequest resq){
+        resq.setAttribute("nid", resq.getParameter("nid"));
+        return "/news/viewNews";
+    }
+
+    /**
+     * 获取新闻的数据，用于查看
+     * @param resq
+     * @param resp
+     */
+    @RequestMapping("/getViewNewsData")
+    public void getViewNewsData(HttpServletRequest resq, HttpServletResponse resp){
+        String nid = resq.getParameter("nid");
+        NewsService newsService = new NewsService();
+        try {
+            ViewNewsBean newsBean = newsService.getNewsContentHtml(nid);
+            JSONObject jsonObject =  new JSONObject();
+            jsonObject.put("listimgurl", resq.getContextPath() + "/" +newsBean.getListimgurl());
+            jsonObject.put("mainimgurl", resq.getContextPath() + "/" +newsBean.getMainimgurl());
+            jsonObject.put("contenthtml", newsBean.getNewscontenthtml());
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
         } catch (BgException e) {
             e.printStackTrace();
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());

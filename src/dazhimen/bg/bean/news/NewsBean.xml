@@ -77,10 +77,9 @@
         from news_content where nid = #{nid}
         order by contentsort
     </select>
-    <select id="getNewsInforById" resultType="java.lang.String">
-        select title
+    <select id="getNewsInforById" resultType="dazhimen.bg.bean.news.ViewNewsBean">
+        select title,mainimgurl,listimgurl
         from news where isdel = '0'
-        and status = '1'
         and nid = #{nid}
     </select>
     <delete id="saveDeleteNewsContent">

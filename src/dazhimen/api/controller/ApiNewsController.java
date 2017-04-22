@@ -30,6 +30,37 @@ import java.util.*;
 @Controller
 @RequestMapping("/api/news")
 public class ApiNewsController {
+    @RequestMapping(value = "/getNewsURLById", method = RequestMethod.POST)
+    public void getNewsURLById(HttpServletRequest resq, HttpServletResponse resp){
+        try {
+            ApiUtils.checkSignature(resq);
+            checkGetNewsContentByIdPara(resq);
+            ApiNewsService newsService = new ApiNewsService();
+            String newsURL = newsService.getNewsURLById(resq.getParameter("nid"));
+            String localIp = resq.getLocalAddr();//获取本地ip
+            if(Constant.isDeployInAliyun){
+                localIp = Constant.AliyunIP;
+            }
+            int localPort = resq.getLocalPort();//获取本地的端口
+            String appName = resq.getContextPath();
+            newsURL = "http://" + localIp + ":" + localPort + appName + "/" + newsURL;
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", "200");
+            jsonObject.put("msg", "获取成功");
+            String iscollection = newsService.getNewsIsCollection(resq.getParameter("nid"), resq.getParameter("cid"));
+            jsonObject.put("iscollection", iscollection);
+            jsonObject.put("contenturl", newsURL);
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+        } catch (ApiException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+        }
+
+    }
     @RequestMapping(value = "getCustomerCollectList", method = RequestMethod.POST)
     public void getCustomerCollectList(HttpServletRequest resq, HttpServletResponse resp) {
         String cid = null;

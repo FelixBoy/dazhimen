@@ -107,6 +107,9 @@
                     }
                 }
             });
+        }else{
+            MsgBox.show("新闻内容为空，无法保存");
+            return false;
         }
         return true;
     }
@@ -144,10 +147,15 @@
         var nextIndex = getNextIndex();
         $("#newsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>副标题:<span style='color:red'>*</span></td>" +
             "<td colspan='5'><input class='easyui-textbox' " +
-            " style='width:100%' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
+            " style='width:700px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='1'>" +
-            "</td></tr>");
+            "</td>" +
+            "<td>" +
+                "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
+                "onclick=\"deleteNewsContent('trcontent" + nextIndex +"')\">删除</a>" +
+            "</td>" +
+            "</tr>");
         $.parser.parse($('#trcontent'+nextIndex));
         dealSortValue();
     }
@@ -156,10 +164,15 @@
         $("#newsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>内容图片:<span style='color:red'>*</span></td>" +
             "<td colspan='5'><input class='easyui-filebox' " +
             " data-options=\"prompt:'请选择图片(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'\"" +
-            " style='width:100%' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
+            " style='width:700px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='2'>" +
-            "</td></tr>");
+            "</td>" +
+            "<td>" +
+                "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
+                "onclick=\"deleteNewsContent('trcontent" + nextIndex +"')\">删除</a>" +
+            "</td>" +
+            "</tr>");
         $.parser.parse($('#trcontent'+nextIndex));
         dealSortValue();
     }
@@ -167,21 +180,31 @@
         var nextIndex = getNextIndex();
         $("#newsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>内容文本:<span style='color:red'>*</span></td>" +
             "<td colspan='5'><input class='easyui-textbox' data-options='multiline:true'" +
-            " style='width:100%;height: 60px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
+            " style='width:700px;height: 60px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='3'>" +
-            "</td></tr>");
+            "</td>" +
+             "<td>" +
+                "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
+                "onclick=\"deleteNewsContent('trcontent" + nextIndex +"')\">删除</a>" +
+              "</td>" +
+            "</tr>");
         $.parser.parse($('#trcontent'+nextIndex));
         dealSortValue();
     }
-    function returnManageNewsInAddProduct(){
+    function returnManageNewsInAddNews(){
         $('#content_panel').panel({
             href:"<%=request.getContextPath() %>/news/fwdManageNewsPage?random_id="+Math.random()
         });
     }
+    function deleteNewsContent(trcontentid){
+        var trcontent = $("#" + trcontentid);
+        trcontent.remove();
+        dealSortValue();
+    }
 </script>
 <div style="text-align: left;">
-    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-back'" onclick="returnManageNewsInAddProduct()">返回</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-back'" onclick="returnManageNewsInAddNews()">返回</a>
 </div>
 <div style="margin:0px auto;width: 900px;text-align: center;">
 <form id="addNewsForm" action="<%=request.getContextPath()%>/news/saveAddNews"
@@ -220,8 +243,8 @@
     </table>
     <table id="newsContentTable" cellpadding="5">
         <tr>
-            <td colspan="6" >
-                <div class="formTitle" style="background-color:#f2f2f2;">
+            <td colspan="7" >
+                <div class="formTitle" style="background-color:#f2f2f2;width: 850px;">
                     <div class="formTitle-icon"></div>
                     <div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">
                         编辑新闻内容（请点击相应按钮，添加内容）
@@ -229,30 +252,39 @@
                 </div>
             </td>
         </tr>
-        <tr>
+        <tr id="trcontent1">
             <td>副标题:<span style="color:red">*</span></td>
             <td colspan="5">
-                <input class="easyui-textbox" style="width:750px" id="newscontent1" name="newscontent1"/>
+                <input class="easyui-textbox" style="width:700px;" id="newscontent1" name="newscontent1"/>
                 <input type="hidden" id="sort_newscontent1" name="sort_newscontent1"/>
                 <input type="hidden" id="type_newscontent1" name="type_newscontent1" value='1'/>
             </td>
+            <td>
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="deleteNewsContent('trcontent1')">删除</a>
+            </td>
         </tr>
-        <tr>
+        <tr id="trcontent2">
             <td>内容图片:<span style="color:red">*</span></td>
             <td colspan="5">
                 <input class="easyui-filebox" data-options="prompt:'请选择图片(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'"
-                       style="width:100%" id="newscontent2" name="newscontent2"/>
+                       style="width:700px;" id="newscontent2" name="newscontent2"/>
                 <input type="hidden" id="sort_newscontent2" name="sort_newscontent2"/>
                 <input type="hidden" id="type_newscontent2" name="type_newscontent2" value='2'/>
             </td>
+            <td>
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="deleteNewsContent('trcontent2')">删除</a>
+            </td>
         </tr>
-        <tr>
+        <tr id="trcontent3">
             <td>内容文本:<span style="color:red">*</span></td>
             <td colspan="5">
                 <input class="easyui-textbox"  data-options='multiline:true'
-                       style="width:100%;height: 60px;" id="newscontent3" name="newscontent3"/>
+                       style="width:700px;height: 60px;" id="newscontent3" name="newscontent3"/>
                 <input type="hidden" id="sort_newscontent3" name="sort_newscontent3"/>
                 <input type="hidden" id="type_newscontent3" name="type_newscontent3" value='3'/>
+            </td>
+            <td>
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="deleteNewsContent('trcontent3')">删除</a>
             </td>
         </tr>
     </table>

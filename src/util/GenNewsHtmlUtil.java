@@ -8,12 +8,18 @@ import java.util.List;
  * Created by Administrator on 2017/4/21.
  */
 public class GenNewsHtmlUtil {
-    public static String genMobileNewsHtml(String tilte, List<GenNewsContentBean> contentBeans){
+    public static String genBrowseNewsHtml(String title, List<GenNewsContentBean> contentBeans){
+        StringBuffer newsHtmlBF = new StringBuffer();
+        newsHtmlBF.append(genNewsTitle(title));
+        newsHtmlBF.append(genBrowseNewsContent(contentBeans));
+        return newsHtmlBF.toString();
+    }
+    public static String genMobileNewsHtml(String title, List<GenNewsContentBean> contentBeans){
         StringBuffer newsHtmlBF = new StringBuffer();
         newsHtmlBF.append(genHtmlTagBegin());
-        newsHtmlBF.append(genHeaderTag(tilte));
+        newsHtmlBF.append(genHeaderTag(title));
         newsHtmlBF.append(genBodyTagBegin());
-        newsHtmlBF.append(genNewsTitle(tilte));
+        newsHtmlBF.append(genNewsTitle(title));
         newsHtmlBF.append(genNewsContent(contentBeans));
         newsHtmlBF.append(genBodyTagEnd());
         return newsHtmlBF.toString();
@@ -57,6 +63,25 @@ public class GenNewsHtmlUtil {
         newTitleBF.append("         <p><b>" + newsTitle + "</b></p>" + System.getProperty("line.separator"));
         newTitleBF.append("     </div>" + System.getProperty("line.separator"));
         return newTitleBF.toString();
+    }
+    private static String genBrowseNewsContent(List<GenNewsContentBean> newsContentBeans){
+        StringBuffer newsContentBF = new StringBuffer();
+        newsContentBF.append("      <div class=\"content\">" + System.getProperty("line.separator"));
+        for(int i = 0 ; i < newsContentBeans.size(); i++){
+            GenNewsContentBean contentBean = newsContentBeans.get(i);
+            String contentType = contentBean.getContenttype();
+            if(contentType.equals(Constant.NewsContentType_SubTitle)){
+                newsContentBF.append("          <p class=\"subtitle\"><b>" + contentBean.getContentvalue() + "</b></p>" + System.getProperty("line.separator"));
+            }
+            if(contentType.equals(Constant.NewsContentType_Img)){
+                newsContentBF.append("          <img src=\"" + "/dazhimen/" +contentBean.getContentvalue() + "\"/>" + System.getProperty("line.separator"));
+            }
+            if(contentType.equals(Constant.NewsContentType_Text)){
+                newsContentBF.append("          <div class=\"main\">" + contentBean.getContentvalue() + "</div>" + System.getProperty("line.separator"));
+            }
+        }
+        newsContentBF.append("      </div>" + System.getProperty("line.separator"));
+        return newsContentBF.toString();
     }
     private static String genNewsContent(List<GenNewsContentBean> newsContentBeans){
         StringBuffer newsContentBF = new StringBuffer();

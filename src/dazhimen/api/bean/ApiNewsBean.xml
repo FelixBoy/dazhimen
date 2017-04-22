@@ -69,4 +69,7 @@
         select count(nid)
         from news where isdel = '0' and status = '1'
     </select>
+    <select id="getNewsURLById" resultType="java.lang.String">
+        select htmlfileurl from news where nid = #{nid}
+    </select>
 </mapper>

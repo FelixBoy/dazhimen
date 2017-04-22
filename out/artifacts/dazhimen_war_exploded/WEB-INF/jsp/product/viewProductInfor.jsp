@@ -1,7 +1,7 @@
 <script type="text/javascript">
     $(function(){
         $('#viewProductForm').form({onLoadSuccess:function(){
-           $("#listImageReal").attr("src",$("#listimage").val());
+           $("#listImageReal").attr("src",$("#listimage").val() + "?rondomid=" + Math.random());
             dealMainImages();
         }});
         $("#viewProductForm").form("load", "<%=request.getContextPath()%>/product/getProductInforById" +
@@ -29,7 +29,7 @@
                         htmlArr.push("<td align='right'>产品主图:</td>");
                         htmlArr.push("<td align='left' colspan='3'>");
                         htmlArr.push("       <input type='hidden' id='mainimg"+i+"' value="+ arr[i].imageId +"/> ");
-                        htmlArr.push("       <img align='left' src='" + arr[i].mainImage + "' width='200px' height='100px'/>");
+                        htmlArr.push("       <img align='left' src='" + arr[i].mainImage + "?randomid=" + Math.random() +"' width='200px' height='100px'/>");
                         htmlArr.push("</td>")
                     }
                     $(htmlArr.join("")).insertAfter("#listimgtr");

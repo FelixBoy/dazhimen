@@ -123,6 +123,19 @@ public class ApiCustomerController {
             customerService.modifyPersonalInfo(customerInfoBean);
             ApiLoginService loginService = new ApiLoginService();
             ApiCustomerBean customerBean = loginService.getCustomerInfoByCid(customerInfoBean.getCid());
+            String headerUrl = customerBean.getHeaderurl();
+            if(headerUrl != null && !headerUrl.equals("")){
+                if(!headerUrl.contains("http")){
+                    String localIp = resq.getLocalAddr();//获取本地ip
+                    if(Constant.isDeployInAliyun){
+                        localIp = Constant.AliyunIP;
+                    }
+                    int localPort = resq.getLocalPort();//获取本地的端口
+                    String appName = resq.getContextPath();
+                    String newHeaderUrl = "http://" + localIp + ":" + localPort + appName + "/" + headerUrl;
+                    customerBean.setHeaderurl(newHeaderUrl);
+                }
+            }
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
