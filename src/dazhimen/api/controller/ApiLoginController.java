@@ -103,12 +103,16 @@ public class ApiLoginController {
         try {
             checkGetVerifyCodePara(resq);
             ApiUtils.checkSignature(resq);
+            ApiLoginService loginService = new ApiLoginService();
+            loginService.getVerifyCode(resq.getParameter("mphone"));
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
-            jsonObj.put("data",new Gson().toJson(null));
             ResponseUtil.writeMsg(resp, jsonObj.toString());
         } catch (ParameterCheckException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+        } catch (ApiException e) {
             e.printStackTrace();
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }

@@ -62,9 +62,9 @@ public class ApiOrderController {
     public void buyProductByBalance(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
-            checkBuyProductByBalancePara(resq);
+            checkBuyProductByBalanceParams(resq);
             ApiOrderService orderService = new ApiOrderService();
-            orderService.buyProductByBalance(resq.getParameter("cid"), resq.getParameter("pid"));
+            orderService.buyProductByBalance(resq.getParameter("cid"), resq.getParameter("pid"), resq.getParameter("verifycode"));
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", "200");
             jsonObject.put("msg", "购买成功");
@@ -83,7 +83,7 @@ public class ApiOrderController {
     public void buyProductByWXPay(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
-            checkBuyProductByBalancePara(resq);
+            checkBuyProductByWXPayAlipayPara(resq);
 
             String remoteIp = resq.getRemoteAddr();
             if(remoteIp == null || remoteIp.equals("")){
@@ -119,7 +119,7 @@ public class ApiOrderController {
     public void buyProductByAlipay(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
-            checkBuyProductByBalancePara(resq);
+            checkBuyProductByWXPayAlipayPara(resq);
             String localIp = resq.getLocalAddr();
             String appName = resq.getContextPath();
             if(Constant.isDeployInAliyun){
@@ -338,7 +338,30 @@ public class ApiOrderController {
             throw new ParameterCheckException("参数[cid]的值为空");
         }
     }
-    private void checkBuyProductByBalancePara(HttpServletRequest resq) throws ParameterCheckException {
+    private void checkBuyProductByBalanceParams(HttpServletRequest resq) throws ParameterCheckException {
+        String pid = resq.getParameter("pid");
+        if(pid == null){
+            throw new ParameterCheckException("未取到参数[pid]");
+        }
+        if(pid.equals("")){
+            throw new ParameterCheckException("参数[pid]的值为空");
+        }
+        String cid = resq.getParameter("cid");
+        if(cid == null){
+            throw new ParameterCheckException("未取到参数[cid]");
+        }
+        if(cid.equals("")){
+            throw new ParameterCheckException("参数[cid]的值为空");
+        }
+        String verifycode = resq.getParameter("verifycode");
+        if(verifycode == null){
+            throw new ParameterCheckException("未取到参数[verifycode]");
+        }
+        if(verifycode.equals("")){
+            throw new ParameterCheckException("参数[verifycode]的值为空");
+        }
+    }
+    public void checkBuyProductByWXPayAlipayPara(HttpServletRequest resq) throws ParameterCheckException {
         String pid = resq.getParameter("pid");
         if(pid == null){
             throw new ParameterCheckException("未取到参数[pid]");

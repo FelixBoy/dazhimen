@@ -41,6 +41,12 @@ public class Constant {
     public static final String LoginUserKey = "loginuser";
     //字符集
     public static final String CharSet = "utf-8";
+
+    //数据库中vid（验证码id)的序列名称
+    public static final String verifycodeSeqName = "verifycode_seq";
+    //数据库中vid，最后面部分的，数字序列的长度
+    public static final int verifycodeSeqLength = 5;
+
     //数据库中rid（新角色id)的序列名称
     public static final String roleSeqName = "role_seq";
     //rid中编码中，最后面部分的，数字序列的长度
@@ -110,14 +116,14 @@ public class Constant {
     public static final String ExperiencePack = "2";
 
     //验证码长度
-    public static final int verifyCodeLength = 4;
+    public static final int verifyCodeLength = 6;
 
     //支付类型常量
     public static final String paymentType_Balance = "1";
     public static final String paymentType_WXPay = "2";
     public static final String paymentType_AliPay = "3";
 
-    public static final String FrontEndVersion = "v1.4";
+    public static final String FrontEndVersion = "v1.5";
 
     //=====以下这些变量，是从配置文件中加载的
     //是否部署在阿里云

@@ -3,6 +3,7 @@ package dazhimen.api.service;
 import com.google.gson.Gson;
 import dazhimen.api.bean.*;
 import dazhimen.api.exception.ApiException;
+import dazhimen.api.exception.ParameterCheckException;
 import db.MyBatisUtil;
 import net.sf.json.JSONObject;
 import org.apache.ibatis.session.SqlSession;
@@ -72,7 +73,7 @@ public class ApiOrderService {
         }
         return courseBeans;
     }
-    public void buyProductByBalance(String cid, String pid) throws ApiException {
+    public void buyProductByBalance(String cid, String pid,String verifycode) throws ApiException {
         CheckIsExistsUtils isExistsUtils = new CheckIsExistsUtils();
         if(!isExistsUtils.checkCidIsExists(cid)){
             throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
@@ -83,6 +84,15 @@ public class ApiOrderService {
         SqlSession sqlSession = null;
         try{
             sqlSession = MyBatisUtil.createSession();
+            ApiCustomerBean customerBean = sqlSession.selectOne("dazhimen.api.bean.ApiLogin.getCustomerInfoByCid", cid);
+            if(customerBean == null || customerBean.getMphone() == null || customerBean.getMphone().equals("")){
+                throw new ApiException("出现异常，查询会员对应手机号码出错");
+            }
+            String mphone = customerBean.getMphone();
+            //校验验证码
+            if(!VerifyCodeUtils.checkVerifyCode(verifycode) && !VerifyCodeUtils.checkMobileVerifyCode(customerBean.getMphone(), verifycode)){
+                throw new ParameterCheckException("验证码输入错误");
+            }
             ApiCheckProductIsBuyBean checkProductIsBuyBean = new ApiCheckProductIsBuyBean();
             checkProductIsBuyBean.setPid(pid);
             checkProductIsBuyBean.setCid(cid);

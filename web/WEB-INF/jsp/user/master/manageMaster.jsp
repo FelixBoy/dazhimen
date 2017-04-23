@@ -81,22 +81,25 @@
             loadMsg:"正在加载掌门数据...",
             columns: [[
                 { field: 'uid', title: '掌门Id', width: '10%'},
-                { field: 'name', title: '姓名', width: '15%'},
+                { field: 'name', title: '姓名', width: '10%'},
                 { field: 'mphone', title: '手机号码', width: '10%'},
                 { field: 'loginname', title: '登录名', width: '10%'},
                 { field: 'gender', title: '性别', width: '5%'},
                 { field: 'introduction', title: '介绍', width: '20%' },
                 { field: 'createDatestr', title: '创建时间',width: '15%' },
                 {
-                    field: "operateID", title: '操作',width:'15%', align: 'center',
+                    field: "operateID", title: '操作',width:'20%', align: 'center',
                     formatter: function (value, rowData, rowIndex) {
-                        return
                         <%if(userBean.getLoginname().equals(Constant.defaultAdministrator)){%>
-                            '<a href="javascript:void(0)" onclick="saveResetMasterPassword('+rowIndex+')">重置密码</a>&nbsp&nbsp' +
-                        <%}%>
+                            return '<a href="javascript:void(0)" onclick="saveResetMasterPassword('+rowIndex+')">重置密码</a>&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="fwdViewMasterPage('+rowIndex+')">查看</a>&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="fwdMasterEditPage('+rowIndex+')">修改</a>&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="saveMasterDel('+rowIndex+')">删除</a>';
+                        <%}else{%>
+                        return '<a href="javascript:void(0)" onclick="fwdViewMasterPage('+rowIndex+')">查看</a>&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdMasterEditPage('+rowIndex+')">修改</a>&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="saveMasterDel('+rowIndex+')">删除</a>';
+                        <%}%>
                     }
                 }
             ]],
@@ -149,6 +152,30 @@
         $("#queryMasterParamsForm").form('clear');
         $("#genderCondition").combobox('setValue','0');
         $("#masterList").datagrid("reload");
+    }
+    function saveResetMasterPassword(index){
+        $('#masterList').datagrid('selectRow',index);// 关键在这里
+        var row = $('#masterList').datagrid('getSelected');
+        if(row){
+            $.messager.prompt('提示信息', '请输入要重置的密码：', function(r){
+                if (r){
+                    var md5Pw = $.md5(row.loginname + r);
+                    $.ajax({
+                        url:"<%=request.getContextPath()%>/user/saveResetUserPassword?uid=" + row.uid + "&password=" + md5Pw + "&random_id="+Math.random(),
+                        type:'get',
+                        async:false,
+                        error:function(data){
+                            MsgBox.show(data.responseText);
+                        },
+                        success:function(data){
+                            MsgBox.show(data);
+                        }
+                    });
+                }
+            });
+
+
+        }
     }
 </script>
 <div style="padding:2px 0;">

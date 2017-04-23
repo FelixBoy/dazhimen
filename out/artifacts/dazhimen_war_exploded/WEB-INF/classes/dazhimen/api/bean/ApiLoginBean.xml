@@ -35,4 +35,15 @@
         insert into customer(cid,mphone,createdate)
               values(#{cid},#{mphone},now())
     </insert>
+    <insert id="insertVerifyCode" parameterType="dazhimen.api.bean.ApiInsertVerifyCodeBean">
+        insert into verifycode(vid, mphone, code, expiredatetime, createdatetime)
+            values(#{vid}, #{mphone}, #{code}, #{expiredatetime}, now());
+    </insert>
+    <select id="getCheckVerifyCode" resultType="dazhimen.api.bean.ApiCheckVerifyCodeBean">
+        select expiredatetime,code
+        from verifycode
+        where mphone = #{mphone}
+        order by createdatetime desc
+        limit 1;
+    </select>
 </mapper>

@@ -11,6 +11,12 @@ import java.util.TimeZone;
  * 各数据库表的 主键ID的生成类
  */
 public class IdUtils {
+    public String getVerifyCodeId() throws BgException {
+        String curDateStr = getCurrentDate();
+        String v_seq = new SeqUtils().getSeqNextVal(Constant.verifycodeSeqName);
+        v_seq = SeqUtils.autoAttachZeroFromStart(v_seq, Constant.verifycodeSeqLength);
+        return "v" + curDateStr + v_seq;
+    }
     public String getRoleId() throws BgException {
         String curDateStr = getCurrentDate();
         String n_seq = new SeqUtils().getSeqNextVal(Constant.roleSeqName);

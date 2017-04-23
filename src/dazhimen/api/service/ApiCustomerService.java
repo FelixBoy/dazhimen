@@ -14,6 +14,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import util.CheckIsExistsUtils;
 import util.Constant;
+import util.VerifyCodeUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,7 +93,7 @@ public class ApiCustomerService {
         }
         String mphone = customerInfoBean.getMphone();
         //校验验证码
-        if(!checkVerifyCode(customerInfoBean.getVerifycode())){
+        if(!VerifyCodeUtils.checkVerifyCode(customerInfoBean.getVerifycode()) && !VerifyCodeUtils.checkMobileVerifyCode(customerInfoBean.getMphone(), customerInfoBean.getVerifycode())){
             throw new ParameterCheckException("验证码输入错误");
         }
         SqlSession sqlSession = null;
@@ -125,14 +126,5 @@ public class ApiCustomerService {
         {
             MyBatisUtil.closeSession(sqlSession);
         }
-    }
-    private boolean checkVerifyCode(String verfiyCode) throws ParameterCheckException {
-        if(verfiyCode == null || verfiyCode.equals("")){
-            throw new ParameterCheckException("传入的验证码为空");
-        }
-        if(verfiyCode.equals("1234")){
-            return true;
-        }
-        return false;
     }
 }

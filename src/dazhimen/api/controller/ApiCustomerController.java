@@ -29,7 +29,6 @@ import java.io.UnsupportedEncodingException;
 @Controller
 @RequestMapping("/api/customer")
 public class ApiCustomerController {
-
     @RequestMapping(value="modifyHeader", method = RequestMethod.POST)
     public void modifyHeader(HttpServletRequest resq, HttpServletResponse resp){
         try {

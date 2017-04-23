@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import dazhimen.bg.bean.login.LoginUserBean;
 import dazhimen.bg.bean.user.ModifyPasswordBean;
 import dazhimen.bg.bean.user.QueryMasterParamBean;
+import dazhimen.bg.bean.user.ResetPasswordBean;
 import dazhimen.bg.bean.user.UserBean;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.LoginService;
@@ -518,6 +519,43 @@ public class UserController {
                 e1.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 重置用户的登录密码
+     * @param resq
+     * @param resp
+     */
+    @RequestMapping("/saveResetUserPassword")
+    public void saveResetUserPassword(HttpServletRequest resq, HttpServletResponse resp){
+        UserService userService = new UserService();
+        try {
+            ResetPasswordBean resetPasswordBean = getResetPasswordBean(resq);
+            boolean result = userService.saveResetUserPassword(resetPasswordBean);
+            if(result){
+                ResponseUtil.writeMsg(resp, "重置密码成功");
+            }else{
+                ResponseUtil.writeMsg(resp, "重置密码失败");
+            }
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+
+    }
+    private ResetPasswordBean getResetPasswordBean(HttpServletRequest resq) throws BgException {
+        String uid = resq.getParameter("uid");
+        if(uid == null || uid.equals("")){
+            throw new BgException("传入的uid为空，重置失败");
+        }
+        String password = resq.getParameter("password");
+        if(password == null || password.equals("")){
+            throw new BgException("传入的password为空，重置失败");
+        }
+        ResetPasswordBean resetPasswordBean = new ResetPasswordBean();
+        resetPasswordBean.setUid(uid);
+        resetPasswordBean.setPassword(password);
+        return resetPasswordBean;
     }
     private UserBean getAddMasterBean(HttpServletRequest resq){
         UserBean user = new UserBean();

@@ -1,16 +1,11 @@
-package demo;
+package util.web;
+
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.fluent.Request;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContextBuilder;
@@ -18,7 +13,6 @@ import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -29,25 +23,18 @@ import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * HTTP 请求工具类
- *
- * @author : liii
- * @version : 1.0.0
- * @date : 2015/7/21
- * @see : TODO
+ * Created by Administrator on 2017/4/23.
  */
-public class HttpClientDemo {
+public class HttpClientUtils {
     private static PoolingHttpClientConnectionManager connMgr;
     private static RequestConfig requestConfig;
     private static final int MAX_TIMEOUT = 7000;
@@ -70,32 +57,13 @@ public class HttpClientDemo {
         configBuilder.setStaleConnectionCheckEnabled(true);
         requestConfig = configBuilder.build();
     }
-
-    /**
-     * 测试方法
-     * @param args
-     */
-    public static void main(String[] args) throws Exception {
-        Map<String, Object> maps = new HashMap<String, Object>();
-        maps.put("action", "send");
-        maps.put("userid", "");
-        maps.put("account", "AB00271");
-        maps.put("password", "70AE96E2F487F7B26BD5A311C3A5DBB8");
-        maps.put("mobile", "18769796133");
-        maps.put("content", "大职门：您的验证码是666888，五分钟内有效。请勿将验证码泄露给其他人。【天津青皮】");
-        maps.put("extno", "");
-        maps.put("sendTime", "");
-        System.out.println(doPost("http://dx.ipyy.net/sms.aspx", maps));
-    }
-
-
     /**
      * 发送 POST 请求（HTTP），K-V形式
      * @param apiUrl API接口URL
      * @param params 参数map
      * @return
      */
-    public static String doPost(String apiUrl, Map<String, Object> params) {
+    public static String doPost(String apiUrl, Map<String, Object> params) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         String httpStr = null;
         HttpPost httpPost = new HttpPost(apiUrl);
@@ -115,6 +83,7 @@ public class HttpClientDemo {
             httpStr = EntityUtils.toString(entity, "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
+            throw new IOException(e);
         } finally {
             if (response != null) {
                 try {
@@ -126,7 +95,6 @@ public class HttpClientDemo {
         }
         return httpStr;
     }
-
     /**
      * 发送 POST 请求（HTTP），JSON形式
      * @param apiUrl
@@ -288,6 +256,5 @@ public class HttpClientDemo {
         }
         return sslsf;
     }
-
 
 }

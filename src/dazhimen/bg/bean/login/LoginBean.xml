@@ -30,4 +30,5 @@
         where a.rid = b.rid
           and a.uid = #{uid}
     </select>
+
 </mapper>

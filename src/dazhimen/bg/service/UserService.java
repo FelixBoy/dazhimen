@@ -22,6 +22,30 @@ import java.util.List;
  */
 public class UserService {
     /**
+     * 重置用户密码
+     * @param resetPasswordBean
+     * @return
+     */
+    public boolean saveResetUserPassword(ResetPasswordBean resetPasswordBean) throws BgException {
+        if(!CheckIsExistsUtils.checkUidIsExists(resetPasswordBean.getUid())){
+            throw new BgException("传入的uid在数据库中不存在");
+        }
+        SqlSession sqlSession = null;
+        int result = 0;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            result = sqlSession.update("dazhimen.bg.bean.User.saveResetUserPassword", resetPasswordBean);
+            sqlSession.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，重置密码失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return result == 1;
+    }
+    /**
      *  修改用户密码
      * @param modifyPasswordBean 修改用户密码的JavaBean
      * @return 修改是否成功 true/false

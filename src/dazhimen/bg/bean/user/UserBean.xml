@@ -236,4 +236,9 @@
         set password = #{newpassword}
         where uid = #{uid}
     </update>
+    <update id="saveResetUserPassword" parameterType="dazhimen.bg.bean.user.ResetPasswordBean">
+        update user
+        set password = #{password}
+        where uid = #{uid}
+    </update>
 </mapper>

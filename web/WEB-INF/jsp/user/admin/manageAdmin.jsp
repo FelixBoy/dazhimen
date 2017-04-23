@@ -77,12 +77,15 @@
                 {
                     field: "operateID", title: '操作',width:'20%', align: 'center',
                     formatter: function (value, rowData, rowIndex) {
-                        return
-                            <%if(userBean.getLoginname().equals(Constant.defaultAdministrator)){%>
-                                '<a href="javascript:void(0)" onclick="saveResetAdminPassword('+rowIndex+')">重置密码</a>&nbsp&nbsp' +
-                            <%}%>
+
+                        <%if(userBean.getLoginname().equals(Constant.defaultAdministrator)){%>
+                        return '<a href="javascript:void(0)" onclick="saveResetAdminPassword('+rowIndex+')">重置密码</a>&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="fwdModifyAdminPage('+rowIndex+')">修改</a>&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="saveDeleteAdmin('+rowIndex+')">删除</a>';
+                        <%}else{%>
+                        return '<a href="javascript:void(0)" onclick="fwdModifyAdminPage('+rowIndex+')">修改</a>&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="saveDeleteAdmin('+rowIndex+')">删除</a>';
+                        <%}%>
                     }
                 }
             ]],
@@ -135,6 +138,30 @@
         $("#queryAdminParamsForm").form('clear');
         $("#genderCondition").combobox('setValue','0');
         $("#adminList").datagrid("reload");
+    }
+    function saveResetAdminPassword(index){
+        $('#adminList').datagrid('selectRow',index);
+        var row = $('#adminList').datagrid('getSelected');
+        if(row){
+            $.messager.prompt('提示信息', '请输入要重置的密码：', function(r){
+                if (r){
+                    var md5Pw = $.md5(row.loginname + r);
+                    $.ajax({
+                        url:"<%=request.getContextPath()%>/user/saveResetUserPassword?uid=" + row.uid + "&password=" + md5Pw + "&random_id="+Math.random(),
+                        type:'get',
+                        async:false,
+                        error:function(data){
+                            MsgBox.show(data.responseText);
+                        },
+                        success:function(data){
+                            MsgBox.show(data);
+                        }
+                    });
+                }
+            });
+
+
+        }
     }
 </script>
 <div style="padding:5px 0;">

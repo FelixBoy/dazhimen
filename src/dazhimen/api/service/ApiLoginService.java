@@ -1,15 +1,15 @@
 package dazhimen.api.service;
 
-import dazhimen.api.bean.ApiCustomerBean;
-import dazhimen.api.bean.MphoneLoginBean;
-import dazhimen.api.bean.ThirdPartLoginBean;
+import dazhimen.api.bean.*;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
+import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import util.CheckIsExistsUtils;
 import util.Constant;
 import util.IdUtils;
+import util.VerifyCodeUtils;
 
 import java.util.Random;
 
@@ -74,7 +74,7 @@ public class ApiLoginService {
             throw new ParameterCheckException("ApiLoginService的doMphoneLogin，参数为null");
         }
         //校验验证码
-        if(!checkVerifyCode(loginBean.getVerifyCode())){
+        if(!VerifyCodeUtils.checkVerifyCode(loginBean.getVerifyCode()) && !VerifyCodeUtils.checkMobileVerifyCode(loginBean.getMphone(), loginBean.getVerifyCode())){
             throw new ParameterCheckException("验证码输入错误");
         }
         SqlSession sqlSession = null;
@@ -101,25 +101,35 @@ public class ApiLoginService {
         }
         return customerBean;
     }
-    private boolean checkVerifyCode(String verfiyCode) throws ParameterCheckException {
-        if(verfiyCode == null || verfiyCode.equals("")){
-            throw new ParameterCheckException("传入的验证码为空");
+
+    public void getVerifyCode(String mphone) throws ApiException {
+        String verifyCode = VerifyCodeUtils.genVerifyCode();
+        try {
+            boolean sendResult = VerifyCodeUtils.sendVerifyCodeToMphone(mphone, verifyCode);
+            if(!sendResult){
+                throw new ApiException("获取验证码失败");
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            throw new ApiException(e.getMessage());
         }
-        if(verfiyCode.equals("1234")){
-            return true;
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            ApiInsertVerifyCodeBean insertVerifyCodeBean = new ApiInsertVerifyCodeBean();
+            String vid = new IdUtils().getVerifyCodeId();
+            insertVerifyCodeBean.setVid(vid);
+            insertVerifyCodeBean.setCode(verifyCode);
+            insertVerifyCodeBean.setMphone(mphone);
+            insertVerifyCodeBean.setExpiredatetime((System.currentTimeMillis() + 1000 * 60 * 5) + "");
+            sqlSession.insert("dazhimen.api.bean.ApiLogin.insertVerifyCode", insertVerifyCodeBean);
+            sqlSession.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new ApiException("出现异常，获取验证码失败");
+        }finally{
+            MyBatisUtil.closeSession(sqlSession);
         }
-        return false;
-    }
-    public String genVerifyCode() {
-        String charValue = "";
-        for (int i = 0; i < Constant.verifyCodeLength; i++) {
-            char c = (char) (randomInt(0, 10) + '0');
-            charValue += String.valueOf(c);
-        }
-        return charValue;
-    }
-    private int randomInt(int from, int to) {
-        Random r = new Random();
-        return from + r.nextInt(to - from);
     }
 }
