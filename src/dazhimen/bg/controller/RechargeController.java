@@ -23,7 +23,6 @@ public class RechargeController {
     }
     @RequestMapping("/queryAllRecharge")
     public void queryAllRecharge(HttpServletRequest resq, HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
 
         try {
             String page = resq.getParameter("page");

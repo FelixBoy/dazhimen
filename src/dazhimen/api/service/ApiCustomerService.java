@@ -6,7 +6,6 @@ import dazhimen.api.bean.ModifyCustomerInfoBean;
 import dazhimen.api.bean.SingleValueBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
-import dazhimen.bg.bean.UpdateMainImgFilePathBean;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.FileManageService;
 import db.MyBatisUtil;

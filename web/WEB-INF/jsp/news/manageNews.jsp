@@ -75,6 +75,18 @@
             }
         });
     }
+    function fwdModifyNewsContentPage(index){
+        MsgBox.show("功能正在调整，即将开放");
+        <%--$('#newsList').datagrid('selectRow',index);--%>
+        <%--var row = $('#newsList').datagrid('getSelected');--%>
+        <%--if (row) {--%>
+            <%--$('#content_panel').panel({--%>
+                <%--href: "<%=request.getContextPath() %>/news/fwdModifyNewsContentPage?nid=" + row.nid + "&random_id=" + Math.random(),--%>
+                <%--onLoad: function () {--%>
+                <%--}--%>
+            <%--});--%>
+        <%--}--%>
+    }
     function fwdModifyNewsTitlePage(index){
         $('#newsList').datagrid('selectRow',index);
         var row = $('#newsList').datagrid('getSelected');

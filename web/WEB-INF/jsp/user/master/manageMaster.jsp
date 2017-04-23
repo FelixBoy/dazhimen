@@ -157,9 +157,9 @@
         $('#masterList').datagrid('selectRow',index);// 关键在这里
         var row = $('#masterList').datagrid('getSelected');
         if(row){
-            $.messager.prompt('提示信息', '请输入要重置的密码：', function(r){
+            $.messager.confirm('提示信息', '确定要重置[' + row.name +']密码为123456', function(r){
                 if (r){
-                    var md5Pw = $.md5(row.loginname + r);
+                    var md5Pw = $.md5(row.loginname + '123456');
                     $.ajax({
                         url:"<%=request.getContextPath()%>/user/saveResetUserPassword?uid=" + row.uid + "&password=" + md5Pw + "&random_id="+Math.random(),
                         type:'get',

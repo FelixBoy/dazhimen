@@ -9,6 +9,8 @@ import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -196,12 +198,105 @@ public class NewsController {
         String nid = resq.getParameter("nid");
         NewsService newsService = new NewsService();
         try {
-            newsService.saveModifyNewsTitle(nid, newsTitle);
+            String basePath = resq.getSession().getServletContext().getRealPath("/");
+            newsService.saveModifyNewsTitle(nid, newsTitle, basePath);
             ResponseUtil.writeMsg(resp, "修改标题成功");
         } catch (BgException e) {
             e.printStackTrace();
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
+    }
+    /**
+     * 转向修改新闻列表图片页面
+     * @param nid 新闻id
+     * @return
+     */
+    @RequestMapping("/fwdModifyNewsListImgPage")
+    public ModelAndView fwdModifyNewsListImgPage(@RequestParam("nid") String nid){
+        ModelAndView mav = new ModelAndView("/news/modifyNewsListImg");
+        mav.addObject("nid", nid);
+        return mav;
+    }
+
+    /**
+     * 保存修改新闻列表图片
+     * @param resq
+     * @return
+     */
+    @RequestMapping("/saveModifyNewsListImg")
+    public ModelAndView saveModifyNewsListImg(HttpServletRequest resq){
+        NewsService newsService = new NewsService();
+        ModelAndView mav = new ModelAndView("fileUploadAfterAction");
+        try {
+            String nid = resq.getParameter("nid");
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
+            CommonsMultipartFile listImgFile = (CommonsMultipartFile) multipartRequest.getFile("listimgmodify");
+            String basePath = resq.getSession().getServletContext().getRealPath("/");
+            newsService.saveModifyNewsListImg(nid,listImgFile,basePath);
+        } catch (BgException e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code", "400");
+            jsonObj.addProperty("msg",e.getMessage());
+            mav.addObject("parameters", jsonObj.toString());
+            return mav;
+        }
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("code", "200");
+        jsonObj.addProperty("msg","修改新闻列表图片成功");
+        mav.addObject("parameters", jsonObj.toString());
+        return mav;
+    }
+
+    /**
+     * 转向修改新闻主图页面
+     * @param nid 新闻id
+     * @return
+     */
+    @RequestMapping("/fwdModifyNewsMainImgPage")
+    public ModelAndView fwdModifyNewsMainImgPage(@RequestParam("nid") String nid){
+        ModelAndView mav = new ModelAndView("/news/modifyNewsMainImg");
+        mav.addObject("nid", nid);
+        return mav;
+    }
+    /**
+     * 保存修改新闻主图
+     * @param resq
+     * @return
+     */
+    @RequestMapping("/saveModifyNewsMainImg")
+    public ModelAndView saveModifyNewsMainImg(HttpServletRequest resq){
+        NewsService newsService = new NewsService();
+        ModelAndView mav = new ModelAndView("fileUploadAfterAction");
+        try {
+            String nid = resq.getParameter("nid");
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
+            CommonsMultipartFile mainImgFile = (CommonsMultipartFile) multipartRequest.getFile("mainimgmodify");
+            String basePath = resq.getSession().getServletContext().getRealPath("/");
+            newsService.saveModifyNewsMainImg(nid,mainImgFile,basePath);
+        } catch (BgException e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code", "400");
+            jsonObj.addProperty("msg",e.getMessage());
+            mav.addObject("parameters", jsonObj.toString());
+            return mav;
+        }
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("code", "200");
+        jsonObj.addProperty("msg","修改新闻主图成功");
+        mav.addObject("parameters", jsonObj.toString());
+        return mav;
+    }
+    /**
+     * 转向修改新闻内容页面
+     * @param resq
+     * @return
+     */
+    @RequestMapping("/fwdModifyNewsContentPage")
+    public String fwdModifyNewsContentPage(HttpServletRequest resq){
+        resq.setAttribute("nid", resq.getParameter("nid"));
+        return "/news/modifyNewsContent";
     }
     private List<ViewNewsContentBean> dealModifynewsDataBean(List<ViewNewsContentBean> newsContentBeans, HttpServletRequest resq){
 

@@ -64,26 +64,31 @@
             "?uid=<%=request.getAttribute("uid").toString()%>&randomid=" + Math.random());
     });
     function checkMoidfyMasterFormBeforeSubmit(){
-        if($("#loginnameInModify").val().length == 0){
+        if($.trim($("#loginnameInModify").val()).length == 0){
             MsgBox.show("请输入登录名");
-            return fasle;
+            return false;
+        }
+        var reg_loginname = /^[0-9a-zA-Z]*$/g;
+        if(!reg_loginname.test($.trim($("#loginnameInModify").val()))){
+            MsgBox.show("登录名格式不正确，只能为字母或数字组合");
+            return false;
         }
         if($("#nameInModifyMaster").val().length == 0){
             MsgBox.show("请输入姓名");
-            return fasle;
+            return false;
         }
-        if($("#mphoneInModifyMaseter").val().length == 0){
+        if($.trim($("#mphoneInModifyMaseter").val()).length == 0){
             MsgBox.show("请输入手机号码");
-            return fasle;
+            return false;
         }
         var reg = /^1\d{10}$/;
-        if (!reg.test($("#mphoneInModifyMaseter").val())) {
+        if (!reg.test($.trim($("#mphoneInModifyMaseter").val()))) {
             MsgBox.show("手机号码格式有误");
             return false;
         }
         if($("#identityInModifyMaseter").val().length == 0){
             MsgBox.show("请输入掌门身份");
-            return fasle;
+            return false;
         }
         return true;
     }

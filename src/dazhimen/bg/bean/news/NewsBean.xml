@@ -104,4 +104,16 @@
     <update id="saveModifyNewsTitle" parameterType="dazhimen.bg.bean.news.ModifyNewsTitleBean">
         update news set title = #{newstitle} where nid = #{nid}
     </update>
+    <select id="getListImgPath" resultType="java.lang.String">
+      select listimgurl from news where nid = #{nid};
+    </select>
+    <update id="updateListImgPath" parameterType="dazhimen.bg.bean.news.UpdateNewsListImgFilePathBean">
+        update news set listimgurl = #{listimage} where nid = #{nid}
+    </update>
+    <select id="getMainImgPath" resultType="java.lang.String">
+        select mainimgurl from news where nid = #{nid};
+    </select>
+    <update id="updateMainImgPath" parameterType="dazhimen.bg.bean.news.UpdateNewsMainImgFilePathBean">
+        update news set mainimgurl = #{mainimage} where nid = #{nid}
+    </update>
 </mapper>

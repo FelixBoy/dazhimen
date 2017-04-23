@@ -10,7 +10,7 @@
 	                  )
         where a.pid = #{pid};
     </update>
-    <update id="updateMainImgPath" parameterType="dazhimen.bg.bean.UpdateMainImgFilePathBean">
+    <update id="updateMainImgPath" parameterType="dazhimen.bg.bean.product.UpdateMainImgFilePathBean">
         update product_image set path = #{mainimage} where pid = #{pid}
     </update>
     <select id="getMainImgPath" resultType="java.lang.String">
@@ -18,7 +18,7 @@
         from product_image a
         where a.pid = #{pid}
     </select>
-    <update id="updateListImgPath" parameterType="dazhimen.bg.bean.UpdateListImgFilePathBean">
+    <update id="updateListImgPath" parameterType="dazhimen.bg.bean.product.UpdateListImgFilePathBean">
       update product set listimage = #{listimage} where pid = #{pid}
     </update>
     <select id="getListImgPath" resultType="java.lang.String">
@@ -26,7 +26,7 @@
         from product a
         where a.pid = #{pid}
     </select>
-    <update id="saveModifyProductBasicInfo" parameterType="dazhimen.bg.bean.ModifyProductBasicInfoBean">
+    <update id="saveModifyProductBasicInfo" parameterType="dazhimen.bg.bean.product.ModifyProductBasicInfoBean">
         update product
           set pname = #{pname},price = #{price},
               derateProportion = #{derateProportion},
@@ -35,7 +35,7 @@
     </update>
 
     <select id="getAllProductCountByParam" resultType="dazhimen.bg.bean.SingleValueBean"
-            parameterType="dazhimen.bg.bean.QueryProductParamBean">
+            parameterType="dazhimen.bg.bean.product.QueryProductParamBean">
         select count(pid) as valueinfo
         from product a
         where a.isdel = '0'
@@ -59,8 +59,8 @@
         </if>
     </select>
 
-    <select id="listAllProductByParam" resultType="dazhimen.bg.bean.ListViewProductBean"
-            parameterType="dazhimen.bg.bean.QueryProductParamBean">
+    <select id="listAllProductByParam" resultType="dazhimen.bg.bean.product.ListViewProductBean"
+            parameterType="dazhimen.bg.bean.product.QueryProductParamBean">
         select pid,pname,getcodetxt('producttype',a.type) type,
         getcodetxt('productstatus',a.status) status,a.status statusnum,
         date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createtime,b.name uname,
@@ -94,7 +94,7 @@
         from product a
        where a.isdel = '0'
     </select>
-    <select id="listAllProduct" resultType="dazhimen.bg.bean.ListViewProductBean"
+    <select id="listAllProduct" resultType="dazhimen.bg.bean.product.ListViewProductBean"
             parameterType="dazhimen.bg.bean.PaginationParamBean">
        select pid,pname,getcodetxt('producttype',a.type) type,
                getcodetxt('productstatus',a.status) status,a.status statusnum,
@@ -106,7 +106,7 @@
        limit #{startnum},#{getrows}
     </select>
 
-    <select id="getModifyProductInforById" resultType="dazhimen.bg.bean.ViewProductBean">
+    <select id="getModifyProductInforById" resultType="dazhimen.bg.bean.product.ViewProductBean">
         select pid,pname,getcodetxt('producttype',a.type) as type,derateProportion,a.price,
         a.introduction,getcodetxt('indexsort',a.indexsort) as indexsort,getcodetxt('rightorwrong',indexplay) as indexplay,
         listimage,b.uid,b.name as uname,b.mphone,b.loginname,getcodetxt('gender',b.gender) as gender
@@ -116,7 +116,7 @@
         and a.isdel = '0'
     </select>
 
-    <select id="getProductInforById" resultType="dazhimen.bg.bean.ViewProductBean">
+    <select id="getProductInforById" resultType="dazhimen.bg.bean.product.ViewProductBean">
         select pid,pname,getcodetxt('producttype',a.type) as type,concat(a.derateProportion,'%') as derateProportion,concat(a.price,'/年') as price,
                 a.introduction,getcodetxt('indexsort',a.indexsort) as indexsort,getcodetxt('rightorwrong',indexplay) as indexplay,
                 listimage,b.uid,b.name as uname,b.mphone,b.loginname,getcodetxt('gender',b.gender) as gender
@@ -126,19 +126,19 @@
           and a.isdel = '0'
     </select>
 
-    <insert id="saveAddProduct" parameterType="dazhimen.bg.bean.UploadProductBean">
+    <insert id="saveAddProduct" parameterType="dazhimen.bg.bean.product.UploadProductBean">
         insert into product(pid,pname,type,price,derateProportion,introduction,
                             indexplay,indexsort,uid,createdatetime,listimage,updatedatetime)
               values(#{pid},  #{pname}  ,#{type},  #{price}, #{derateProportion},  #{introduction},
                             #{indexPlay},#{indexSort},#{uid},now(),#{listimage},now())
     </insert>
 
-    <insert id="saveAddProductImage" parameterType="dazhimen.bg.bean.AddProductImageBean">
+    <insert id="saveAddProductImage" parameterType="dazhimen.bg.bean.product.AddProductImageBean">
         insert into product_image(imageid,path,pid)
                         values(#{imageid},    #{path},   #{pid})
     </insert>
 
-    <select id="getCourseInforByCourseid" resultType="dazhimen.bg.bean.UploadCourseBean">
+    <select id="getCourseInforByCourseid" resultType="dazhimen.bg.bean.product.UploadCourseBean">
         select pid,courseid,coursename,sort,istry
           from course
         where courseid = #{courseid}
@@ -149,7 +149,7 @@
           from course where pid = #{pid}
     </select>
 
-    <select id="queryAllCourseByPid" resultType="dazhimen.bg.bean.ListViewCourseBean"
+    <select id="queryAllCourseByPid" resultType="dazhimen.bg.bean.product.ListViewCourseBean"
             parameterType="dazhimen.bg.bean.PaginationParamBean">
         select courseid,coursename,getcodetxt('indexsort',sort) as sort,viewcount,
                 getcodetxt('rightorwrong',istry) as istry,audiopath as audiourl
@@ -179,24 +179,24 @@
         delete from course where courseid = #{courseid}
     </delete>
 
-    <update id="saveModifyCourse" parameterType="dazhimen.bg.bean.UploadCourseBean">
+    <update id="saveModifyCourse" parameterType="dazhimen.bg.bean.product.UploadCourseBean">
         update course
           set coursename = #{coursename},istry = #{istry}, sort = #{sort},updatetime=now()
         where courseid =  #{courseid}
     </update>
 
-    <insert id="saveAddCourse" parameterType="dazhimen.bg.bean.UploadCourseBean">
+    <insert id="saveAddCourse" parameterType="dazhimen.bg.bean.product.UploadCourseBean">
         insert into course(courseid,coursename,istry,sort,audiopath,createdate,updatetime,pid)
         values(#{courseid}, #{coursename},  #{istry},  #{sort}, #{audiopath}, now() , now(), #{pid})
     </insert>
 
-    <select id="getProductMainImages" resultType="dazhimen.bg.bean.ViewMainImageBean">
+    <select id="getProductMainImages" resultType="dazhimen.bg.bean.product.ViewMainImageBean">
           select imageid,path as mainimage
             from product_image
           where pid = #{pid}
     </select>
 
-    <update id="saveModifyProductStatus" parameterType="dazhimen.bg.bean.ModifyProductStatusBean">
+    <update id="saveModifyProductStatus" parameterType="dazhimen.bg.bean.product.ModifyProductStatusBean">
         update product set status = #{status} where pid = #{pid}
     </update>
 

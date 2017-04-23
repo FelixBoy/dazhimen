@@ -32,6 +32,19 @@
         }
         return true;
     }
+    function openModifyNewsListImgDialog(){
+        $('#modifyNewsListImgDialog').dialog({
+            title: '修改新闻列表图片',
+            width: 430,
+            height: 230,
+            closed: true,
+            cache: false,
+            modal: true
+        });
+        $("#modifyNewsListImgDialog").dialog("refresh", "<%=request.getContextPath()%>/news/fwdModifyNewsListImgPage?nid=" + $("#nidInModifyTitle").val()
+            + "&random_id=" + Math.random());
+        $('#modifyNewsListImgDialog').dialog("open");
+    }
     function submitModifyNewsTitleForm(){
         if(!checkModifyNewsTitleFormBeforeSubmit()){
             return;
@@ -68,10 +81,26 @@
             }
         });
     }
+    function openModifyNewsMainImgDialog(){
+        $('#modifyNewsMainImgDialog').dialog({
+            title: '修改新闻主图',
+            width: 430,
+            height: 230,
+            closed: true,
+            cache: false,
+            modal: true
+        });
+        $("#modifyNewsMainImgDialog").dialog("refresh", "<%=request.getContextPath()%>/news/fwdModifyNewsMainImgPage?nid=" + $("#nidInModifyTitle").val()
+            + "&random_id=" + Math.random());
+        $('#modifyNewsMainImgDialog').dialog("open");
+    }
+
 </script>
 <div style="text-align: left;">
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-back'" onclick="returnManageNewsInModifyNews()">返回</a>
 </div>
+<div id="modifyNewsListImgDialog"></div>
+<div id="modifyNewsMainImgDialog"></div>
 <div style="margin:0px auto;width: 900px;text-align: center;">
     <form id="modifyNewsTitleForm">
     <table id="modifyNewsTitleTable" cellpadding="5">
@@ -90,9 +119,6 @@
             <td colspan="4">
                 <input class="easyui-textbox" style="width:700px;" id="newstitleInModifyTitle" name="newstitle"/>
                 <input type="hidden" id="nidInModifyTitle" name="nid" />
-            </td>
-            <td>
-
             </td>
         </tr>
     </table>
@@ -124,8 +150,8 @@
             </td>
         </tr>
         <tr>
-            <td colspan="3" style="text-align: right;"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="openModifyListImgDialog()">修改列表图片</a></td>
-            <td colspan="3" style="text-align: center;"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="openModifyMainImgDialog()">修改新闻主图</a></td>
+            <td colspan="3" style="text-align: right;"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="openModifyNewsListImgDialog()">修改列表图片</a></td>
+            <td colspan="3" style="text-align: center;"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="openModifyNewsMainImgDialog()">修改新闻主图</a></td>
         </tr>
     </table>
 </div>

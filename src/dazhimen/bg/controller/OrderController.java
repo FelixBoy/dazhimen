@@ -23,8 +23,6 @@ public class OrderController {
     }
     @RequestMapping("/queryAllOrder")
     public void queryAllOrder(HttpServletRequest resq, HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
-
         try {
             String page = resq.getParameter("page");
             String rows = resq.getParameter("rows");
@@ -53,7 +51,6 @@ public class OrderController {
                 paramBean.setEndAmountCondition(endAmountCondition);
                 result = orderService.queryAllOrderByParam(page, rows, paramBean);
             }
-
             ResponseUtil.writeMsg(resp, result);
         }catch (Exception e){
             e.printStackTrace();

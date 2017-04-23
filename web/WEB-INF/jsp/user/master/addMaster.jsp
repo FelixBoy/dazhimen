@@ -57,34 +57,44 @@
         $("#masterAddForm").submit();
     }
     function checkAddMasterFormBeforeSubmit(){
-        if($("#loginnameInAdd").val().length == 0){
+        if($.trim($("#loginnameInAdd").val()).length == 0){
             MsgBox.show("请输入登录名");
-            return fasle;
+            return false;
         }
-        if($("#password").val().length == 0){
+        var reg_loginname = /^[0-9a-zA-Z]*$/g;
+        if(!reg_loginname.test($.trim($("#loginnameInAdd").val()))){
+            MsgBox.show("登录名格式不正确，只能为字母或数字组合");
+            return false;
+        }
+        if($.trim($("#password").val()).length == 0){
             MsgBox.show("请输入密码");
-            return fasle;
+            return false;
         }
-        if($("#nameInAddMaster").val().length == 0){
+        var reg_password = /^[0-9a-zA-Z]*$/g;
+        if(!reg_password.test($.trim($("#password").val()))){
+            MsgBox.show("密码格式不正确，只能为字母或数字组合");
+            return false;
+        }
+        if($.trim($("#nameInAddMaster").val()).length == 0){
             MsgBox.show("请输入姓名");
             return fasle;
         }
-        if($("#mphoneInAddMaseter").val().length == 0){
+        if($.trim($("#mphoneInAddMaseter").val()).length == 0){
             MsgBox.show("请输入手机号码");
-            return fasle;
+            return false;
         }
         var reg = /^1\d{10}$/;
-        if (!reg.test($("#mphoneInAddMaseter").val())) {
+        if (!reg.test($.trim($("#mphoneInAddMaseter").val()))) {
             MsgBox.show("手机号码格式有误");
             return false;
         }
-        if($("#identityInAddMaseter").val().length == 0){
+        if($.trim($("#identityInAddMaseter").val()).length == 0){
             MsgBox.show("请输入掌门身份");
-            return fasle;
+            return false;
         }
         if(!$("#headerimgInAddMaster").filebox("getValue")){
             MsgBox.show("请选择掌门头像");
-            return fasle;
+            return false;
         }
         var headerFileName = $("#headerimgInAddMaster").filebox("getValue");
         var headerSuffixName = headerFileName.substring(headerFileName.lastIndexOf("."));

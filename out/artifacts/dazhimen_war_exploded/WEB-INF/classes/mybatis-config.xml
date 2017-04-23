@@ -6,10 +6,9 @@
     <mappers>
         <mapper resource="dazhimen/bg/bean/user/UserBean.xml"/>
         <mapper resource="dazhimen/bg/bean/customer/CustomerBean.xml"/>
-        <mapper resource="dazhimen/bg/bean/ProductBean.xml"/>
+        <mapper resource="dazhimen/bg/bean/product/ProductBean.xml"/>
         <mapper resource="dazhimen/bg/bean/login/LoginBean.xml"/>
         <mapper resource="dazhimen/bg/bean/playsort/PlaySortBean.xml"/>
-        <mapper resource="dazhimen/bg/bean/UtilBean.xml"/>
         <mapper resource="dazhimen/bg/bean/recharge/RechargeBean.xml"/>
         <mapper resource="dazhimen/bg/bean/order/OrderBean.xml"/>
         <mapper resource="dazhimen/bg/bean/news/NewsBean.xml"/>

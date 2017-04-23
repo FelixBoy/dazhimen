@@ -261,57 +261,35 @@ public class UserController {
     }
     @RequestMapping("/getMasterData")
     public void getMasterData(@RequestParam("uid") String uid, HttpServletRequest resq, HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try{
             UserService userService = new UserService();
             UserBean user = userService.getMasterDataByUid(uid);
             user.setHeaderimg(resq.getContextPath() + "/" + user.getHeaderimg());
             Gson gson = new Gson();
             String userJson = gson.toJson(user);
-            resp.getWriter().write(userJson);
+            ResponseUtil.writeMsg(resp, userJson);
         }catch (BgException e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write(e.getMessage());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询指定掌门信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询指定掌门信息失败");
         }
     }
     @RequestMapping("/getAdminData")
     public void getAdminData(@RequestParam("uid") String uid, HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try{
             UserService userService = new UserService();
             UserBean user = userService.getAdminDataByUid(uid);
             Gson gson = new Gson();
             String userJson = gson.toJson(user);
-            resp.getWriter().write(userJson);
+            ResponseUtil.writeMsg(resp, userJson);
         }catch (BgException e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write(e.getMessage());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询指定管理员信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询指定管理员信息失败");
         }
     }
     @RequestMapping("/saveMasterModify")
@@ -357,24 +335,14 @@ public class UserController {
         try{
             UserService userService = new UserService();
             if(userService.saveMasterDel(resq, uid)){
-                resp.getWriter().write("删除成功");
+                ResponseUtil.writeMsg(resp, "删除成功");
             }
         }catch (BgException e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write(e.getMessage());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，删除掌门信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，删除掌门信息失败");
         }
     }
 
@@ -426,31 +394,21 @@ public class UserController {
 
     @RequestMapping("/saveAddAdmin")
     public void saveAddAdmin(HttpServletResponse resp, UserBean userBean) {
-        resp.setCharacterEncoding(Constant.CharSet);
         try{
             UserService userService = new UserService();
             boolean result = userService.saveAddAdmin(userBean);
             if(result){
-                resp.getWriter().write("添加成功");
+                ResponseUtil.writeMsg(resp,"添加成功");
             }else{
-                resp.getWriter().write("添加失败");
+                ResponseUtil.writeMsg(resp,"添加失败");
             }
         }catch (BgException e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write(e.getMessage());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，新增管理员失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，新增管理员失败");
         }
     }
 
@@ -462,62 +420,38 @@ public class UserController {
 
     @RequestMapping("/saveModifyAdmin")
     public void saveModifyAdmin(HttpServletResponse resp, UserBean user){
-        resp.setCharacterEncoding(Constant.CharSet);
         UserService userService = new UserService();
         boolean result = false;
         try {
             result = userService.saveModifyAdmin(user);
 
             if(result){
-                resp.setStatus(HttpServletResponse.SC_OK);
-                resp.getWriter().write("修改成功");
+                ResponseUtil.writeMsg(resp, "修改成功");
             }else{
-                resp.setStatus(HttpServletResponse.SC_OK);
-                resp.getWriter().write("修改失败");
+                ResponseUtil.writeMsg(resp, "修改失败");
             }
         } catch (BgException e) {
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write(e.getMessage());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，修改管理员信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp,"出现异常，修改管理员信息失败");
         }
     }
     @RequestMapping("/saveDeleteAdmin")
     public void saveDeleteAdmin(@RequestParam("uid") String uid, HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try{
             UserService userService = new UserService();
             if(userService.saveDeleteAdmin(uid)){
-
-                resp.getWriter().write("删除成功");
+                ResponseUtil.writeMsg(resp, "删除成功");
             }
         }catch (BgException e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write(e.getMessage());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，删除管理员信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，删除管理员信息失败");
         }
     }
 

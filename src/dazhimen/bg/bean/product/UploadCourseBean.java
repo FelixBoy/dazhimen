@@ -1,4 +1,4 @@
-package dazhimen.bg.bean;
+package dazhimen.bg.bean.product;
 
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 

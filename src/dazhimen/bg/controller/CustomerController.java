@@ -23,7 +23,6 @@ public class CustomerController {
     }
     @RequestMapping("/queryAllCustomers")
     public void queryAllCustomers(HttpServletRequest resq, HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try{
             CustomerService customerService = new CustomerService();
             String page = resq.getParameter("page");

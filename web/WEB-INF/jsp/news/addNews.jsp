@@ -251,7 +251,7 @@
                 <div class="formTitle" style="background-color:#f2f2f2;">
                     <div class="formTitle-icon"></div>
                     <div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">
-                        编辑新闻内容（请点击相应按钮，添加内容）
+                        编辑新闻内容（请点击相应按钮，编辑内容）
                     </div>
                 </div>
             </td>

@@ -2,7 +2,7 @@ package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import dazhimen.bg.bean.*;
+import dazhimen.bg.bean.product.*;
 import dazhimen.bg.bean.user.UserBean;
 import dazhimen.bg.exception.BgException;
 import net.sf.json.JSONObject;
@@ -20,7 +20,6 @@ import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -280,7 +279,6 @@ public class ProductController {
     @RequestMapping("/getMainImagesInforById")
     public void getMainImagesInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
                                        HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             ProductService productService = new ProductService();
             List<ViewMainImageBean> mainImageBeans = productService.getProductMainImages(pid);
@@ -302,21 +300,15 @@ public class ProductController {
     @RequestMapping("/getMasterInfor")
     public void getMasterInfor(@RequestParam("uid") String uid, HttpServletRequest resq,
                                        HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             ProductService productService = new ProductService();
             UserBean userBean = productService.getMasterDataByUid(uid);
             Gson gson = new Gson();
             String mainImagesJson = gson.toJson(userBean);
-            resp.getWriter().write(mainImagesJson);
+            ResponseUtil.writeMsg(resp, mainImagesJson);
         } catch (Exception e) {
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询指定掌门信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询指定掌门信息失败");
         }
     }
     @RequestMapping("/fwdManageProductPage")
@@ -325,7 +317,6 @@ public class ProductController {
     }
     @RequestMapping("/queryAllProducts")
     public void queryAllProducts(HttpServletRequest resq, HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try{
             ProductService productService = new ProductService();
             String page = resq.getParameter("page");
@@ -350,15 +341,10 @@ public class ProductController {
                 paramBean.setEndtimeCondition(endtimeCondition);
                 result = productService.queryAllProductsByParams(page, rows, paramBean);
             }
-            resp.getWriter().write(result);
+            ResponseUtil.writeMsg(resp, result);
         }catch (Exception e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询所有产品信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询所有产品信息失败");
         }
 
     }
@@ -370,39 +356,27 @@ public class ProductController {
     }
     @RequestMapping("/saveModifyProductStatus")
     public void saveModifyProductStatus(HttpServletRequest resq,HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             String pid = resq.getParameter("pid");
             String status = resq.getParameter("status");
             ProductService productService = new ProductService();
             productService.saveModifyProductStatus(pid, status);
-            resp.getWriter().write("修改成功");
+            ResponseUtil.writeMsg(resp, "修改成功");
         } catch (Exception e) {
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，修改产品状态失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，修改产品状态失败");
         }
     }
     @RequestMapping("/saveProductDel")
     public void saveProductDel(HttpServletRequest resq,HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             String pid = resq.getParameter("pid");
             ProductService productService = new ProductService();
             productService.saveProductDel(pid, resq);
-            resp.getWriter().write("删除成功");
+            ResponseUtil.writeMsg(resp, "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，删除产品失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，删除产品失败");
         }
     }
     @RequestMapping("/fwdManageCoursePage")
@@ -412,7 +386,6 @@ public class ProductController {
     }
     @RequestMapping("/queryAllCourseByPid")
     public void queryAllCourseByPid(HttpServletRequest resq,HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try{
             String pid = resq.getParameter("pid");
             ProductService productService = new ProductService();
@@ -436,15 +409,10 @@ public class ProductController {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("total", totalCount);
             jsonObject.put("rows", courseBeans);
-            resp.getWriter().write(jsonObject.toString());
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
         }catch (Exception e){
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询产品的课程失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询产品的课程失败");
         }
     }
     @RequestMapping("/fwdAddCoursePage")
@@ -485,20 +453,14 @@ public class ProductController {
     }
     @RequestMapping("/getCourseInforByCourseid")
     public void getCourseInforByCourseid(HttpServletRequest resq,HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try {
             String courseid = resq.getParameter("courseid");
             ProductService productService = new ProductService();
             UploadCourseBean courseBean = productService.getCourseInforByCourseid(courseid);
-            resp.getWriter().write(new Gson().toJson(courseBean));
+            ResponseUtil.writeMsg(resp, new Gson().toJson(courseBean));
         } catch (Exception e) {
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，查询指定课程信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询指定课程信息失败");
         }
     }
     @RequestMapping("/saveModifyCourse")
@@ -528,21 +490,15 @@ public class ProductController {
 
     @RequestMapping("/saveCourseDel")
     public void saveCourseDel(HttpServletRequest resq,HttpServletResponse resp){
-        resp.setCharacterEncoding(Constant.CharSet);
         try{
             String courseid = resq.getParameter("courseid");
             String pid = resq.getParameter("pid");
             ProductService productService = new ProductService();
             productService.saveCourseDel(courseid,pid, resq);
-            resp.getWriter().write("删除成功");
+            ResponseUtil.writeMsg(resp, "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try {
-                resp.getWriter().write("出现异常，删除课程信息失败");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，删除课程信息失败");
         }
     }
     private ViewProductBean dealListImgUrlPrefix(String prefix, ViewProductBean productBean){

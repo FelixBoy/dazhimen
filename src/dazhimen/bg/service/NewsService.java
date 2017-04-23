@@ -24,7 +24,13 @@ import java.util.List;
  * Created by Administrator on 2017/4/12.
  */
 public class NewsService {
-    public void saveModifyNewsTitle(String nid, String newstitle) throws BgException {
+    /**
+     * 保存修改新闻标题
+     * @param nid
+     * @param newstitle
+     * @throws BgException
+     */
+    public void saveModifyNewsTitle(String nid, String newstitle, String basePath) throws BgException {
         if(nid == null || nid.equals("")){
             throw new BgException("传入的nid为空，修改标题失败");
         }
@@ -32,17 +38,162 @@ public class NewsService {
             throw new BgException("传入的newstitle为空，修改标题失败");
         }
         SqlSession sqlSession = null;
+        FileOutputStream fileOutputStream = null;
         try{
             sqlSession = MyBatisUtil.createSession();
             ModifyNewsTitleBean newsTitleBean = new ModifyNewsTitleBean();
             newsTitleBean.setNid(nid);
             newsTitleBean.setNewstitle(newstitle);
             sqlSession.update("dazhimen.bg.bean.News.saveModifyNewsTitle", newsTitleBean);
+
+            List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.News.getNewsContentById", nid);
+            String newsContentFileName = nid + "_newscontent.html";
+            String newsContentFileRelPath = Constant.uploadNewsDbPrefixPath +  nid +  "/" + newsContentFileName;
+            String newsMainFolderPath = basePath + Constant.newsPrefixPath  + nid + "\\";
+            String newsContentFilePath = newsMainFolderPath + newsContentFileName;
+            File newContentFile = new File(newsContentFilePath);
+
+            fileOutputStream = new FileOutputStream(newContentFile);
+            String newsHtml = GenNewsHtmlUtil.genMobileNewsHtml(newstitle, contentBeans);
+            fileOutputStream.write(newsHtml.getBytes("UTF-8"));
             sqlSession.commit();
-        }catch (Exception e){
+        }catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("生成新闻html文件时，字符集编码不支持");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("找不到新闻html文件");
+        } catch (IOException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("生成新闻html文件时，出现读写错误");
+        } catch (Exception e){
             e.printStackTrace();
             sqlSession.rollback();
             throw new BgException("出现异常，修改标题失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    /**
+     * 保存修改新闻主图
+     * @param nid
+     * @param mainImgFile
+     * @param bashPath
+     * @throws BgException
+     */
+    public void saveModifyNewsMainImg(String nid, CommonsMultipartFile mainImgFile, String bashPath) throws BgException {
+        SqlSession sqlSession = null;
+        try {
+            if(mainImgFile != null && !mainImgFile.isEmpty()) {
+                sqlSession = MyBatisUtil.createSession();
+                String mainImgPath = sqlSession.selectOne("dazhimen.bg.bean.News.getMainImgPath", nid);
+                if (mainImgPath == null || mainImgPath.equals("")) {
+                    throw new BgException("出现异常，查询原新闻主图路径时出错");
+                }
+                String mainImgFileOldName = mainImgPath.substring(mainImgPath.lastIndexOf("/") + 1);
+                String newsMainFolderPath = bashPath + Constant.newsPrefixPath  + nid + "\\";
+                //获得文件的原始名称
+                String mainImgFileOrginalName = mainImgFile.getOriginalFilename();
+                //获得原始文件的后缀
+                String mainImgFileSuffixName = mainImgFileOrginalName.substring(mainImgFileOrginalName.lastIndexOf("."));
+                //新文件名
+                //通过新闻主目录+nid+_mainimg+原始文件后缀名，计算出文件转移的路径
+                String mainImageFileNewName = nid + "_mainimg" + mainImgFileSuffixName;
+                //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+                String mainImageTransferFilename = newsMainFolderPath + mainImageFileNewName;
+                try {
+                    mainImgFile.transferTo(new File(mainImageTransferFilename));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new BgException("出现异常，修改新闻主图失败");
+                }
+                if(!mainImgFileOldName.equals(mainImageFileNewName)){
+                    FileManageService fileManageService = new FileManageService();
+                    fileManageService.deleteFile(newsMainFolderPath + mainImgFileOldName);
+
+                    //计算新闻主图图片在工程中的相对路径，用于记录到数据库
+                    String mainImageNewFileRelPath = Constant.uploadNewsDbPrefixPath + nid + "/" + mainImageFileNewName;
+                    UpdateNewsMainImgFilePathBean filePathBean = new UpdateNewsMainImgFilePathBean();
+                    filePathBean.setNid(nid);
+                    filePathBean.setMainimage(mainImageNewFileRelPath);
+                    sqlSession.update("dazhimen.bg.bean.News.updateMainImgPath",filePathBean);
+                    sqlSession.commit();
+                }
+            }
+        } catch (BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException(e.getMessage());
+        } catch(Exception e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，修改新闻主图失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+    /**
+     * 保存修改新闻列表图片
+     * @param nid
+     * @param listImgFile
+     * @param bashPath
+     * @throws BgException
+     */
+    public void saveModifyNewsListImg(String nid, CommonsMultipartFile listImgFile, String bashPath) throws BgException {
+        SqlSession sqlSession = null;
+        try {
+            if(listImgFile != null && !listImgFile.isEmpty()) {
+                sqlSession = MyBatisUtil.createSession();
+                String listImgPath = sqlSession.selectOne("dazhimen.bg.bean.News.getListImgPath", nid);
+                if (listImgPath == null || listImgPath.equals("")) {
+                    throw new BgException("出现异常，查询原新闻列表图片路径时出错");
+                }
+                String listImgFileOldName = listImgPath.substring(listImgPath.lastIndexOf("/") + 1);
+                String newsMainFolderPath = bashPath + Constant.newsPrefixPath  + nid + "\\";
+                //获得文件的原始名称
+                String listImgFileOrginalName = listImgFile.getOriginalFilename();
+                //获得原始文件的后缀
+                String listImgFileSuffixName = listImgFileOrginalName.substring(listImgFileOrginalName.lastIndexOf("."));
+                //新文件名
+                //通过新闻主目录+nid+_listimg+原始文件后缀名，计算出文件转移的路径
+                String listImageFileNewName = nid + "_listimg" + listImgFileSuffixName;
+                //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+                String listImageTransferFilename = newsMainFolderPath + listImageFileNewName;
+                try {
+                    listImgFile.transferTo(new File(listImageTransferFilename));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new BgException("出现异常，修改新闻列表图片失败");
+                }
+                if(!listImgFileOldName.equals(listImageFileNewName)){
+                    FileManageService fileManageService = new FileManageService();
+                    fileManageService.deleteFile(newsMainFolderPath + listImgFileOldName);
+
+                    //计算列表图片在工程中的相对路径，用于记录到数据库
+                    String listImageNewFileRelPath = Constant.uploadNewsDbPrefixPath + nid + "/" + listImageFileNewName;
+                    UpdateNewsListImgFilePathBean filePathBean = new UpdateNewsListImgFilePathBean();
+                    filePathBean.setNid(nid);
+                    filePathBean.setListimage(listImageNewFileRelPath);
+                    sqlSession.update("dazhimen.bg.bean.News.updateListImgPath",filePathBean);
+                    sqlSession.commit();
+                }
+            }
+        } catch (BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException(e.getMessage());
+        } catch(Exception e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，修改新闻列表图片失败");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }

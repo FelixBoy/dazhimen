@@ -1,23 +1,33 @@
 <script type="text/javascript">
     function checkAddAdminFormBeforeSubmit(){
-        if($("#loginnameInAddAdmin").val().length == 0){
+        if($.trim($("#loginnameInAddAdmin").val()).length == 0){
             MsgBox.show("请输入登录名");
-            return fasle;
+            return false;
         }
-        if($("#passwordInAddAdmin").val().length == 0){
+        var reg_loginname = /^[0-9a-zA-Z]*$/g;
+        if(!reg_loginname.test($.trim($("#loginnameInAddAdmin").val()))){
+            MsgBox.show("登录名格式不正确，只能为字母或数字组合");
+            return false;
+        }
+        if($.trim($("#passwordInAddAdmin").val()).length == 0){
             MsgBox.show("请输入密码");
-            return fasle;
+            return false;
         }
-        if($("#nameInAddAdmin").val().length == 0){
+        var reg_password = /^[0-9a-zA-Z]*$/g;
+        if(!reg_password.test($.trim($("#passwordInAddAdmin").val()))){
+            MsgBox.show("密码格式不正确，只能为字母或数字组合");
+            return false;
+        }
+        if($.trim(($("#nameInAddAdmin").val())).length == 0){
             MsgBox.show("请输入姓名");
-            return fasle;
+            return false;
         }
-        if($("#mphoneInAddAdmin").val().length == 0){
+        if($.trim($("#mphoneInAddAdmin").val().length) == 0){
             MsgBox.show("请输入手机号码");
-            return fasle;
+            return false;
         }
-        var reg = /^1\d{10}$/;
-        if (!reg.test($("#mphoneInAddAdmin").val())) {
+        var reg_mphone = /^1\d{10}$/;
+        if (!reg_mphone.test($.trim($("#mphoneInAddAdmin").val()))) {
             MsgBox.show("手机号码格式有误");
             return false;
         }

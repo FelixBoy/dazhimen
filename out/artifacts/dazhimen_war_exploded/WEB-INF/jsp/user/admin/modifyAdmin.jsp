@@ -23,20 +23,25 @@
             "?uid=<%=request.getAttribute("uid").toString()%>&randomid=" + Math.random());
     });
     function checkMoidfyAdminFormBeforeSubmit(){
-        if($("#loginnameInModifyAdmin").val().length == 0){
+        if($.trim($("#loginnameInModifyAdmin").val()).length == 0){
             MsgBox.show("请输入登录名");
-            return fasle;
+            return false;
         }
-        if($("#nameInModifyAdmin").val().length == 0){
+        var reg_loginname = /^[0-9a-zA-Z]*$/g;
+        if(!reg_loginname.test($.trim($("#loginnameInModifyAdmin").val()))){
+            MsgBox.show("登录名格式不正确，只能为字母或数字组合");
+            return false;
+        }
+        if($.trim($("#nameInModifyAdmin").val()).length == 0){
             MsgBox.show("请输入姓名");
-            return fasle;
+            return false;
         }
-        if($("#mphoneInModifyAdmin").val().length == 0){
+        if($.trim($("#mphoneInModifyAdmin").val()).length == 0){
             MsgBox.show("请输入手机号码");
-            return fasle;
+            return false;
         }
         var reg = /^1\d{10}$/;
-        if (!reg.test($("#mphoneInModifyAdmin").val())) {
+        if (!reg.test($.trim($("#mphoneInModifyAdmin").val()))) {
             MsgBox.show("手机号码格式有误");
             return false;
         }
