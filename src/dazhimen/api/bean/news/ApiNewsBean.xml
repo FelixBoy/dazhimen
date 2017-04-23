@@ -72,4 +72,7 @@
     <select id="getNewsURLById" resultType="java.lang.String">
         select htmlfileurl from news where nid = #{nid}
     </select>
+    <select id="getShareURL" resultType="java.lang.String">
+        select htmlfileurl from news where nid = #{nid}
+    </select>
 </mapper>

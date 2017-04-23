@@ -1,3 +1,4 @@
+<%@ page import="util.Constant" %>
 <script type="text/javascript">
     $(function () {
         $("#newsList").datagrid({
@@ -113,6 +114,10 @@
         $('#newsList').datagrid('selectRow',index);
         var row = $('#newsList').datagrid('getSelected');
         if (row){
+            if(row.nid == '<%=Constant.shareNewsId%>'){
+                MsgBox.show("该新闻用于App分享，不能删除");
+                return;
+            }
             $.messager.confirm('确认','您确认删除新闻【'+ row.title + '】吗？',function(r){
                 if (r){
                     $.ajax({
@@ -135,6 +140,10 @@
         $('#newsList').datagrid('selectRow',index);
         var row = $('#newsList').datagrid('getSelected');
         if (row){
+            if(row.nid == '<%=Constant.shareNewsId%>'){
+                MsgBox.show("该新闻用于App分享，不能修改状态");
+                return;
+            }
             $('#modifyNewsStatusDialog').dialog({
                 title: '修改新闻【' + row.title + '】的状态',
                 width: 330,

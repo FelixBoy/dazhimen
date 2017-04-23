@@ -10,6 +10,7 @@ import dazhimen.api.exception.ParameterCheckException;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import util.CheckIsExistsUtils;
+import util.Constant;
 
 import java.util.List;
 /**
@@ -244,5 +245,22 @@ public class ApiNewsService {
             MyBatisUtil.closeSession(sqlSession);
         }
         return fileUrl;
+    }
+    public String getShareURL() throws ApiException {
+        SqlSession sqlSession = null;
+        String shareURL = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            shareURL = sqlSession.selectOne("dazhimen.api.bean.ApiNews.getShareURL", Constant.shareNewsId);
+            if(shareURL == null || shareURL.equals("")){
+                throw new ApiException("出现异常，获取分享链接出错");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ApiException("出现异常，获取分享链接出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return shareURL;
     }
 }

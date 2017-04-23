@@ -107,7 +107,7 @@ public class ApiProductController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             String totalCount = productService.getProductTotalCountByType(Constant.SkillPack);
-            jsonObj.put("totalCount", totalCount);
+            jsonObj.put("totalCount", Integer.parseInt(totalCount));
             if(productBeans == null || productBeans.size() == 0){
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
@@ -133,7 +133,7 @@ public class ApiProductController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             String totalCount = productService.getProductTotalCountByType(Constant.ExperiencePack);
-            jsonObj.put("totalCount", totalCount);
+            jsonObj.put("totalCount", Integer.parseInt(totalCount));
             if(productBeans == null || productBeans.size() == 0){
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
@@ -160,7 +160,7 @@ public class ApiProductController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             String totalCount = productService.getProductTotalCountByType(Constant.SkillPack);
-            jsonObj.put("totalCount", totalCount);
+            jsonObj.put("totalCount", Integer.parseInt(totalCount));
             if(productBeans == null || productBeans.size() == 0){
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
@@ -187,7 +187,7 @@ public class ApiProductController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             String totalCount = productService.getProductTotalCountByType(Constant.ExperiencePack);
-            jsonObj.put("totalCount", totalCount);
+            jsonObj.put("totalCount", Integer.parseInt(totalCount));
             if(productBeans == null || productBeans.size() == 0){
                 jsonObj.put("data",new Gson().toJson(null));
             }else{

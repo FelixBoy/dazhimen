@@ -42,6 +42,9 @@ public class DazhimenListener  implements ServletContextListener {
                 if(itemName.equals("defaultAdministrator")){
                     Constant.defaultAdministrator = itemValue;
                 }
+                if(itemName.equals("shareNewsId")){
+                    Constant.shareNewsId = itemValue;
+                }
             }
         } catch (DocumentException e) {
             e.printStackTrace();

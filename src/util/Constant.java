@@ -132,4 +132,6 @@ public class Constant {
     public static String AliyunIP = null;
     //默认管理员账户的登录名
     public static String defaultAdministrator = null;
+    //用于分享的新闻id
+    public static String shareNewsId = null;
 }

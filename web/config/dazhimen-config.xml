@@ -13,5 +13,9 @@
         <config name="defaultAdministrator" value="dzm"></config>
     <!--end  默认管理员账户配置 end-->
 
+    <!--begin  用于分享App信息的新闻配置 begin-->
+    <!-- 配置用于分享的新闻id，该新闻不能删除，不能修改状态，只可以修改标题和内容-->
+    <config name="shareNewsId" value="n170423024"></config>
+    <!--end  用于分享App信息的新闻配置 end-->
 
 </config>

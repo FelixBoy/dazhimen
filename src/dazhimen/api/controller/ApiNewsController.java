@@ -159,7 +159,7 @@ public class ApiNewsController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             String totalCount = newsService.getNewsTotalCount();
-            jsonObj.put("totalCount", totalCount);
+            jsonObj.put("totalCount", Integer.parseInt(totalCount));
             if(newsBeans == null || newsBeans.size() == 0){
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
@@ -185,7 +185,7 @@ public class ApiNewsController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             String totalCount = newsService.getNewsTotalCount();
-            jsonObj.put("totalCount", totalCount);
+            jsonObj.put("totalCount", Integer.parseInt(totalCount));
             if(newsBeans == null || newsBeans.size() == 0){
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
@@ -252,6 +252,32 @@ public class ApiNewsController {
             jsonObject.put("data", dataObject.toString());
             ResponseUtil.writeMsg(resp, jsonObject.toString());
         }catch (ParameterCheckException e){
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+        } catch (ApiException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+        }
+    }
+    @RequestMapping(value = "/getShareURL", method = RequestMethod.POST)
+    public void getShareURL(HttpServletRequest resq, HttpServletResponse resp){
+        try {
+            ApiUtils.checkSignature(resq);
+            ApiNewsService newsService = new ApiNewsService();
+            String shareURL = newsService.getShareURL();
+            String localIp = resq.getLocalAddr();//获取本地ip
+            if(Constant.isDeployInAliyun){
+                localIp = Constant.AliyunIP;
+            }
+            int localPort = resq.getLocalPort();//获取本地的端口
+            String appName = resq.getContextPath();
+            shareURL = "http://" + localIp + ":" + localPort + appName + "/" + shareURL;
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", "200");
+            jsonObject.put("msg", "获取成功");
+            jsonObject.put("shareurl", shareURL);
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
+        } catch (ParameterCheckException e) {
             e.printStackTrace();
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {

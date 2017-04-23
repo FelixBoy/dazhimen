@@ -12,14 +12,14 @@
         <servlet-name>dazhimen</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-    <!--<filter>-->
-            <!--<filter-name>DazhimenFilter</filter-name>-->
-            <!--<filter-class>dazhimen.filter.DazhimenFilter</filter-class>-->
-    <!--</filter>-->
-    <!--<filter-mapping>-->
-        <!--<filter-name>DazhimenFilter</filter-name>-->
-        <!--<url-pattern>/*</url-pattern>-->
-    <!--</filter-mapping>-->
+    <filter>
+            <filter-name>DazhimenFilter</filter-name>
+            <filter-class>dazhimen.filter.DazhimenFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DazhimenFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <listener>
         <listener-class>
             dazhimen.listener.DazhimenListener

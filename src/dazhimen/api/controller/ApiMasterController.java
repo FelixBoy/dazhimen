@@ -59,7 +59,7 @@ public class ApiMasterController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             String totalCount = masterService.getMasterTotalCount();
-            jsonObj.put("totalCount", totalCount);
+            jsonObj.put("totalCount", Integer.parseInt(totalCount));
             if(masterBeans != null && masterBeans.size() == 0){
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
@@ -86,7 +86,7 @@ public class ApiMasterController {
             jsonObj.put("code","200");
             jsonObj.put("msg","成功");
             String totalCount = masterService.getMasterTotalCount();
-            jsonObj.put("totalCount", totalCount);
+            jsonObj.put("totalCount", Integer.parseInt(totalCount));
             if(masterBeans != null && masterBeans.size() == 0){
                 jsonObj.put("data",new Gson().toJson(null));
             }else{
