@@ -13,14 +13,15 @@
         <mapper resource="dazhimen/bg/bean/order/OrderBean.xml"/>
         <mapper resource="dazhimen/bg/bean/news/NewsBean.xml"/>
         <mapper resource="dazhimen/bg/bean/permission/PermissionBean.xml"/>
-        <mapper resource="dazhimen/api/bean/ApiCustomerBean.xml"/>
-        <mapper resource="dazhimen/api/bean/ApiLoginBean.xml"/>
-        <mapper resource="dazhimen/api/bean/ApiProductBean.xml"/>
-        <mapper resource="dazhimen/api/bean/ApiMasterBean.xml"/>
-        <mapper resource="dazhimen/api/bean/ApiIndexPlayBean.xml"/>
-        <mapper resource="dazhimen/api/bean/ApiRechargeBean.xml"/>
-        <mapper resource="dazhimen/api/bean/ApiOrderBean.xml"/>
-        <mapper resource="dazhimen/api/bean/ApiGlobalBean.xml"/>
-        <mapper resource="dazhimen/api/bean/ApiNewsBean.xml"/>
+
+        <mapper resource="dazhimen/api/bean/customer/ApiCustomerBean.xml"/>
+        <mapper resource="dazhimen/api/bean/login/ApiLoginBean.xml"/>
+        <mapper resource="dazhimen/api/bean/product/ApiProductBean.xml"/>
+        <mapper resource="dazhimen/api/bean/master/ApiMasterBean.xml"/>
+        <mapper resource="dazhimen/api/bean/other/ApiIndexPlayBean.xml"/>
+        <mapper resource="dazhimen/api/bean/recharge/ApiRechargeBean.xml"/>
+        <mapper resource="dazhimen/api/bean/order/ApiOrderBean.xml"/>
+        <mapper resource="dazhimen/api/bean/other/ApiGlobalBean.xml"/>
+        <mapper resource="dazhimen/api/bean/news/ApiNewsBean.xml"/>
     </mappers>
 </configuration>

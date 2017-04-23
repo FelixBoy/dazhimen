@@ -1,6 +1,6 @@
 package dazhimen.api.service;
 
-import dazhimen.api.bean.ApiGlobalSearchBean;
+import dazhimen.api.bean.other.ApiGlobalSearchBean;
 import dazhimen.api.exception.ApiException;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;

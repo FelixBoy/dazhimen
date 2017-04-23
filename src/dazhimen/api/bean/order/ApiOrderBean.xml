@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.api.bean.ApiOrder">
+    <select id="getPurchaseProductByCid" resultType="dazhimen.api.bean.order.ApiCustomerPurchaseProductBean">
+        select d.pid,d.pname,d.type,d.listimage as listimgurl,e.path as mainimgurl,d.introduction
+        from orders a,ir_order_product c,product d,product_image e
+        where a.orid = c.orid
+        and c.pid = d.pid
+        and d.pid = e.pid
+        and a.cid = #{cid}
+        and d.isdel = '0'
+        and a.isdel = '0';
+    </select>
+    <select id="checkProductIsBuyByOrid" resultType="dazhimen.api.bean.SingleValueBean">
+      select 1 as valueinfo from orders where orid = #{orid}
+    </select>
+
+    <select id="checkProductIsBuy" parameterType="dazhimen.api.bean.order.ApiCheckProductIsBuyBean"
+            resultType="dazhimen.api.bean.SingleValueBean">
+        select 1 as valueinfo
+        from orders a,
+        ir_order_product b
+        where a.orid = b.orid
+          and a.cid = #{cid}
+          and b.pid = #{pid}
+    </select>
+
+    <select id="getBalanceByCid" resultType="dazhimen.api.bean.order.ApiBalanceBean">
+        select accoutbalance from customer where cid = #{cid}
+    </select>
+    <select id="getProductPriceByPid" resultType="dazhimen.api.bean.order.ApiProductPriceBean">
+        select price,derateProportion,pname from product where pid = #{pid}
+    </select>
+
+    <update id="updateCustomerBalanceAfterBuy" parameterType="dazhimen.api.bean.order.ApiUpdateCustomerBalanceBean">
+        update customer
+           set accoutbalance = accoutbalance - #{changeamount}
+         where cid = #{cid}
+    </update>
+
+    <insert id="buyProductByBalance" parameterType="dazhimen.api.bean.order.ApiBuyProductByBalance">
+        insert into orders(orid,ordatetime,ordersum,paymenttype,cid)
+            value(#{orid},now(),#{ordersum},#{paymenttype},#{cid})
+    </insert>
+
+    <insert id="dealIrOrderProduct" parameterType="dazhimen.api.bean.order.ApiIROrderProductBean">
+        insert into ir_order_product(orid, pid)
+          values(#{orid}, #{pid})
+    </insert>
+
+    <select id="checkISTransactionExists" resultType="dazhimen.api.bean.SingleValueBean">
+        select count(orid) as valueinfo from orders where transaction_id = #{transaction_id}
+    </select>
+
+    <insert id="buyProductByWXPay" parameterType="dazhimen.api.bean.order.ApiBuyProductByWXPay">
+         insert into orders(orid,ordatetime,ordersum,paymenttype,transaction_id,cid)
+            value(#{orid},now(),#{ordersum},#{paymenttype},#{transaction_id},#{cid})
+    </insert>
+    
+    <update id="updateProductBuyCount">
+      update product set buycount = buycount + 1 where pid = #{pid}
+    </update>
+</mapper>

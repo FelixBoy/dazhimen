@@ -1,10 +1,9 @@
 package dazhimen.api.controller;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
-import dazhimen.api.bean.ApiCustomerBean;
+import dazhimen.api.bean.customer.ApiCustomerBean;
 import com.google.gson.Gson;
-import dazhimen.api.bean.MphoneLoginBean;
-import dazhimen.api.bean.ThirdPartLoginBean;
+import dazhimen.api.bean.login.MphoneLoginBean;
+import dazhimen.api.bean.login.ThirdPartLoginBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiLoginService;
@@ -18,8 +17,6 @@ import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Administrator on 2017/3/18.

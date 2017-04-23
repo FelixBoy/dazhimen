@@ -1,7 +1,9 @@
 package dazhimen.api.controller;
 
 import com.google.gson.Gson;
-import dazhimen.api.bean.*;
+import dazhimen.api.bean.product.ApiListViewCourseBean;
+import dazhimen.api.bean.product.ApiProductBean;
+import dazhimen.api.bean.product.ApiSpecifyProductBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiProductService;
@@ -15,8 +17,6 @@ import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;

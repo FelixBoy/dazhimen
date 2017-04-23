@@ -1,10 +1,10 @@
 package dazhimen.api.controller;
 
 import com.google.gson.Gson;
-import dazhimen.api.bean.ApiCustomerCollectProductBean;
-import dazhimen.api.bean.ApiHomePageNewsBean;
-import dazhimen.api.bean.ApiMoreNewsBean;
-import dazhimen.api.bean.ApiNewsContentBean;
+import dazhimen.api.bean.product.ApiCustomerCollectProductBean;
+import dazhimen.api.bean.news.ApiHomePageNewsBean;
+import dazhimen.api.bean.news.ApiMoreNewsBean;
+import dazhimen.api.bean.news.ApiNewsContentBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiNewsService;
@@ -20,8 +20,6 @@ import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**

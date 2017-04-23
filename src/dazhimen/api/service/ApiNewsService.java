@@ -1,6 +1,10 @@
 package dazhimen.api.service;
 
 import dazhimen.api.bean.*;
+import dazhimen.api.bean.news.ApiHomePageNewsBean;
+import dazhimen.api.bean.news.ApiMoreNewsBean;
+import dazhimen.api.bean.news.ApiNewsContentBean;
+import dazhimen.api.bean.news.ApiQueryNewsCollectionParamBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
 import db.MyBatisUtil;

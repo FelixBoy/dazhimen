@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.api.bean.ApiRecharge">
+    <select id="getBalanceByCid" resultType="dazhimen.api.bean.order.ApiBalanceBean">
+       select accoutbalance from customer where cid = #{cid}
+    </select>
+    <insert id="doRechargeByWeixin" parameterType="dazhimen.api.bean.recharge.ApiRechargeByWeixinBean">
+        insert into recharge(recid,recamount,cid, paymenttype,transaction_id, recdatetime)
+        values(#{recid}, #{recamount}, #{cid},#{paymenttype},#{transaction_id}, now())
+    </insert>
+
+    <select id="checkISTransactionExists" resultType="dazhimen.api.bean.SingleValueBean">
+       select count(recid) as valueinfo from recharge where transaction_id = #{transaction_id}
+    </select>
+
+    <update id="updateCustomerBalanceAfterWX" parameterType="dazhimen.api.bean.order.ApiUpdateCustomerBalanceBean">
+        update customer
+           set accoutbalance = accoutbalance + #{changeamount}
+         where cid = #{cid}
+    </update>
+
+</mapper>

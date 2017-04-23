@@ -1,8 +1,8 @@
 package dazhimen.api.service;
 
-import dazhimen.api.bean.ApiQueryCustomerExistsParamBean;
-import dazhimen.api.bean.ApiUpdateHeaderFilePathBean;
-import dazhimen.api.bean.ModifyCustomerInfoBean;
+import dazhimen.api.bean.customer.ApiQueryCustomerExistsParamBean;
+import dazhimen.api.bean.customer.ApiUpdateHeaderFilePathBean;
+import dazhimen.api.bean.customer.ModifyCustomerInfoBean;
 import dazhimen.api.bean.SingleValueBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;

@@ -1,14 +1,13 @@
 package dazhimen.api.controller;
 
-import dazhimen.api.bean.ApiCustomerBean;
+import dazhimen.api.bean.customer.ApiCustomerBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.service.ApiCustomerService;
 import com.google.gson.Gson;
 import net.sf.json.JSONObject;
-import dazhimen.api.bean.ModifyCustomerInfoBean;
+import dazhimen.api.bean.customer.ModifyCustomerInfoBean;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiLoginService;
-import dazhimen.bg.service.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,8 +19,6 @@ import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Administrator on 2017/3/18.

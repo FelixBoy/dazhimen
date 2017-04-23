@@ -1,6 +1,6 @@
 package dazhimen.api.service;
 
-import dazhimen.api.bean.ApiMasterBean;
+import dazhimen.api.bean.master.ApiMasterBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
 import db.MyBatisUtil;

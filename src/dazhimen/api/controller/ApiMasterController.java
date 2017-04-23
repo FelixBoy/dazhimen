@@ -1,7 +1,7 @@
 package dazhimen.api.controller;
 
 import com.google.gson.Gson;
-import dazhimen.api.bean.ApiMasterBean;
+import dazhimen.api.bean.master.ApiMasterBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
 import dazhimen.api.service.ApiMasterService;
@@ -15,8 +15,6 @@ import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**

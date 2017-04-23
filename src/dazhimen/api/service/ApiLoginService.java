@@ -1,17 +1,16 @@
 package dazhimen.api.service;
 
 import dazhimen.api.bean.*;
+import dazhimen.api.bean.customer.ApiCustomerBean;
+import dazhimen.api.bean.login.MphoneLoginBean;
+import dazhimen.api.bean.login.ThirdPartLoginBean;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
-import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import util.CheckIsExistsUtils;
-import util.Constant;
 import util.IdUtils;
 import util.VerifyCodeUtils;
-
-import java.util.Random;
 
 /**
  * Created by Administrator on 2017/3/18.

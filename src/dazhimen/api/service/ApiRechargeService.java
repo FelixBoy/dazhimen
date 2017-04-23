@@ -1,8 +1,8 @@
 package dazhimen.api.service;
 
-import dazhimen.api.bean.ApiBalanceBean;
-import dazhimen.api.bean.ApiRechargeByWeixinBean;
-import dazhimen.api.bean.ApiUpdateCustomerBalanceBean;
+import dazhimen.api.bean.order.ApiBalanceBean;
+import dazhimen.api.bean.recharge.ApiRechargeByWeixinBean;
+import dazhimen.api.bean.order.ApiUpdateCustomerBalanceBean;
 import dazhimen.api.bean.SingleValueBean;
 import dazhimen.api.exception.ApiException;
 import db.MyBatisUtil;

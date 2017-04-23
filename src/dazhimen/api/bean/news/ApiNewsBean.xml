@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dazhimen.api.bean.ApiNews">
+    <select id="getNewsInforById" resultType="dazhimen.api.bean.news.ApiHomePageNewsBean">
+        select nid, title, listimgurl
+        from news where isdel = '0'
+         and status = '1'
+         and nid = #{nid}
+    </select>
+    <select id="getHomePageNews" resultType="dazhimen.api.bean.news.ApiHomePageNewsBean">
+        select nid, title, listimgurl
+        from news where isdel = '0' and status = '1'
+        order by indexsort,createdatetime desc
+        limit #{getCountInt}
+    </select>
+    <select id="getNewsContentById" resultType="dazhimen.api.bean.news.ApiNewsContentBean">
+        select contentvalue,contenttype
+        from news_content where nid = #{nid}
+        order by contentsort
+    </select>
+
+    <select id="checkNidIsExists" resultType="dazhimen.api.bean.SingleValueBean">
+        select 1 as valueinfo
+          from news
+         where nid = #{nid}
+           and status = '1'
+           and isdel = '0'
+    </select>
+    <select id="getMoreNews" resultType="dazhimen.api.bean.news.ApiMoreNewsBean">
+      select nid, title, listimgurl, date_format(createdate,'%Y年%m月%d日') createdate
+        from news where isdel = '0' and status = '1'
+        order by createdatetime desc
+    </select>
+    <select id="getMoreNewsByCount"  resultType="dazhimen.api.bean.news.ApiMoreNewsBean">
+         select nid, title, listimgurl, date_format(createdate,'%Y年%m月%d日') createdate
+        from news where isdel = '0' and status = '1'
+        order by createdatetime desc
+        limit #{getcount}
+    </select>
+    <select id="searchNews" resultType="dazhimen.api.bean.news.ApiMoreNewsBean">
+        select nid, title, listimgurl, date_format(createdate,'%Y年%m月%d日') createdate
+        from news
+        where isdel = '0'
+        and status ='1'
+        and title like concat('%', #{keyword}, '%')
+        order by createdatetime desc
+    </select>
+    <select id="getNewsIsCollection" parameterType="dazhimen.api.bean.news.ApiQueryNewsCollectionParamBean"
+        resultType="dazhimen.api.bean.SingleValueBean">
+      select 1 as valueinfo
+        from ir_customer_news
+      where cid = #{cid} and nid = #{nid}
+    </select>
+    <insert id="collectNews" parameterType="dazhimen.api.bean.news.ApiQueryNewsCollectionParamBean">
+      insert into ir_customer_news(cid, nid)
+         values(#{cid}, #{nid})
+    </insert>
+    <delete id="cancelCollectNews" parameterType="dazhimen.api.bean.news.ApiQueryNewsCollectionParamBean">
+        delete from ir_customer_news where cid = #{cid} and nid = #{nid}
+    </delete>
+    <select id="getCustomerCollectNews" resultType="dazhimen.api.bean.news.ApiHomePageNewsBean">
+      select a.nid, a.title, a.listimgurl
+        from news a,ir_customer_news b
+        where a.nid = b.nid
+         and b.cid = #{cid}
+    </select>
+    <select id="getNewsTotalCount" resultType="java.lang.String">
+        select count(nid)
+        from news where isdel = '0' and status = '1'
+    </select>
+    <select id="getNewsURLById" resultType="java.lang.String">
+        select htmlfileurl from news where nid = #{nid}
+    </select>
+</mapper>
