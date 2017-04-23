@@ -118,6 +118,7 @@
             return;
         }
         dealAddNewsFormBeforeSubmit();
+        dealSortValue();
         $("#addNewsForm").submit();
         LoadingMaskLayer.show();
     }
