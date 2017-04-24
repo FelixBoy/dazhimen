@@ -123,7 +123,7 @@ public class Constant {
     public static final String paymentType_WXPay = "2";
     public static final String paymentType_AliPay = "3";
 
-    public static final String FrontEndVersion = "v1.5";
+    public static final String FrontEndVersion = "v1.6";
 
     //=====以下这些变量，是从配置文件中加载的
     //是否部署在阿里云

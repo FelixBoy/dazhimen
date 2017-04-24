@@ -1,6 +1,28 @@
 <script>
     $(function(){
         $("#pidInAddCourse").val($("#pidInManageCourse").val());
+        $.ajax({
+            url:"<%=request.getContextPath()%>/product/getCourseSortData" +
+            "?pid=" +  $("#pidInAddCourse").val() + "&random_id=" + Math.random(),
+            type:'get',
+            async:false,
+            error:function(data){
+                MsgBox.show(data.responseText);
+            },
+            success:function(data){
+                if(!data){
+                    $("#isSortDealDone").val("1");
+                }else{
+                    var arr = data.split(",");
+                    var sortSelect = $("#sortSelect");
+                    for(var i = 0; i < arr.length; i++){
+                        sortSelect.append("<option value='" + arr[i] + "'>排序"+ arr[i] +"</option>");
+                    }
+                    $.parser.parse($('#sortSelect'));
+                    $("#isSortDealDone").val("1");
+                }
+            }
+        });
     });
     function checkCourseForm(){
         if($("#coursenameInAddCourse").val().length == 0){
@@ -55,6 +77,7 @@
         $("#courseForm").attr('target', frameId);
     }
     function actionAfterSubmit(jsonObj){
+        LoadingMaskLayer.hide();
         var resultObj = JSON.parse(jsonObj);
         if(!resultObj){
             return;
@@ -76,6 +99,7 @@
         }
         dealCourseFormBeforeSubmit();
         $("#courseForm").submit();
+        LoadingMaskLayer.show();
     }
 </script>
 <div style="width: 500px;margin: 0 auto;">
@@ -101,13 +125,8 @@
         <tr>
             <td>排序:</td>
             <td>
-                <select class="easyui-combobox"  editable="false" name="sort" id="sort" style="width:140px;" style="width:350px">
-                    <option value="999">按上架时间排序</option>
-                    <option value="1">排序1</option>
-                    <option value="2">排序2</option>
-                    <option value="3">排序3</option>
-                    <option value="4">排序4</option>
-                    <option value="5">排序5</option>
+                <select id="sortSelect" class="easyui-combobox"  editable="false" name="sort" id="sort" style="width:140px;" style="width:350px">
+                    <option value="99" selected>按上架时间排序</option>
                 </select>
             </td>
         </tr>

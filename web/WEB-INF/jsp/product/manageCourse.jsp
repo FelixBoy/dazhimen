@@ -12,13 +12,13 @@
         if(row){
             $("#modifyCourseDialog").dialog({
                 title:'修改课程信息',
+                href:"<%=request.getContextPath()%>/product/fwdModifyCoursePage?courseid=" + row.courseid + "&random_id=" + Math.random(),
                 width: 580,
                 height: 310,
                 closed: true,
                 cache: false,
                 modal: true
             });
-            $("#modifyCourseDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyCoursePage?courseid=" + row.courseid + "&random_id=" + Math.random());
             $("#modifyCourseDialog").dialog("open");
         }
     }
@@ -45,19 +45,16 @@
             });
         }
     }
-    function downloadCourseAudio(index){
-        MsgBox.show("功能正在开发，敬请期待");
-    }
     function forwardAddCoursePage(){
         $('#addCourseDialog').dialog({
             title: '新增课程',
+            href:"<%=request.getContextPath()%>/product/fwdAddCoursePage?random_id=" + Math.random(),
             width: 580,
             height: 310,
             closed: true,
             cache: false,
             modal: true
         });
-        $("#addCourseDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdAddCoursePage?random_id=" + Math.random());
         $('#addCourseDialog').dialog("open");
     }
     $(function(){
@@ -72,17 +69,10 @@
             loadMsg:"正在加载课程数据...",
             columns: [[
                 { field: 'courseid', title: '课程Id', width: '15%'},
-                { field: 'coursename', title: '名称', width: '15%'},
-                { field: 'sort', title: '排序', width: '10%'},
+                { field: 'coursename', title: '名称', width: '25%'},
+                { field: 'sortstr', title: '排序', width: '15%'},
                 { field: 'istry', title: '是否试学', width: '10%'},
                 { field: 'viewcount', title: '已读人数', width: '10%'},
-                { field: 'audiourl',hidden:'true', title: '音频url'},
-                {
-                    field: "downloadaudio", title: '音频',width:'15%', align: 'center',
-                    formatter: function (value, rowData, rowIndex) {
-                        return '<a href="#" class="easyui-linkbutton" onclick="downloadCourseAudio('+rowIndex+')">下载音频</a>';
-                    }
-                },
                 {
                     field: "operateID", title: '操作',width:'25%', align: 'center',
                     formatter: function (value, rowData, rowIndex) {

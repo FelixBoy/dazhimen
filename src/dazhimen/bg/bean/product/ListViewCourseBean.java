@@ -6,20 +6,10 @@ package dazhimen.bg.bean.product;
 public class ListViewCourseBean {
     private String courseid = null;
     private String coursename = null;
-    private String sort = null;
+    private String sortstr = null;
     private String istry = null;
     private String audiourl = null;
     private Integer viewcount = null;
-    @Override
-    public String toString() {
-        return "ListViewCourseBean{" +
-                "courseid='" + courseid + '\'' +
-                ", coursename='" + coursename + '\'' +
-                ", sort='" + sort + '\'' +
-                ", istry='" + istry + '\'' +
-                ", audiourl='" + audiourl + '\'' +
-                '}';
-    }
 
     public Integer getViewcount() {
         return viewcount;
@@ -45,12 +35,12 @@ public class ListViewCourseBean {
         this.coursename = coursename;
     }
 
-    public String getSort() {
-        return sort;
+    public String getSortstr() {
+        return sortstr;
     }
 
-    public void setSort(String sort) {
-        this.sort = sort;
+    public void setSortstr(String sortstr) {
+        this.sortstr = sortstr;
     }
 
     public String getIstry() {

@@ -1,9 +1,93 @@
 <script>
     $(function(){
-        $("#modifyCourseForm").form("load",
-            "<%=request.getContextPath()%>/product/getCourseInforByCourseid?courseid=<%=request.getAttribute("courseid").toString()%>&random_id="
-            + Math.random());
+        $.ajax({
+            url:"<%=request.getContextPath()%>/product/getCourseSortDataInModify" +
+            "?pid=" + $("#pidInManageCourse").val() + "&courseid=<%=request.getAttribute("courseid").toString()%>&random_id=" + Math.random(),
+            type:'get',
+            async:false,
+            error:function(data){
+                MsgBox.show(data.responseText);
+            },
+            success:function(data) {
+                if (!data) {
+                    return;
+                } else {
+                    var jsonObj = JSON.parse(data);
+                    if (!jsonObj) {
+                        return;
+                    }
+                    $("#coursenameInModifyCourse").val(jsonObj.coursename);
+                    $("#courseidInModifyCourse").val(jsonObj.courseid);
+                    $("#pidInModifyCourse").val(jsonObj.pid);
+                    if (jsonObj.istry && jsonObj.istry == '1') {
+                        $("#istryInModifyCourse").prop("checked", true);
+                    } else {
+                        $("#istryInModifyCourse").prop("checked", false);
+                    }
+                    dealSortSelectInModify(jsonObj.sortsdata, jsonObj.sort);
+                }
+            }
+        });
     });
+    function dealSortSelectInModify(sortsData, sort){
+        var arr_new = new Array();
+        if(!sortsData){
+            arr_new[0] = sort;
+        }else{
+            var arr = sortsData.split(",");
+            arr_new = dealInsertSort(arr, sort);
+        }
+        var sortSelect = $("#sortSelectInmodify");
+        for(var i = 0; i < arr_new.length; i++){
+            if(arr_new[i] == '99'){
+                continue;
+            }
+            if(arr_new[i] == sort){
+                sortSelect.append("<option value='" + arr_new[i] + "' selected>排序"+ arr_new[i] +"</option>");
+            }else{
+                sortSelect.append("<option value='" + arr_new[i] + "'>排序"+ arr_new[i] +"</option>");
+            }
+        }
+        $.parser.parse($('#sortSelectInmodify'));
+    }
+    function dealInsertSort(arr, sort){
+        var subScript = 0;
+        if(sort < arr[0])
+        {
+            subScript = 0;
+        }else if(sort > arr[arr.length - 1])
+        {
+            subScript = arr.length;
+        }else {
+            for(var i=0; i<arr.length; i++)
+            {
+                if(sort == arr[i])
+                {
+                    subScript = i;
+                }
+                if(sort > arr[i] && sort < arr[i+1])
+                {
+                    subScript = i + 1;
+                }
+            }
+        }
+        var arr_new = new Array(arr.length + 1);
+        for(var i = 0; i < arr_new.length; i++){
+            if(i < subScript)
+            {
+                arr_new[i] = arr[i];
+            }
+            if(i == subScript)
+            {
+                arr_new[i] = sort;
+            }
+            if(i > subScript)
+            {
+                arr_new[i] = arr[i-1];
+            }
+        }
+        return arr_new;
+    }
     function checkModifyCourseForm(){
         if($("#coursenameInModifyCourse").val().length == 0){
             MsgBox.show("请填写课程名称");
@@ -17,7 +101,6 @@
                 return false;
             }
         }
-
         return true;
     }
     var checkCount = 10;
@@ -56,6 +139,7 @@
         $("#modifyCourseForm").attr('target', frameId);
     }
     function actionAfterSubmit(jsonObj){
+        LoadingMaskLayer.hide();
         var resultObj = JSON.parse(jsonObj);
         if(!resultObj){
             return;
@@ -77,6 +161,7 @@
         }
         dealModifyCourseFormBeforeSubmit();
         $("#modifyCourseForm").submit();
+        LoadingMaskLayer.show();
     }
 </script>
 <div style="width: 500px;margin: 0 auto;">
@@ -103,19 +188,14 @@
             <tr>
                 <td>排序:</td>
                 <td>
-                    <select class="easyui-combobox" name="sort" id="sort" editable="false" style="width:140px;" style="width:350px">
+                    <select class="easyui-combobox" name="sort" id="sortSelectInmodify" editable="false" style="width:140px;" style="width:350px">
                         <option value="99">按上架时间排序</option>
-                        <option value="1">排序1</option>
-                        <option value="2">排序2</option>
-                        <option value="3">排序3</option>
-                        <option value="4">排序4</option>
-                        <option value="5">排序5</option>
                     </select>
                 </td>
             </tr>
             <tr>
                 <td>试学:</td>
-                <td><input type="checkbox" id="istry" name="istry" style="width:100px" value="1"/></td>
+                <td><input type="checkbox" id="istryInModifyCourse" name="istry" style="width:100px" value="1"/></td>
             </tr>
             <tr>
                 <td>音频文件:</td>

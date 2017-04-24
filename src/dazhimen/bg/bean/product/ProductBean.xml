@@ -151,9 +151,10 @@
 
     <select id="queryAllCourseByPid" resultType="dazhimen.bg.bean.product.ListViewCourseBean"
             parameterType="dazhimen.bg.bean.PaginationParamBean">
-        select courseid,coursename,getcodetxt('indexsort',sort) as sort,viewcount,
+        select courseid,coursename,getcodetxt('indexsort',sort) as sortstr,viewcount,
                 getcodetxt('rightorwrong',istry) as istry,audiopath as audiourl
           from course where pid = #{pid}
+          order by sort,createdate desc
         limit #{startnum},#{getrows}
     </select>
 
@@ -211,4 +212,8 @@
     <update id="saveProductDel">
         delete from product where pid = #{pid}
     </update>
+
+    <select id="getCourseSortData" resultType="dazhimen.bg.bean.product.CourseSortDataBean">
+        select sort from course where pid = #{pid} and sort != '99' order by sort;
+    </select>
 </mapper>

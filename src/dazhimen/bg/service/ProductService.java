@@ -1,5 +1,6 @@
 package dazhimen.bg.service;
 
+import dazhimen.bg.bean.product.CourseSortDataBean;
 import dazhimen.bg.bean.*;
 import dazhimen.bg.bean.product.*;
 import dazhimen.bg.bean.user.UserBean;
@@ -16,12 +17,50 @@ import util.PaginationUtil;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/3/17.
  */
 public class ProductService {
+    public String getCourseSortData(String pid) throws BgException {
+        SqlSession sqlSession = null;
+        List<CourseSortDataBean> courseSortDataBeans = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            courseSortDataBeans = sqlSession.selectList("dazhimen.bg.bean.Product.getCourseSortData",pid);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BgException("出现异常，获取课程排序信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return getCourseSortString(courseSortDataBeans);
+    }
+    private String getCourseSortString(List<CourseSortDataBean> sortDataBeans){
+        if(sortDataBeans == null || sortDataBeans.size() == 0){
+            return "1,2,3,4,5";
+        }
+        if(sortDataBeans.size() >= 5){
+            return "";
+        }
+        ArrayList<String> arrayList = new ArrayList<String>();
+        for(int i = 0; i < sortDataBeans.size(); i++){
+            arrayList.add(sortDataBeans.get(i).getSort());
+        }
+        StringBuffer sortBF = new StringBuffer();
+        for(int i = 1; i < 6; i++){
+            if(!arrayList.contains(i+"")){
+                sortBF.append(i + ",");
+            }
+        }
+        if(sortBF.length() <= 1){
+            return "";
+        }else{
+            return sortBF.deleteCharAt(sortBF.length() - 1).toString();
+        }
+    }
     public UploadCourseBean getCourseInforByCourseid(String courseid) throws BgException {
         UploadCourseBean courseBean = null;
         SqlSession sqlSession = null;

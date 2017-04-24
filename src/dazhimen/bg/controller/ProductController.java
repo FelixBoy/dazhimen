@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import dazhimen.bg.bean.product.*;
 import dazhimen.bg.bean.user.UserBean;
 import dazhimen.bg.exception.BgException;
+import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -443,6 +444,39 @@ public class ProductController {
         jsonObj.addProperty("pid", pid);
         mav.addObject("parameters", jsonObj.toString());
         return mav;
+    }
+    @RequestMapping("/getCourseSortData")
+    public void getCourseSortData(HttpServletRequest resq, HttpServletResponse resp){
+        String pid = resq.getParameter("pid");
+        ProductService productService = new ProductService();
+        try {
+            String sortData = productService.getCourseSortData(pid);
+            ResponseUtil.writeMsg(resp, sortData);
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/getCourseSortDataInModify")
+    public void getCourseSortDataInModify(HttpServletRequest resq, HttpServletResponse resp){
+        String pid = resq.getParameter("pid");
+        String courseid = resq.getParameter("courseid");
+        ProductService productService = new ProductService();
+        try {
+            UploadCourseBean uploadCourseBean = productService.getCourseInforByCourseid(courseid);
+            String sortData = productService.getCourseSortData(pid);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("pid", uploadCourseBean.getPid());
+            jsonObject.put("courseid", uploadCourseBean.getCourseid());
+            jsonObject.put("coursename", uploadCourseBean.getCoursename());
+            jsonObject.put("istry", uploadCourseBean.getIstry());
+            jsonObject.put("sort", uploadCourseBean.getSort());
+            jsonObject.put("sortsdata", sortData);
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
     }
 
     @RequestMapping("/fwdModifyCoursePage")
