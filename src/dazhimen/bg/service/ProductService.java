@@ -391,6 +391,33 @@ public class ProductService {
         }
         return mainImageBeans;
     }
+    public String queryAllProductsByParamsAndMaster(String page, String rows, QueryProductParamBean paramBean) throws BgException {
+        List<ListViewProductBean> productBeans = null;
+        SqlSession sqlSession = null;
+        Integer totalCount = 0;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+
+            SingleValueBean allProductCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllProductCountByParamAndMaster", paramBean);
+            if(allProductCountValue == null || allProductCountValue.getValueInfo() == null){
+                throw new BgException("获取产品数据总条数出错");
+            }
+            totalCount = Integer.parseInt(allProductCountValue.getValueInfo());
+            PaginationParamBean paginationParamBean = PaginationUtil.getPaginationParamBean(page,rows);
+            paramBean.setStartnum(paginationParamBean.getStartnum());
+            paramBean.setGetrows(paginationParamBean.getGetrows());
+            productBeans = sqlSession.selectList("dazhimen.bg.bean.Product.listAllProductByParamAndMaster", paramBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BgException("出现异常，查询所有产品信息失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("total", totalCount);
+        jsonObject.put("rows", productBeans);
+        return jsonObject.toString();
+    }
     public String queryAllProductsByParams(String page, String rows, QueryProductParamBean paramBean) throws BgException {
         List<ListViewProductBean> productBeans = null;
         SqlSession sqlSession = null;
@@ -407,6 +434,31 @@ public class ProductService {
             paramBean.setStartnum(paginationParamBean.getStartnum());
             paramBean.setGetrows(paginationParamBean.getGetrows());
             productBeans = sqlSession.selectList("dazhimen.bg.bean.Product.listAllProductByParam", paramBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BgException("出现异常，查询所有产品信息失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("total", totalCount);
+        jsonObject.put("rows", productBeans);
+        return jsonObject.toString();
+    }
+    public String queryAllProductsByMaster(String page,String rows, String userid) throws BgException {
+        List<ListViewProductBean> productBeans = null;
+        SqlSession sqlSession = null;
+        Integer totalCount = 0;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+
+            SingleValueBean allProductCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllProductCountByMaster", userid);
+            if(allProductCountValue == null || allProductCountValue.getValueInfo() == null){
+                throw new BgException("获取产品数据总条数出错");
+            }
+            totalCount = Integer.parseInt(allProductCountValue.getValueInfo());
+            MasterPaginationParamBean paramBean = PaginationUtil.getMasterPaginationParamBean(page,rows, userid);
+            productBeans = sqlSession.selectList("dazhimen.bg.bean.Product.listAllProductByMaster", paramBean);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BgException("出现异常，查询所有产品信息失败");

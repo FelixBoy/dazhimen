@@ -11,18 +11,34 @@ public class LoginUserBean {
     private String utype = null;
     private String utypeStr = null;
     private String loginname = null;
+    private String gender = null;
+    private String mphone = null;
+    private String introduction = null;
+
     private HashMap<String, String> userPermissionMap = null;
 
-    @Override
-    public String toString() {
-        return "LoginUserBean{" +
-                "uid='" + uid + '\'' +
-                ", uname='" + uname + '\'' +
-                ", utype='" + utype + '\'' +
-                ", utypeStr='" + utypeStr + '\'' +
-                ", loginname='" + loginname + '\'' +
-                ", userPermissionMap=" + userPermissionMap +
-                '}';
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getMphone() {
+        return mphone;
+    }
+
+    public void setMphone(String mphone) {
+        this.mphone = mphone;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
     public HashMap<String, String> getUserPermissionMap() {

@@ -18,7 +18,8 @@
     </select>
 
     <select id="getUserInfoByLoginname" resultType="dazhimen.bg.bean.login.LoginUserBean">
-        select uid, name as uname,loginname,type as utype, getcodetxt('usertype', type) as utypeStr
+        select uid, name as uname,loginname,type as utype, getcodetxt('usertype', type) as utypeStr,
+               getcodetxt('gender', gender) gender,mphone, introduction
           from user
         where loginname = #{loginname}
           and isdel = '0'

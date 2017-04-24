@@ -59,6 +59,33 @@
         </if>
     </select>
 
+    <select id="getAllProductCountByParamAndMaster" resultType="dazhimen.bg.bean.SingleValueBean"
+            parameterType="dazhimen.bg.bean.product.QueryProductParamBean">
+        select count(pid) as valueinfo
+        from product a, user b
+        where a.isdel = '0'
+          and a.uid = b.uid
+          and b.uid = #{uid}
+        <if test="pidCondition != null and pidCondition != ''">
+            and  pid like concat('%', #{pidCondition}, '%')
+        </if>
+        <if test="pnameCondition != null and pnameCondition != ''">
+            and pname like concat('%', #{pnameCondition}, '%')
+        </if>
+        <if test="typeCondition != null and typeCondition != 0">
+            and a.type = #{typeCondition}
+        </if>
+        <if test="statusCondition != null and statusCondition != 0">
+            and status = #{statusCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and createdatetime <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and createdatetime <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+    </select>
+
     <select id="listAllProductByParam" resultType="dazhimen.bg.bean.product.ListViewProductBean"
             parameterType="dazhimen.bg.bean.product.QueryProductParamBean">
         select pid,pname,getcodetxt('producttype',a.type) type,
@@ -88,11 +115,59 @@
         order by createdatetime desc
         limit #{startnum},#{getrows}
     </select>
+    <select id="listAllProductByParamAndMaster" resultType="dazhimen.bg.bean.product.ListViewProductBean"
+            parameterType="dazhimen.bg.bean.product.QueryProductParamBean">
+        select pid,pname,getcodetxt('producttype',a.type) type,
+        getcodetxt('productstatus',a.status) status,a.status statusnum,
+        date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createtime,b.name uname,
+        buycount,concat(a.price,'/年') as price
+        from product a, user b
+        where a.uid = b.uid and a.isdel = '0' and b.uid = #{uid}
+        <if test="pidCondition != null and pidCondition != ''">
+            and pid like concat('%', #{pidCondition}, '%')
+        </if>
+        <if test="pnameCondition != null and pnameCondition != ''">
+            and pname like concat('%', #{pnameCondition}, '%')
+        </if>
+        <if test="typeCondition !=null and typeCondition!= 0">
+            and a.type = #{typeCondition}
+        </if>
+        <if test="statusCondition != null and statusCondition != 0">
+            and status = #{statusCondition}
+        </if>
+        <if test="starttimeCondition != null and starttimeCondition !=''">
+            and createdatetime <![CDATA[>=]]> #{starttimeCondition}
+        </if>
+        <if test="endtimeCondition != null and endtimeCondition !=''">
+            and createdatetime <![CDATA[<=]]> #{endtimeCondition}
+        </if>
+        order by createdatetime desc
+        limit #{startnum},#{getrows}
+    </select>
 
     <select id="getAllProductCount" resultType="dazhimen.bg.bean.SingleValueBean">
          select count(pid) as valueinfo
         from product a
        where a.isdel = '0'
+    </select>
+    <select id="getAllProductCountByMaster" resultType="dazhimen.bg.bean.SingleValueBean">
+        select count(pid) as valueinfo
+        from product a,
+             user b
+        where a.isdel = '0'
+          and a.uid = b.uid
+          and b.uid = #{uid}
+    </select>
+    <select id="listAllProductByMaster" resultType="dazhimen.bg.bean.product.ListViewProductBean"
+            parameterType="dazhimen.bg.bean.MasterPaginationParamBean">
+        select pid,pname,getcodetxt('producttype',a.type) type,
+        getcodetxt('productstatus',a.status) status,a.status statusnum,
+        date_format(a.createdatetime,'%Y-%m-%d %H:%i:%s') createtime,b.name uname,
+        buycount,concat(a.price,'/年') as price
+        from product a, user b
+        where a.uid = b.uid and a.isdel = '0' and b.uid = #{uid}
+        order by createdatetime desc
+        limit #{startnum},#{getrows}
     </select>
     <select id="listAllProduct" resultType="dazhimen.bg.bean.product.ListViewProductBean"
             parameterType="dazhimen.bg.bean.PaginationParamBean">

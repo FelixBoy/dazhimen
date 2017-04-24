@@ -12,8 +12,17 @@ public class QueryProductParamBean {
     private String starttimeCondition = null;
     private String endtimeCondition = null;
     private String statusCondition = null;
+    private String uid = null;
     private Integer startnum = null;
     private Integer getrows = null;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public String getPidCondition() {
         return pidCondition;

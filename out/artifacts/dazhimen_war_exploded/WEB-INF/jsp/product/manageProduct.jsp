@@ -1,3 +1,5 @@
+<%@ page import="dazhimen.bg.bean.login.LoginUserBean" %>
+<%@ page import="util.Constant" %>
 <script>
     function fwdViewProductPage(index){
         $('#productList').datagrid('selectRow',index);
@@ -67,11 +69,23 @@
         }
     }
     function forwardAddProductPage(){
+        <%
+             HttpSession sessionObj = request.getSession(false);
+            LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
+            if(userBean.getUtype().equals(Constant.userType_Master)){
+        %>
         $('#content_panel').panel({
-            href:"<%=request.getContextPath() %>/product/fwdAddProductPage?random_id="+Math.random(),
+            href:"<%=request.getContextPath() %>/product/fwdAddProductByMasterPage?random_id="+Math.random(),
             onLoad:function(){
             }
         });
+        <%}else{%>
+            $('#content_panel').panel({
+                href:"<%=request.getContextPath() %>/product/fwdAddProductPage?random_id="+Math.random(),
+                onLoad:function(){
+                }
+            });
+        <%}%>
     }
     function saveProductDel(index){
         $('#productList').datagrid('selectRow',index);

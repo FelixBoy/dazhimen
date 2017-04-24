@@ -2,6 +2,7 @@ package dazhimen.bg.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import dazhimen.bg.bean.login.LoginUserBean;
 import dazhimen.bg.bean.product.*;
 import dazhimen.bg.bean.user.UserBean;
 import dazhimen.bg.exception.BgException;
@@ -21,6 +22,7 @@ import util.web.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -70,6 +72,16 @@ public class ProductController {
     public String forwardAddProductPage(){
         return "/product/addProduct";
     }
+
+    /**
+     * 掌门身份登录时的新增产品页面
+     * @return
+     */
+    @RequestMapping("/fwdAddProductByMasterPage")
+    public String fwdAddProductByMasterPage(){
+        return "/product/addProductByMaster";
+    }
+
     /**
      * 转向上传产品时，选择掌门页面
      * @return
@@ -324,8 +336,14 @@ public class ProductController {
             String rows = resq.getParameter("rows");
             String queryByParamFlag = resq.getParameter("queryByParamFlag");
             String result = null;
+            HttpSession sessionObj = resq.getSession(false);
+            LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
             if(queryByParamFlag == null || queryByParamFlag.equals("")){
-                result = productService.queryAllProducts(page, rows);
+                if(userBean.getUtype().equals(Constant.userType_Master)){
+                    result = productService.queryAllProductsByMaster(page, rows, userBean.getUid());
+                }else{
+                    result = productService.queryAllProducts(page, rows);
+                }
             }else{
                 String pidCondition = resq.getParameter("pidCondition");
                 String pnameCondition = resq.getParameter("pnameCondition");
@@ -340,7 +358,12 @@ public class ProductController {
                 paramBean.setStatusCondition(statusCondition);
                 paramBean.setStarttimeCondition(starttimeCondition);
                 paramBean.setEndtimeCondition(endtimeCondition);
-                result = productService.queryAllProductsByParams(page, rows, paramBean);
+                if(userBean.getUtype().equals(Constant.userType_Master)){
+                    paramBean.setUid(userBean.getUid());
+                    result = productService.queryAllProductsByParamsAndMaster(page, rows, paramBean);
+                }else{
+                    result = productService.queryAllProductsByParams(page, rows, paramBean);
+                }
             }
             ResponseUtil.writeMsg(resp, result);
         }catch (Exception e){
