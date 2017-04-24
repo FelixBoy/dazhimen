@@ -61,24 +61,22 @@
     }
 
     function checkModifyProductFormBeforeSubmit(){
-        if($("#pnameInModify").val().length == 0){
+        if($.trim($("#pnameInModify").val()).length == 0){
             MsgBox.show("请填写产品名称");
-            $("#pnameInModify").focus();
             return false;
         }
-        if($("#priceInModify").val().length == 0){
+        if($.trim($("#priceInModify").val()).length == 0){
             MsgBox.show("请填写产品价格");
-            $("#priceInModify").focus();
             return false;
         }
         var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
-        if(!reg.test($("#priceInModify").val())){
-            MsgBox.show("产品价格[" + $("#priceInModify").val() + "]格式不正确");
+        if(!reg.test($.trim($("#priceInModify").val()))){
+            MsgBox.show("产品价格[" + $.trim($("#priceInModify").val()) + "]格式不正确");
             return false;
         }
-        if($("#derateProportionInModify").val().length > 0){
-            if($("#derateProportionInModify").val() >99 || $("#derateProportionInModify").val() < 0){
-                MsgBox.show("余额支付减免[" +$("#derateProportionInModify").val() + "]超出范围");
+        if($.trim($("#derateProportionInModify").val()).length > 0){
+            if($.trim($("#derateProportionInModify").val()) >99 || $.trim($("#derateProportionInModify").val()) < 0){
+                MsgBox.show("余额支付减免[" + $.trim($("#derateProportionInModify").val()) + "]超出范围");
                 return false;
             }
         }

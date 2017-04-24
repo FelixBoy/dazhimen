@@ -50,24 +50,24 @@
             MsgBox.show("请选择掌门信息");
             return false;
         }
-        if($("#pname").val().length == 0){
+        if($.trim($("#pname").val()).length == 0){
             MsgBox.show("请填写产品名称");
             $("#pname").focus();
             return false;
         }
-        if($("#price").val().length == 0){
+        if($.trim($("#price").val()).length == 0){
             MsgBox.show("请填写产品价格");
             $("#price").focus();
             return false;
         }
         var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
-        if(!reg.test($("#price").val())){
-            MsgBox.show("产品价格[" + $("#price").val() + "]格式不正确");
+        if(!reg.test($.trim($("#price").val()))){
+            MsgBox.show("产品价格[" + $.trim($("#price").val()) + "]格式不正确");
             return false;
         }
-        if($("#derateProportion").val().length > 0){
-            if($("#derateProportion").val() >99 || $("#derateProportion").val() < 0){
-                MsgBox.show("余额支付减免[" +$("#derateProportion").val() + "]超出范围");
+        if($.trim($("#derateProportion").val()).length > 0){
+            if($.trim($("#derateProportion").val()) >99 || $.trim($("#derateProportion").val()) < 0){
+                MsgBox.show("余额支付减免[" + $.trim($("#derateProportion").val()) + "]超出范围");
                 return false;
             }
         }

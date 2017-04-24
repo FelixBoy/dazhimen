@@ -25,7 +25,7 @@
         });
     });
     function checkCourseForm(){
-        if($("#coursenameInAddCourse").val().length == 0){
+        if($.trim($("#coursenameInAddCourse").val()).length == 0){
             MsgBox.show("请填写课程名称");
             return false;
         }

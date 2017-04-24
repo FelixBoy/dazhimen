@@ -575,7 +575,7 @@ public class ProductController {
         courseBean.setPid(pid);
         String courseid = resq.getParameter("courseid");
         courseBean.setCourseid(courseid);
-        String coursename = resq.getParameter("coursename");
+        String coursename = resq.getParameter("coursename").trim();
         courseBean.setCoursename(coursename);
         String sort = resq.getParameter("sort");
         courseBean.setSort(sort);
@@ -595,40 +595,39 @@ public class ProductController {
     }
     private ModifyProductBasicInfoBean getSaveModifyProductionBasicInfoBean(HttpServletRequest resq){
         ModifyProductBasicInfoBean productBean = new ModifyProductBasicInfoBean();
-        String pid = resq.getParameter("pid");
+        String pid = resq.getParameter("pid").trim();
         productBean.setPid(pid);
-        String pname = resq.getParameter("pname");
+        String pname = resq.getParameter("pname").trim();
         productBean.setPname(pname);
-        Double price = Double.parseDouble(resq.getParameter("price"));
+        Double price = Double.parseDouble(resq.getParameter("price").trim());
         productBean.setPrice(price);
-        String derateProportionStr = resq.getParameter("derateProportion");
+        String derateProportionStr = resq.getParameter("derateProportion").trim();
         if(derateProportionStr == null || derateProportionStr.equals("")){
             productBean.setDerateProportion(0);
         }else{
             Integer derateProportion = Integer.parseInt(derateProportionStr);
             productBean.setDerateProportion(derateProportion);
         }
-        String introduction = resq.getParameter("introduction");
+        String introduction = resq.getParameter("introduction").trim();
         productBean.setIntroduction(introduction);
-
         return productBean;
     }
     private UploadProductBean getUploadProductBean(HttpServletRequest resq){
         UploadProductBean productBean = new UploadProductBean();
-        String pname = resq.getParameter("pname");
+        String pname = resq.getParameter("pname").trim();
         productBean.setPname(pname);
         String type = resq.getParameter("type");
         productBean.setType(type);
-        Double price = Double.parseDouble(resq.getParameter("price"));
+        Double price = Double.parseDouble(resq.getParameter("price").trim());
         productBean.setPrice(price);
-        String derateProportionStr = resq.getParameter("derateProportion");
+        String derateProportionStr = resq.getParameter("derateProportion").trim();
         if(derateProportionStr == null || derateProportionStr.equals("")){
             productBean.setDerateProportion(0);
         }else{
             Integer derateProportion = Integer.parseInt(derateProportionStr);
             productBean.setDerateProportion(derateProportion);
         }
-        String introduction = resq.getParameter("introduction");
+        String introduction = resq.getParameter("introduction").trim();
         productBean.setIntroduction(introduction);
         String indexSort = resq.getParameter("indexsort");
         if(indexSort == null || indexSort.equals("")){
