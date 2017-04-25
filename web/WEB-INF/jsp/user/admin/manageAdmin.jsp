@@ -189,7 +189,7 @@
                     <td><input class="easyui-textbox" data-options="prompt:'登录名'" id="loginnameCondition" name="loginnameCondition"/></td>
                 </tr>
                 <tr>
-                    <td>性别:</td>
+                    <td nowrap="nowrap">性别:</td>
                     <td>
                         <select name="genderCondition" id="genderCondition" class="easyui-combobox"
                                 editable="false"  style="width:100%">
@@ -198,10 +198,10 @@
                             <option value="2">女</option>
                         </select>
                     </td>
-                    <td>创建时间:</td>
+                    <td nowrap="nowrap">创建时间:</td>
                     <td><input id="starttimeCondition" name="starttimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'起始时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false"></td>
-                    <td>至</td>
+                    <td nowrap="nowrap">至</td>
                     <td><input id="endtimeCondition" name="endtimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'结束时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false" ></td>
                     <td align="right" colspan="2">

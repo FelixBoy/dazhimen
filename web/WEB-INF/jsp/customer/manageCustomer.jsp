@@ -87,13 +87,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Id:</td>
+                    <td nowrap="nowrap">Id:</td>
                     <td><input class="easyui-textbox"  id="cidCondition" data-options="prompt:'会员Id'" name="cidCondition"/></td>
                     <td nowrap="nowrap">昵称:</td>
                     <td><input class="easyui-textbox" data-options="prompt:'会员昵称'" id="nicknameCondition" name="nicknameCondition"/></td>
-                    <td>姓名:</td>
+                    <td nowrap="nowrap">姓名:</td>
                     <td><input class="easyui-textbox" data-options="prompt:'会员姓名'" id="nameCondition" name="nameCondition"/></td>
-                    <td>是否微信用户:</td>
+                    <td  nowrap="nowrap">是否微信用户:</td>
                     <td>
                         <select name="weixinCondition" id="weixinCondition" class="easyui-combobox"
                                 editable="false"  style="width:100%">
@@ -105,17 +105,17 @@
 
                 </tr>
                 <tr>
-                    <td>首次登录时间:</td>
+                    <td  nowrap="nowrap">首次登录时间:</td>
                     <td><input id="starttimeCondition" name="starttimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'起始时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false"></td>
-                    <td>至</td>
+                    <td  nowrap="nowrap">至</td>
                     <td><input id="endtimeCondition" name="endtimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'结束时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false" ></td>
-                    <td>余额范围:</td>
-                    <td>
+                    <td  nowrap="nowrap">余额范围:</td>
+                    <td  nowrap="nowrap">
                         <input class="easyui-textbox"  id="startBalanceCondition" data-options="prompt:'余额下限'" name="startBalanceCondition"/>
                     </td>
-                    <td>至</td>
+                    <td nowrap="nowrap">至</td>
                     <td>
                         <input class="easyui-textbox"  id="endBalanceCondition" data-options="prompt:'余额上限'" name="endBalanceCondition"/>
                     </td>

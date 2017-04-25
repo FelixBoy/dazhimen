@@ -85,13 +85,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>会员Id:</td>
+                    <td nowrap="nowrap">会员Id:</td>
                     <td><input class="easyui-textbox"  id="cidCondition" data-options="prompt:'会员Id'" name="cidCondition"/></td>
                     <td nowrap="nowrap">会员姓名:</td>
                     <td><input class="easyui-textbox" data-options="prompt:'会员姓名'" id="nameCondition" name="nameCondition"/></td>
                     <td nowrap="nowrap">会员昵称:</td>
                     <td><input class="easyui-textbox" data-options="prompt:'会员昵称'" id="nicknameCondition" name="nicknameCondition"/></td>
-                    <td>支付类型:</td>
+                    <td nowrap="nowrap">支付类型:</td>
                     <td>
                         <select name="paymenttypeCondition" id="paymenttypeCondition" class="easyui-combobox"
                                 editable="false"  style="width:100%">
@@ -103,17 +103,17 @@
 
                 </tr>
                 <tr>
-                    <td>充值时间:</td>
+                    <td nowrap="nowrap">充值时间:</td>
                     <td><input id="starttimeCondition" name="starttimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'起始时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false"></td>
-                    <td>至</td>
+                    <td nowrap="nowrap">至</td>
                     <td><input id="endtimeCondition" name="endtimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'结束时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false" ></td>
-                    <td>充值金额:</td>
+                    <td nowrap="nowrap">充值金额:</td>
                     <td>
                         <input class="easyui-textbox"  id="startAmountCondition" data-options="prompt:'金额下限'" name="startAmountCondition"/>
                     </td>
-                    <td>至</td>
+                    <td nowrap="nowrap">至</td>
                     <td>
                         <input class="easyui-textbox"  id="endAmountCondition" data-options="prompt:'金额上限'" name="endAmountCondition"/>
                     </td>

@@ -87,11 +87,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>会员Id:</td>
+                    <td nowrap="nowrap">会员Id:</td>
                     <td><input class="easyui-textbox"  id="cidCondition" data-options="prompt:'会员Id'" name="cidCondition"/></td>
                     <td nowrap="nowrap">手机号码:</td>
                     <td><input class="easyui-textbox" data-options="prompt:'会员手机号码'" id="mphoneCondition" name="mphoneCondition"/></td>
-                    <td>支付类型:</td>
+                    <td nowrap="nowrap">支付类型:</td>
                     <td>
                         <select name="paymenttypeCondition" id="paymenttypeCondition" class="easyui-combobox"
                                 editable="false"  style="width:100%">
@@ -101,7 +101,7 @@
                             <option value="3">支付宝支付</option>
                         </select>
                     </td>
-                    <td>产品类型:</td>
+                    <td nowrap="nowrap">产品类型:</td>
                     <td>
                         <select name="producttypeCondition" id="producttypeCondition" class="easyui-combobox"
                                 editable="false"  style="width:100%">
@@ -112,17 +112,17 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>下单时间:</td>
+                    <td nowrap="nowrap">下单时间:</td>
                     <td><input id="starttimeCondition" name="starttimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'起始时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false"></td>
-                    <td>至</td>
+                    <td nowrap="nowrap">至</td>
                     <td><input id="endtimeCondition" name="endtimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'结束时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false" ></td>
-                    <td>订单金额:</td>
+                    <td nowrap="nowrap">订单金额:</td>
                     <td>
                         <input class="easyui-textbox"  id="startAmountCondition" data-options="prompt:'金额下限'" name="startAmountCondition"/>
                     </td>
-                    <td>至</td>
+                    <td nowrap="nowrap">至</td>
                     <td>
                         <input class="easyui-textbox"  id="endAmountCondition" data-options="prompt:'金额上限'" name="endAmountCondition"/>
                     </td>

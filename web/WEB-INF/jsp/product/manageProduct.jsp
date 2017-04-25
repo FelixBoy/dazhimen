@@ -214,11 +214,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Id:</td>
+                    <td nowrap="nowrap">Id:</td>
                     <td><input class="easyui-textbox"  id="pidCondition" data-options="prompt:'产品Id'" name="pidCondition"/></td>
-                    <td>名称:</td>
+                    <td nowrap="nowrap">名称:</td>
                     <td><input class="easyui-textbox" data-options="prompt:'产品名称'" id="pnameCondition" name="pnameCondition"/></td>
-                    <td>类型:</td>
+                    <td nowrap="nowrap">类型:</td>
                     <td>
                         <select name="typeCondition" id="typeCondition" class="easyui-combobox"
                                 editable="false"  style="width:100%">
@@ -227,7 +227,7 @@
                             <option value="2">经验包</option>
                         </select>
                     </td>
-                    <td>状态:</td>
+                    <td nowrap="nowrap">状态:</td>
                     <td>
                         <select name="statusCondition" id="statusCondition" class="easyui-combobox"
                                 editable="false" style="width:100%">
@@ -239,10 +239,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>上传时间:</td>
+                    <td nowrap="nowrap">上传时间:</td>
                     <td><input id="starttimeCondition" name="starttimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'起始时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false"></td>
-                    <td>至</td>
+                    <td nowrap="nowrap">至</td>
                     <td><input id="endtimeCondition" name="endtimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'结束时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false" ></td>
                     <td align="right" colspan="4">

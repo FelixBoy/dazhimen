@@ -172,19 +172,19 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Id:</td>
+                    <td nowrap="nowrap">Id:</td>
                     <td><input class="easyui-textbox"  id="nidCondition" data-options="prompt:'新闻Id'" name="nidCondition"/></td>
-                    <td>标题:</td>
+                    <td nowrap="nowrap">标题:</td>
                     <td><input class="easyui-textbox" data-options="prompt:'新闻标题'" id="ntitleCondition" name="ntitleCondition"/></td>
-                    <td>上传时间:</td>
+                    <td nowrap="nowrap">上传时间:</td>
                     <td><input id="starttimeCondition" name="starttimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'起始时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false"></td>
-                    <td>至</td>
+                    <td nowrap="nowrap">至</td>
                     <td><input id="endtimeCondition" name="endtimeCondition" class="easyui-datetimebox" style="width:100%" value=""
                                data-options="prompt:'结束时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false" ></td>
                 </tr>
                 <tr>
-                    <td>状态:</td>
+                    <td nowrap="nowrap">状态:</td>
                     <td>
                         <select name="statusCondition" id="statusCondition" class="easyui-combobox"
                                 editable="false" style="width:100%">
