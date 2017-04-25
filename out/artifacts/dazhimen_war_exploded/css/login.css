@@ -28,6 +28,15 @@ body{
 	height: 360px;
 	background: url(../image/login/logon_form.png) no-repeat center center;
 }
+.dw-logon-logo {
+	position: absolute;
+	border: none;
+	top: 95px;
+	left: 160px;
+	width: 326px;
+	height: 360px;
+	background: url(../image/dazhimen_logo.jpg) no-repeat center center;
+}
 
 .dw-logon-form-loginname {
 	position: absolute;

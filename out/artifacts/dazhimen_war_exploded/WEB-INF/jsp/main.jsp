@@ -150,15 +150,17 @@
     </script>
 </head>
 <body class="easyui-layout">
-<div data-options="region:'north',border:false" style="height:60px;background:#B3DFDA;padding:10px;text-align: center">
-    <div style="font-size: 30px;float:left;">大职门后台管理系统</div>
-    <div style="height:40px;font-size: 16px;line-height:20px;float: right;">
+<div data-options="region:'north',border:false" style="height:60px;background:#E4EEFF;padding:5px;text-align: center">
+    <div style="font-size: 30px;float:left;"><img src="<%=request.getContextPath()%>/image/dazhimen_logo_mini.jpg" width="60px" height="40px"/>
+        大职门后台管理系统
+    </div>
+    <div style="height:40px;font-size: 16px;line-height:20px;float: right;margin-right: 10px;">
         <%=userBean.getUname()%>|<%=userBean.getUtypeStr()%><br/>
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit'" onclick="modifyPassword()" >修改密码</a>
         <a href="<%=request.getContextPath()%>/login/exitLogin" class="easyui-linkbutton" data-options="iconCls:'icon-redo'" >退出</a>
     </div>
 </div>
-<div data-options="region:'west',split:false,title:'导航菜单'" style="width:240px;padding:10px;">
+<div data-options="region:'west',split:false,title:'导航菜单',collapsible:false" style="width:240px;padding:10px;">
     <div style="margin:20px 0;"></div>
     <div id="modifyPasswordDialog"></div>
     <%if(userBean.getUserPermissionMap().size() > 0 || userBean.getLoginname().equals(Constant.defaultAdministrator)){%>

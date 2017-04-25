@@ -123,7 +123,7 @@ public class Constant {
     public static final String paymentType_WXPay = "2";
     public static final String paymentType_AliPay = "3";
 
-    public static final String FrontEndVersion = "v1.6";
+    public static final String FrontEndVersion = "v1.8";
     //用户类型
     public static final String userType_Master = "1";
     public static final String userType_Admin = "2";

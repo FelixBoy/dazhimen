@@ -62,6 +62,7 @@
 <body>
 <%-- 背景图片 --%>
 <img class="dw-logon-bg" src="image/login/login_bg_3.jpg">
+<div class="dw-logon-logo"></div>
 <div class="dw-logon-form">
   <form id="loginform" action="<%=request.getContextPath()%>/login/doLoginCheck?random_id="+Math.random() method="post">
     <input type="text" id="userNameInput" class="dw-logon-form-loginname"/>
