@@ -89,7 +89,7 @@
         return arr_new;
     }
     function checkModifyCourseForm(){
-        if($("#coursenameInModifyCourse").val().length == 0){
+        if($.trim($("#coursenameInModifyCourse").val()).length == 0){
             MsgBox.show("请填写课程名称");
             return false;
         }

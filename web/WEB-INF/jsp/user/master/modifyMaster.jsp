@@ -73,7 +73,7 @@
             MsgBox.show("登录名格式不正确，只能为字母或数字组合");
             return false;
         }
-        if($("#nameInModifyMaster").val().length == 0){
+        if($.trim($("#nameInModifyMaster").val()).length == 0){
             MsgBox.show("请输入姓名");
             return false;
         }
@@ -86,7 +86,7 @@
             MsgBox.show("手机号码格式有误");
             return false;
         }
-        if($("#identityInModifyMaseter").val().length == 0){
+        if($.trim($("#identityInModifyMaseter").val()).length == 0){
             MsgBox.show("请输入掌门身份");
             return false;
         }

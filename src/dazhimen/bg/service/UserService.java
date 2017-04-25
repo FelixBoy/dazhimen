@@ -406,6 +406,11 @@ public class UserService {
         return result == 1;
     }
     public boolean saveAddAdmin(UserBean userBean) throws BgException {
+        userBean.setMphone(userBean.getMphone().trim());
+        userBean.setPassword(userBean.getPassword().trim());
+        userBean.setLoginname(userBean.getLoginname().trim());
+        userBean.setName(userBean.getName().trim());
+        userBean.setIdentity(userBean.getIdentity().trim());
         int result = 0;
         SqlSession sqlSession = null;
         try{
@@ -442,6 +447,9 @@ public class UserService {
     }
 
     public boolean saveModifyAdmin(UserBean user) throws BgException {
+        user.setMphone(user.getMphone().trim());
+        user.setLoginname(user.getLoginname().trim());
+        user.setName(user.getName().trim());
         SqlSession sqlSession = null;
         int result = 0;
         try{

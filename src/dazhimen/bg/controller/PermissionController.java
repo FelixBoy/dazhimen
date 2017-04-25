@@ -222,7 +222,7 @@ public class PermissionController {
     }
     private AddRoleBean getAddRoleBean(HttpServletRequest resq){
         AddRoleBean addRoleBean = new AddRoleBean();
-        addRoleBean.setName(resq.getParameter("name"));
+        addRoleBean.setName(resq.getParameter("name").trim());
         String isMasterCanOwn = resq.getParameter("ismastercanown");
         if(isMasterCanOwn == null || isMasterCanOwn.equals("")){
             addRoleBean.setIsmastercanown("0");
@@ -247,7 +247,7 @@ public class PermissionController {
     private ModifyRoleBean getModifyRoleBean(HttpServletRequest resq){
         ModifyRoleBean modifyRoleBean = new ModifyRoleBean();
         modifyRoleBean.setRid(resq.getParameter("rid"));
-        modifyRoleBean.setName(resq.getParameter("name"));
+        modifyRoleBean.setName(resq.getParameter("name").trim());
         String introduction = resq.getParameter("introduction");
         modifyRoleBean.setIntroduction(introduction);
         ArrayList<String> permissionList = new ArrayList<String>();

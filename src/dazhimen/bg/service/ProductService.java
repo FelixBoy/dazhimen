@@ -129,6 +129,33 @@ public class ProductService {
         }
         return user;
     }
+
+    public String queryAllMastersByParams(String page, String rows, QueryMasterParamBean paramBean) throws BgException {
+        List<UserBean> userBeans = null;
+        SqlSession sqlSession = null;
+        Integer totalCount = null;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            SingleValueBean allSelectMasterCountValue = sqlSession.selectOne("dazhimen.bg.bean.Product.getAllMastersCountByParams", paramBean);
+            if(allSelectMasterCountValue == null || allSelectMasterCountValue.getValueInfo() == null){
+                throw new BgException("获取选择掌门数据总条数出错");
+            }
+            totalCount = Integer.parseInt(allSelectMasterCountValue.getValueInfo());
+            PaginationParamBean paginationParamBean = PaginationUtil.getPaginationParamBean(page,rows);
+            paramBean.setGetrows(paginationParamBean.getGetrows());
+            paramBean.setStartnum(paginationParamBean.getStartnum());
+            userBeans = sqlSession.selectList("dazhimen.bg.bean.Product.listAllMastersByParams", paramBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BgException("出现异常，查询所有掌门信息失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("total", totalCount);
+        jsonObject.put("rows", userBeans);
+        return jsonObject.toString();
+    }
     /**
      * 查询所有掌门的信息
      * @return 包含所有掌门信息的 list

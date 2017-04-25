@@ -243,12 +243,32 @@
         select count(uid) as valueinfo
         from user where type = '1' and isdel = '0'
     </select>
-
+    <select id="getAllMastersCountByParams" resultType="dazhimen.bg.bean.SingleValueBean"
+            parameterType="dazhimen.bg.bean.PaginationParamBean">
+        select count(uid) as valueinfo
+        from user where type = '1' and isdel = '0'
+        <if test="searchCondition != null and searchCondition != ''">
+            and (name like concat('%', #{searchCondition}, '%')
+                 or mphone like concat('%', #{searchCondition}, '%')
+                 or loginname like concat('%', #{searchCondition}, '%'))
+        </if>
+    </select>
     <select id="listAllMasters" resultType="dazhimen.bg.bean.user.UserBean"
             parameterType="dazhimen.bg.bean.PaginationParamBean">
         select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,introduction
           from user where type = '1' and isdel = '0'
            limit #{startnum},#{getrows}
+    </select>
+    <select id="listAllMastersByParams" resultType="dazhimen.bg.bean.user.UserBean"
+            parameterType="dazhimen.bg.bean.product.QueryMasterParamBean">
+        select uid,name,mphone,getcodetxt('gender',gender) gender,loginname,introduction
+        from user where type = '1' and isdel = '0'
+        <if test="searchCondition != null and searchCondition != ''">
+            and (name like concat('%', #{searchCondition}, '%')
+            or mphone like concat('%', #{searchCondition}, '%')
+            or loginname like concat('%', #{searchCondition}, '%'))
+        </if>
+        limit #{startnum},#{getrows}
     </select>
 
     <delete id="saveCourseDel">

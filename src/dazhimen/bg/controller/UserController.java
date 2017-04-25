@@ -493,11 +493,11 @@ public class UserController {
     }
     private UserBean getAddMasterBean(HttpServletRequest resq){
         UserBean user = new UserBean();
-        user.setLoginname(resq.getParameter("loginname"));
-        user.setPassword(resq.getParameter("password"));
-        user.setName(resq.getParameter("name"));
-        user.setMphone(resq.getParameter("mphone"));
-        user.setIdentity(resq.getParameter("identity"));
+        user.setLoginname(resq.getParameter("loginname").trim());
+        user.setPassword(resq.getParameter("password").trim());
+        user.setName(resq.getParameter("name").trim());
+        user.setMphone(resq.getParameter("mphone").trim());
+        user.setIdentity(resq.getParameter("identity").trim());
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
         CommonsMultipartFile headerimgFile = (CommonsMultipartFile) multipartRequest.getFile("headerimg");
@@ -513,11 +513,11 @@ public class UserController {
     private UserBean getModifyMasterBean(HttpServletRequest resq){
         UserBean user = new UserBean();
         user.setUid(resq.getParameter("uid"));
-        user.setLoginname(resq.getParameter("loginname"));
+        user.setLoginname(resq.getParameter("loginname").trim());
         user.setLoginnameorginal(resq.getParameter("loginnameorginal"));
-        user.setName(resq.getParameter("name"));
-        user.setMphone(resq.getParameter("mphone"));
-        user.setIdentity(resq.getParameter("identity"));
+        user.setName(resq.getParameter("name").trim());
+        user.setMphone(resq.getParameter("mphone").trim());
+        user.setIdentity(resq.getParameter("identity").trim());
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
         CommonsMultipartFile headerimgFile = (CommonsMultipartFile) multipartRequest.getFile("headerimgInModify");

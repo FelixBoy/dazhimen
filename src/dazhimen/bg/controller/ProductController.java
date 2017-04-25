@@ -102,7 +102,17 @@ public class ProductController {
             ProductService productService = new ProductService();
             String page = resq.getParameter("page");
             String rows = resq.getParameter("rows");
-            String result = productService.queryAllMasters(page, rows);
+            String result = null;
+            String queryByParamFlag = resq.getParameter("queryByParamFlag");
+            if(queryByParamFlag == null || queryByParamFlag.equals("")){
+                result = productService.queryAllMasters(page, rows);
+            }else{
+                QueryMasterParamBean paramBean = new QueryMasterParamBean();
+                String searchCondition = resq.getParameter("searchCondition");
+                paramBean.setSearchCondition(searchCondition);
+                result = productService.queryAllMastersByParams(page, rows, paramBean);
+            }
+
             ResponseUtil.writeMsg(resp, result);
         } catch (Exception e) {
             e.printStackTrace();
@@ -627,7 +637,7 @@ public class ProductController {
             Integer derateProportion = Integer.parseInt(derateProportionStr);
             productBean.setDerateProportion(derateProportion);
         }
-        String introduction = resq.getParameter("introduction").trim();
+        String introduction = resq.getParameter("introduction");
         productBean.setIntroduction(introduction);
         String indexSort = resq.getParameter("indexsort");
         if(indexSort == null || indexSort.equals("")){
