@@ -1,6 +1,7 @@
 package dazhimen.api.service;
 
 import dazhimen.api.bean.*;
+import dazhimen.api.bean.order.ApiProductPriceBean;
 import dazhimen.api.bean.product.*;
 import dazhimen.api.exception.ApiException;
 import dazhimen.api.exception.ParameterCheckException;
@@ -221,7 +222,14 @@ public class ApiProductService {
                 productBean.setIscollection(getProductIsCollection(cid, pid));
                 productBean.setIsbuy(getProductIsBuy(cid, pid));
             }
-
+            ApiProductPriceBean productPriceBean = sqlSession.selectOne("dazhimen.api.bean.ApiOrder.getProductPriceByPid", pid);
+            if(productPriceBean == null || productPriceBean.getPrice() == null || productPriceBean.getDerateProportion() == null){
+                throw new ApiException("出现异常，获取产品价格信息异常");
+            }
+            Double productPrice = productPriceBean.getPrice();
+            Integer derateProportion = productPriceBean.getDerateProportion();
+            Double realPayPrice = productPrice * ((100.0 - derateProportion)/100.0);
+            productBean.setDiscountprice(realPayPrice);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ApiException("查询指定产品信息出错");

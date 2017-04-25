@@ -29,6 +29,10 @@
             MsgBox.show("请填写课程名称");
             return false;
         }
+        if(StringUtil.getBinaryLength($.trim($("#coursenameInAddCourse").val())) > 100){
+            MsgBox.show("课程名称过长，无法保存");
+            return false;
+        }
         if(!$("#audioInAddCourse").filebox("getValue")){
             MsgBox.show("请选择课程音频");
             return false;

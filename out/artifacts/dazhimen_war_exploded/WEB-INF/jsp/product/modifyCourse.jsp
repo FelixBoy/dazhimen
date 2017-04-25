@@ -93,6 +93,10 @@
             MsgBox.show("请填写课程名称");
             return false;
         }
+        if(StringUtil.getBinaryLength($.trim($("#coursenameInModifyCourse").val())) > 100){
+            MsgBox.show("课程名称过长，无法保存");
+            return false;
+        }
         if($("#audioInModifyCourse").filebox("getValue")){
             var audioFileName = $("#audioInModifyCourse").filebox("getValue");
             var audioSuffixName = audioFileName.substring(audioFileName.lastIndexOf("."));

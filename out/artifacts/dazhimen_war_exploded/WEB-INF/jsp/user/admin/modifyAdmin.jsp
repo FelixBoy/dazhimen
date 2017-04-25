@@ -27,6 +27,10 @@
             MsgBox.show("请输入登录名");
             return false;
         }
+        if(StringUtil.getBinaryLength($.trim($("#loginnameInModifyAdmin").val())) > 100){
+            MsgBox.show("登录名过长，无法保存");
+            return false;
+        }
         var reg_loginname = /^[0-9a-zA-Z]*$/g;
         if(!reg_loginname.test($.trim($("#loginnameInModifyAdmin").val()))){
             MsgBox.show("登录名格式不正确，只能为字母或数字组合");
@@ -34,6 +38,10 @@
         }
         if($.trim($("#nameInModifyAdmin").val()).length == 0){
             MsgBox.show("请输入姓名");
+            return false;
+        }
+        if(StringUtil.getBinaryLength($.trim($("#nameInModifyAdmin").val())) > 100){
+            MsgBox.show("姓名过长，无法保存");
             return false;
         }
         if($.trim($("#mphoneInModifyAdmin").val()).length == 0){

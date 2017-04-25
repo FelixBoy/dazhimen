@@ -28,6 +28,50 @@ import java.util.*;
 @Controller
 @RequestMapping("/api/news")
 public class ApiNewsController {
+    @RequestMapping(value = "/getCombineNewsContentById", method = RequestMethod.POST)
+    public void getCombineNewsContentById(HttpServletRequest resq, HttpServletResponse resp){
+        try {
+            ApiUtils.checkSignature(resq);
+            checkGetNewsContentByIdPara(resq);
+            ApiNewsService newsService = new ApiNewsService();
+            String newsURL = newsService.getNewsURLById(resq.getParameter("nid"));
+            String localIp = resq.getLocalAddr();//获取本地ip
+            if(Constant.isDeployInAliyun){
+                localIp = Constant.AliyunIP;
+            }
+            int localPort = resq.getLocalPort();//获取本地的端口
+            String appName = resq.getContextPath();
+            newsURL = "http://" + localIp + ":" + localPort + appName + "/" + newsURL;
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", "200");
+            jsonObject.put("msg", "获取成功");
+            String iscollection = newsService.getNewsIsCollection(resq.getParameter("nid"), resq.getParameter("cid"));
+            jsonObject.put("iscollection", iscollection);
+            jsonObject.put("contenturl", newsURL);
+
+            List<ApiNewsContentBean> contentBeans = newsService.getNewsContentById(resq.getParameter("nid"));
+            ApiHomePageNewsBean newsBean = newsService.getNewsInforById(resq.getParameter("nid"));
+            JSONObject dataObject = new JSONObject();
+            dataObject.put("nid", newsBean.getNid());
+            dataObject.put("title", newsBean.getTitle());
+            if(contentBeans == null || contentBeans.size()==0){
+                dataObject.put("contentlist", new Gson().toJson(null));
+            }else{
+                contentBeans = dealNewsContentBean(resq,contentBeans);
+                dataObject.put("contentlist", new Gson().toJson(contentBeans));
+            }
+            jsonObject.put("data", dataObject.toString());
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+        } catch (ApiException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+        }
+
+    }
     @RequestMapping(value = "/getNewsURLById", method = RequestMethod.POST)
     public void getNewsURLById(HttpServletRequest resq, HttpServletResponse resp){
         try {

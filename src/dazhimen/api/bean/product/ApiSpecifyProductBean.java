@@ -10,6 +10,7 @@ public class ApiSpecifyProductBean {
     private String mainimgurl = "";
     private String pname = "";
     private Double price = null;
+    private Double discountprice = null;
     private String buycount = "";
     private String istry = "";
     private String iscollection = "";
@@ -37,6 +38,14 @@ public class ApiSpecifyProductBean {
                 ", iscollection='" + iscollection + '\'' +
                 ", isbuy='" + isbuy + '\'' +
                 '}';
+    }
+
+    public Double getDiscountprice() {
+        return discountprice;
+    }
+
+    public void setDiscountprice(Double discountprice) {
+        this.discountprice = discountprice;
     }
 
     public String getIsbuy() {

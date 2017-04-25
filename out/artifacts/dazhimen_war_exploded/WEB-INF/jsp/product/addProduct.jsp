@@ -66,7 +66,10 @@
         }
         if($.trim($("#pname").val()).length == 0){
             MsgBox.show("请填写产品名称");
-            $("#pname").focus();
+            return false;
+        }
+        if(StringUtil.getBinaryLength($.trim($("#pname").val())) > 100){
+            MsgBox.show("产品名称过长，无法保存");
             return false;
         }
         if($.trim($("#price").val()).length == 0){
