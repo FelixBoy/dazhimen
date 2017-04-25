@@ -10,6 +10,10 @@
             MsgBox.show("请填写角色名称");
             return false;
         }
+        if(StringUtil.getBinaryLength($.trim($("#roleNameInAddRole").val())) > 100){
+            MsgBox.show("角色名称过长，无法保存");
+            return false;
+        }
         return true;
     }
     function submitAddRoleForm(){

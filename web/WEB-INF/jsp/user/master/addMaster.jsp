@@ -63,6 +63,10 @@
             MsgBox.show("请输入登录名");
             return false;
         }
+        if(StringUtil.getBinaryLength($.trim($("#loginnameInAdd").val())) > 100){
+            MsgBox.show("登录名过长，无法保存");
+            return false;
+        }
         var reg_loginname = /^[0-9a-zA-Z]*$/g;
         if(!reg_loginname.test($.trim($("#loginnameInAdd").val()))){
             MsgBox.show("登录名格式不正确，只能为字母或数字组合");
@@ -70,6 +74,10 @@
         }
         if($.trim($("#password").val()).length == 0){
             MsgBox.show("请输入密码");
+            return false;
+        }
+        if(StringUtil.getBinaryLength($.trim($("#password").val())) > 30){
+            MsgBox.show("密码过长，无法保存");
             return false;
         }
         var reg_password = /^[0-9a-zA-Z]*$/g;
@@ -80,6 +88,10 @@
         if($.trim($("#nameInAddMaster").val()).length == 0){
             MsgBox.show("请输入姓名");
             return fasle;
+        }
+        if(StringUtil.getBinaryLength($.trim($("#nameInAddMaster").val())) > 100){
+            MsgBox.show("姓名过长，无法保存");
+            return false;
         }
         if($.trim($("#mphoneInAddMaseter").val()).length == 0){
             MsgBox.show("请输入手机号码");

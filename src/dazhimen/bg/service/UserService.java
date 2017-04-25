@@ -410,7 +410,6 @@ public class UserService {
         userBean.setPassword(userBean.getPassword().trim());
         userBean.setLoginname(userBean.getLoginname().trim());
         userBean.setName(userBean.getName().trim());
-        userBean.setIdentity(userBean.getIdentity().trim());
         int result = 0;
         SqlSession sqlSession = null;
         try{

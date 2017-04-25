@@ -56,6 +56,10 @@
             MsgBox.show("请填写新闻标题");
             return false;
         }
+        if(StringUtil.getBinaryLength($("#newstitle").val()) > 150){
+            MsgBox.show("新闻标题过长，无法保存");
+            return false;
+        }
         if(!$("#newslistimg").filebox("getValue")){
             MsgBox.show("请选择列表图片");
             return false;
@@ -122,8 +126,6 @@
     }
     function submitAddNewsForm(){
         var result = checkAddNewsFormBeforeSubmit();
-        alert(result);
-        return;
         dealAddNewsFormBeforeSubmit();
         dealSortValue();
         $("#addNewsForm").submit();

@@ -30,6 +30,10 @@
             MsgBox.show("新闻标题不能为空");
             return false;
         }
+        if(StringUtil.getBinaryLength($("#newstitleInModifyTitle").val()) > 150){
+            MsgBox.show("新闻标题过长，无法保存");
+            return false;
+        }
         return true;
     }
     function openModifyNewsListImgDialog(){
