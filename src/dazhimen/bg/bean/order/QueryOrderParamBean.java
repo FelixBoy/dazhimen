@@ -4,7 +4,7 @@ package dazhimen.bg.bean.order;
  * Created by Administrator on 2017/4/16.
  */
 public class QueryOrderParamBean {
-    private String cidCondition = null;
+    private String cnameCondition = null;
     private String mphoneCondition = null;
     private String producttypeCondition = null;
     private String paymenttypeCondition = null;
@@ -15,12 +15,12 @@ public class QueryOrderParamBean {
     private Integer startnum = null;
     private Integer getrows = null;
 
-    public String getCidCondition() {
-        return cidCondition;
+    public String getCnameCondition() {
+        return cnameCondition;
     }
 
-    public void setCidCondition(String cidCondition) {
-        this.cidCondition = cidCondition;
+    public void setCnameCondition(String cnameCondition) {
+        this.cnameCondition = cnameCondition;
     }
 
     public String getMphoneCondition() {

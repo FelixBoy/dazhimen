@@ -1,3 +1,5 @@
+<%@ page import="dazhimen.bg.bean.login.LoginUserBean" %>
+<%@ page import="util.Constant" %>
 <script type="text/javascript">
     $(function(){
         $('#viewProductForm').form({onLoadSuccess:function(){
@@ -85,11 +87,17 @@
             <tr>
                 <td class="form-label-cell">余额支付减免:</td>
                 <td><input class="dzm-noBorder-text" readonly  id="derateProportion" name="derateProportion"/></td>
+                <%
+                    HttpSession sessionObj = request.getSession(false);
+                    LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
+                    if(userBean.getUtype().equals(Constant.userType_Admin)){
+                %>
                 <td nowrap="nowrap">首页轮播:</td>
-                <td><input class="dzm-noBorder-text" readonly style="font-size: large" id="indexplay" name="indexPlay"/></td>
+                <td><input class="dzm-noBorder-text" readonly id="indexplay" name="indexPlay"/></td>
                 <td nowrap="nowrap">首页排序:</td>
                 <td><input class="dzm-noBorder-text" readonly id="indexsort" name="indexSort"/></td>
                 <td colspan="2"></td>
+                <%}%>
             </tr>
             <tr>
                 <td nowrap="nowrap">列表图片:</td>

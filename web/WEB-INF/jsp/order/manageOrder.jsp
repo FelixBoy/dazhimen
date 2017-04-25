@@ -31,23 +31,23 @@
         });
     });
     function SearchOrderByParams() {
-        var cidCondition = $("#cidCondition").val();
-        var mphoneCondition = $("#mphoneCondition").val();
+        var cnameCondition = $("#cnameCondition").val();
+//        var mphoneCondition = $("#mphoneCondition").val();
         var producttypeCondition = $("#producttypeCondition").val();
         var paymenttypeCondition = $("#paymenttypeCondition").val();
         var startAmountCondition = $("#startAmountCondition").val();
         var endAmountCondition = $("#endAmountCondition").val();
         var starttimeCondition = $('#starttimeCondition').datetimebox('getValue');
         var endtimeCondition = $('#endtimeCondition').datetimebox('getValue');
-        if(!cidCondition && !mphoneCondition && producttypeCondition == '0' && paymenttypeCondition == '0'
+        if(!cnameCondition && producttypeCondition == '0' && paymenttypeCondition == '0'
             && !starttimeCondition && !endtimeCondition && !startAmountCondition && !endAmountCondition){
             clearOrderSearchParams();
             return;
         }
 
         var queryParameter = $('#orderList').datagrid("options").queryParams;
-        queryParameter.cidCondition = cidCondition;
-        queryParameter.mphoneCondition = mphoneCondition;
+        queryParameter.cnameCondition = cnameCondition;
+//        queryParameter.mphoneCondition = mphoneCondition;
         queryParameter.producttypeCondition = producttypeCondition;
         queryParameter.paymenttypeCondition = paymenttypeCondition;
         queryParameter.starttimeCondition = starttimeCondition;
@@ -59,8 +59,8 @@
     }
     function clearOrderSearchParams(){
         var queryParameter = $('#orderList').datagrid("options").queryParams;
-        queryParameter.cidCondition = null;
-        queryParameter.mphoneCondition = null;
+        queryParameter.cnameCondition = null;
+//        queryParameter.mphoneCondition = null;
         queryParameter.producttypeCondition = null;
         queryParameter.paymenttypeCondition = null;
         queryParameter.starttimeCondition = null;
@@ -87,10 +87,25 @@
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">会员Id:</td>
-                    <td><input class="easyui-textbox"  id="cidCondition" data-options="prompt:'会员Id'" name="cidCondition"/></td>
-                    <td nowrap="nowrap">手机号码:</td>
-                    <td><input class="easyui-textbox" data-options="prompt:'会员手机号码'" id="mphoneCondition" name="mphoneCondition"/></td>
+
+                    <td nowrap="nowrap">下单时间:</td>
+                    <td><input id="starttimeCondition" name="starttimeCondition" class="easyui-datetimebox" style="width:100%" value=""
+                               data-options="prompt:'起始时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false"></td>
+                    <td nowrap="nowrap">至</td>
+                    <td><input id="endtimeCondition" name="endtimeCondition" class="easyui-datetimebox" style="width:100%" value=""
+                               data-options="prompt:'结束时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false" ></td>
+                    <td nowrap="nowrap">订单金额:</td>
+                    <td>
+                        <input class="easyui-textbox"  id="startAmountCondition" data-options="prompt:'金额下限'" name="startAmountCondition"/>
+                    </td>
+                    <td nowrap="nowrap">至</td>
+                    <td>
+                        <input class="easyui-textbox"  id="endAmountCondition" data-options="prompt:'金额上限'" name="endAmountCondition"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">会员姓名:</td>
+                    <td><input class="easyui-textbox"  id="cnameCondition" data-options="prompt:'会员姓名'" name="cnameCondition"/></td>
                     <td nowrap="nowrap">支付类型:</td>
                     <td>
                         <select name="paymenttypeCondition" id="paymenttypeCondition" class="easyui-combobox"
@@ -110,25 +125,7 @@
                             <option value="2">经验包</option>
                         </select>
                     </td>
-                </tr>
-                <tr>
-                    <td nowrap="nowrap">下单时间:</td>
-                    <td><input id="starttimeCondition" name="starttimeCondition" class="easyui-datetimebox" style="width:100%" value=""
-                               data-options="prompt:'起始时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false"></td>
-                    <td nowrap="nowrap">至</td>
-                    <td><input id="endtimeCondition" name="endtimeCondition" class="easyui-datetimebox" style="width:100%" value=""
-                               data-options="prompt:'结束时间',currentText:'当前时间',closeText:'关闭',okText:'确定'" editable="false" ></td>
-                    <td nowrap="nowrap">订单金额:</td>
-                    <td>
-                        <input class="easyui-textbox"  id="startAmountCondition" data-options="prompt:'金额下限'" name="startAmountCondition"/>
-                    </td>
-                    <td nowrap="nowrap">至</td>
-                    <td>
-                        <input class="easyui-textbox"  id="endAmountCondition" data-options="prompt:'金额上限'" name="endAmountCondition"/>
-                    </td>
-                </tr>
-                <tr align="right">
-                    <td colspan="8">
+                    <td align="right" colspan="2">
                         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="SearchOrderByParams()">检索</a>
                         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="clearOrderSearchParams()">清空条件</a>
                     </td>

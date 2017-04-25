@@ -36,6 +36,7 @@
         }, 100);
     }
     function actionAfterSubmit(jsonObj){
+        LoadingMaskLayer.hide();
         var resultObj = JSON.parse(jsonObj);
         if(!resultObj){
             return;
@@ -89,6 +90,7 @@
         }
         dealModifyNewsMainimgFormBeforeSubmit();
         $("#modifyNewsMainimgForm").submit();
+        LoadingMaskLayer.show();
     }
 </script>
 <div  style="width: 380px;margin: 0 auto;">

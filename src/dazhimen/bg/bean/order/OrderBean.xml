@@ -36,8 +36,8 @@
         and a.cid = c.cid
         and b.pid = d.pid
         and a.isdel = '0'
-        <if test="cidCondition != null and cidCondition != ''">
-            and  c.cid like concat('%', #{cidCondition}, '%')
+        <if test="cnameCondition != null and cnameCondition != ''">
+            and  c.name like concat('%', #{cnameCondition}, '%')
         </if>
         <if test="mphoneCondition != null and mphoneCondition != ''">
             and  b.mphone like concat('%', #{mphoneCondition}, '%')
@@ -74,8 +74,8 @@
         and a.cid = c.cid
         and b.pid = d.pid
         and a.isdel = '0'
-        <if test="cidCondition != null and cidCondition != ''">
-            and  c.cid like concat('%', #{cidCondition}, '%')
+        <if test="cnameCondition != null and cnameCondition != ''">
+            and  c.name like concat('%', #{cnameCondition}, '%')
         </if>
         <if test="mphoneCondition != null and mphoneCondition != ''">
             and  b.mphone like concat('%', #{mphoneCondition}, '%')

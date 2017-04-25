@@ -4,7 +4,7 @@
 <mapper namespace="dazhimen.bg.bean.Permission">
     <select id="queryAllRole" resultType="dazhimen.bg.bean.permission.ListViewRoleBean"
         parameterType="dazhimen.bg.bean.PaginationParamBean">
-        select rid,name,introduction,getcodetxt('rightorwrong',ismastercanown) ismastercanown
+        select rid,name,introduction,getcodetxt('yesorno',ismastercanown) ismastercanown
          from role
         order by rid desc
         limit #{startnum},#{getrows}
@@ -31,7 +31,7 @@
     </insert>
 
     <select id="getRoleInfor" resultType="dazhimen.bg.bean.permission.ViewRoleInforBean">
-       select rid,name,introduction,getcodetxt('rightorwrong',ismastercanown) ismastercanown
+       select rid,name,introduction,getcodetxt('yesorno',ismastercanown) ismastercanown
          from role
          where rid = #{rid}
     </select>
@@ -45,7 +45,7 @@
     </select>
 
     <select id="getModifyRoleInfor" resultType="dazhimen.bg.bean.permission.ViewRoleInforBean">
-        select rid,name,introduction,getcodetxt('rightorwrong',ismastercanown) ismastercanown
+        select rid,name,introduction,getcodetxt('yesorno',ismastercanown) ismastercanown
         from role
         where rid = #{rid}
     </select>

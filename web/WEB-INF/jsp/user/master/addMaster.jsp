@@ -35,6 +35,7 @@
         $("#masterAddForm").attr('target', frameId);
     }
     function actionAfterSubmit(jsonObj) {
+        LoadingMaskLayer.hide();
         var resultObj = JSON.parse(jsonObj);
         if (!resultObj) {
             return;
@@ -55,6 +56,7 @@
         }
         dealmasterAddFormBeforeSubmit();
         $("#masterAddForm").submit();
+        LoadingMaskLayer.show();
     }
     function checkAddMasterFormBeforeSubmit(){
         if($.trim($("#loginnameInAdd").val()).length == 0){

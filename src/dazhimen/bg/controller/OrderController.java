@@ -32,8 +32,8 @@ public class OrderController {
             if(queryByParamFlag == null || queryByParamFlag.equals("")){
                 result = orderService.queryAllOrder(page, rows);
             }else{
-                String cidCondition = resq.getParameter("cidCondition");
-                String mphoneCondition = resq.getParameter("mphoneCondition");
+                String cnameCondition = resq.getParameter("cnameCondition");
+//                String mphoneCondition = resq.getParameter("mphoneCondition");
                 String producttypeCondition = resq.getParameter("producttypeCondition");
                 String paymenttypeCondition = resq.getParameter("paymenttypeCondition");
                 String starttimeCondition = resq.getParameter("starttimeCondition");
@@ -41,8 +41,8 @@ public class OrderController {
                 String startAmountCondition = resq.getParameter("startAmountCondition");
                 String endAmountCondition = resq.getParameter("endAmountCondition");
                 QueryOrderParamBean paramBean = new QueryOrderParamBean();
-                paramBean.setCidCondition(cidCondition);
-                paramBean.setMphoneCondition(mphoneCondition);
+                paramBean.setCnameCondition(cnameCondition);
+//                paramBean.setMphoneCondition(mphoneCondition);
                 paramBean.setProducttypeCondition(producttypeCondition);
                 paramBean.setPaymenttypeCondition(paymenttypeCondition);
                 paramBean.setStarttimeCondition(starttimeCondition);

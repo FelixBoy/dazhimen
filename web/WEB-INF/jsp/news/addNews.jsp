@@ -77,36 +77,43 @@
             return false;
         }
         var newsContent = $("input[id^='newscontent']");
+        var result = true;
         if(newsContent.length > 0){
             newsContent.each(function(index, domElement){
                 var domid = domElement.id;
                 var dom_type = $("#type_" + domid).val();
                 if(!dom_type){
-                    return false;
+                    result = false;
+                    return;
                 }
                 if(dom_type == '2'){
                     if(!$("#" + domid).filebox("getValue")){
                         MsgBox.show("无法保存，存在内容图片未选择");
-                        return false;
+                        result = false;
+                        return;
                     }
                     imgFileName = $("#" + domid).filebox("getValue");
                     imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
                     if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
                         MsgBox.show("无法保存，内容主图文件，仅支持jpg、png");
-                        return false;
+                        result = false;
+                        return;
                     }
                 }else if(dom_type == '1'){
                     if($("#" + domid).val().length == 0){
                         MsgBox.show("无法保存，存在新闻副标题未填写");
-                        return false;
+                        result = false;
+                        return;
                     }
                 }else if(dom_type == '3'){
                     if($("#" + domid).val().length == 0){
                         MsgBox.show("无法保存，存在内容文本未填写");
-                        return false;
+                        result = false;
+                        return;
                     }
                 }
             });
+            return result;
         }else{
             MsgBox.show("新闻内容为空，无法保存");
             return false;
@@ -114,9 +121,9 @@
         return true;
     }
     function submitAddNewsForm(){
-        if(!checkAddNewsFormBeforeSubmit()){
-            return;
-        }
+        var result = checkAddNewsFormBeforeSubmit();
+        alert(result);
+        return;
         dealAddNewsFormBeforeSubmit();
         dealSortValue();
         $("#addNewsForm").submit();

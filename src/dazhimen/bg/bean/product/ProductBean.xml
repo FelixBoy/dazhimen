@@ -193,7 +193,7 @@
 
     <select id="getProductInforById" resultType="dazhimen.bg.bean.product.ViewProductBean">
         select pid,pname,getcodetxt('producttype',a.type) as type,concat(a.derateProportion,'%') as derateProportion,concat(a.price,'/年') as price,
-                a.introduction,getcodetxt('indexsort',a.indexsort) as indexsort,getcodetxt('rightorwrong',indexplay) as indexplay,
+                a.introduction,getcodetxt('indexsort',a.indexsort) as indexsort,getcodetxt('yesorno',indexplay) as indexplay,
                 listimage,b.uid,b.name as uname,b.mphone,b.loginname,getcodetxt('gender',b.gender) as gender
           from product a,user b
         where a.uid = b.uid
@@ -227,7 +227,7 @@
     <select id="queryAllCourseByPid" resultType="dazhimen.bg.bean.product.ListViewCourseBean"
             parameterType="dazhimen.bg.bean.PaginationParamBean">
         select courseid,coursename,getcodetxt('indexsort',sort) as sortstr,viewcount,
-                getcodetxt('rightorwrong',istry) as istry,audiopath as audiourl
+                getcodetxt('yesorno',istry) as istry,audiopath as audiourl
           from course where pid = #{pid}
           order by sort,createdate desc
         limit #{startnum},#{getrows}

@@ -20,6 +20,7 @@
         }, 100);
     }
     function actionAfterSubmit(jsonObj) {
+        LoadingMaskLayer.hide();
         var resultObj = JSON.parse(jsonObj);
         if (!resultObj) {
             return;
@@ -55,6 +56,7 @@
         }
         dealmasterModifyFormBeforeSubmit();
         $("#masterModifyForm").submit();
+        LoadingMaskLayer.show();
     }
     $(function(){
         $('#masterModifyForm').form({onLoadSuccess:function(){
