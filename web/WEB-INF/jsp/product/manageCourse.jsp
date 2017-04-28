@@ -12,13 +12,13 @@
         if(row){
             $("#modifyCourseDialog").dialog({
                 title:'修改课程信息',
-                href:"<%=request.getContextPath()%>/product/fwdModifyCoursePage.do?courseid=" + row.courseid + "&random_id=" + Math.random(),
                 width: 580,
                 height: 310,
                 closed: true,
                 cache: false,
                 modal: true
             });
+            $("#modifyCourseDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyCoursePage.do?courseid=" + row.courseid + "&random_id=" + Math.random());
             $("#modifyCourseDialog").dialog("open");
         }
     }
