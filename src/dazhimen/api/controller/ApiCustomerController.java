@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/api/customer")
 public class ApiCustomerController {
-    @RequestMapping(value="modifyHeader", method = RequestMethod.POST)
+    @RequestMapping(value="modifyHeader.do", method = RequestMethod.POST)
     public void modifyHeader(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -75,7 +75,7 @@ public class ApiCustomerController {
         }
 
     }
-    @RequestMapping(value="getPersonalInfo", method = RequestMethod.POST)
+    @RequestMapping(value="getPersonalInfo.do", method = RequestMethod.POST)
     public void getPersonalInfo(HttpServletRequest resq, HttpServletResponse resp){
         try {
             checkGetPersonalInfoPara(resq);
@@ -109,7 +109,7 @@ public class ApiCustomerController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value="modifyPersonalInfo", method = RequestMethod.POST)
+    @RequestMapping(value="modifyPersonalInfo.do", method = RequestMethod.POST)
     public void modifyPersonalInfo(HttpServletRequest resq, HttpServletResponse resp){
         try {
             checkModifyPersonalInfoPara(resq);

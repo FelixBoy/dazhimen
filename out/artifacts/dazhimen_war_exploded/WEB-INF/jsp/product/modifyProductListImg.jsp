@@ -49,7 +49,7 @@
             var pid = resultObj.pid;
             $('#modifyProductListImgDialog').dialog('close');
             MsgBox.show(msg);
-            $("#modifyProductForm").form("load", "<%=request.getContextPath()%>/product/getModifyProductInforById" +
+            $("#modifyProductForm").form("load", "<%=request.getContextPath()%>/product/getModifyProductInforById.do" +
                 "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random());
 
         }else{
@@ -79,7 +79,7 @@
     }
 </script>
 <div  style="width: 380px;margin: 0 auto;">
-    <form id="modifyProductListimgForm" action="<%=request.getContextPath()%>/product/saveModifyProductListImg"
+    <form id="modifyProductListimgForm" action="<%=request.getContextPath()%>/product/saveModifyProductListImg.do"
           enctype="multipart/form-data" method="post">
         <br/>
         <table cellpadding="5">

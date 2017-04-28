@@ -29,7 +29,7 @@ import java.util.List;
 @RequestMapping("/api/product/")
 public class ApiProductController {
 
-    @RequestMapping(value = "/updateCourseViewCount",method = RequestMethod.POST)
+    @RequestMapping(value = "/updateCourseViewCount.do",method = RequestMethod.POST)
     public void updateCourseViewCount(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -49,7 +49,7 @@ public class ApiProductController {
         }
 
     }
-    @RequestMapping(value = "/getHomePageSkillPack",method = RequestMethod.POST)
+    @RequestMapping(value = "/getHomePageSkillPack.do",method = RequestMethod.POST)
     public void getHomePageSkillPack(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -73,7 +73,7 @@ public class ApiProductController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value = "/getHomePageExperiencePack",method = RequestMethod.POST)
+    @RequestMapping(value = "/getHomePageExperiencePack.do",method = RequestMethod.POST)
     public void getHomePageExperiencePack(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -97,7 +97,7 @@ public class ApiProductController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value = "/getMoreSkillPack",method = RequestMethod.POST)
+    @RequestMapping(value = "/getMoreSkillPack.do",method = RequestMethod.POST)
     public void getMoreSkillPack(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -123,7 +123,7 @@ public class ApiProductController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value = "/getExperienceSkillPack",method = RequestMethod.POST)
+    @RequestMapping(value = "/getExperienceSkillPack.do",method = RequestMethod.POST)
     public void getExperienceSkillPack(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -149,7 +149,7 @@ public class ApiProductController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value = "/searchSkillPack",method = RequestMethod.POST)
+    @RequestMapping(value = "/searchSkillPack.do",method = RequestMethod.POST)
     public void searchSkillPack(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -176,7 +176,7 @@ public class ApiProductController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value = "/searchExperiencePack",method = RequestMethod.POST)
+    @RequestMapping(value = "/searchExperiencePack.do",method = RequestMethod.POST)
     public void searchExperiencePack(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -203,7 +203,7 @@ public class ApiProductController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value = "/getProductInforById",method = RequestMethod.POST)
+    @RequestMapping(value = "/getProductInforById.do",method = RequestMethod.POST)
     public void getProductInforById(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -242,7 +242,7 @@ public class ApiProductController {
             ResponseUtil.writeFailMsgToApiResult(resp, "无法获取指定pid的产品信息");
         }
     }
-    @RequestMapping(value = "/collectProduct", method = RequestMethod.POST)
+    @RequestMapping(value = "/collectProduct.do", method = RequestMethod.POST)
     public void collectProduct(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -270,7 +270,7 @@ public class ApiProductController {
         }
 
     }
-    @RequestMapping(value = "/cancelCollectProduct", method = RequestMethod.POST)
+    @RequestMapping(value = "/cancelCollectProduct.do", method = RequestMethod.POST)
     public void cancelCollectProduct(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -298,7 +298,7 @@ public class ApiProductController {
         ResponseUtil.writeMsg(resp, jsonObj.toString());
     }
 
-    @RequestMapping(value = "/getProductCourseList", method = RequestMethod.POST)
+    @RequestMapping(value = "/getProductCourseList.do", method = RequestMethod.POST)
     public void getProductCourseList(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -354,7 +354,7 @@ public class ApiProductController {
         ResponseUtil.writeMsg(resp, jsonObject.toString());
     }
 
-    @RequestMapping(value = "/getReverseCourseList", method = RequestMethod.POST)
+    @RequestMapping(value = "/getReverseCourseList.do", method = RequestMethod.POST)
     public void getReverseCourseList(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);

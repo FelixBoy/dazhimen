@@ -22,7 +22,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/api/indexplay")
 public class ApiIndexPlayController {
-    @RequestMapping("/getIndexPlay")
+    @RequestMapping("/getIndexPlay.do")
     public void getIndexPlay(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);

@@ -1,12 +1,12 @@
 <script type="text/javascript">
     function returnManageNewsInViewNews(){
         $('#content_panel').panel({
-            href:"<%=request.getContextPath() %>/news/fwdManageNewsPage?random_id="+Math.random()
+            href:"<%=request.getContextPath() %>/news/fwdManageNewsPage.do?random_id="+Math.random()
         });
     }
     $(function(){
         $.ajax({
-            url:"<%=request.getContextPath()%>/news/getViewNewsData" +
+            url:"<%=request.getContextPath()%>/news/getViewNewsData.do" +
             "?nid=<%=request.getAttribute("nid").toString()%>&random_id=" + Math.random(),
             type:'get',
             async:false,

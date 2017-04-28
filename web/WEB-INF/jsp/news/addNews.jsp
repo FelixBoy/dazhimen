@@ -30,7 +30,7 @@
             var msg = resultObj.msg;
             MsgBox.show(msg);
             $('#content_panel').panel({
-                href:"<%=request.getContextPath() %>/news/fwdManageNewsPage?random_id="+Math.random()
+                href:"<%=request.getContextPath() %>/news/fwdManageNewsPage.do?random_id="+Math.random()
             });
         }else{
             MsgBox.show(resultObj.msg);
@@ -174,7 +174,7 @@
         $("#newsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>内容图片:<span style='color:red'>*</span></td>" +
             "<td colspan='5'><input class='easyui-filebox' " +
             " data-options=\"prompt:'请选择图片(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'\"" +
-            " style='width:700px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
+            "  accept='image/jpeg,image/png'  style='width:700px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='2'>" +
             "</td>" +
@@ -204,7 +204,7 @@
     }
     function returnManageNewsInAddNews(){
         $('#content_panel').panel({
-            href:"<%=request.getContextPath() %>/news/fwdManageNewsPage?random_id="+Math.random()
+            href:"<%=request.getContextPath() %>/news/fwdManageNewsPage.do?random_id="+Math.random()
         });
     }
     function deleteNewsContent(trcontentid){
@@ -221,7 +221,7 @@
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-back'" onclick="returnManageNewsInAddNews()">返回</a>
 </div>
 <div style="margin:0px auto;width: 900px;text-align: center;">
-<form id="addNewsForm" action="<%=request.getContextPath()%>/news/saveAddNews"
+<form id="addNewsForm" action="<%=request.getContextPath()%>/news/saveAddNews.do"
       enctype="multipart/form-data" method="post">
     <table id="newsTitleTable" cellpadding="5">
         <tr>
@@ -244,14 +244,14 @@
             <td>列表图片:<span style="color:red">*</span></td>
             <td colspan="5">
                 <input class="easyui-filebox" data-options="prompt:'用于新闻列表展示，(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'"
-                       style="width:100%" id="newslistimg" name="newslistimg"/>
+                       accept="image/jpeg,image/png" style="width:100%" id="newslistimg" name="newslistimg"/>
             </td>
         </tr>
         <tr>
             <td>新闻主图:<span style="color:red">*</span></td>
             <td colspan="5">
                 <input class="easyui-filebox" data-options="prompt:'用于首页轮播，(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'"
-                       style="width:100%" id="newsmainimg" name="newsmainimg"/>
+                       accept="image/jpeg,image/png" style="width:100%" id="newsmainimg" name="newsmainimg"/>
             </td>
         </tr>
     </table>
@@ -281,7 +281,7 @@
             <td>内容图片:<span style="color:red">*</span></td>
             <td colspan="5">
                 <input class="easyui-filebox" data-options="prompt:'请选择图片(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'"
-                       style="width:700px;" id="newscontent2" name="newscontent2"/>
+                       accept="image/jpeg,image/png" style="width:700px;" id="newscontent2" name="newscontent2"/>
                 <input type="hidden" id="sort_newscontent2" name="sort_newscontent2"/>
                 <input type="hidden" id="type_newscontent2" name="type_newscontent2" value='2'/>
             </td>

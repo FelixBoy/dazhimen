@@ -9,7 +9,7 @@
             $.messager.confirm('确认','您确认取消【'+ row.pname + '】的首页轮播吗？',function(r) {
                 if (r) {
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/playsort/saveDeleteIndexPlay?id=" + row.id + "&type="+row.typenum
+                        url:"<%=request.getContextPath()%>/playsort/saveDeleteIndexPlay.do?id=" + row.id + "&type="+row.typenum
                         + "&random_id="+Math.random(),
                         type:'get',
                         async:false,
@@ -37,7 +37,7 @@
             height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/playsort/fwdAddIndexPlayPage?random_id=" + Math.random(),
+            href: "<%=request.getContextPath()%>/playsort/fwdAddIndexPlayPage.do?random_id=" + Math.random(),
             modal: true
         });
         $('#addIndexPlayDialog').dialog("open");
@@ -46,7 +46,7 @@
 <div style="padding:5px 0;">
     <div id="addIndexPlayDialog" style="text-align: center;"></div>
     <table id="indexPlayList" title="首页轮播列表" class="easyui-datagrid" style="width: auto;height: auto;"
-           url="<%=request.getContextPath()%>/playsort/queryAllIndexPlay?random_id="+Math.random()
+           url="<%=request.getContextPath()%>/playsort/queryAllIndexPlay.do?random_id="+Math.random()
            rownumbers="true" fitColumns="true" singleSelect="true" >
         <thead>
         <tr>

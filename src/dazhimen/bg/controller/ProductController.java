@@ -36,7 +36,7 @@ public class ProductController {
      * @param pid 产品id
      * @return
      */
-    @RequestMapping("/fwdModifyProductMainImgPage")
+    @RequestMapping("/fwdModifyProductMainImgPage.do")
     public ModelAndView fwdModifyProductMainImgPage(@RequestParam("pid") String pid){
         ModelAndView mav = new ModelAndView("/product/modifyProductMainImg");
         mav.addObject("pid", pid);
@@ -47,7 +47,7 @@ public class ProductController {
      * @param pid 产品id
      * @return
      */
-    @RequestMapping("/fwdModifyProductListImgPage")
+    @RequestMapping("/fwdModifyProductListImgPage.do")
     public ModelAndView fwdModifyProductListImgPage(@RequestParam("pid") String pid){
         ModelAndView mav = new ModelAndView("/product/modifyProductListImg");
         mav.addObject("pid", pid);
@@ -58,7 +58,7 @@ public class ProductController {
      * @param pid 产品id
      * @return
      */
-    @RequestMapping("/fwdModifyProductPage")
+    @RequestMapping("/fwdModifyProductPage.do")
     public ModelAndView fwdModifyProductPage(@RequestParam("pid") String pid){
         ModelAndView mav = new ModelAndView("/product/modifyProduct");
         mav.addObject("pid", pid);
@@ -68,7 +68,7 @@ public class ProductController {
      * 转向新增（上传）产品页面
      * @return
      */
-    @RequestMapping("/fwdAddProductPage")
+    @RequestMapping("/fwdAddProductPage.do")
     public String forwardAddProductPage(){
         return "/product/addProduct";
     }
@@ -77,7 +77,7 @@ public class ProductController {
      * 掌门身份登录时的新增产品页面
      * @return
      */
-    @RequestMapping("/fwdAddProductByMasterPage")
+    @RequestMapping("/fwdAddProductByMasterPage.do")
     public String fwdAddProductByMasterPage(){
         return "/product/addProductByMaster";
     }
@@ -86,7 +86,7 @@ public class ProductController {
      * 转向上传产品时，选择掌门页面
      * @return
      */
-    @RequestMapping("/fwdSelectMasterPage")
+    @RequestMapping("/fwdSelectMasterPage.do")
     public String forwardSelectMasterPage(){
         return "product/selectMaster";
     }
@@ -96,7 +96,7 @@ public class ProductController {
      * @param resq
      * @param resp
      */
-    @RequestMapping("/getSelectMasterData")
+    @RequestMapping("/getSelectMasterData.do")
     public void getSelectMasterData(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ProductService productService = new ProductService();
@@ -126,7 +126,7 @@ public class ProductController {
      * @param resp
      * @return
      */
-    @RequestMapping("/saveAddProduct")
+    @RequestMapping("/saveAddProduct.do")
     public ModelAndView saveAddProduct(HttpServletRequest resq, HttpServletResponse resp){
         UploadProductBean productBean = getUploadProductBean(resq);
         ProductService productService = new ProductService();
@@ -156,7 +156,7 @@ public class ProductController {
      * @param pid
      * @return
      */
-    @RequestMapping("/fwdProductInfoPage")
+    @RequestMapping("/fwdProductInfoPage.do")
     public ModelAndView fwdProductInfoPage(@RequestParam("pid") String pid){
         ModelAndView mav = new ModelAndView("product/viewProductInfor");
         mav.addObject("pid", pid);
@@ -169,7 +169,7 @@ public class ProductController {
      * @param resq
      * @param resp
      */
-    @RequestMapping("/getProductInforById")
+    @RequestMapping("/getProductInforById.do")
     public void getProductInforById(@RequestParam("pid") String pid, HttpServletRequest resq, HttpServletResponse resp){
         try{
             ProductService productService = new ProductService();
@@ -190,7 +190,7 @@ public class ProductController {
      * @param resq
      * @param resp
      */
-    @RequestMapping("/getModifyProductInforById")
+    @RequestMapping("/getModifyProductInforById.do")
     public void getModifyProductInforById(@RequestParam("pid") String pid, HttpServletRequest resq, HttpServletResponse resp){
         try{
             ProductService productService = new ProductService();
@@ -210,7 +210,7 @@ public class ProductController {
      * @param resq
      * @param resp
      */
-    @RequestMapping(value="/saveModifyProductBasicInfo",method = RequestMethod.POST)
+    @RequestMapping(value="/saveModifyProductBasicInfo.do",method = RequestMethod.POST)
     public void saveModifyProductBasicInfo(HttpServletRequest resq, HttpServletResponse resp){
         ModifyProductBasicInfoBean productBean = getSaveModifyProductionBasicInfoBean(resq);
         ProductService productService = new ProductService();
@@ -237,7 +237,7 @@ public class ProductController {
      * @param resp
      * @return
      */
-    @RequestMapping("/saveModifyProductListImg")
+    @RequestMapping("/saveModifyProductListImg.do")
     public ModelAndView saveModifyProductListImg(HttpServletRequest resq, HttpServletResponse resp){
         ProductService productService = new ProductService();
         ModelAndView mav = new ModelAndView("fileUploadAfterAction");
@@ -268,7 +268,7 @@ public class ProductController {
      * @param resp
      * @return
      */
-    @RequestMapping("/saveModifyProductMainImg")
+    @RequestMapping("/saveModifyProductMainImg.do")
     public ModelAndView saveModifyProductMainImg(HttpServletRequest resq, HttpServletResponse resp){
         ProductService productService = new ProductService();
         ModelAndView mav = new ModelAndView("fileUploadAfterAction");
@@ -299,7 +299,7 @@ public class ProductController {
      * @param resq
      * @param resp
      */
-    @RequestMapping("/getMainImagesInforById")
+    @RequestMapping("/getMainImagesInforById.do")
     public void getMainImagesInforById(@RequestParam("pid") String pid, HttpServletRequest resq,
                                        HttpServletResponse resp){
         try {
@@ -314,13 +314,13 @@ public class ProductController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询产品主图信息失败");
         }
     }
-    @RequestMapping("/fwdViewMasterInforPage")
+    @RequestMapping("/fwdViewMasterInforPage.do")
     public String fwdViewMasterInforPage(@RequestParam("uid") String uid, HttpServletRequest resq,
                                        HttpServletResponse resp){
         resq.setAttribute("uid", uid);
         return "/product/viewMasterInfor";
     }
-    @RequestMapping("/getMasterInfor")
+    @RequestMapping("/getMasterInfor.do")
     public void getMasterInfor(@RequestParam("uid") String uid, HttpServletRequest resq,
                                        HttpServletResponse resp){
         try {
@@ -334,11 +334,11 @@ public class ProductController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询指定掌门信息失败");
         }
     }
-    @RequestMapping("/fwdManageProductPage")
+    @RequestMapping("/fwdManageProductPage.do")
     public String fwdManageProductPage(){
         return "/product/manageProduct";
     }
-    @RequestMapping("/queryAllProducts")
+    @RequestMapping("/queryAllProducts.do")
     public void queryAllProducts(HttpServletRequest resq, HttpServletResponse resp){
         try{
             ProductService productService = new ProductService();
@@ -382,13 +382,13 @@ public class ProductController {
         }
 
     }
-    @RequestMapping("/fwdModifyProductStatusPage")
+    @RequestMapping("/fwdModifyProductStatusPage.do")
     public String fwdModifyProductStatusPage(HttpServletRequest resq){
         resq.setAttribute("pid", resq.getParameter("pid"));
         resq.setAttribute("status" ,resq.getParameter("status"));
         return "/product/modifyProductStatus";
     }
-    @RequestMapping("/saveModifyProductStatus")
+    @RequestMapping("/saveModifyProductStatus.do")
     public void saveModifyProductStatus(HttpServletRequest resq,HttpServletResponse resp){
         try {
             String pid = resq.getParameter("pid");
@@ -401,7 +401,7 @@ public class ProductController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，修改产品状态失败");
         }
     }
-    @RequestMapping("/saveProductDel")
+    @RequestMapping("/saveProductDel.do")
     public void saveProductDel(HttpServletRequest resq,HttpServletResponse resp){
         try {
             String pid = resq.getParameter("pid");
@@ -413,12 +413,12 @@ public class ProductController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，删除产品失败");
         }
     }
-    @RequestMapping("/fwdManageCoursePage")
+    @RequestMapping("/fwdManageCoursePage.do")
     public String fwdManageCoursePage(HttpServletRequest resq,HttpServletResponse resp){
         resq.setAttribute("pid", resq.getParameter("pid"));
         return "/product/manageCourse";
     }
-    @RequestMapping("/queryAllCourseByPid")
+    @RequestMapping("/queryAllCourseByPid.do")
     public void queryAllCourseByPid(HttpServletRequest resq,HttpServletResponse resp){
         try{
             String pid = resq.getParameter("pid");
@@ -449,12 +449,12 @@ public class ProductController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询产品的课程失败");
         }
     }
-    @RequestMapping("/fwdAddCoursePage")
+    @RequestMapping("/fwdAddCoursePage.do")
     public String fwdAddCoursePage(HttpServletRequest resq,HttpServletResponse resp){
         return "/product/addCourse";
     }
 
-    @RequestMapping("/saveAddCourse")
+    @RequestMapping("/saveAddCourse.do")
     public ModelAndView saveAddCourse(HttpServletRequest resq, HttpServletResponse resp){
         UploadCourseBean courseBean = getUploadCourseBean(resq);
         ProductService productService = new ProductService();
@@ -478,7 +478,7 @@ public class ProductController {
         mav.addObject("parameters", jsonObj.toString());
         return mav;
     }
-    @RequestMapping("/getCourseSortData")
+    @RequestMapping("/getCourseSortData.do")
     public void getCourseSortData(HttpServletRequest resq, HttpServletResponse resp){
         String pid = resq.getParameter("pid");
         ProductService productService = new ProductService();
@@ -490,7 +490,7 @@ public class ProductController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/getCourseSortDataInModify")
+    @RequestMapping("/getCourseSortDataInModify.do")
     public void getCourseSortDataInModify(HttpServletRequest resq, HttpServletResponse resp){
         String pid = resq.getParameter("pid");
         String courseid = resq.getParameter("courseid");
@@ -512,13 +512,13 @@ public class ProductController {
         }
     }
 
-    @RequestMapping("/fwdModifyCoursePage")
+    @RequestMapping("/fwdModifyCoursePage.do")
     public String fwdModifyCoursePage(HttpServletRequest resq,HttpServletResponse resp){
         String courseid = resq.getParameter("courseid");
         resq.setAttribute("courseid", courseid);
         return "/product/modifyCourse";
     }
-    @RequestMapping("/getCourseInforByCourseid")
+    @RequestMapping("/getCourseInforByCourseid.do")
     public void getCourseInforByCourseid(HttpServletRequest resq,HttpServletResponse resp){
         try {
             String courseid = resq.getParameter("courseid");
@@ -530,7 +530,7 @@ public class ProductController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询指定课程信息失败");
         }
     }
-    @RequestMapping("/saveModifyCourse")
+    @RequestMapping("/saveModifyCourse.do")
     public ModelAndView saveModifyCourse(HttpServletRequest resq,HttpServletResponse resp){
         UploadCourseBean courseBean = getUploadCourseBean(resq);
         ProductService productService = new ProductService();
@@ -555,7 +555,7 @@ public class ProductController {
         return mav;
     }
 
-    @RequestMapping("/saveCourseDel")
+    @RequestMapping("/saveCourseDel.do")
     public void saveCourseDel(HttpServletRequest resq,HttpServletResponse resp){
         try{
             String courseid = resq.getParameter("courseid");

@@ -29,7 +29,7 @@
             return;
         }
         $.ajax({
-            url:"<%=request.getContextPath()%>/product/saveModifyProductStatus?random_id=" + Math.random()
+            url:"<%=request.getContextPath()%>/product/saveModifyProductStatus.do?random_id=" + Math.random()
             + "&pid=<%=request.getAttribute("pid")%>&status="+newStatus,
             type:'get',
             async:false,

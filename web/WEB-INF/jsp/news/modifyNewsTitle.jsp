@@ -1,12 +1,12 @@
 <script type="text/javascript">
     function returnManageNewsInModifyNews(){
         $('#content_panel').panel({
-            href:"<%=request.getContextPath() %>/news/fwdManageNewsPage?random_id="+Math.random()
+            href:"<%=request.getContextPath() %>/news/fwdManageNewsPage.do?random_id="+Math.random()
         });
     }
     $(function(){
         $.ajax({
-            url:"<%=request.getContextPath()%>/news/getModifyNewsTitleData" +
+            url:"<%=request.getContextPath()%>/news/getModifyNewsTitleData.do" +
             "?nid=<%=request.getAttribute("nid").toString()%>&random_id=" + Math.random(),
             type:'get',
             async:false,
@@ -45,7 +45,7 @@
             cache: false,
             modal: true
         });
-        $("#modifyNewsListImgDialog").dialog("refresh", "<%=request.getContextPath()%>/news/fwdModifyNewsListImgPage?nid=" + $("#nidInModifyTitle").val()
+        $("#modifyNewsListImgDialog").dialog("refresh", "<%=request.getContextPath()%>/news/fwdModifyNewsListImgPage.do?nid=" + $("#nidInModifyTitle").val()
             + "&random_id=" + Math.random());
         $('#modifyNewsListImgDialog').dialog("open");
     }
@@ -54,7 +54,7 @@
             return;
         }
         $.ajax({
-            url:"<%=request.getContextPath()%>/news/saveModifyNewsTitle",
+            url:"<%=request.getContextPath()%>/news/saveModifyNewsTitle.do",
             data:$('#modifyNewsTitleForm').serialize(),
             type:'post',
             async:false,
@@ -64,7 +64,7 @@
             success:function(data){
                 MsgBox.show(data);
                 $.ajax({
-                    url:"<%=request.getContextPath()%>/news/getModifyNewsTitleData" +
+                    url:"<%=request.getContextPath()%>/news/getModifyNewsTitleData.do" +
                     "?nid=<%=request.getAttribute("nid").toString()%>&random_id=" + Math.random(),
                     type:'get',
                     async:false,
@@ -94,7 +94,7 @@
             cache: false,
             modal: true
         });
-        $("#modifyNewsMainImgDialog").dialog("refresh", "<%=request.getContextPath()%>/news/fwdModifyNewsMainImgPage?nid=" + $("#nidInModifyTitle").val()
+        $("#modifyNewsMainImgDialog").dialog("refresh", "<%=request.getContextPath()%>/news/fwdModifyNewsMainImgPage.do?nid=" + $("#nidInModifyTitle").val()
             + "&random_id=" + Math.random());
         $('#modifyNewsMainImgDialog').dialog("open");
     }

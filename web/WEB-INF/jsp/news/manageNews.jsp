@@ -3,7 +3,7 @@
     $(function () {
         $("#newsList").datagrid({
             title:"新闻列表",
-            url:"<%=request.getContextPath()%>/news/queryAllNews?random_id="+Math.random(),
+            url:"<%=request.getContextPath()%>/news/queryAllNews.do?random_id="+Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,
@@ -71,7 +71,7 @@
     }
     function forwardAddNewsPage(){
         $('#content_panel').panel({
-            href:"<%=request.getContextPath() %>/news/fwdAddNewsPage?random_id="+Math.random(),
+            href:"<%=request.getContextPath() %>/news/fwdAddNewsPage.do?random_id="+Math.random(),
             onLoad:function(){
             }
         });
@@ -82,7 +82,7 @@
         <%--var row = $('#newsList').datagrid('getSelected');--%>
         <%--if (row) {--%>
             <%--$('#content_panel').panel({--%>
-                <%--href: "<%=request.getContextPath() %>/news/fwdModifyNewsContentPage?nid=" + row.nid + "&random_id=" + Math.random(),--%>
+                <%--href: "<%=request.getContextPath() %>/news/fwdModifyNewsContentPage.do?nid=" + row.nid + "&random_id=" + Math.random(),--%>
                 <%--onLoad: function () {--%>
                 <%--}--%>
             <%--});--%>
@@ -93,7 +93,7 @@
         var row = $('#newsList').datagrid('getSelected');
         if (row){
             $('#content_panel').panel({
-                href:"<%=request.getContextPath() %>/news/fwdModifyNewsTitlePage?nid=" + row.nid + "&random_id="+Math.random(),
+                href:"<%=request.getContextPath() %>/news/fwdModifyNewsTitlePage.do?nid=" + row.nid + "&random_id="+Math.random(),
                 onLoad:function(){
                 }
             });
@@ -104,7 +104,7 @@
         var row = $('#newsList').datagrid('getSelected');
         if (row){
             $('#content_panel').panel({
-                href:"<%=request.getContextPath() %>/news/fwdViewNewsPage?nid=" + row.nid + "&random_id="+Math.random(),
+                href:"<%=request.getContextPath() %>/news/fwdViewNewsPage.do?nid=" + row.nid + "&random_id="+Math.random(),
                 onLoad:function(){
                 }
             });
@@ -121,7 +121,7 @@
             $.messager.confirm('确认','您确认删除新闻【'+ row.title + '】吗？',function(r){
                 if (r){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/news/saveDeleteNews?nid=" + row.nid +"&random_id="+Math.random(),
+                        url:"<%=request.getContextPath()%>/news/saveDeleteNews.do?nid=" + row.nid +"&random_id="+Math.random(),
                         type:'get',
                         async:false,
                         error:function(data){
@@ -150,7 +150,7 @@
                 height: 150,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/news/fwdModifyNewsStatusPage?random_id=" + Math.random()+"&nid=" + row.nid
+                href: "<%=request.getContextPath()%>/news/fwdModifyNewsStatusPage.do?random_id=" + Math.random()+"&nid=" + row.nid
                 + "&status=" + row.statusnum,
                 modal: true
             });

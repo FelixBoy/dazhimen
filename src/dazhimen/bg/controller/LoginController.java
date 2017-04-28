@@ -22,7 +22,7 @@ import java.util.HashMap;
 @Controller
 @RequestMapping("/login")
 public class LoginController {
-    @RequestMapping(value="/doLoginCheck", method= RequestMethod.POST)
+    @RequestMapping(value="/doLoginCheck.do", method= RequestMethod.POST)
     public void doLoginCheck(@RequestParam("loginname") String loginName,
                              @RequestParam("password") String passWord,
                              HttpServletRequest resq,
@@ -36,7 +36,7 @@ public class LoginController {
                 ResponseUtil.writeFailMsgToBrowse(resp, "用户名或者密码错误");
             }else{
                 jsonObj.addProperty("msg", "登录成功");
-                jsonObj.addProperty("rediretUrl" , resq.getContextPath()+"/user/fwdMainPage");
+                jsonObj.addProperty("rediretUrl" , resq.getContextPath()+"/user/fwdMainPage.do");
                 LoginUserBean userBean = loginService.getUserInfoByLoginname(loginName);
                 HttpSession session = resq.getSession(true);
                 session.setAttribute(Constant.LoginUserKey, userBean);
@@ -47,7 +47,7 @@ public class LoginController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，登录失败");
         }
     }
-    @RequestMapping("/exitLogin")
+    @RequestMapping("/exitLogin.do")
     public void exitLogin(HttpServletRequest resq, HttpServletResponse resp){
         HttpSession session = resq.getSession(false);
         if(session != null || isSessionContainsLoginUser(session)) {

@@ -2,7 +2,7 @@
     $(function () {
         $("#customerList").datagrid({
             title:"客户列表",
-            url:"<%=request.getContextPath()%>/customer/queryAllCustomers?random_id="+Math.random(),
+            url:"<%=request.getContextPath()%>/customer/queryAllCustomers.do?random_id="+Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,

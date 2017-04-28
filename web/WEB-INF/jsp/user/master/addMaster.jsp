@@ -120,7 +120,7 @@
     }
 </script>
 <div style="width: 400px;margin: 0 auto;">
-        <form id="masterAddForm" action="<%=request.getContextPath()%>/user/saveMasterAdd"
+        <form id="masterAddForm" action="<%=request.getContextPath()%>/user/saveMasterAdd.do"
               enctype="multipart/form-data" method="post">
             <br/>
             <table cellpadding="5">

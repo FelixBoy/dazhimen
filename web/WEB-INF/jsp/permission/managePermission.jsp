@@ -2,7 +2,7 @@
     $(function () {
         $("#roleList").datagrid({
             title:"角色列表",
-            url:"<%=request.getContextPath()%>/permission/queryAllRole?random_id="+Math.random(),
+            url:"<%=request.getContextPath()%>/permission/queryAllRole.do?random_id="+Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,
@@ -38,7 +38,7 @@
         var row = $('#roleList').datagrid('getSelected');
         if(row){
             $('#content_panel').panel({
-                href:"<%=request.getContextPath() %>/permission/fwdAdjustRoleUserPage?random_id="+Math.random() + "&rid=" + row.rid,
+                href:"<%=request.getContextPath() %>/permission/fwdAdjustRoleUserPage.do?random_id="+Math.random() + "&rid=" + row.rid,
                 onLoad:function(){
                 }
             });
@@ -54,7 +54,7 @@
                 height: 600,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/permission/fwdModifyRolePage?randomid="+Math.random() + "&rid=" + row.rid,
+                href: "<%=request.getContextPath()%>/permission/fwdModifyRolePage.do?randomid="+Math.random() + "&rid=" + row.rid,
                 modal: true
             });
             $('#modifyRoleDialog').dialog("open");
@@ -70,7 +70,7 @@
                 height: 610,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/permission/fwdViewRolePage?randomid="+Math.random() + "&rid=" + row.rid,
+                href: "<%=request.getContextPath()%>/permission/fwdViewRolePage.do?randomid="+Math.random() + "&rid=" + row.rid,
                 modal: true
             });
             $('#viewRoleDialog').dialog("open");
@@ -83,7 +83,7 @@
             height: 550,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/permission/forwardAddRolePage?randomid="+Math.random(),
+            href: "<%=request.getContextPath()%>/permission/forwardAddRolePage.do?randomid="+Math.random(),
             modal: true
         });
         $('#addRoleDialog').dialog("open");
@@ -95,7 +95,7 @@
             $.messager.confirm('确认','您确认删除角色【'+ row.name + '】吗？',function(r){
                 if (r){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/permission/saveDeleteRole?rid=" + row.rid+"&random_id="+Math.random(),
+                        url:"<%=request.getContextPath()%>/permission/saveDeleteRole.do?rid=" + row.rid+"&random_id="+Math.random(),
                         type:'get',
                         async:false,
                         error:function(data){

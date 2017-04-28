@@ -11,7 +11,7 @@
             height: 420,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/user/fwdAddAdminPage",
+            href: "<%=request.getContextPath()%>/user/fwdAddAdminPage.do",
             modal: true
         });
         $('#addAdminDialog').dialog("open");
@@ -26,7 +26,7 @@
                 height: 420,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/user/fwdModifyAdminPage?uid="+row.uid,
+                href: "<%=request.getContextPath()%>/user/fwdModifyAdminPage.do?uid="+row.uid,
                 modal: true
             });
             $('#modifyAdminDialog').dialog("open");
@@ -39,7 +39,7 @@
             $.messager.confirm('确认','您确认想要删除管理员【' + row.name + '】吗？',function(r){
                 if (r){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/user/saveDeleteAdmin?uid=" + row.uid+"&random_id="+Math.random(),
+                        url:"<%=request.getContextPath()%>/user/saveDeleteAdmin.do?uid=" + row.uid+"&random_id="+Math.random(),
                         type:'get',
                         async:false,
                         error:function(data){
@@ -61,7 +61,7 @@
     $(function () {
         $("#adminList").datagrid({
             title:"管理员列表",
-            url:"<%=request.getContextPath()%>/user/queryAllAdmin?random_id="+Math.random(),
+            url:"<%=request.getContextPath()%>/user/queryAllAdmin.do?random_id="+Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,
@@ -147,7 +147,7 @@
                 if (r){
                     var md5Pw = $.md5(row.loginname + '123456');
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/user/saveResetUserPassword?uid=" + row.uid + "&password=" + md5Pw + "&random_id="+Math.random(),
+                        url:"<%=request.getContextPath()%>/user/saveResetUserPassword.do?uid=" + row.uid + "&password=" + md5Pw + "&random_id="+Math.random(),
                         type:'get',
                         async:false,
                         error:function(data){

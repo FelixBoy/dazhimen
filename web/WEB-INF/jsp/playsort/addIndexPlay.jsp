@@ -11,7 +11,7 @@
             onDblClickRow:function(index, row){
                 if(row){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/playsort/saveAddIndexPlay?id=" + row.id + "&type=" + row.typenum
+                        url:"<%=request.getContextPath()%>/playsort/saveAddIndexPlay.do?id=" + row.id + "&type=" + row.typenum
                         + "&random_id="+Math.random(),
                         type:'get',
                         async:false,
@@ -33,7 +33,7 @@
         var row = $('#addIndexPlayList').datagrid('getSelected');
         if(row){
             $.ajax({
-                url:"<%=request.getContextPath()%>/playsort/saveAddIndexPlay?id=" + row.id + "&type=" + row.typenum
+                url:"<%=request.getContextPath()%>/playsort/saveAddIndexPlay.do?id=" + row.id + "&type=" + row.typenum
                 + "&random_id="+Math.random(),
                 type:'get',
                 async:false,
@@ -52,7 +52,7 @@
 </script>
 <div style="padding:5px 0;">
     <table id="addIndexPlayList" title="选择要首页轮播的产品或者新闻" class="easyui-datagrid" style="width: auto;height: auto;"
-           url="<%=request.getContextPath()%>/playsort/getAddIndexPlayData?random_id="+Math.random()
+           url="<%=request.getContextPath()%>/playsort/getAddIndexPlayData.do?random_id="+Math.random()
            rownumbers="true" fitColumns="true" singleSelect="true" >
         <thead>
         <tr>

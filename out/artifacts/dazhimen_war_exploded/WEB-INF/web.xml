@@ -10,7 +10,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>dazhimen</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>*.do</url-pattern>
     </servlet-mapping>
     <filter>
             <filter-name>DazhimenFilter</filter-name>
@@ -18,7 +18,7 @@
     </filter>
     <filter-mapping>
         <filter-name>DazhimenFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>*.do</url-pattern>
     </filter-mapping>
     <listener>
         <listener-class>

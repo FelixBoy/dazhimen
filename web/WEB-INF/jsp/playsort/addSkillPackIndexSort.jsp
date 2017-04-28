@@ -11,7 +11,7 @@
             onDblClickRow:function(index, row){
                 if(row){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/playsort/saveAddSkillPackIndexSort?pid=" + row.pid
+                        url:"<%=request.getContextPath()%>/playsort/saveAddSkillPackIndexSort.do?pid=" + row.pid
                         + "&random_id="+Math.random(),
                         type:'get',
                         async:false,
@@ -33,7 +33,7 @@
         var row = $('#addSkillPackIndexSortList').datagrid('getSelected');
         if(row){
             $.ajax({
-                url:"<%=request.getContextPath()%>/playsort/saveAddSkillPackIndexSort?pid=" + row.pid
+                url:"<%=request.getContextPath()%>/playsort/saveAddSkillPackIndexSort.do?pid=" + row.pid
                 + "&random_id="+Math.random(),
                 type:'get',
                 async:false,
@@ -51,7 +51,7 @@
 </script>
 <div style="padding:5px 0;">
     <table id="addSkillPackIndexSortList" class="easyui-datagrid" style="width: auto;height: auto;"
-           url="<%=request.getContextPath()%>/playsort/getAddSkillPackIndexSortData?random_id="+Math.random()
+           url="<%=request.getContextPath()%>/playsort/getAddSkillPackIndexSortData.do?random_id="+Math.random()
            rownumbers="true" fitColumns="true" singleSelect="true" >
         <thead>
         <tr>

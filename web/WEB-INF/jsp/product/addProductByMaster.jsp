@@ -109,7 +109,7 @@
             var pid = resultObj.pid;
             MsgBox.show(msg);
             $('#content_panel').panel({
-                href:"<%=request.getContextPath() %>/product/fwdProductInfoPage?random_id=" + Math.random()+"&pid=" + pid,
+                href:"<%=request.getContextPath() %>/product/fwdProductInfoPage.do?random_id=" + Math.random()+"&pid=" + pid,
                 onLoad:function(){
                 }
             });
@@ -119,7 +119,7 @@
     }
     function returnManageProductInAddProduct(){
         $('#content_panel').panel({
-            href:"<%=request.getContextPath() %>/product/fwdManageProductPage?random_id="+Math.random(),
+            href:"<%=request.getContextPath() %>/product/fwdManageProductPage.do?random_id="+Math.random(),
             onLoad:function(){
             }
         });
@@ -162,7 +162,7 @@
         </table>
         <br/>
     </form>
-    <form id="productForm" action="<%=request.getContextPath()%>/product/saveAddProduct"
+    <form id="productForm" action="<%=request.getContextPath()%>/product/saveAddProduct.do"
           enctype="multipart/form-data" method="post">
         <table cellpadding="5">
             <tr>

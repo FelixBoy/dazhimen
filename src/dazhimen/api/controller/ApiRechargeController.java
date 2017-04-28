@@ -34,7 +34,7 @@ import java.util.SortedMap;
 @Controller
 @RequestMapping("/api/recharge")
 public class ApiRechargeController {
-    @RequestMapping(value="/getBalanceByCid", method = RequestMethod.POST)
+    @RequestMapping(value="/getBalanceByCid.do", method = RequestMethod.POST)
     public void getBalanceByCid(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -58,7 +58,7 @@ public class ApiRechargeController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value="/doRechargeByWeixin", method = RequestMethod.POST)
+    @RequestMapping(value="/doRechargeByWeixin.do", method = RequestMethod.POST)
     public void doRechargeByWeixin(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -80,7 +80,7 @@ public class ApiRechargeController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping("/dealWXRechargeResult")
+    @RequestMapping("/dealWXRechargeResult.do")
     public void dealWXRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException, ApiException {
         InputStream inStream = null;
         inStream = resq.getInputStream();
@@ -114,7 +114,7 @@ public class ApiRechargeController {
         }
 
     }
-    @RequestMapping(value="/doRechargeByAlipay", method = RequestMethod.POST)
+    @RequestMapping(value="/doRechargeByAlipay.do", method = RequestMethod.POST)
     public void doRechargeByAlipay(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -137,7 +137,7 @@ public class ApiRechargeController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping("/dealAliPayRechargeResult")
+    @RequestMapping("/dealAliPayRechargeResult.do")
     public void dealAliPayRechargeResult(HttpServletRequest resq, HttpServletResponse resp){
         //获取支付宝POST过来反馈信息
         System.out.println("===========进入支付宝回调=================");
@@ -171,7 +171,7 @@ public class ApiRechargeController {
             e.printStackTrace();
         }
     }
-    @RequestMapping(value = "/recheckWXRechargeResult", method = RequestMethod.POST)
+    @RequestMapping(value = "/recheckWXRechargeResult.do", method = RequestMethod.POST)
     public void recheckWXRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
         try {
             ApiUtils.checkSignature(resq);
@@ -195,7 +195,7 @@ public class ApiRechargeController {
         }
 
     }
-    @RequestMapping(value = "/recheckAlipayRechargeResult", method = RequestMethod.POST)
+    @RequestMapping(value = "/recheckAlipayRechargeResult.do", method = RequestMethod.POST)
     public void recheckAlipayRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
         try {
             ApiUtils.checkSignature(resq);

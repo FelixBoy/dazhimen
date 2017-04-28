@@ -2,7 +2,7 @@
     $(function () {
         $("#rechargeList").datagrid({
             title:"充值列表",
-            url:"<%=request.getContextPath()%>/recharge/queryAllRecharge?random_id="+Math.random(),
+            url:"<%=request.getContextPath()%>/recharge/queryAllRecharge.do?random_id="+Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,

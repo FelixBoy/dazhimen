@@ -1,7 +1,7 @@
 <script type="text/javascript">
     function returnManageProductInModifyProduct(){
         $('#content_panel').panel({
-            href:"<%=request.getContextPath() %>/product/fwdManageProductPage?random_id="+Math.random(),
+            href:"<%=request.getContextPath() %>/product/fwdManageProductPage.do?random_id="+Math.random(),
             onLoad:function(){
             }
         });
@@ -11,12 +11,12 @@
             $("#listImageInModify").attr("src",$("#listimage").val()+"?random_id="+Math.random());
             dealMainImagesInModifyProduct();
         }});
-        $("#modifyProductForm").form("load", "<%=request.getContextPath()%>/product/getModifyProductInforById" +
+        $("#modifyProductForm").form("load", "<%=request.getContextPath()%>/product/getModifyProductInforById.do" +
             "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random());
     });
     function dealMainImagesInModifyProduct(){
         $.ajax({
-            url:"<%=request.getContextPath()%>/product/getMainImagesInforById" +
+            url:"<%=request.getContextPath()%>/product/getMainImagesInforById.do" +
             "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random(),
             type:'get',
             async:false,
@@ -42,7 +42,7 @@
             cache: false,
             modal: true
         });
-        $("#modifyProductMainImgDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyProductMainImgPage?pid=" + $("#pid").val()
+        $("#modifyProductMainImgDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyProductMainImgPage.do?pid=" + $("#pid").val()
             + "&random_id=" + Math.random());
         $('#modifyProductMainImgDialog').dialog("open");
     }
@@ -55,7 +55,7 @@
             cache: false,
             modal: true
         });
-        $("#modifyProductListImgDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyProductListImgPage?pid=" + $("#pid").val()
+        $("#modifyProductListImgDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyProductListImgPage.do?pid=" + $("#pid").val()
             + "&random_id=" + Math.random());
         $('#modifyProductListImgDialog').dialog("open");
     }
@@ -91,7 +91,7 @@
             return;
         }
         $.ajax({
-            url:"<%=request.getContextPath()%>/product/saveModifyProductBasicInfo",
+            url:"<%=request.getContextPath()%>/product/saveModifyProductBasicInfo.do",
             data:$('#modifyProductForm').serialize(),
             type:'post',
             async:false,
@@ -100,7 +100,7 @@
             },
             success:function(data){
                 MsgBox.show(data);
-                $("#modifyProductForm").form("load", "<%=request.getContextPath()%>/product/getModifyProductInforById" +
+                $("#modifyProductForm").form("load", "<%=request.getContextPath()%>/product/getModifyProductInforById.do" +
                     "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random());
             }
         });

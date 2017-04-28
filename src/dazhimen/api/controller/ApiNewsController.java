@@ -28,7 +28,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/api/news")
 public class ApiNewsController {
-    @RequestMapping(value = "/getCombineNewsContentById", method = RequestMethod.POST)
+    @RequestMapping(value = "/getCombineNewsContentById.do", method = RequestMethod.POST)
     public void getCombineNewsContentById(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -72,7 +72,7 @@ public class ApiNewsController {
         }
 
     }
-    @RequestMapping(value = "/getNewsURLById", method = RequestMethod.POST)
+    @RequestMapping(value = "/getNewsURLById.do", method = RequestMethod.POST)
     public void getNewsURLById(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -103,7 +103,7 @@ public class ApiNewsController {
         }
 
     }
-    @RequestMapping(value = "getCustomerCollectList", method = RequestMethod.POST)
+    @RequestMapping(value = "getCustomerCollectList.do", method = RequestMethod.POST)
     public void getCustomerCollectList(HttpServletRequest resq, HttpServletResponse resp) {
         String cid = null;
         try {
@@ -144,7 +144,7 @@ public class ApiNewsController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value = "cancelCollectNews", method = RequestMethod.POST)
+    @RequestMapping(value = "cancelCollectNews.do", method = RequestMethod.POST)
     public void cancelCollectNews(HttpServletRequest resq, HttpServletResponse resp) {
         try {
             ApiUtils.checkSignature(resq);
@@ -166,7 +166,7 @@ public class ApiNewsController {
         }
     }
 
-    @RequestMapping(value = "collectNews", method = RequestMethod.POST)
+    @RequestMapping(value = "collectNews.do", method = RequestMethod.POST)
     public void collectNews(HttpServletRequest resq, HttpServletResponse resp) {
         try {
             ApiUtils.checkSignature(resq);
@@ -192,7 +192,7 @@ public class ApiNewsController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value = "searchNews", method = RequestMethod.POST)
+    @RequestMapping(value = "searchNews.do", method = RequestMethod.POST)
     public void searchNews(HttpServletRequest resq, HttpServletResponse resp) {
         try {
             ApiUtils.checkSignature(resq);
@@ -219,7 +219,7 @@ public class ApiNewsController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value = "getMoreNews", method = RequestMethod.POST)
+    @RequestMapping(value = "getMoreNews.do", method = RequestMethod.POST)
     public void getMoreNews(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -246,7 +246,7 @@ public class ApiNewsController {
         }
 
     }
-    @RequestMapping(value = "getHomePageNews", method = RequestMethod.POST)
+    @RequestMapping(value = "getHomePageNews.do", method = RequestMethod.POST)
     public void getHomePageNews(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -270,7 +270,7 @@ public class ApiNewsController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value = "getNewsContentById", method = RequestMethod.POST)
+    @RequestMapping(value = "getNewsContentById.do", method = RequestMethod.POST)
     public void getNewsContentById(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -303,7 +303,7 @@ public class ApiNewsController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value = "/getShareURL", method = RequestMethod.POST)
+    @RequestMapping(value = "/getShareURL.do", method = RequestMethod.POST)
     public void getShareURL(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);

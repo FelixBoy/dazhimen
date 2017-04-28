@@ -6,7 +6,7 @@
         var row = $('#productList').datagrid('getSelected');
         if (row){
             $('#content_panel').panel({
-                href:"<%=request.getContextPath() %>/product/fwdProductInfoPage?random_id=" + Math.random()+"&pid=" + row.pid,
+                href:"<%=request.getContextPath() %>/product/fwdProductInfoPage.do?random_id=" + Math.random()+"&pid=" + row.pid,
                 onLoad:function(){
                 }
             });
@@ -26,7 +26,7 @@
                 height: 150,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/product/fwdModifyProductStatusPage?random_id=" + Math.random()+"&pid=" + row.pid
+                href: "<%=request.getContextPath()%>/product/fwdModifyProductStatusPage.do?random_id=" + Math.random()+"&pid=" + row.pid
                         + "&pid="+row.pid + "&status=" + row.statusnum,
                 modal: true
             });
@@ -38,7 +38,7 @@
         var row = $('#productList').datagrid('getSelected');
         if (row){
             $('#content_panel').panel({
-                href:"<%=request.getContextPath() %>/product/fwdManageCoursePage?random_id=" + Math.random()+"&pid=" + row.pid,
+                href:"<%=request.getContextPath() %>/product/fwdManageCoursePage.do?random_id=" + Math.random()+"&pid=" + row.pid,
                 onLoad:function(){
                 }
             });
@@ -52,7 +52,7 @@
                 $.messager.confirm('确认','产品【'+ row.pname + '】处于上架状态，修改【价格】等关键信息，可能造成异常，确定修改吗？',function(r){
                     if (r){
                         $('#content_panel').panel({
-                            href:"<%=request.getContextPath() %>/product/fwdModifyProductPage?random_id=" + Math.random()+"&pid=" + row.pid,
+                            href:"<%=request.getContextPath() %>/product/fwdModifyProductPage.do?random_id=" + Math.random()+"&pid=" + row.pid,
                             onLoad:function(){
                             }
                         });
@@ -60,7 +60,7 @@
                 });
             }else{
                 $('#content_panel').panel({
-                    href:"<%=request.getContextPath() %>/product/fwdModifyProductPage?random_id=" + Math.random()+"&pid=" + row.pid,
+                    href:"<%=request.getContextPath() %>/product/fwdModifyProductPage.do?random_id=" + Math.random()+"&pid=" + row.pid,
                     onLoad:function(){
                     }
                 });
@@ -75,13 +75,13 @@
             if(userBean.getUtype().equals(Constant.userType_Master)){
         %>
         $('#content_panel').panel({
-            href:"<%=request.getContextPath() %>/product/fwdAddProductByMasterPage?random_id="+Math.random(),
+            href:"<%=request.getContextPath() %>/product/fwdAddProductByMasterPage.do?random_id="+Math.random(),
             onLoad:function(){
             }
         });
         <%}else{%>
             $('#content_panel').panel({
-                href:"<%=request.getContextPath() %>/product/fwdAddProductPage?random_id="+Math.random(),
+                href:"<%=request.getContextPath() %>/product/fwdAddProductPage.do?random_id="+Math.random(),
                 onLoad:function(){
                 }
             });
@@ -106,7 +106,7 @@
             $.messager.confirm('确认','您确认删除产品【'+ row.pname + '】吗？',function(r){
                 if (r){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/product/saveProductDel?pid=" + row.pid+"&random_id="+Math.random(),
+                        url:"<%=request.getContextPath()%>/product/saveProductDel.do?pid=" + row.pid+"&random_id="+Math.random(),
                         type:'get',
                         async:false,
                         error:function(data){
@@ -124,7 +124,7 @@
     $(function () {
         $("#productList").datagrid({
             title:"产品列表",
-            url:"<%=request.getContextPath()%>/product/queryAllProducts?random_id="+Math.random(),
+            url:"<%=request.getContextPath()%>/product/queryAllProducts.do?random_id="+Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,

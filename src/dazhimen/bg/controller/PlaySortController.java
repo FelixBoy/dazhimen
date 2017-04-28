@@ -23,11 +23,11 @@ import java.util.List;
 @RequestMapping("/playsort")
 public class PlaySortController {
 
-    @RequestMapping("/forwardAddSkillPackIndexSortPage")
+    @RequestMapping("/forwardAddSkillPackIndexSortPage.do")
     public String forwardAddProductIndexSortPage(){
         return "/playsort/addSkillPackIndexSort";
     }
-    @RequestMapping("/getAddSkillPackIndexSortData")
+    @RequestMapping("/getAddSkillPackIndexSortData.do")
     public void getAddSkillPackIndexSortData(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -39,7 +39,7 @@ public class PlaySortController {
         }
     }
 
-    @RequestMapping("/saveAddSkillPackIndexSort")
+    @RequestMapping("/saveAddSkillPackIndexSort.do")
     public void saveAddSkillPackIndexSort(@RequestParam("pid") String pid,HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try{
@@ -54,7 +54,7 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，新增技能包首页排序出错");
         }
     }
-    @RequestMapping("/clearSkillPackIndexSort")
+    @RequestMapping("/clearSkillPackIndexSort.do")
     public void clearSkillPackIndexSort(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -65,7 +65,7 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/queryAllSkillPackIndexSort")
+    @RequestMapping("/queryAllSkillPackIndexSort.do")
     public void queryAllSkillPackIndexSort(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -77,7 +77,7 @@ public class PlaySortController {
         }
     }
 
-    @RequestMapping("/queryAllExperiencePackIndexSort")
+    @RequestMapping("/queryAllExperiencePackIndexSort.do")
     public void queryAllExperiencePackIndexSort(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -88,12 +88,12 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询经验包首页排序信息失败");
         }
     }
-    @RequestMapping("/forwardAddExperiencePackIndexSortPage")
+    @RequestMapping("/forwardAddExperiencePackIndexSortPage.do")
     public String forwardAddExperiencePackIndexSortPage(){
         return "/playsort/addExperiencePackIndexSort";
     }
 
-    @RequestMapping("/getAddExperiencePackIndexSortData")
+    @RequestMapping("/getAddExperiencePackIndexSortData.do")
     public void getAddExperiencePackIndexSortData(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -104,7 +104,7 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp ,"出现异常，查询新增经验包首页排序数据出错");
         }
     }
-    @RequestMapping("/saveAddExperiencePackIndexSort")
+    @RequestMapping("/saveAddExperiencePackIndexSort.do")
     public void saveAddExperiencePackIndexSort(@RequestParam("pid") String pid,HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try{
@@ -119,7 +119,7 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，新增经验包首页排序出错");
         }
     }
-    @RequestMapping("/clearExperiencePackIndexSort")
+    @RequestMapping("/clearExperiencePackIndexSort.do")
     public void clearExperiencePackIndexSort(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -131,7 +131,7 @@ public class PlaySortController {
         }
     }
 
-    @RequestMapping("/queryAllNewsIndexSort")
+    @RequestMapping("/queryAllNewsIndexSort.do")
     public void queryAllNewsIndexSort(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -143,11 +143,11 @@ public class PlaySortController {
         }
     }
 
-    @RequestMapping("/forwardAddNewsIndexSortPage")
+    @RequestMapping("/forwardAddNewsIndexSortPage.do")
     public String forwardAddNewsIndexSortPage(){
         return "/playsort/addNewsIndexSort";
     }
-    @RequestMapping("/getAddNewsIndexSortData")
+    @RequestMapping("/getAddNewsIndexSortData.do")
     public void getAddNewsIndexSortData(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -159,7 +159,7 @@ public class PlaySortController {
         }
     }
 
-    @RequestMapping("/saveAddNewsIndexSort")
+    @RequestMapping("/saveAddNewsIndexSort.do")
     public void saveAddNewsIndexSort(@RequestParam("nid") String nid,HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try{
@@ -175,7 +175,7 @@ public class PlaySortController {
         }
     }
 
-    @RequestMapping("/clearNewsIndexSort")
+    @RequestMapping("/clearNewsIndexSort.do")
     public void clearNewsIndexSort(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -187,7 +187,7 @@ public class PlaySortController {
         }
     }
 
-    @RequestMapping("/queryAllMasterIndexSort")
+    @RequestMapping("/queryAllMasterIndexSort.do")
     public void queryAllMasterIndexSort(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -198,12 +198,12 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询新闻首页排序信息失败");
         }
     }
-    @RequestMapping("/forwardAddMasterIndexSortPage")
+    @RequestMapping("/forwardAddMasterIndexSortPage.do")
     public String forwardAddMasterIndexSortPage(){
         return "/playsort/addMasterIndexSort";
     }
 
-    @RequestMapping("/getAddMasterIndexSortData")
+    @RequestMapping("/getAddMasterIndexSortData.do")
     public void getAddMasterIndexSortData(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -215,7 +215,7 @@ public class PlaySortController {
         }
     }
 
-    @RequestMapping("/saveAddMasterIndexSort")
+    @RequestMapping("/saveAddMasterIndexSort.do")
     public void saveAddMasterIndexSort(@RequestParam("uid") String uid,HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try{
@@ -230,7 +230,7 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，新增掌门首页排序出错");
         }
     }
-    @RequestMapping("/clearMasterIndexSort")
+    @RequestMapping("/clearMasterIndexSort.do")
     public void clearMasterIndexSort(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -241,11 +241,11 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/fwdIndexPlayManagePage")
+    @RequestMapping("/fwdIndexPlayManagePage.do")
     public String fwdIndexPlayManagePage(){
         return "/playsort/manageIndexPlay";
     }
-    @RequestMapping("/queryAllIndexPlay")
+    @RequestMapping("/queryAllIndexPlay.do")
     public void queryAllIndexPlay(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -256,12 +256,12 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询首页轮播信息失败");
         }
     }
-    @RequestMapping("/fwdAddIndexPlayPage")
+    @RequestMapping("/fwdAddIndexPlayPage.do")
     public String fwdAddIndexPlayPage(){
         return "/playsort/addIndexPlay";
     }
 
-    @RequestMapping("/getAddIndexPlayData")
+    @RequestMapping("/getAddIndexPlayData.do")
     public void getAddIndexPlayData(HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try {
@@ -272,7 +272,7 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询新增轮播数据出错");
         }
     }
-    @RequestMapping("/saveAddIndexPlay")
+    @RequestMapping("/saveAddIndexPlay.do")
     public void saveAddIndexPlay(@RequestParam("id") String id,@RequestParam("type") String type,HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try{
@@ -287,7 +287,7 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，新增轮播数据出错");
         }
     }
-    @RequestMapping("/saveDeleteIndexPlay")
+    @RequestMapping("/saveDeleteIndexPlay.do")
     public void saveDeleteIndexPlay(@RequestParam("id") String id, @RequestParam("type") String type, HttpServletResponse resp){
         PlaySortService playSortService = new PlaySortService();
         try{
@@ -302,7 +302,7 @@ public class PlaySortController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，取消轮播数据出错");
         }
     }
-    @RequestMapping("/fwdIndexSortManagePage")
+    @RequestMapping("/fwdIndexSortManagePage.do")
     public String fwdIndexSortManagePage(){
         return "/playsort/manageIndexSort";
     }

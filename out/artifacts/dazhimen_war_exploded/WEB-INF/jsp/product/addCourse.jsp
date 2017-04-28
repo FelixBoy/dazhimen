@@ -2,7 +2,7 @@
     $(function(){
         $("#pidInAddCourse").val($("#pidInManageCourse").val());
         $.ajax({
-            url:"<%=request.getContextPath()%>/product/getCourseSortData" +
+            url:"<%=request.getContextPath()%>/product/getCourseSortData.do" +
             "?pid=" +  $("#pidInAddCourse").val() + "&random_id=" + Math.random(),
             type:'get',
             async:false,
@@ -107,7 +107,7 @@
     }
 </script>
 <div style="width: 500px;margin: 0 auto;">
-<form id="courseForm" action="<%=request.getContextPath()%>/product/saveAddCourse"
+<form id="courseForm" action="<%=request.getContextPath()%>/product/saveAddCourse.do"
       enctype="multipart/form-data" method="post">
     <br/>
     <table cellpadding="5">

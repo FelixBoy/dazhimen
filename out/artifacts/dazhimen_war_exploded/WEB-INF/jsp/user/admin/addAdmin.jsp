@@ -50,7 +50,7 @@
             return;
         }
         $.ajax({
-            url:"<%=request.getContextPath()%>/user/saveAddAdmin",
+            url:"<%=request.getContextPath()%>/user/saveAddAdmin.do",
             data:$('#addAdminForm').serialize(),
             type:'post',
             async:false,

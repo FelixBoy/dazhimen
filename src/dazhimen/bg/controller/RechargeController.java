@@ -17,11 +17,11 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/recharge")
 public class RechargeController {
-    @RequestMapping("/fwdManageRechargePage")
+    @RequestMapping("/fwdManageRechargePage.do")
     public String fwdManageRechargePage(){
         return "/recharge/manageRecharge";
     }
-    @RequestMapping("/queryAllRecharge")
+    @RequestMapping("/queryAllRecharge.do")
     public void queryAllRecharge(HttpServletRequest resq, HttpServletResponse resp){
 
         try {

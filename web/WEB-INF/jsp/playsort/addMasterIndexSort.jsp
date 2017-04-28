@@ -11,7 +11,7 @@
             onDblClickRow:function(index, row){
                 if(row){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/playsort/saveAddMasterIndexSort?uid=" + row.uid
+                        url:"<%=request.getContextPath()%>/playsort/saveAddMasterIndexSort.do?uid=" + row.uid
                         + "&random_id="+Math.random(),
                         type:'get',
                         async:false,
@@ -33,7 +33,7 @@
         var row = $('#addMasterIndexSortList').datagrid('getSelected');
         if(row){
             $.ajax({
-                url:"<%=request.getContextPath()%>/playsort/saveAddMasterIndexSort?uid=" + row.uid
+                url:"<%=request.getContextPath()%>/playsort/saveAddMasterIndexSort.do?uid=" + row.uid
                 + "&random_id="+Math.random(),
                 type:'get',
                 async:false,
@@ -51,7 +51,7 @@
 </script>
 <div style="padding:5px 0;">
     <table id="addMasterIndexSortList" class="easyui-datagrid" style="width: auto;height: auto;"
-           url="<%=request.getContextPath()%>/playsort/getAddMasterIndexSortData?random_id="+Math.random()
+           url="<%=request.getContextPath()%>/playsort/getAddMasterIndexSortData.do?random_id="+Math.random()
            rownumbers="true" fitColumns="true" singleSelect="true" >
         <thead>
         <tr>

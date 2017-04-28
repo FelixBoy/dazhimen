@@ -68,7 +68,7 @@ public class ApiRechargeService {
                 localIp = Constant.AliyunIP;
             }
             int localPort = resq.getLocalPort();
-            String notify_url = "http://" + localIp + ":" + localPort + appName + "/api/recharge/dealWXRechargeResult";
+            String notify_url = "http://" + localIp + ":" + localPort + appName + "/api/recharge/dealWXRechargeResult.do";
             String recid = new IdUtils().getRECId();
             Map<String, String> map = WXPayUtil.weixinPrePay(recid, new BigDecimal(rechargeAmount),"大职门余额充值", remoteIp, notify_url, cid);
             if(map.get("result_code").toString().equalsIgnoreCase("SUCCESS")){
@@ -112,7 +112,7 @@ public class ApiRechargeService {
                 localIp = Constant.AliyunIP;
             }
             int localPort = resq.getLocalPort();
-            String notify_url = "http://" + localIp + ":" + localPort + appName + "/api/recharge/dealAliPayRechargeResult";
+            String notify_url = "http://" + localIp + ":" + localPort + appName + "/api/recharge/dealAliPayRechargeResult.do";
             String recid = new IdUtils().getRECId();
             resultMap.put("recid", recid);
             orderString = AlipayUtil.orderPay(rechargeAmountDouble, recid,"大职门余额充值", notify_url, cid);

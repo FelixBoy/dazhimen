@@ -12,7 +12,7 @@
             height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/user/fwdMasterAddPage?random_id=" + Math.random(),
+            href: "<%=request.getContextPath()%>/user/fwdMasterAddPage.do?random_id=" + Math.random(),
             modal: true
         });
         $('#masterAddDialog').dialog("open");
@@ -27,14 +27,14 @@
                 height: 500,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/user/fwdViewMasterPage?uid=" + row.uid + "&random_id=" + Math.random(),
+                href: "<%=request.getContextPath()%>/user/fwdViewMasterPage.do?uid=" + row.uid + "&random_id=" + Math.random(),
                 modal: true
             });
             $('#viewMasterDialog').dialog("open");
         }
     }
     function fwdMasterEditPage(index){
-        $('#masterList').datagrid('selectRow',index);// 关键在这里
+        $('#masterList').datagrid('selectRow',index);
         var row = $('#masterList').datagrid('getSelected');
         if (row){
             $('#masterModifyDialog').dialog({
@@ -43,20 +43,20 @@
                 height: 600,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/user/fwdMasterModifyPage?uid=" + row.uid + "&random_id=" + Math.random(),
+                href: "<%=request.getContextPath()%>/user/fwdMasterModifyPage.do?uid=" + row.uid + "&random_id=" + Math.random(),
                 modal: true
             });
             $('#masterModifyDialog').dialog("open");
         }
     }
     function saveMasterDel(index){
-        $('#masterList').datagrid('selectRow',index);// 关键在这里
+        $('#masterList').datagrid('selectRow',index);
         var row = $('#masterList').datagrid('getSelected');
         if(row){
             $.messager.confirm('确认','您确认想要删除掌门【' + row.name + '】吗？',function(r){
                 if (r){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/user/saveMasterDel?uid=" + row.uid+"&random_id="+Math.random(),
+                        url:"<%=request.getContextPath()%>/user/saveMasterDel.do?uid=" + row.uid+"&random_id="+Math.random(),
                         type:'get',
                         async:false,
                         error:function(data){
@@ -74,7 +74,7 @@
     $(function () {
         $("#masterList").datagrid({
             title:"掌门列表",
-            url:"<%=request.getContextPath()%>/user/queryAllMasters?random_id="+Math.random(),
+            url:"<%=request.getContextPath()%>/user/queryAllMasters.do?random_id="+Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,
@@ -154,14 +154,14 @@
         $("#masterList").datagrid("reload");
     }
     function saveResetMasterPassword(index){
-        $('#masterList').datagrid('selectRow',index);// 关键在这里
+        $('#masterList').datagrid('selectRow',index);
         var row = $('#masterList').datagrid('getSelected');
         if(row){
             $.messager.confirm('提示信息', '确定要重置[' + row.name +']密码为123456', function(r){
                 if (r){
                     var md5Pw = $.md5(row.loginname + '123456');
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/user/saveResetUserPassword?uid=" + row.uid + "&password=" + md5Pw + "&random_id="+Math.random(),
+                        url:"<%=request.getContextPath()%>/user/saveResetUserPassword.do?uid=" + row.uid + "&password=" + md5Pw + "&random_id="+Math.random(),
                         type:'get',
                         async:false,
                         error:function(data){

@@ -30,11 +30,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/news")
 public class NewsController {
-    @RequestMapping("/fwdManageNewsPage")
+    @RequestMapping("/fwdManageNewsPage.do")
     public String fwdManageNewsPage(){
         return "/news/manageNews";
     }
-    @RequestMapping("/queryAllNews")
+    @RequestMapping("/queryAllNews.do")
     public void queryAllNews(HttpServletRequest resq, HttpServletResponse resp){
         try{
             String page = resq.getParameter("page");
@@ -65,13 +65,13 @@ public class NewsController {
         }
 
     }
-    @RequestMapping("/fwdModifyNewsStatusPage")
+    @RequestMapping("/fwdModifyNewsStatusPage.do")
     public String fwdModifyNewsStatusPage(HttpServletRequest resq){
         resq.setAttribute("nid", resq.getParameter("nid"));
         resq.setAttribute("status" ,resq.getParameter("status"));
         return "/news/modifyNewsStatus";
     }
-    @RequestMapping("/saveModifyNewsStatus")
+    @RequestMapping("/saveModifyNewsStatus.do")
     public void saveModifyNewsStatus(HttpServletRequest resq,HttpServletResponse resp) {
         resp.setCharacterEncoding(Constant.CharSet);
         try {
@@ -85,11 +85,11 @@ public class NewsController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，修改新闻状态失败");
         }
     }
-    @RequestMapping(value="fwdAddNewsPage")
+    @RequestMapping(value="fwdAddNewsPage.do")
     public String fwdAddNewsPage(){
         return "/news/addNews";
     }
-    @RequestMapping(value="/saveAddNews", method = RequestMethod.POST)
+    @RequestMapping(value="/saveAddNews.do", method = RequestMethod.POST)
     public ModelAndView saveAddNews(HttpServletRequest resq, HttpServletResponse resp){
         AddNewsBean addNewsBean = getAddNewsBean(resq);
         String basePath = resq.getSession().getServletContext().getRealPath("/");
@@ -117,7 +117,7 @@ public class NewsController {
      * @param resq
      * @param resp
      */
-    @RequestMapping("/saveDeleteNews")
+    @RequestMapping("/saveDeleteNews.do")
     public void saveDeleteNews(HttpServletRequest resq, HttpServletResponse resp){
         NewsService newsService = new NewsService();
         try {
@@ -134,7 +134,7 @@ public class NewsController {
      * @param resq
      * @return
      */
-    @RequestMapping("/fwdViewNewsPage")
+    @RequestMapping("/fwdViewNewsPage.do")
     public String fwdViewNewsPage(HttpServletRequest resq){
         resq.setAttribute("nid", resq.getParameter("nid"));
         return "/news/viewNews";
@@ -145,7 +145,7 @@ public class NewsController {
      * @param resq
      * @param resp
      */
-    @RequestMapping("/getViewNewsData")
+    @RequestMapping("/getViewNewsData.do")
     public void getViewNewsData(HttpServletRequest resq, HttpServletResponse resp){
         String nid = resq.getParameter("nid");
         NewsService newsService = new NewsService();
@@ -167,7 +167,7 @@ public class NewsController {
      * @param resq
      * @return
      */
-    @RequestMapping("/fwdModifyNewsTitlePage")
+    @RequestMapping("/fwdModifyNewsTitlePage.do")
     public String fwdModifyNewsPage(HttpServletRequest resq){
         resq.setAttribute("nid", resq.getParameter("nid"));
         return "/news/modifyNewsTitle";
@@ -178,7 +178,7 @@ public class NewsController {
      * @param resq
      * @param resp
      */
-    @RequestMapping("/getModifyNewsTitleData")
+    @RequestMapping("/getModifyNewsTitleData.do")
     public void getModifyNewsTitleData(HttpServletRequest resq, HttpServletResponse resp){
         String nid = resq.getParameter("nid");
         NewsService newsService = new NewsService();
@@ -192,7 +192,7 @@ public class NewsController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/saveModifyNewsTitle")
+    @RequestMapping("/saveModifyNewsTitle.do")
     public void saveModifyNewsTitle(HttpServletRequest resq, HttpServletResponse resp){
         String newsTitle = resq.getParameter("newstitle");
         String nid = resq.getParameter("nid");
@@ -211,7 +211,7 @@ public class NewsController {
      * @param nid 新闻id
      * @return
      */
-    @RequestMapping("/fwdModifyNewsListImgPage")
+    @RequestMapping("/fwdModifyNewsListImgPage.do")
     public ModelAndView fwdModifyNewsListImgPage(@RequestParam("nid") String nid){
         ModelAndView mav = new ModelAndView("/news/modifyNewsListImg");
         mav.addObject("nid", nid);
@@ -223,7 +223,7 @@ public class NewsController {
      * @param resq
      * @return
      */
-    @RequestMapping("/saveModifyNewsListImg")
+    @RequestMapping("/saveModifyNewsListImg.do")
     public ModelAndView saveModifyNewsListImg(HttpServletRequest resq){
         NewsService newsService = new NewsService();
         ModelAndView mav = new ModelAndView("fileUploadAfterAction");
@@ -253,7 +253,7 @@ public class NewsController {
      * @param nid 新闻id
      * @return
      */
-    @RequestMapping("/fwdModifyNewsMainImgPage")
+    @RequestMapping("/fwdModifyNewsMainImgPage.do")
     public ModelAndView fwdModifyNewsMainImgPage(@RequestParam("nid") String nid){
         ModelAndView mav = new ModelAndView("/news/modifyNewsMainImg");
         mav.addObject("nid", nid);
@@ -264,7 +264,7 @@ public class NewsController {
      * @param resq
      * @return
      */
-    @RequestMapping("/saveModifyNewsMainImg")
+    @RequestMapping("/saveModifyNewsMainImg.do")
     public ModelAndView saveModifyNewsMainImg(HttpServletRequest resq){
         NewsService newsService = new NewsService();
         ModelAndView mav = new ModelAndView("fileUploadAfterAction");
@@ -293,7 +293,7 @@ public class NewsController {
      * @param resq
      * @return
      */
-    @RequestMapping("/fwdModifyNewsContentPage")
+    @RequestMapping("/fwdModifyNewsContentPage.do")
     public String fwdModifyNewsContentPage(HttpServletRequest resq){
         resq.setAttribute("nid", resq.getParameter("nid"));
         return "/news/modifyNewsContent";

@@ -17,11 +17,11 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/order")
 public class OrderController {
-    @RequestMapping("/fwdManageOrderPage")
+    @RequestMapping("/fwdManageOrderPage.do")
     public String fwdManageOrderPage(){
         return "/order/manageOrder";
     }
-    @RequestMapping("/queryAllOrder")
+    @RequestMapping("/queryAllOrder.do")
     public void queryAllOrder(HttpServletRequest resq, HttpServletResponse resp){
         try {
             String page = resq.getParameter("page");

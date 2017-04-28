@@ -3,7 +3,7 @@
         $('#masterViewForm').form({onLoadSuccess:function(){
             $("#headImgReal").attr("src",$("#headerimg").val()+"?random_id="+Math.random());
         }});
-        $("#masterViewForm").form("load", "<%=request.getContextPath()%>/user/getMasterData" +
+        $("#masterViewForm").form("load", "<%=request.getContextPath()%>/user/getMasterData.do" +
             "?uid=<%=request.getAttribute("uid").toString()%>&randomid=" + Math.random());
     });
 </script>

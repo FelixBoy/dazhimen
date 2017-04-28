@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/api/customer")
 public class ApiLoginController {
-    @RequestMapping(value = "/thirdPartLogin",method = RequestMethod.POST)
+    @RequestMapping(value = "/thirdPartLogin.do",method = RequestMethod.POST)
     public void doThirdPartLogin(HttpServletRequest resq, HttpServletResponse resp){
         try {
             checkThirdPartLoginParam(resq);
@@ -59,7 +59,7 @@ public class ApiLoginController {
         }
     }
 
-    @RequestMapping(value="/mphoneLogin",method = RequestMethod.POST)
+    @RequestMapping(value="/mphoneLogin.do",method = RequestMethod.POST)
     public void doMphoneLogin(HttpServletRequest resq,
                         HttpServletResponse resp){
         try {
@@ -94,7 +94,7 @@ public class ApiLoginController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value="/getVerifyCode",method = RequestMethod.POST)
+    @RequestMapping(value="/getVerifyCode.do",method = RequestMethod.POST)
     public void getVerifyCode(HttpServletRequest resq,
                               HttpServletResponse resp){
         try {

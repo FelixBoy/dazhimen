@@ -35,7 +35,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    @RequestMapping("/fwdTipsInforPage")
+    @RequestMapping("/fwdTipsInforPage.do")
     public String fwdTipsInforPage(HttpServletRequest resq, HttpServletResponse resp){
         String menuid = resq.getParameter("menuid");
         String tipsInfor = "欢迎使用大职门系统";
@@ -128,7 +128,7 @@ public class UserController {
      * @param resq
      * @return
      */
-    @RequestMapping("/fwdModifyPasswordPage")
+    @RequestMapping("/fwdModifyPasswordPage.do")
     public String fwdModifyPasswordPage(HttpServletRequest resq){
         return "/user/modifyPassword";
     }
@@ -138,7 +138,7 @@ public class UserController {
      * @param resq
      * @param resp
      */
-    @RequestMapping("/saveModifyPassword")
+    @RequestMapping("/saveModifyPassword.do")
     public void saveModifyPassword(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ModifyPasswordBean modifyPasswordBean = getModifyPasswordBean(resq);
@@ -153,7 +153,7 @@ public class UserController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/fwdMainPage")
+    @RequestMapping("/fwdMainPage.do")
     public String forwardMainPage(HttpServletRequest resq){
         HttpSession sessionObj = resq.getSession(false);
         LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
@@ -168,16 +168,16 @@ public class UserController {
         return "main";
     }
 
-    @RequestMapping("/fwdMasterManagePage")
+    @RequestMapping("/fwdMasterManagePage.do")
     public String fowardMasterManagePage(){
         return "/user/master/manageMaster";
     }
 
-    @RequestMapping("/fwdMasterAddPage")
+    @RequestMapping("/fwdMasterAddPage.do")
     public String forwardMasterAddPage(){
         return "user/master/addMaster";
     }
-    @RequestMapping("/saveMasterAdd")
+    @RequestMapping("/saveMasterAdd.do")
     public ModelAndView saveMasterAdd(HttpServletRequest resq,HttpServletResponse resp) {
         resp.setCharacterEncoding(Constant.CharSet);
         ModelAndView mav = new ModelAndView("fileUploadAfterAction");
@@ -215,12 +215,12 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/fwdViewMasterPage")
+    @RequestMapping("/fwdViewMasterPage.do")
     public String fwdViewMasterPage(@RequestParam("uid") String uid, HttpServletResponse resp, Map model){
         model.put("uid", uid);
         return "/user/master/viewMaster";
     }
-    @RequestMapping("/queryAllMasters")
+    @RequestMapping("/queryAllMasters.do")
     public void queryAllMasters(HttpServletRequest resq, HttpServletResponse resp) {
         try {
             UserService userService = new UserService();
@@ -254,12 +254,12 @@ public class UserController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询所有掌门信息失败");
         }
     }
-    @RequestMapping("/fwdMasterModifyPage")
+    @RequestMapping("/fwdMasterModifyPage.do")
     public String forwardMasterModifyPage(@RequestParam("uid") String uid, HttpServletResponse resp, Map model){
         model.put("uid", uid);
         return "/user/master/modifyMaster";
     }
-    @RequestMapping("/getMasterData")
+    @RequestMapping("/getMasterData.do")
     public void getMasterData(@RequestParam("uid") String uid, HttpServletRequest resq, HttpServletResponse resp){
         try{
             UserService userService = new UserService();
@@ -276,7 +276,7 @@ public class UserController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询指定掌门信息失败");
         }
     }
-    @RequestMapping("/getAdminData")
+    @RequestMapping("/getAdminData.do")
     public void getAdminData(@RequestParam("uid") String uid, HttpServletResponse resp){
         try{
             UserService userService = new UserService();
@@ -292,7 +292,7 @@ public class UserController {
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询指定管理员信息失败");
         }
     }
-    @RequestMapping("/saveMasterModify")
+    @RequestMapping("/saveMasterModify.do")
     public ModelAndView saveMasterModify(HttpServletRequest resq,HttpServletResponse resp){
         resp.setCharacterEncoding(Constant.CharSet);
         ModelAndView mav = new ModelAndView("fileUploadAfterAction");
@@ -329,7 +329,7 @@ public class UserController {
             return mav;
         }
     }
-    @RequestMapping("/saveMasterDel")
+    @RequestMapping("/saveMasterDel.do")
     public void saveMasterDel(@RequestParam("uid") String uid,HttpServletRequest resq, HttpServletResponse resp){
         resp.setCharacterEncoding(Constant.CharSet);
         try{
@@ -346,11 +346,11 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/fwdManageAdminPage")
+    @RequestMapping("/fwdManageAdminPage.do")
     public String fwdManageAdminPage() {
         return "user/admin/manageAdmin";
     }
-    @RequestMapping("/queryAllAdmin")
+    @RequestMapping("/queryAllAdmin.do")
     public void queryAllAdmin(HttpServletRequest resq, HttpServletResponse resp) {
         try {
             UserService userService = new UserService();
@@ -387,12 +387,12 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/fwdAddAdminPage")
+    @RequestMapping("/fwdAddAdminPage.do")
     public String fwdAddAdminPage(){
         return "user/admin/addAdmin";
     }
 
-    @RequestMapping("/saveAddAdmin")
+    @RequestMapping("/saveAddAdmin.do")
     public void saveAddAdmin(HttpServletResponse resp, UserBean userBean) {
         try{
             UserService userService = new UserService();
@@ -412,13 +412,13 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/fwdModifyAdminPage")
+    @RequestMapping("/fwdModifyAdminPage.do")
     public String fwdModifyAdminPage(@RequestParam("uid") String uid, HttpServletResponse resp, Map model){
         model.put("uid", uid);
         return "user/admin/modifyAdmin";
     }
 
-    @RequestMapping("/saveModifyAdmin")
+    @RequestMapping("/saveModifyAdmin.do")
     public void saveModifyAdmin(HttpServletResponse resp, UserBean user){
         UserService userService = new UserService();
         boolean result = false;
@@ -439,7 +439,7 @@ public class UserController {
             ResponseUtil.writeFailMsgToBrowse(resp,"出现异常，修改管理员信息失败");
         }
     }
-    @RequestMapping("/saveDeleteAdmin")
+    @RequestMapping("/saveDeleteAdmin.do")
     public void saveDeleteAdmin(@RequestParam("uid") String uid, HttpServletResponse resp){
         try{
             UserService userService = new UserService();
@@ -460,7 +460,7 @@ public class UserController {
      * @param resq
      * @param resp
      */
-    @RequestMapping("/saveResetUserPassword")
+    @RequestMapping("/saveResetUserPassword.do")
     public void saveResetUserPassword(HttpServletRequest resq, HttpServletResponse resp){
         UserService userService = new UserService();
         try {

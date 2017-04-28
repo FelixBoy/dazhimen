@@ -2,7 +2,7 @@
     $(function () {
         $("#orderList").datagrid({
             title:"订单列表",
-            url:"<%=request.getContextPath()%>/order/queryAllOrder?random_id="+Math.random(),
+            url:"<%=request.getContextPath()%>/order/queryAllOrder.do?random_id="+Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,

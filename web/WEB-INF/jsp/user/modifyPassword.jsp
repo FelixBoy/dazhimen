@@ -30,7 +30,7 @@
             return;
         }
         $.ajax({
-            url:"<%=request.getContextPath()%>/user/saveModifyPassword",
+            url:"<%=request.getContextPath()%>/user/saveModifyPassword.do",
             data:$('#modifyPasswordForm').serialize(),
             type:'post',
             async:false,

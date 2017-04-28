@@ -23,11 +23,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/permission")
 public class PermissionController {
-    @RequestMapping("/fwdManagePermissionPage")
+    @RequestMapping("/fwdManagePermissionPage.do")
     public String fwdManagePermissionPage(){
         return "/permission/managePermission";
     }
-    @RequestMapping("/queryAllRole")
+    @RequestMapping("/queryAllRole.do")
     public void queryAllRole(HttpServletRequest resq, HttpServletResponse resp){
         try {
             PermissionService permissionService = new PermissionService();
@@ -45,7 +45,7 @@ public class PermissionController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/saveDeleteRole")
+    @RequestMapping("/saveDeleteRole.do")
     public void saveDeleteRole(@RequestParam("rid") String rid, HttpServletResponse resp){
         PermissionService permissionService = new PermissionService();
         try {
@@ -57,11 +57,11 @@ public class PermissionController {
         }
     }
 
-    @RequestMapping("/forwardAddRolePage")
+    @RequestMapping("/forwardAddRolePage.do")
     public String forwardAddRolePage(){
         return "/permission/addRole";
     }
-    @RequestMapping("/saveAddRole")
+    @RequestMapping("/saveAddRole.do")
     public void saveAddRole(HttpServletRequest resq, HttpServletResponse resp){
         AddRoleBean addRoleBean = getAddRoleBean(resq);
         PermissionService permissionService = new PermissionService();
@@ -73,12 +73,12 @@ public class PermissionController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/fwdViewRolePage")
+    @RequestMapping("/fwdViewRolePage.do")
     public String fwdViewRolePage(HttpServletRequest resq){
         resq.setAttribute("rid", resq.getParameter("rid"));
         return "/permission/viewRole";
     }
-    @RequestMapping("/getRoleInfor")
+    @RequestMapping("/getRoleInfor.do")
     public void getRoleInfor(HttpServletRequest resq, HttpServletResponse resp){
         String rid = resq.getParameter("rid");
         PermissionService permissionService = new PermissionService();
@@ -90,7 +90,7 @@ public class PermissionController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/queryIrRoleModule")
+    @RequestMapping("/queryIrRoleModule.do")
     public void queryIrRoleModule(HttpServletRequest resq, HttpServletResponse resp){
         String rid = resq.getParameter("rid");
         PermissionService permissionService = new PermissionService();
@@ -102,12 +102,12 @@ public class PermissionController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/fwdModifyRolePage")
+    @RequestMapping("/fwdModifyRolePage.do")
     public String fwdModifyRolePage(HttpServletRequest resq){
         resq.setAttribute("rid", resq.getParameter("rid"));
         return "/permission/modifyRole";
     }
-    @RequestMapping("/getModifyRoleInfor")
+    @RequestMapping("/getModifyRoleInfor.do")
     public void getModifyRoleInfor(HttpServletRequest resq, HttpServletResponse resp){
         String rid = resq.getParameter("rid");
         PermissionService permissionService = new PermissionService();
@@ -119,7 +119,7 @@ public class PermissionController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/saveModifyRole")
+    @RequestMapping("/saveModifyRole.do")
     public void saveModifyRole(HttpServletRequest resq, HttpServletResponse resp){
         ModifyRoleBean modifyRoleBean = getModifyRoleBean(resq);
         PermissionService permissionService = new PermissionService();
@@ -131,12 +131,12 @@ public class PermissionController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/fwdAdjustRoleUserPage")
+    @RequestMapping("/fwdAdjustRoleUserPage.do")
     public String fwdAdjustRoleUserPage(HttpServletRequest resq){
         resq.setAttribute("rid", resq.getParameter("rid"));
         return "/permission/adjustRoleUser";
     }
-    @RequestMapping("/getRoleInforInAdjustUser")
+    @RequestMapping("/getRoleInforInAdjustUser.do")
     public void getRoleInforInAdjustUser(HttpServletRequest resq, HttpServletResponse resp){
         String rid = resq.getParameter("rid");
         PermissionService permissionService = new PermissionService();
@@ -148,7 +148,7 @@ public class PermissionController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/queryIrRoleUser")
+    @RequestMapping("/queryIrRoleUser.do")
     public void queryIrRoleUser(HttpServletRequest resq, HttpServletResponse resp){
         String rid = resq.getParameter("rid");
         PermissionService permissionService = new PermissionService();
@@ -160,13 +160,13 @@ public class PermissionController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-    @RequestMapping("/forwardAddIrRoleUserPage")
+    @RequestMapping("/forwardAddIrRoleUserPage.do")
     public ModelAndView forwardAddIrRoleUserPage(@RequestParam("rid") String rid){
         ModelAndView mav = new ModelAndView("/permission/addIrRoleUser");
         mav.addObject("rid", rid);
         return mav;
     }
-    @RequestMapping("/getAddIrRoleUserData")
+    @RequestMapping("/getAddIrRoleUserData.do")
     public void getAddIrRoleUserData(HttpServletRequest resq, HttpServletResponse resp){
         String rid = resq.getParameter("rid");
         PermissionService permissionService = new PermissionService();
@@ -184,7 +184,7 @@ public class PermissionController {
      * @param resq
      * @param resp
      */
-    @RequestMapping("/saveAddIrRoleUser")
+    @RequestMapping("/saveAddIrRoleUser.do")
     public void saveAddIrRoleUser(HttpServletRequest resq, HttpServletResponse resp){
         String rid = resq.getParameter("rid");
         String uid = resq.getParameter("uid");
@@ -207,7 +207,7 @@ public class PermissionController {
      * @param resq
      * @param resp
      */
-    @RequestMapping("/saveRemoveRoleUser")
+    @RequestMapping("/saveRemoveRoleUser.do")
     public void saveRemoveRoleUser(HttpServletRequest resq, HttpServletResponse resp){
         String rid = resq.getParameter("rid");
         String uid = resq.getParameter("uid");

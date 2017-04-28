@@ -1,14 +1,14 @@
 <script type="text/javascript">
     function returnManageRole() {
         $('#content_panel').panel({
-            href:"<%=request.getContextPath() %>/permission/fwdManagePermissionPage?random_id="+Math.random()
+            href:"<%=request.getContextPath() %>/permission/fwdManagePermissionPage.do?random_id="+Math.random()
         });
     }
     $(function(){
-        $("#adjustRoleUserForm").form("load", "<%=request.getContextPath()%>/permission/getRoleInforInAdjustUser" +
+        $("#adjustRoleUserForm").form("load", "<%=request.getContextPath()%>/permission/getRoleInforInAdjustUser.do" +
             "?rid=<%=request.getAttribute("rid").toString()%>&randomid=" + Math.random());
         $("#roleUserList").datagrid({
-            url:"<%=request.getContextPath()%>/permission/queryIrRoleUser?rid=<%=request.getAttribute("rid").toString()%>&randomid=" + Math.random(),
+            url:"<%=request.getContextPath()%>/permission/queryIrRoleUser.do?rid=<%=request.getAttribute("rid").toString()%>&randomid=" + Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,
@@ -36,7 +36,7 @@
             $.messager.confirm('确认','您确认移除【'+ row.name + '】吗？',function(r) {
                 if (r) {
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/permission/saveRemoveRoleUser?rid=<%=request.getAttribute("rid").toString()%>" + "&uid=" + row.uid
+                        url:"<%=request.getContextPath()%>/permission/saveRemoveRoleUser.do?rid=<%=request.getAttribute("rid").toString()%>" + "&uid=" + row.uid
                         + "&random_id="+Math.random(),
                         type:'get',
                         async:false,
@@ -61,7 +61,7 @@
             cache: false,
             modal: true
         });
-        $("#addIrRoleUserDialog").dialog("refresh", "<%=request.getContextPath()%>/permission/forwardAddIrRoleUserPage?rid=" + $("#rid").val() + "&random_id=" + Math.random());
+        $("#addIrRoleUserDialog").dialog("refresh", "<%=request.getContextPath()%>/permission/forwardAddIrRoleUserPage.do?rid=" + $("#rid").val() + "&random_id=" + Math.random());
         $("#addIrRoleUserDialog").dialog("open");
     }
 </script>
@@ -86,7 +86,7 @@
                 <td>名称:</td>
                 <td><input class="dzm-noBorder-text" readonly id="name" name="name"></td>
                 <td>可以分配给掌门:</td>
-                <td><input class="dzm-noBorder-text" style="font-size: large" readonly id="ismastercanown" name="ismastercanown"></td>
+                <td><input class="dzm-noBorder-text" readonly id="ismastercanown" name="ismastercanown"></td>
             </tr>
             <tr>
                 <td>介绍:</td>

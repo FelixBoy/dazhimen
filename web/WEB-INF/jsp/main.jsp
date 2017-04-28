@@ -37,100 +37,100 @@
             switch (nodeid){
                 case 'product_news':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&menuid=product_news",
+                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage.do?random_id="+Math.random() + "&menuid=product_news",
                         onLoad:function(){
                         }
                     });
                     break;
                 case 'product_manage':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/product/fwdManageProductPage?random_id="+Math.random(),
+                        href:"<%=request.getContextPath() %>/product/fwdManageProductPage.do?random_id="+Math.random(),
                         onLoad:function(){
                         }
                     });
                     break;
                 case 'news_manage':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/news/fwdManageNewsPage?random_id="+Math.random()
+                        href:"<%=request.getContextPath() %>/news/fwdManageNewsPage.do?random_id="+Math.random()
                     });
                     break;
                 case 'customer_recharge_order':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&menuid=customer_recharge_order",
+                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage.do?random_id="+Math.random() + "&menuid=customer_recharge_order",
                         onLoad:function(){
                         }
                     });
                     break;
                 case 'customer_query':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/customer/fwdCustomerManagePage?random_id="+Math.random(),
+                        href:"<%=request.getContextPath() %>/customer/fwdCustomerManagePage.do?random_id="+Math.random(),
                         onLoad:function(){
                         }
                     });
                     break;
                 case 'recharge_query':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/recharge/fwdManageRechargePage?random_id="+Math.random(),
+                        href:"<%=request.getContextPath() %>/recharge/fwdManageRechargePage.do?random_id="+Math.random(),
                         onLoad:function(){
                         }
                     });
                     break;
                 case 'order_query':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/order/fwdManageOrderPage?random_id="+Math.random(),
+                        href:"<%=request.getContextPath() %>/order/fwdManageOrderPage.do?random_id="+Math.random(),
                         onLoad:function(){
                         }
                     });
                     break;
                 case 'play_sort':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() + "&menuid=play_sort",
+                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage.do?random_id="+Math.random() + "&menuid=play_sort",
                         onLoad:function(){
                         }
                     });
                     break;
                 case 'indexplay_manage':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/playsort/fwdIndexPlayManagePage?random_id="+Math.random()
+                        href:"<%=request.getContextPath() %>/playsort/fwdIndexPlayManagePage.do?random_id="+Math.random()
                     });
                     break;
                 case 'indexsort_manange':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/playsort/fwdIndexSortManagePage?random_id="+Math.random(),
+                        href:"<%=request.getContextPath() %>/playsort/fwdIndexSortManagePage.do?random_id="+Math.random(),
                         onLoad:function(){
                         }
                     });
                     break;
                 case 'master_admin_permission':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage?random_id="+Math.random() +  "&menuid=master_admin_permission",
+                        href:"<%=request.getContextPath() %>/user/fwdTipsInforPage.do?random_id="+Math.random() +  "&menuid=master_admin_permission",
                         onLoad:function(){
                         }
                     });
                     break;
                 case 'master_manage':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdMasterManagePage?random_id="+Math.random(),
+                        href:"<%=request.getContextPath() %>/user/fwdMasterManagePage.do?random_id="+Math.random(),
                         onLoad:function(){
                         }
                     });
                     break;
                 case 'admin_manage':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/user/fwdManageAdminPage?random_id="+Math.random(),
+                        href:"<%=request.getContextPath() %>/user/fwdManageAdminPage.do?random_id="+Math.random(),
                         onLoad:function(){
                         }
                     });
                     break;
                 case 'permission_manage':
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/permission/fwdManagePermissionPage?random_id="+Math.random()
+                        href:"<%=request.getContextPath() %>/permission/fwdManagePermissionPage.do?random_id="+Math.random()
                     });
                     break;
                 default:
                     MsgBox.show("功能正在开发，敬请期待！");
                     $('#content_panel').panel({
-                        href:"<%=request.getContextPath() %>/demo/fwdSuspensionInfor?random_id="+Math.random()
+                        href:"<%=request.getContextPath() %>/demo/fwdSuspensionInfor.do?random_id="+Math.random()
                     });
             }
         }
@@ -142,7 +142,7 @@
                 height: 400,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/user/fwdModifyPasswordPage?randomid="+Math.random(),
+                href: "<%=request.getContextPath()%>/user/fwdModifyPasswordPage.do?randomid="+Math.random(),
                 modal: true
             });
             $('#modifyPasswordDialog').dialog("open");
@@ -157,7 +157,7 @@
     <div style="height:40px;font-size: 16px;line-height:20px;float: right;margin-right: 10px;">
         <%=userBean.getUname()%>|<%=userBean.getUtypeStr()%><br/>
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit'" onclick="modifyPassword()" >修改密码</a>
-        <a href="<%=request.getContextPath()%>/login/exitLogin" class="easyui-linkbutton" data-options="iconCls:'icon-redo'" >退出</a>
+        <a href="<%=request.getContextPath()%>/login/exitLogin.do" class="easyui-linkbutton" data-options="iconCls:'icon-redo'" >退出</a>
     </div>
 </div>
 <div data-options="region:'west',split:false,title:'导航菜单',collapsible:false" style="width:240px;padding:10px;">

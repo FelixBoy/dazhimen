@@ -32,7 +32,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/api/order")
 public class ApiOrderController {
-    @RequestMapping(value = "/getPurchaseProductByCid",method = RequestMethod.POST)
+    @RequestMapping(value = "/getPurchaseProductByCid.do",method = RequestMethod.POST)
     public void getPurchaseProductByCid(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -57,7 +57,7 @@ public class ApiOrderController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value="/buyProductByBalance", method = RequestMethod.POST)
+    @RequestMapping(value="/buyProductByBalance.do", method = RequestMethod.POST)
     public void buyProductByBalance(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -78,7 +78,7 @@ public class ApiOrderController {
 
     }
 
-    @RequestMapping(value="/buyProductByWXPay", method = RequestMethod.POST)
+    @RequestMapping(value="/buyProductByWXPay.do", method = RequestMethod.POST)
     public void buyProductByWXPay(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -94,7 +94,7 @@ public class ApiOrderController {
                 localIp = Constant.AliyunIP;
             }
             int localPort = resq.getLocalPort();
-            String notify_url = "http://" + localIp + ":" + localPort + appName + "/api/order/dealWXPayBuyProductResult";
+            String notify_url = "http://" + localIp + ":" + localPort + appName + "/api/order/dealWXPayBuyProductResult.do";
 
             String cid = resq.getParameter("cid");
             String pid = resq.getParameter("pid");
@@ -114,7 +114,7 @@ public class ApiOrderController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value="/buyProductByAlipay", method = RequestMethod.POST)
+    @RequestMapping(value="/buyProductByAlipay.do", method = RequestMethod.POST)
     public void buyProductByAlipay(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -125,7 +125,7 @@ public class ApiOrderController {
                 localIp = Constant.AliyunIP;
             }
             int localPort = resq.getLocalPort();
-            String notify_url = "http://" + localIp + ":" + localPort + appName + "/api/order/dealAliPayByProductResult";
+            String notify_url = "http://" + localIp + ":" + localPort + appName + "/api/order/dealAliPayByProductResult.do";
 
             String cid = resq.getParameter("cid");
             String pid = resq.getParameter("pid");
@@ -146,7 +146,7 @@ public class ApiOrderController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping("/dealAliPayByProductResult")
+    @RequestMapping("/dealAliPayByProductResult.do")
     public void dealAliPayRechargeResult(HttpServletRequest resq, HttpServletResponse resp){
         //获取支付宝POST过来反馈信息
         System.out.println("=======Start   支付宝支付购买产品，支付结果处理========");
@@ -181,7 +181,7 @@ public class ApiOrderController {
         }
         System.out.println("=======End  支付宝支付购买产品，支付结果处理========");
     }
-    @RequestMapping("/dealWXPayBuyProductResult")
+    @RequestMapping("/dealWXPayBuyProductResult.do")
     public void dealWXPayBuyProductResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException, ApiException {
         System.out.println("=======Start   微信支付购买产品，支付结果处理========");
         InputStream inStream = null;
@@ -223,7 +223,7 @@ public class ApiOrderController {
         }
         System.out.println("=======End  微信支付购买产品，支付结果处理========");
     }
-    @RequestMapping(value = "/recheckWXPayBuyProductResult", method = RequestMethod.POST)
+    @RequestMapping(value = "/recheckWXPayBuyProductResult.do", method = RequestMethod.POST)
     public void recheckWXPayBuyProductResult(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -247,7 +247,7 @@ public class ApiOrderController {
         }
     }
 
-    @RequestMapping(value = "/recheckAlipayBuyProductResult", method = RequestMethod.POST)
+    @RequestMapping(value = "/recheckAlipayBuyProductResult.do", method = RequestMethod.POST)
     public void recheckAlipayBuyProductResult(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);

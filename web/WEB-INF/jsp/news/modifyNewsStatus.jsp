@@ -22,11 +22,11 @@
         if(newStatus == oldStatus){
             return;
         }
-        $.get("<%=request.getContextPath()%>/news/saveModifyNewsStatus?random_id=" + Math.random()
+        $.get("<%=request.getContextPath()%>/news/saveModifyNewsStatus.do?random_id=" + Math.random()
             + "&nid=<%=request.getAttribute("nid")%>&status="+newStatus,
             function(data){
                 MsgBox.show(data);
-                $('#modifyNewsStatusDialog').dialog('close');		// close the dialog
+                $('#modifyNewsStatusDialog').dialog('close');
                 $('#newsList').datagrid('reload');
             }
         );

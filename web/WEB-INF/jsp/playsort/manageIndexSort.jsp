@@ -11,7 +11,7 @@
             height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/playsort/forwardAddSkillPackIndexSortPage?random_id=" + Math.random(),
+            href: "<%=request.getContextPath()%>/playsort/forwardAddSkillPackIndexSortPage.do?random_id=" + Math.random(),
             modal: true
         });
         $('#addSkillPackIndexSortDialog').dialog("open");
@@ -28,7 +28,7 @@
             height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/playsort/forwardAddExperiencePackIndexSortPage?random_id=" + Math.random(),
+            href: "<%=request.getContextPath()%>/playsort/forwardAddExperiencePackIndexSortPage.do?random_id=" + Math.random(),
             modal: true
         });
         $('#addExperiencePackIndexSortDialog').dialog("open");
@@ -46,7 +46,7 @@
             height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/playsort/forwardAddNewsIndexSortPage?random_id=" + Math.random(),
+            href: "<%=request.getContextPath()%>/playsort/forwardAddNewsIndexSortPage.do?random_id=" + Math.random(),
             modal: true
         });
         $('#addNewsIndexSortDialog').dialog("open");
@@ -64,7 +64,7 @@
             height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/playsort/forwardAddMasterIndexSortPage?random_id=" + Math.random(),
+            href: "<%=request.getContextPath()%>/playsort/forwardAddMasterIndexSortPage.do?random_id=" + Math.random(),
             modal: true
         });
         $('#addMasterIndexSortDialog').dialog("open");
@@ -73,7 +73,7 @@
         $.messager.confirm('确认','您确定清空【技能包】首页排序吗？',function(r){
             if (r){
                 $.ajax({
-                    url:"<%=request.getContextPath()%>/playsort/clearSkillPackIndexSort?random_id="+Math.random(),
+                    url:"<%=request.getContextPath()%>/playsort/clearSkillPackIndexSort.do?random_id="+Math.random(),
                     type:'get',
                     async:false,
                     error:function(data){
@@ -91,7 +91,7 @@
         $.messager.confirm('确认','您确定清空【经验包】首页排序吗？',function(r){
             if (r){
                 $.ajax({
-                    url:"<%=request.getContextPath()%>/playsort/clearExperiencePackIndexSort?random_id="+Math.random(),
+                    url:"<%=request.getContextPath()%>/playsort/clearExperiencePackIndexSort.do?random_id="+Math.random(),
                     type:'get',
                     async:false,
                     error:function(data){
@@ -109,7 +109,7 @@
         $.messager.confirm('确认','您确定清空【新闻】首页排序吗？',function(r){
             if (r){
                 $.ajax({
-                    url:"<%=request.getContextPath()%>/playsort/clearNewsIndexSort?random_id="+Math.random(),
+                    url:"<%=request.getContextPath()%>/playsort/clearNewsIndexSort.do?random_id="+Math.random(),
                     type:'get',
                     async:false,
                     error:function(data){
@@ -127,7 +127,7 @@
         $.messager.confirm('确认','您确定清空【掌门】首页排序吗？',function(r){
             if (r){
                 $.ajax({
-                    url:"<%=request.getContextPath()%>/playsort/clearMasterIndexSort?random_id="+Math.random(),
+                    url:"<%=request.getContextPath()%>/playsort/clearMasterIndexSort.do?random_id="+Math.random(),
                     type:'get',
                     async:false,
                     error:function(data){
@@ -148,7 +148,7 @@
         <div data-options="region:'west',collapsible:false" title="【技能包】首页排序" style="width:50%">
             <div id="addSkillPackIndexSortDialog" style="text-align: center;"></div>
             <table id="skillPackIndexSortList" class="easyui-datagrid" style="width: auto;height: auto;"
-                   url="<%=request.getContextPath()%>/playsort/queryAllSkillPackIndexSort?random_id="+Math.random()
+                   url="<%=request.getContextPath()%>/playsort/queryAllSkillPackIndexSort.do?random_id="+Math.random()
                    rownumbers="true" fitColumns="true" singleSelect="true" >
                 <thead>
                 <tr>
@@ -167,7 +167,7 @@
         <div data-options="region:'center'" title="【经验包】首页排序">
             <div id="addExperiencePackIndexSortDialog" style="text-align: center;"></div>
             <table id="experiencePackIndexSortList" class="easyui-datagrid" style="width: auto;height: auto;"
-                   url="<%=request.getContextPath()%>/playsort/queryAllExperiencePackIndexSort?random_id="+Math.random()
+                   url="<%=request.getContextPath()%>/playsort/queryAllExperiencePackIndexSort.do?random_id="+Math.random()
                    rownumbers="true" fitColumns="true" singleSelect="true" >
                 <thead>
                 <tr>
@@ -189,7 +189,7 @@
         <div data-options="region:'west',collapsible:false" title="【新闻首】页排序" style="width:50%">
             <div id="addNewsIndexSortDialog" style="text-align: center;"></div>
             <table id="newsIndexSortList" class="easyui-datagrid" style="width: auto;height: auto;"
-                   url="<%=request.getContextPath()%>/playsort/queryAllNewsIndexSort?random_id="+Math.random()
+                   url="<%=request.getContextPath()%>/playsort/queryAllNewsIndexSort.do?random_id="+Math.random()
                    rownumbers="true" fitColumns="true" singleSelect="true" >
                 <thead>
                 <tr>
@@ -207,7 +207,7 @@
         <div data-options="region:'center'" title="【掌门】首页排序">
             <div id="addMasterIndexSortDialog" style="text-align: center;"></div>
             <table id="masterIndexSortList" class="easyui-datagrid" style="width: auto;height: auto;"
-                   url="<%=request.getContextPath()%>/playsort/queryAllMasterIndexSort?random_id="+Math.random()
+                   url="<%=request.getContextPath()%>/playsort/queryAllMasterIndexSort.do?random_id="+Math.random()
                    rownumbers="true" fitColumns="true" singleSelect="true" >
                 <thead>
                 <tr>

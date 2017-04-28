@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(function(){
-        $("#viewRoleForm").form("load", "<%=request.getContextPath()%>/permission/getRoleInfor" +
+        $("#viewRoleForm").form("load", "<%=request.getContextPath()%>/permission/getRoleInfor.do" +
             "?rid=<%=request.getAttribute("rid").toString()%>&randomid=" + Math.random());
     });
 </script>
@@ -53,7 +53,7 @@
     </table>
     <div style="width:400px;margin: 0 auto;">
     <table id="roleModuleList" class="easyui-datagrid" style="width: auto;height: 230px;"
-           url="<%=request.getContextPath()%>/permission/queryIrRoleModule?rid=<%=request.getAttribute("rid").toString()%>&randomid=" + Math.random()
+           url="<%=request.getContextPath()%>/permission/queryIrRoleModule.do?rid=<%=request.getAttribute("rid").toString()%>&randomid=" + Math.random()
            rownumbers="true" fitColumns="true" singleSelect="true" >
         <thead>
         <tr>

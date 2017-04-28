@@ -4,7 +4,7 @@
             return;
         }
         $.ajax({
-            url:"<%=request.getContextPath()%>/user/saveModifyAdmin",
+            url:"<%=request.getContextPath()%>/user/saveModifyAdmin.do",
             data:$('#modifyAdminForm').serialize(),
             type:'post',
             async:false,
@@ -19,7 +19,7 @@
         });
     }
     $(function(){
-        $("#modifyAdminForm").form("load", "<%=request.getContextPath()%>/user/getAdminData" +
+        $("#modifyAdminForm").form("load", "<%=request.getContextPath()%>/user/getAdminData.do" +
             "?uid=<%=request.getAttribute("uid").toString()%>&randomid=" + Math.random());
     });
     function checkMoidfyAdminFormBeforeSubmit(){

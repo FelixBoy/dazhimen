@@ -62,7 +62,7 @@
         $('#masterModifyForm').form({onLoadSuccess:function(){
             $("#headImgRealInModifyMaster").attr("src",$("#headerimgInModifyMaster").val()+"?random_id="+Math.random());
         }});
-        $("#masterModifyForm").form("load", "<%=request.getContextPath()%>/user/getMasterData" +
+        $("#masterModifyForm").form("load", "<%=request.getContextPath()%>/user/getMasterData.do" +
             "?uid=<%=request.getAttribute("uid").toString()%>&randomid=" + Math.random());
     });
     function checkMoidfyMasterFormBeforeSubmit(){
@@ -104,7 +104,7 @@
     }
 </script>
 <div  style="width: 400px;margin: 0 auto;">
-    <form id="masterModifyForm" action="<%=request.getContextPath()%>/user/saveMasterModify"
+    <form id="masterModifyForm" action="<%=request.getContextPath()%>/user/saveMasterModify.do"
           enctype="multipart/form-data" method="post">
         <br/>
         <table cellpadding="5">

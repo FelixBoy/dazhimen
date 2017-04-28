@@ -17,11 +17,11 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/customer")
 public class CustomerController {
-    @RequestMapping("/fwdCustomerManagePage")
+    @RequestMapping("/fwdCustomerManagePage.do")
     public String forwardCustomerManagePage(HttpServletResponse resp){
         return "/customer/manageCustomer";
     }
-    @RequestMapping("/queryAllCustomers")
+    @RequestMapping("/queryAllCustomers.do")
     public void queryAllCustomers(HttpServletRequest resq, HttpServletResponse resp){
         try{
             CustomerService customerService = new CustomerService();

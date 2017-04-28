@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/api/master")
 public class ApiMasterController {
 
-    @RequestMapping(value = "/getHomePageMasterInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "/getHomePageMasterInfo.do",method = RequestMethod.POST)
     public void getHomePageMasterInfo(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -49,7 +49,7 @@ public class ApiMasterController {
         }
     }
 
-    @RequestMapping(value = "/getMoreMasterInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "/getMoreMasterInfo.do",method = RequestMethod.POST)
     public void getMoreMasterInfo(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -75,7 +75,7 @@ public class ApiMasterController {
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
         }
     }
-    @RequestMapping(value = "/searchMasterInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "/searchMasterInfo.do",method = RequestMethod.POST)
     public void searchMasterInfo(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);
@@ -103,7 +103,7 @@ public class ApiMasterController {
         }
     }
 
-    @RequestMapping(value = "/getMasterInfoById",method = RequestMethod.POST)
+    @RequestMapping(value = "/getMasterInfoById.do",method = RequestMethod.POST)
     public void getMasterInfoById(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);

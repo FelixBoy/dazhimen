@@ -26,7 +26,7 @@
     $(function () {
         $("#selectMasterList").datagrid({
             title:"掌门列表",
-            url:"<%=request.getContextPath()%>/product/getSelectMasterData?random_id="+Math.random(),
+            url:"<%=request.getContextPath()%>/product/getSelectMasterData.do?random_id="+Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,

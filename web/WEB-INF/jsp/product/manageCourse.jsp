@@ -1,7 +1,7 @@
 <script>
     function returnManageProductInManageCourse(){
         $('#content_panel').panel({
-            href:"<%=request.getContextPath() %>/product/fwdManageProductPage?random_id="+Math.random(),
+            href:"<%=request.getContextPath() %>/product/fwdManageProductPage.do?random_id="+Math.random(),
             onLoad:function(){
             }
         });
@@ -12,7 +12,7 @@
         if(row){
             $("#modifyCourseDialog").dialog({
                 title:'修改课程信息',
-                href:"<%=request.getContextPath()%>/product/fwdModifyCoursePage?courseid=" + row.courseid + "&random_id=" + Math.random(),
+                href:"<%=request.getContextPath()%>/product/fwdModifyCoursePage.do?courseid=" + row.courseid + "&random_id=" + Math.random(),
                 width: 580,
                 height: 310,
                 closed: true,
@@ -29,7 +29,7 @@
             $.messager.confirm('确认','您确认删除课程【'+ row.coursename + '】吗？',function(r){
                 if (r){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/product/saveCourseDel?courseid=" + row.courseid
+                        url:"<%=request.getContextPath()%>/product/saveCourseDel.do?courseid=" + row.courseid
                         + "&pid=" + $("#pidInManageCourse").val() + "&random_id="+Math.random(),
                         type:'get',
                         async:false,
@@ -48,7 +48,7 @@
     function forwardAddCoursePage(){
         $('#addCourseDialog').dialog({
             title: '新增课程',
-            href:"<%=request.getContextPath()%>/product/fwdAddCoursePage?random_id=" + Math.random(),
+            href:"<%=request.getContextPath()%>/product/fwdAddCoursePage.do?random_id=" + Math.random(),
             width: 580,
             height: 310,
             closed: true,
@@ -58,11 +58,11 @@
         $('#addCourseDialog').dialog("open");
     }
     $(function(){
-        $("#viewProductFormInCoursePage").form("load", "<%=request.getContextPath()%>/product/getProductInforById" +
+        $("#viewProductFormInCoursePage").form("load", "<%=request.getContextPath()%>/product/getProductInforById.do" +
             "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random());
         $("#courseList").datagrid({
             title:"课程列表",
-            url:"<%=request.getContextPath()%>/product/queryAllCourseByPid?pid=<%=request.getAttribute("pid").toString()%>&random_id="+Math.random(),
+            url:"<%=request.getContextPath()%>/product/queryAllCourseByPid.do?pid=<%=request.getAttribute("pid").toString()%>&random_id="+Math.random(),
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,

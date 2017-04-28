@@ -1,7 +1,7 @@
 <script>
     $(function(){
         $.ajax({
-            url:"<%=request.getContextPath()%>/product/getCourseSortDataInModify" +
+            url:"<%=request.getContextPath()%>/product/getCourseSortDataInModify.do" +
             "?pid=" + $("#pidInManageCourse").val() + "&courseid=<%=request.getAttribute("courseid").toString()%>&random_id=" + Math.random(),
             type:'get',
             async:false,
@@ -169,7 +169,7 @@
     }
 </script>
 <div style="width: 500px;margin: 0 auto;">
-    <form id="modifyCourseForm" action="<%=request.getContextPath()%>/product/saveModifyCourse"
+    <form id="modifyCourseForm" action="<%=request.getContextPath()%>/product/saveModifyCourse.do"
           enctype="multipart/form-data" method="post">
         <br/>
         <table cellpadding="5">

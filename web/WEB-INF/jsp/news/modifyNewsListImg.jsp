@@ -61,7 +61,7 @@
             var msg = resultObj.msg;
             MsgBox.show(msg);
             $.ajax({
-                url:"<%=request.getContextPath()%>/news/getModifyNewsTitleData" +
+                url:"<%=request.getContextPath()%>/news/getModifyNewsTitleData.do" +
                 "?nid=<%=request.getAttribute("nid").toString()%>&random_id=" + Math.random(),
                 type:'get',
                 async:false,
@@ -94,7 +94,7 @@
     }
 </script>
 <div  style="width: 380px;margin: 0 auto;">
-    <form id="modifyNewsListimgForm" action="<%=request.getContextPath()%>/news/saveModifyNewsListImg"
+    <form id="modifyNewsListimgForm" action="<%=request.getContextPath()%>/news/saveModifyNewsListImg.do"
           enctype="multipart/form-data" method="post">
         <br/>
         <table cellpadding="5">

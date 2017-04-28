@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(function(){
-        $("#viewMasterForm").form("load", "<%=request.getContextPath()%>/product/getMasterInfor" +
+        $("#viewMasterForm").form("load", "<%=request.getContextPath()%>/product/getMasterInfor.do" +
             "?uid=<%=request.getAttribute("uid").toString()%>&randomid=" + Math.random());
     });
 </script>

@@ -2,7 +2,7 @@
     $(function () {
         $("#addIrRoleUserList").datagrid({
             title:"人员列表",
-            url:"<%=request.getContextPath()%>/permission/getAddIrRoleUserData?random_id="+Math.random() + "&rid=<%=request.getAttribute("rid").toString()%>",
+            url:"<%=request.getContextPath()%>/permission/getAddIrRoleUserData.do?random_id="+Math.random() + "&rid=<%=request.getAttribute("rid").toString()%>",
             rownumbers:true,
             singleSelect:true,
             fitColumns:true,
@@ -20,7 +20,7 @@
             onDblClickRow:function(index, row){
                 if(row){
                     $.ajax({
-                        url:"<%=request.getContextPath()%>/permission/saveAddIrRoleUser?uid=" + row.uid + "&rid=<%=request.getAttribute("rid").toString()%>"
+                        url:"<%=request.getContextPath()%>/permission/saveAddIrRoleUser.do?uid=" + row.uid + "&rid=<%=request.getAttribute("rid").toString()%>"
                         + "&random_id="+Math.random(),
                         type:'get',
                         async:false,
@@ -45,7 +45,7 @@
         var row = $('#addIrRoleUserList').datagrid('getSelected');
         if(row){
             $.ajax({
-                url:"<%=request.getContextPath()%>/permission/saveAddIrRoleUser?uid=" + row.uid + "&rid=<%=request.getAttribute("rid").toString()%>"
+                url:"<%=request.getContextPath()%>/permission/saveAddIrRoleUser.do?uid=" + row.uid + "&rid=<%=request.getAttribute("rid").toString()%>"
                 + "&random_id="+Math.random(),
                 type:'get',
                 async:false,

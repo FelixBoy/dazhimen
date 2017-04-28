@@ -29,7 +29,7 @@
         }
         var md5Pw = $.md5($("#userNameInput").val() + $("#userPwdInput").val());
         $.ajax({
-            url:"<%=request.getContextPath()%>/login/doLoginCheck?random_id="+Math.random(),
+            url:"<%=request.getContextPath()%>/login/doLoginCheck.do?random_id="+Math.random(),
             data: {loginname:$("#userNameInput").val(), password:md5Pw},
             type:'post',
             async:false,
@@ -64,7 +64,7 @@
 <img class="dw-logon-bg" src="image/login/login_bg_3.jpg">
 <div class="dw-logon-logo"></div>
 <div class="dw-logon-form">
-  <form id="loginform" action="<%=request.getContextPath()%>/login/doLoginCheck?random_id="+Math.random() method="post">
+  <form id="loginform">
     <input type="text" id="userNameInput" class="dw-logon-form-loginname"/>
     <input type="password" id="userPwdInput" class="dw-logon-form-pwd"/>
     <input type="button" id="logonBtn" class="dw-logon-form-btnlogin" onclick="onLogin()"/>

@@ -6,12 +6,12 @@
            $("#listImageReal").attr("src",$("#listimage").val() + "?rondomid=" + Math.random());
             dealMainImages();
         }});
-        $("#viewProductForm").form("load", "<%=request.getContextPath()%>/product/getProductInforById" +
+        $("#viewProductForm").form("load", "<%=request.getContextPath()%>/product/getProductInforById.do" +
             "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random());
     });
     function dealMainImages(){
         $.ajax({
-            url:"<%=request.getContextPath()%>/product/getMainImagesInforById" +
+            url:"<%=request.getContextPath()%>/product/getMainImagesInforById.do" +
                 "?pid=<%=request.getAttribute("pid").toString()%>&random_id=" + Math.random(),
             type:'get',
             async:false,
@@ -46,14 +46,14 @@
             height: 400,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/product/fwdViewMasterInforPage?uid="+$("#uid").val(),
+            href: "<%=request.getContextPath()%>/product/fwdViewMasterInforPage.do?uid="+$("#uid").val(),
             modal: true
         });
         $('#viewMasterDialog').dialog("open").dialog('setTitle','查看掌门信息');
     }
     function returnManageProductInViewProduct(){
         $('#content_panel').panel({
-            href:"<%=request.getContextPath() %>/product/fwdManageProductPage?random_id="+Math.random(),
+            href:"<%=request.getContextPath() %>/product/fwdManageProductPage.do?random_id="+Math.random(),
             onLoad:function(){
             }
         });
@@ -128,9 +128,6 @@
                 <td><input class="dzm-noBorder-text" readonly="true" id="gender" name="gender" /></td>
                 <td>手机:</td>
                 <td><input class="dzm-noBorder-text" readonly="true" id="mphone" name="mphone" /></td>
-                <%--<td colspan="2">--%>
-                    <%--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="viewMasterInfo()">完整掌门信息</a>--%>
-                <%--</td>--%>
             </tr>
             <tr>
                 <td>登录账户:</td>

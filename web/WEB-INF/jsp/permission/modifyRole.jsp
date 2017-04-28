@@ -5,18 +5,18 @@
     function cancelSelectAllPermissionInModify(){
         $("input[id^='per_']").prop("checked", false);
     }
-    $('#modifyRoleForm').form({onLoadSuccess:function(){
-        var rolepermissionstr = $("#rolepermissionstr").val();
-        if(!rolepermissionstr){
-            return;
-        }
-        var rolepermissionArr = rolepermissionstr.split(",");
-        for(var i = 0; i < rolepermissionArr.length; i++){
-            $("#per_" + rolepermissionArr[i]).prop("checked", true);
-        }
-    }});
     $(function(){
-        $("#modifyRoleForm").form("load", "<%=request.getContextPath()%>/permission/getModifyRoleInfor" +
+        $('#modifyRoleForm').form({onLoadSuccess:function(){
+            var rolepermissionstr = $("#rolepermissionstr").val();
+            if(!rolepermissionstr){
+                return;
+            }
+            var rolepermissionArr = rolepermissionstr.split(",");
+            for(var i = 0; i < rolepermissionArr.length; i++){
+                $("#per_" + rolepermissionArr[i]).prop("checked", true);
+            }
+        }});
+        $("#modifyRoleForm").form("load", "<%=request.getContextPath()%>/permission/getModifyRoleInfor.do" +
             "?rid=<%=request.getAttribute("rid").toString()%>&randomid=" + Math.random());
     });
     function checkModifyRoleFormBeforeSubmit(){
@@ -35,7 +35,7 @@
             return;
         }
         $.ajax({
-            url:"<%=request.getContextPath()%>/permission/saveModifyRole",
+            url:"<%=request.getContextPath()%>/permission/saveModifyRole.do",
             data:$('#modifyRoleForm').serialize(),
             type:'post',
             async:false,

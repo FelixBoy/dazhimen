@@ -22,7 +22,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/api/global")
 public class ApiGlobalController {
-    @RequestMapping(value = "/globalSearch", method = RequestMethod.POST)
+    @RequestMapping(value = "/globalSearch.do", method = RequestMethod.POST)
     public void globalSearch(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ApiUtils.checkSignature(resq);

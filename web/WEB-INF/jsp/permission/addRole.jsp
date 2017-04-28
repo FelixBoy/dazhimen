@@ -21,7 +21,7 @@
             return;
         }
         $.ajax({
-            url:"<%=request.getContextPath()%>/permission/saveAddRole",
+            url:"<%=request.getContextPath()%>/permission/saveAddRole.do",
             data:$('#addRoleForm').serialize(),
             type:'post',
             async:false,
