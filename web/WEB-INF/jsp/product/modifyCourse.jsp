@@ -9,7 +9,6 @@
                 MsgBox.show(data.responseText);
             },
             success:function(data) {
-                alert(data);
                 if (!data) {
                     return;
                 } else {
