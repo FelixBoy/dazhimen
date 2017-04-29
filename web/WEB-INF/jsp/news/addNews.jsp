@@ -52,7 +52,7 @@
         $("#addNewsForm").attr('target', frameId);
     }
     function checkAddNewsFormBeforeSubmit(){
-        if($("#newstitle").val().length == 0){
+        if($.trim($("#newstitle").val()).length == 0){
             MsgBox.show("请填写新闻标题");
             return false;
         }
@@ -92,26 +92,26 @@
                 }
                 if(dom_type == '2'){
                     if(!$("#" + domid).filebox("getValue")){
-                        MsgBox.show("无法保存，存在内容图片未选择");
+                        MsgBox.show("无法保存，存在图片未选择");
                         result = false;
                         return;
                     }
                     imgFileName = $("#" + domid).filebox("getValue");
                     imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
                     if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
-                        MsgBox.show("无法保存，内容主图文件，仅支持jpg、png");
+                        MsgBox.show("无法保存，图片文件，仅支持jpg、png");
                         result = false;
                         return;
                     }
                 }else if(dom_type == '1'){
-                    if($("#" + domid).val().length == 0){
-                        MsgBox.show("无法保存，存在新闻副标题未填写");
+                    if($.trim($("#" + domid).val()).length == 0){
+                        MsgBox.show("无法保存，存在副标题未填写");
                         result = false;
                         return;
                     }
                 }else if(dom_type == '3'){
-                    if($("#" + domid).val().length == 0){
-                        MsgBox.show("无法保存，存在内容文本未填写");
+                    if($.trim($("#" + domid).val()).length == 0){
+                        MsgBox.show("无法保存，存在文本未填写");
                         result = false;
                         return;
                     }
@@ -173,7 +173,7 @@
     }
     function addNewsImage() {
         var nextIndex = getNextIndex();
-        $("#newsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>内容图片:<span style='color:red'>*</span></td>" +
+        $("#newsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>图片:<span style='color:red'>*</span></td>" +
             "<td colspan='5'><input class='easyui-filebox' " +
             " data-options=\"prompt:'请选择图片(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'\"" +
             "  accept='image/jpeg,image/png'  style='width:700px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
@@ -190,7 +190,7 @@
     }
     function addNewsText() {
         var nextIndex = getNextIndex();
-        $("#newsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>内容文本:<span style='color:red'>*</span></td>" +
+        $("#newsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>文本:<span style='color:red'>*</span></td>" +
             "<td colspan='5'><input class='easyui-textbox' data-options='multiline:true'" +
             " style='width:700px;height: 60px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
@@ -280,7 +280,7 @@
             </td>
         </tr>
         <tr id="trcontent2">
-            <td>内容图片:<span style="color:red">*</span></td>
+            <td>图片:<span style="color:red">*</span></td>
             <td colspan="5">
                 <input class="easyui-filebox" data-options="prompt:'请选择图片(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'"
                        accept="image/jpeg,image/png" style="width:700px;" id="newscontent2" name="newscontent2"/>
@@ -292,7 +292,7 @@
             </td>
         </tr>
         <tr id="trcontent3">
-            <td>内容文本:<span style="color:red">*</span></td>
+            <td>文本:<span style="color:red">*</span></td>
             <td colspan="5">
                 <input class="easyui-textbox"  data-options='multiline:true'
                        style="width:700px;height: 60px;" id="newscontent3" name="newscontent3"/>
@@ -306,9 +306,9 @@
     </table>
 </form>
     <div style="text-align: center;">
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addNewsSubtitle()">添加副标题</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addNewsImage()">添加图片</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addNewsText()">添加内容</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addNewsSubtitle()">新增副标题</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addNewsImage()">新增图片</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addNewsText()">新增文本</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submitAddNewsForm()">保存</a>
     </div>
 </div>

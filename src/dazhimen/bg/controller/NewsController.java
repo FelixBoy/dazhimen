@@ -388,7 +388,73 @@ public class NewsController {
         }
         JsonObject jsonObj = new JsonObject();
         jsonObj.addProperty("code", "200");
-        jsonObj.addProperty("msg","修改新闻内容图片成功");
+        jsonObj.addProperty("msg","修改图片成功");
+        mav.addObject("parameters", jsonObj.toString());
+        return mav;
+    }
+    @RequestMapping("/deleteNewsContentSubtitle.do")
+    public void deleteNewsContentSubtitle(HttpServletRequest resq, HttpServletResponse resp){
+        String contentid = resq.getParameter("contentid");
+        String nid = resq.getParameter("nid");
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        NewsService newsService = new NewsService();
+        try {
+            newsService.deleteNewsContentSubtitle(nid, contentid, basePath);
+            ResponseUtil.writeMsg(resp, "删除副标题成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/deleteNewsContentText.do")
+    public void deleteNewsContentText(HttpServletRequest resq, HttpServletResponse resp){
+        String contentid = resq.getParameter("contentid");
+        String nid = resq.getParameter("nid");
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        NewsService newsService = new NewsService();
+        try {
+            newsService.deleteNewsContentText(nid, contentid, basePath);
+            ResponseUtil.writeMsg(resp, "删除本文成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/deleteNewsContentImg.do")
+    public void deleteNewsContentImg(HttpServletRequest resq, HttpServletResponse resp){
+        String contentid = resq.getParameter("contentid");
+        String nid = resq.getParameter("nid");
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        NewsService newsService = new NewsService();
+        try {
+            newsService.deleteNewsContentImg(nid, contentid, basePath);
+            ResponseUtil.writeMsg(resp, "删除图片成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+
+    @RequestMapping(value="/saveAddNewsContent.do", method = RequestMethod.POST)
+    public ModelAndView saveAddNewsContent(HttpServletRequest resq, HttpServletResponse resp){
+        String nid = resq.getParameter("nid");
+        List<NewsContentBean> newsContentBeans = getAddNewsContentBean(resq);
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        ModelAndView mav = new ModelAndView("fileUploadAfterAction");
+        NewsService newsService = new NewsService();
+        try {
+            newsService.saveAddNewsContent(nid, newsContentBeans, basePath);
+        } catch (BgException e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code", "400");
+            jsonObj.addProperty("msg",e.getMessage());
+            mav.addObject("parameters", jsonObj.toString());
+            return mav;
+        }
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("code", "200");
+        jsonObj.addProperty("msg","新闻修改成功");
         mav.addObject("parameters", jsonObj.toString());
         return mav;
     }
@@ -442,5 +508,33 @@ public class NewsController {
         }
         addNewsBean.setContentBeans(newContentBeans);
         return addNewsBean;
+    }
+    public List<NewsContentBean> getAddNewsContentBean(HttpServletRequest resq){
+        MultipartRequest multipartRequest = (MultipartRequest)resq;
+        List<NewsContentBean> newContentBeans = new ArrayList<NewsContentBean>();
+        Enumeration<String> names = resq.getParameterNames();
+        while(names.hasMoreElements()) {
+            String parameterName = names.nextElement();
+            if(parameterName.startsWith("type_")){
+                String contentId = parameterName.substring(5);
+                String typeValue = resq.getParameter(parameterName);
+                String sortvalue = resq.getParameter("sort_" + contentId);
+                NewsContentBean contentBean = new NewsContentBean();
+                contentBean.setContenttype(typeValue);
+                contentBean.setContentsort(sortvalue);
+                if(typeValue.equals("1")){
+                    String subtitle = resq.getParameter(contentId);
+                    contentBean.setContentsubtitle(subtitle);
+                }else if(typeValue.equals("2")){
+                    CommonsMultipartFile file = (CommonsMultipartFile) multipartRequest.getFile(contentId);
+                    contentBean.setContentfile(file);
+                }else{
+                    String text = resq.getParameter(contentId);
+                    contentBean.setContenttext(text);
+                }
+                newContentBeans.add(contentBean);
+            }
+        }
+        return newContentBeans;
     }
 }

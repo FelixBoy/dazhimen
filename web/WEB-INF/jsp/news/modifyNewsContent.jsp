@@ -48,13 +48,13 @@
                             "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-save'\" " +
                             "onclick=\"modifyNewsContentSubtitle('" + (i+1) + "','" + newsContentArr[i].contentid + "')\">保存修改</a>&nbsp;&nbsp;&nbsp;" +
                             "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
-                            "onclick=\"deleteNewsContent('trcontent" + (i+1) + "','" + newsContentArr[i].contentid + "')\">删除</a>" +
+                            "onclick=\"deleteNewsContentSubtitle('" + newsContentArr[i].contentid + "')\">删除</a>" +
                             "</td>" +
                             "</tr>");
                         $("#newscontent" + (i+1) +"").val(newsContentArr[i].contentvalue);
                     }
                     if(newsContentArr[i].contenttype == '2'){
-                        $("#modifyNewsContentTable").append("<tr id='trcontent" + (i+1) + "'><td nowrap='nowrap'>内容图片:<span style='color:red'>*</span></td>" +
+                        $("#modifyNewsContentTable").append("<tr id='trcontent" + (i+1) + "'><td nowrap='nowrap'>图片:<span style='color:red'>*</span></td>" +
                             "<td colspan='5'><img width='120px' height='60px' id='newscontent" + (i+1) +"' />" +
                             "<input type='hidden' id='id_newscontent" + (i+1) + "' name='id_newscontent" + (i+1) + "' value='" + newsContentArr[i].contentid + "'/>" +
                             "<input type='hidden' id='sort_newscontent" + (i+1) + "' name='sort_newscontent" + (i+1) + "' value='" + (i+1) + "'/>" +
@@ -63,13 +63,13 @@
                             "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-save'\" " +
                             "onclick=\"openModifyNewsContentImgDialog('" + (i+1) +"','" + newsContentArr[i].contentid + "')\">修改图片</a>&nbsp;&nbsp;&nbsp;" +
                             "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
-                            "onclick=\"deleteNewsContent('trcontent" + i +"')\">删除</a>" +
+                            "onclick=\"deleteNewsContentImg('" + newsContentArr[i].contentid + "')\">删除</a>" +
                             "</td>" +
                             "</tr>");
                         $("#newscontent" + (i+1) +"").attr("src", newsContentArr[i].contentvalue + "?rondomid=" + Math.random());
                     }
                     if(newsContentArr[i].contenttype == '3'){
-                        $("#modifyNewsContentTable").append("<tr id='trcontent" + (i+1) + "'><td nowrap='nowrap'>内容文本:<span style='color:red'>*</span></td>" +
+                        $("#modifyNewsContentTable").append("<tr id='trcontent" + (i+1) + "'><td nowrap='nowrap'>文本:<span style='color:red'>*</span></td>" +
                             "<td colspan='5'><input class='easyui-textbox' data-options='multiline:true'" +
                             " style='width:650px;height: 60px;' id='newscontent" + (i+1) +"' name='newscontent" + (i+1) + "'/>" +
                             "<input type='hidden' id='id_newscontent" + (i+1) + "' name='id_newscontent" + (i+1) + "' value='" + newsContentArr[i].contentid + "'/>" +
@@ -79,7 +79,7 @@
                             "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-save'\" " +
                             "onclick=\"modifyNewsContentText('" + (i+1) + "','" + newsContentArr[i].contentid + "')\">保存修改</a>&nbsp;&nbsp;&nbsp;" +
                             "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
-                            "onclick=\"deleteNewsContent('trcontent" + (i+1) + "','" + newsContentArr[i].contentid + "')\">删除</a>" +
+                            "onclick=\"deleteNewsContentText('" + newsContentArr[i].contentid + "')\">删除</a>" +
                             "</td>" +
                             "</tr>");
                         $("#newscontent" + (i+1) +"").val(newsContentArr[i].contentvalue);
@@ -89,7 +89,72 @@
             }
         });
     }
+
+    function deleteNewsContentImg(contentid){
+        $.messager.confirm('确认','您确认删除吗？',function(r){
+            if(r){
+                $.ajax({
+                    url: "<%=request.getContextPath()%>/news/deleteNewsContentImg.do" +
+                    "?nid=" + $("#nidInModifyNewsContent").val() + "&contentid=" + contentid
+                    + "&random_id=" + Math.random(),
+                    type: 'get',
+                    async: false,
+                    error: function (data) {
+                        MsgBox.show(data.responseText);
+                    },
+                    success: function (data) {
+                        MsgBox.show(data);
+                        refreshNewsContent();
+                    }
+                });
+            }
+        });
+    }
+    function deleteNewsContentSubtitle(contentid){
+        $.messager.confirm('确认','您确认删除吗？',function(r){
+            if(r){
+                $.ajax({
+                    url: "<%=request.getContextPath()%>/news/deleteNewsContentSubtitle.do" +
+                    "?nid=" + $("#nidInModifyNewsContent").val() + "&contentid=" + contentid
+                    + "&random_id=" + Math.random(),
+                    type: 'get',
+                    async: false,
+                    error: function (data) {
+                        MsgBox.show(data.responseText);
+                    },
+                    success: function (data) {
+                        MsgBox.show(data);
+                        refreshNewsContent();
+                    }
+                });
+            }
+        });
+    }
+    function deleteNewsContentText(contentid){
+        $.messager.confirm('确认','您确认删除吗？',function(r){
+            if(r){
+                $.ajax({
+                    url: "<%=request.getContextPath()%>/news/deleteNewsContentText.do" +
+                    "?nid=" + $("#nidInModifyNewsContent").val() + "&contentid=" + contentid
+                    + "&random_id=" + Math.random(),
+                    type: 'get',
+                    async: false,
+                    error: function (data) {
+                        MsgBox.show(data.responseText);
+                    },
+                    success: function (data) {
+                        MsgBox.show(data);
+                        refreshNewsContent();
+                    }
+                });
+            }
+        });
+    }
     function modifyNewsContentSubtitle(index, contentid){
+        if($.trim($("#newscontent" + index).val()).length == 0){
+            MsgBox.show("新闻副标题不能为空");
+            return;
+        }
         $.ajax({
             url: "<%=request.getContextPath()%>/news/modifyNewsContentSubtitle.do" +
             "?nid=" + $("#nidInModifyNewsContent").val() + "&contentid=" + contentid
@@ -106,6 +171,10 @@
         });
     }
     function modifyNewsContentText(index, contentid){
+        if($.trim($("#newscontent" + index).val()).length == 0){
+            MsgBox.show("文本不能为空");
+            return;
+        }
         $.ajax({
             url: "<%=request.getContextPath()%>/news/modifyNewsContentText.do" +
             "?nid=" + $("#nidInModifyNewsContent").val() + "&contentid=" + contentid
@@ -136,6 +205,191 @@
             + "&random_id=" + Math.random());
         $('#modifyNewsContentImgDialog').dialog("open");
     }
+    function getNextIndexInModify(){
+        var lastContent = $("input[id^='newscontent']:last");
+        if(lastContent.length > 0){
+            var nextIndex = -1;
+            lastContent.each(function(index, domElement){
+                var lastDomId = domElement.id;
+                nextIndex = lastDomId.substring(11);
+            });
+            return parseInt(nextIndex) + 1;
+        }else{
+            return 1;
+        }
+    }
+    function addNewsSubtitleInModify(){
+        var nextIndex = getNextIndexInModify();
+        $("#addNewsContentTable").append("<tr id='trcontent" + nextIndex + "'>" +
+            "<td  nowrap='nowrap'>副标题(新增):<span style='color:red'>*</span></td>" +
+            "<td colspan='5'><input class='easyui-textbox' " +
+            " style='width:700px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
+            "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
+            "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='1'>" +
+            "</td>" +
+            "<td nowrap='nowrap'>" +
+            "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
+            "onclick=\"deleteNewsContentInModify('trcontent" + nextIndex +"')\">删除</a>" +
+            "</td>" +
+            "</tr>");
+        $.parser.parse($('#trcontent'+nextIndex));
+        dealSortValueInModify();
+    }
+    function addNewsImageInModify() {
+        var nextIndex = getNextIndexInModify();
+        $("#addNewsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>图片(新增):<span style='color:red'>*</span></td>" +
+            "<td colspan='5'><input class='easyui-filebox' " +
+            " data-options=\"prompt:'请选择图片(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'\"" +
+            "  accept='image/jpeg,image/png'  style='width:700px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
+            "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
+            "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='2'>" +
+            "</td>" +
+            "<td>" +
+            "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
+            "onclick=\"deleteNewsContentInModify('trcontent" + nextIndex +"')\">删除</a>" +
+            "</td>" +
+            "</tr>");
+        $.parser.parse($('#trcontent'+nextIndex));
+        dealSortValueInModify();
+    }
+    function addNewsTextInModify() {
+        var nextIndex = getNextIndexInModify();
+        $("#addNewsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>文本(新增):<span style='color:red'>*</span></td>" +
+            "<td colspan='5'><input class='easyui-textbox' data-options='multiline:true'" +
+            " style='width:700px;height: 60px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
+            "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
+            "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='3'>" +
+            "</td>" +
+            "<td>" +
+            "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
+            "onclick=\"deleteNewsContentInModify('trcontent" + nextIndex +"')\">删除</a>" +
+            "</td>" +
+            "</tr>");
+        $.parser.parse($('#trcontent'+nextIndex));
+        dealSortValueInModify();
+    }
+    function deleteNewsContentInModify(trcontentid){
+        $.messager.confirm('确认','您确认删除吗？',function(r){
+            if (r){
+                var trcontent = $("#" + trcontentid);
+                trcontent.remove();
+                dealSortValueInModify();
+            }
+        });
+    }
+    function dealSortValueInModify(){
+        var newsContent = $("input[id^='newscontent']");
+        if(newsContent.length > 0){
+            newsContent.each(function(index, domElement){
+                var domid = domElement.id;
+                $("#sort_" + domid).val(index + 1);
+            });
+        }
+    }
+    var checkCountInModifyNews = 10;
+    function cbInModifyNews(){
+        var f = $('#addNewsFormInModify_iframe'), data = "";
+        if (!f.length){
+            return
+        }
+        f.unbind();
+        var body = f.contents().find('body');
+        data = body.html();
+        if (data == ""){
+            if (--checkCountInModifyNews){
+                setTimeout(cbInModifyNews, 100);
+                return;
+            }
+        }
+        setTimeout(function(){
+            f.unbind();
+            f.remove();
+        }, 100);
+    }
+    function actionAfterSubmit(jsonObj){
+        LoadingMaskLayer.hide();
+        var resultObj = JSON.parse(jsonObj);
+        if(!resultObj){
+            return;
+        }
+        var code = resultObj.code;
+        if(code == '200'){
+            var msg = resultObj.msg;
+            MsgBox.show(msg);
+            $("#addNewsContentTable").empty();
+            refreshNewsContent();
+        }else{
+            MsgBox.show(resultObj.msg);
+        }
+    }
+    function dealAddNewsFormInModifyBeforeSubmit(){
+        var frameId = "addNewsFormInModify_iframe", $frame = null;
+        var testFrameId = $('#'+frameId);
+        if(testFrameId.length>0){
+            testFrameId.unbind();
+            testFrameId.remove();
+        }
+        $frame = $('<iframe id='+frameId+' name='+frameId+'></iframe>').appendTo('body');
+        $frame.attr('src', window.ActiveXObject ? 'javascript:false' : 'about:blank');
+        $frame.css({
+            display:"none"
+        });
+        $frame.bind('load', cbInModifyNews);
+        $("#addNewsFormInModify").attr('target', frameId);
+    }
+    function checkModifyNewsFormBeforeSubmit(){
+        var addNewsContentTable = $("#addNewsContentTable");
+        var newsContent = addNewsContentTable.find("input[id^='newscontent']");
+        var result = true;
+        if(newsContent.length > 0){
+            newsContent.each(function(index, domElement){
+                var domid = domElement.id;
+                var dom_type = $("#type_" + domid).val();
+                if(!dom_type){
+                    result = false;
+                    return;
+                }
+                if(dom_type == '2'){
+                    if(!$("#" + domid).filebox("getValue")){
+                        MsgBox.show("无法保存，存在图片未选择");
+                        result = false;
+                        return;
+                    }
+                    imgFileName = $("#" + domid).filebox("getValue");
+                    imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
+                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                        MsgBox.show("无法保存，图片文件，仅支持jpg、png");
+                        result = false;
+                        return;
+                    }
+                }else if(dom_type == '1'){
+                    if($.trim($("#" + domid).val()).length == 0){
+                        MsgBox.show("无法保存，存在副标题未填写");
+                        result = false;
+                        return;
+                    }
+                }else if(dom_type == '3'){
+                    if($.trim($("#" + domid).val()).length == 0){
+                        MsgBox.show("无法保存，存在文本未填写");
+                        result = false;
+                        return;
+                    }
+                }
+            });
+        }else{
+            return false;
+        }
+        return result;
+    }
+    function submitAddNewsFormInModify(){
+        if(!checkModifyNewsFormBeforeSubmit()){
+            return;
+        }
+        dealAddNewsFormInModifyBeforeSubmit();
+        dealSortValueInModify();
+        $("#addNewsFormInModify").submit();
+        LoadingMaskLayer.show();
+    }
 </script>
 <div style="text-align: left;">
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-back'" onclick="returnManageNewsInModifyNewsContent()">返回</a>
@@ -163,10 +417,16 @@
         </table>
     <table id="modifyNewsContentTable" cellpadding="5">
     </table>
+    <form id="addNewsFormInModify" action="<%=request.getContextPath()%>/news/saveAddNewsContent.do"
+        enctype="multipart/form-data" method="post">
+        <input type="hidden" name="nid" id="nidInAddNewsForm" value="<%=request.getAttribute("nid").toString()%>"/>
+        <table id="addNewsContentTable" cellpadding="5">
+        </table>
+    </form>
     <div style="text-align: center;">
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addNewsSubtitle()">添加副标题</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addNewsImage()">添加图片</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addNewsText()">添加内容</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submitAddNewsForm()">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addNewsSubtitleInModify()">新增副标题</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addNewsImageInModify()">新增图片</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addNewsTextInModify()">新增文本</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submitAddNewsFormInModify()">保存新增</a>
     </div>
 </div>

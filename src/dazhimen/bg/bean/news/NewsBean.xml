@@ -128,4 +128,16 @@
     <update id="updateContentImgPath" parameterType="dazhimen.bg.bean.news.ModifyNewsSubtitleBean">
         update news_content set contentvalue = #{contentvalue} where contentid = #{contentid}
     </update>
+    <delete id="deleleNewsContent">
+        delete from news_content where contentid = #{contentid}
+    </delete>
+    <select id="getContentSortById" resultType="java.lang.String">
+        select contentsort from news_content where contentid = #{contentid}
+    </select>
+    <update id="dealNewsContentSort" parameterType="dazhimen.bg.bean.news.DealNewsContentSortBean">
+        update news_content
+          set contentsort = contentsort -1
+        where nid = #{nid}
+          and contentsort > #{sort}
+    </update>
 </mapper>

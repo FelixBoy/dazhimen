@@ -26,6 +26,325 @@ import java.util.List;
 public class NewsService {
 
     /**
+     * 保存新增新闻信息
+     * @param basePath
+     * @throws BgException
+     */
+    public void saveAddNewsContent(String nid, List<NewsContentBean> newsContentBeans, String basePath) throws BgException {
+        IdUtils idUtils = new IdUtils();
+        //2 计算新闻主目录路径
+        String newsMainFolderPath = basePath + Constant.newsPrefixPath  + nid + "\\";
+        FileManageService fileService = new FileManageService();
+        SqlSession sqlSession = null;
+        FileOutputStream fileOutputStream = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            for(int i = 0; i < newsContentBeans.size(); i++){
+                NewsContentBean contentBean = newsContentBeans.get(i);
+                String contentId = idUtils.getNesContentId();
+                String contenteType = contentBean.getContenttype();
+
+                GenNewsContentBean genNewsContentBean = new GenNewsContentBean();
+                genNewsContentBean.setContenttype(contenteType);
+                genNewsContentBean.setContentSort(contentBean.getContentsort());
+                if(contenteType.equals("1")){
+                    contentBean.setContentvalue(contentBean.getContentsubtitle());
+                    genNewsContentBean.setContentvalue(contentBean.getContentsubtitle());
+                }else if(contenteType.equals("2")){
+                    CommonsMultipartFile contentFile = contentBean.getContentfile();
+                    //获得列表图片文件的原始名称
+                    String contentFileOrginalName = contentFile.getOriginalFilename();
+                    //获得原始文件的后缀
+                    String contentFileSuffixName = contentFileOrginalName.substring(contentFileOrginalName.lastIndexOf("."));
+                    //新文件名
+                    String contentFileNewName = contentId + "_contentimg" + contentFileSuffixName;
+
+                    //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+                    String contentFileTransferFilename = newsMainFolderPath + contentFileNewName;
+
+                    try {
+                        contentFile.transferTo(new File(contentFileTransferFilename));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new BgException("出现异常,保存新闻内容图片失败");
+                    }
+                    //计算列表图片在工程中的相对路径，用于记录到数据库
+                    String contentFileRelPath = Constant.uploadNewsDbPrefixPath + nid + "/" + contentFileNewName;
+                    contentBean.setContentvalue(contentFileRelPath);
+                    genNewsContentBean.setContentvalue(contentFileNewName);
+                }else{
+                    contentBean.setContentvalue(contentBean.getContenttext());
+                    genNewsContentBean.setContentvalue(contentBean.getContenttext());
+                }
+                contentBean.setContentid(contentId);
+                contentBean.setNid(nid);
+                sqlSession.insert("dazhimen.bg.bean.News.saveAddNewContents", contentBean);
+            }
+            ModifyNewsDataBean newsBean = sqlSession.selectOne("dazhimen.bg.bean.News.getModifyNewsTitleData" ,nid);
+            if(newsBean == null){
+                throw new BgException("获取新闻信息异常");
+            }
+
+            List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.News.getNewsContentById", nid);
+            if(contentBeans == null || contentBeans.size() == 0){
+                throw new BgException("获取新闻内容异常");
+            }
+            String newsContentFileName = nid + "_newscontent.html";
+            String newsContentFilePath = newsMainFolderPath + newsContentFileName;
+            File newContentFile = new File(newsContentFilePath);
+
+            fileOutputStream = new FileOutputStream(newContentFile);
+            String newsHtml = GenNewsHtmlUtil.genMobileNewsHtml(newsBean.getTitle(), contentBeans);
+            fileOutputStream.write(newsHtml.getBytes("UTF-8"));
+            sqlSession.commit();
+        }catch (BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            fileService.deleteFolder(newsMainFolderPath);
+            throw new BgException(e.getMessage());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            fileService.deleteFolder(newsMainFolderPath);
+            throw new BgException("生成新闻html文件时，字符集编码不支持");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            fileService.deleteFolder(newsMainFolderPath);
+            throw new BgException("找不到新闻html文件");
+        } catch (IOException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            fileService.deleteFolder(newsMainFolderPath);
+            throw new BgException("生成新闻html文件时，出现读写错误");
+        } catch (Exception e){
+            sqlSession.rollback();
+            fileService.deleteFolder(newsMainFolderPath);
+            throw new BgException("出现异常，添加新闻失败");
+        } finally{
+            MyBatisUtil.closeSession(sqlSession);
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void deleteNewsContentImg(String nid, String contentid, String basePath) throws BgException {
+        if(nid == null || nid.equals("")){
+            throw new BgException("传入的nid为空，删除图片失败");
+        }
+        if(contentid == null || contentid.equals("")){
+            throw new BgException("传入的contentid为空，删除图片失败");
+        }
+        SqlSession sqlSession = null;
+        FileOutputStream fileOutputStream = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            String contentSort = sqlSession.selectOne("dazhimen.bg.bean.News.getContentSortById" ,contentid);
+            if(contentSort == null || contentSort.equals("")){
+                throw new BgException("获取新闻内容的排序信息异常");
+            }
+            String contentImgPath = sqlSession.selectOne("dazhimen.bg.bean.News.getCotentImgPath", contentid);
+            if (contentImgPath == null || contentImgPath.equals("")) {
+                throw new BgException("出现异常，查询原新闻内容图片路径时出错");
+            }
+            String contentImgFileName = contentImgPath.substring(contentImgPath.lastIndexOf("/") + 1);
+
+            sqlSession.delete("dazhimen.bg.bean.News.deleleNewsContent", contentid);
+            DealNewsContentSortBean dealNewsContentSortBean = new DealNewsContentSortBean();
+            dealNewsContentSortBean.setNid(nid);
+            dealNewsContentSortBean.setSort(contentSort);
+            sqlSession.update("dazhimen.bg.bean.News.dealNewsContentSort", dealNewsContentSortBean);
+
+            ModifyNewsDataBean newsBean = sqlSession.selectOne("dazhimen.bg.bean.News.getModifyNewsTitleData" ,nid);
+            if(newsBean == null){
+                throw new BgException("获取新闻信息异常");
+            }
+
+            List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.News.getNewsContentById", nid);
+            if(contentBeans == null || contentBeans.size() == 0){
+                throw new BgException("获取新闻内容异常");
+            }
+            String newsContentFileName = nid + "_newscontent.html";
+            String newsMainFolderPath = basePath + Constant.newsPrefixPath  + nid + "\\";
+            String newsContentFilePath = newsMainFolderPath + newsContentFileName;
+            File newContentFile = new File(newsContentFilePath);
+
+            fileOutputStream = new FileOutputStream(newContentFile);
+            String newsHtml = GenNewsHtmlUtil.genMobileNewsHtml(newsBean.getTitle(), contentBeans);
+            fileOutputStream.write(newsHtml.getBytes("UTF-8"));
+            //新文件名
+            FileManageService fileManageService = new FileManageService();
+            fileManageService.deleteFile(newsMainFolderPath + contentImgFileName);
+            sqlSession.commit();
+        }catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("生成新闻html文件时，字符集编码不支持");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("找不到新闻html文件");
+        } catch (IOException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("生成新闻html文件时，出现读写错误");
+        } catch(BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException(e.getMessage());
+        } catch(Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，删除图片失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void deleteNewsContentSubtitle(String nid, String contentid, String basePath) throws BgException {
+        if(nid == null || nid.equals("")){
+            throw new BgException("传入的nid为空，删除副标题失败");
+        }
+        if(contentid == null || contentid.equals("")){
+            throw new BgException("传入的contentid为空，删除副标题失败");
+        }
+        SqlSession sqlSession = null;
+        FileOutputStream fileOutputStream = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            String contentSort = sqlSession.selectOne("dazhimen.bg.bean.News.getContentSortById" ,contentid);
+            if(contentSort == null || contentSort.equals("")){
+                throw new BgException("获取新闻内容的排序信息异常");
+            }
+            sqlSession.delete("dazhimen.bg.bean.News.deleleNewsContent", contentid);
+            DealNewsContentSortBean dealNewsContentSortBean = new DealNewsContentSortBean();
+            dealNewsContentSortBean.setNid(nid);
+            dealNewsContentSortBean.setSort(contentSort);
+            sqlSession.update("dazhimen.bg.bean.News.dealNewsContentSort", dealNewsContentSortBean);
+
+            ModifyNewsDataBean newsBean = sqlSession.selectOne("dazhimen.bg.bean.News.getModifyNewsTitleData" ,nid);
+            if(newsBean == null){
+                throw new BgException("获取新闻信息异常");
+            }
+
+            List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.News.getNewsContentById", nid);
+            if(contentBeans == null || contentBeans.size() == 0){
+                throw new BgException("获取新闻内容异常");
+            }
+            String newsContentFileName = nid + "_newscontent.html";
+            String newsMainFolderPath = basePath + Constant.newsPrefixPath  + nid + "\\";
+            String newsContentFilePath = newsMainFolderPath + newsContentFileName;
+            File newContentFile = new File(newsContentFilePath);
+
+            fileOutputStream = new FileOutputStream(newContentFile);
+            String newsHtml = GenNewsHtmlUtil.genMobileNewsHtml(newsBean.getTitle(), contentBeans);
+            fileOutputStream.write(newsHtml.getBytes("UTF-8"));
+            sqlSession.commit();
+        }catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("生成新闻html文件时，字符集编码不支持");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("找不到新闻html文件");
+        } catch (IOException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("生成新闻html文件时，出现读写错误");
+        } catch(BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException(e.getMessage());
+        } catch(Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，删除副标题失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void deleteNewsContentText(String nid, String contentid, String basePath) throws BgException {
+        if(nid == null || nid.equals("")){
+            throw new BgException("传入的nid为空，删除文本失败");
+        }
+        if(contentid == null || contentid.equals("")){
+            throw new BgException("传入的contentid为空，删除文本失败");
+        }
+        SqlSession sqlSession = null;
+        FileOutputStream fileOutputStream = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            String contentSort = sqlSession.selectOne("dazhimen.bg.bean.News.getContentSortById" ,contentid);
+            if(contentSort == null || contentSort.equals("")){
+                throw new BgException("获取新闻内容的排序信息异常");
+            }
+            sqlSession.delete("dazhimen.bg.bean.News.deleleNewsContent", contentid);
+            DealNewsContentSortBean dealNewsContentSortBean = new DealNewsContentSortBean();
+            dealNewsContentSortBean.setNid(nid);
+            dealNewsContentSortBean.setSort(contentSort);
+            sqlSession.update("dazhimen.bg.bean.News.dealNewsContentSort", dealNewsContentSortBean);
+
+            ModifyNewsDataBean newsBean = sqlSession.selectOne("dazhimen.bg.bean.News.getModifyNewsTitleData" ,nid);
+            if(newsBean == null){
+                throw new BgException("获取新闻信息异常");
+            }
+
+            List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.News.getNewsContentById", nid);
+            if(contentBeans == null || contentBeans.size() == 0){
+                throw new BgException("获取新闻内容异常");
+            }
+            String newsContentFileName = nid + "_newscontent.html";
+            String newsMainFolderPath = basePath + Constant.newsPrefixPath  + nid + "\\";
+            String newsContentFilePath = newsMainFolderPath + newsContentFileName;
+            File newContentFile = new File(newsContentFilePath);
+
+            fileOutputStream = new FileOutputStream(newContentFile);
+            String newsHtml = GenNewsHtmlUtil.genMobileNewsHtml(newsBean.getTitle(), contentBeans);
+            fileOutputStream.write(newsHtml.getBytes("UTF-8"));
+            sqlSession.commit();
+        }catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("生成新闻html文件时，字符集编码不支持");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("找不到新闻html文件");
+        } catch (IOException e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("生成新闻html文件时，出现读写错误");
+        } catch(BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException(e.getMessage());
+        } catch(Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，删除文本失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * 保存修改新闻内容图片
      * @param nid
      * @param contentImgFile
@@ -35,6 +354,15 @@ public class NewsService {
     public void saveModifyNewsContentImg(String nid, String contentid, CommonsMultipartFile contentImgFile, String bashPath) throws BgException {
         SqlSession sqlSession = null;
         FileOutputStream fileOutputStream = null;
+        if(nid == null || nid.equals("")){
+            throw new BgException("传入的nid为空，修改文本失败");
+        }
+        if(contentid == null || contentid.equals("")){
+            throw new BgException("传入的nid为空，修改文本失败");
+        }
+        if(contentImgFile == null || contentImgFile.isEmpty()){
+            throw new BgException("传入的contentImgFile为空，修改文本失败");
+        }
         try {
             if(contentImgFile != null && !contentImgFile.isEmpty()) {
                 sqlSession = MyBatisUtil.createSession();
@@ -107,7 +435,7 @@ public class NewsService {
         } catch(Exception e) {
             e.printStackTrace();
             sqlSession.rollback();
-            throw new BgException("出现异常，修改新闻内容图片失败");
+            throw new BgException("出现异常，修改新闻文本失败");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
             try {

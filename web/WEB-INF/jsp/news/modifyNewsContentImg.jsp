@@ -5,13 +5,13 @@
     });
     function checkNewsContentImgModify(){
         if(!$("#imgInModifyNewsContentImgDialog").filebox("getValue")){
-            MsgBox.show("请选择新闻内容图片");
+            MsgBox.show("请选择图片");
             return false;
         }
         var imgFileName = $("#imgInModifyNewsContentImgDialog").filebox("getValue");
         var imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
         if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
-            MsgBox.show("内容图片文件，仅支持jpg、png");
+            MsgBox.show("图片文件，仅支持jpg、png");
             return false;
         }
         return true;
@@ -85,12 +85,12 @@
                 <td colspan="2" >
                     <div class="formTitle" style="background-color:#f2f2f2;">
                         <div class="formTitle-icon">
-                        </div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">请重新选择新闻内容图片</div>
+                        </div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">请重新选择图片</div>
                     </div>
                 </td>
             </tr>
             <tr>
-                <td style="text-align: right" nowrap="nowrap">内容图片:<span style="color:red">*</span></td>
+                <td style="text-align: right" nowrap="nowrap">图片:<span style="color:red">*</span></td>
                 <td>
                     <input type="hidden" id="nidInModifyNewsContentImgDialog" name="nid"/>
                     <input type="hidden" id="contentidInModifyNewsContentImgDialog" name="contentid"/>
