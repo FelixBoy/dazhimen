@@ -323,6 +323,75 @@ public class NewsController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
+
+    @RequestMapping("/modifyNewsContentSubtitle.do")
+    public void modifyNewsContentSubtitle(HttpServletRequest resq, HttpServletResponse resp){
+        String contentid = resq.getParameter("contentid");
+        String nid = resq.getParameter("nid");
+        String subtitle = resq.getParameter("subtitle");
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        NewsService newsService = new NewsService();
+        try {
+            newsService.modifyNewsContentSubtitle(nid, contentid, subtitle, basePath);
+            ResponseUtil.writeMsg(resp, "修改副标题成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/modifyNewsContentText.do")
+    public void modifyNewsContentText(HttpServletRequest resq, HttpServletResponse resp){
+        String contentid = resq.getParameter("contentid");
+        String nid = resq.getParameter("nid");
+        String text = resq.getParameter("text");
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        NewsService newsService = new NewsService();
+        try {
+            newsService.modifyNewsContentText(nid, contentid, text, basePath);
+            ResponseUtil.writeMsg(resp, "修改内容本文成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/fwdModifyNewsContentImgPage.do")
+    public ModelAndView fwdModifyNewsContentImgPage(@RequestParam("nid") String nid, @RequestParam("contentid") String contentid){
+        ModelAndView mav = new ModelAndView("/news/modifyNewsContentImg");
+        mav.addObject("nid", nid);
+        mav.addObject("contentid", contentid);
+        return mav;
+    }
+
+    /**
+     * 保存修改新闻主图
+     * @param resq
+     * @return
+     */
+    @RequestMapping("/saveModifyNewsContentImg.do")
+    public ModelAndView saveModifyNewsContentImg(HttpServletRequest resq){
+        NewsService newsService = new NewsService();
+        ModelAndView mav = new ModelAndView("fileUploadAfterAction");
+        try {
+            String nid = resq.getParameter("nid");
+            String contentid = resq.getParameter("contentid");
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
+            CommonsMultipartFile contentImgFile = (CommonsMultipartFile) multipartRequest.getFile("contentimgmodify");
+            String basePath = resq.getSession().getServletContext().getRealPath("/");
+            newsService.saveModifyNewsContentImg(nid,contentid,contentImgFile,basePath);
+        } catch (BgException e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code", "400");
+            jsonObj.addProperty("msg",e.getMessage());
+            mav.addObject("parameters", jsonObj.toString());
+            return mav;
+        }
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("code", "200");
+        jsonObj.addProperty("msg","修改新闻内容图片成功");
+        mav.addObject("parameters", jsonObj.toString());
+        return mav;
+    }
     private List<ViewNewsContentBean> dealModifynewsDataBean(List<ViewNewsContentBean> newsContentBeans, HttpServletRequest resq){
 
         if(newsContentBeans != null && newsContentBeans.size() > 0){

@@ -125,7 +125,9 @@
         return true;
     }
     function submitAddNewsForm(){
-        var result = checkAddNewsFormBeforeSubmit();
+        if(!checkAddNewsFormBeforeSubmit()){
+            return;
+        }
         dealAddNewsFormBeforeSubmit();
         dealSortValue();
         $("#addNewsForm").submit();

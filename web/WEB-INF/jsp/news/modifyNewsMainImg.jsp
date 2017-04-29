@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
     $(function(){
         $("#nidInModifyNewsMainImgDialog").val("<%=request.getAttribute("nid")%>");
     });

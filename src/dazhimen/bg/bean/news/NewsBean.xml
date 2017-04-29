@@ -116,5 +116,16 @@
     <update id="updateMainImgPath" parameterType="dazhimen.bg.bean.news.UpdateNewsMainImgFilePathBean">
         update news set mainimgurl = #{mainimage} where nid = #{nid}
     </update>
-
+    <update id="modifyNewsContentSubtitle" parameterType="dazhimen.bg.bean.news.ModifyNewsSubtitleBean">
+        update news_content set contentvalue = #{contentvalue} where contentid = #{contentid}
+    </update>
+    <update id="modifyNewsContentText" parameterType="dazhimen.bg.bean.news.ModifyNewsSubtitleBean">
+        update news_content set contentvalue = #{contentvalue} where contentid = #{contentid}
+    </update>
+    <select id="getCotentImgPath" resultType="java.lang.String">
+        select contentvalue from news_content where contentid = #{contentid}
+    </select>
+    <update id="updateContentImgPath" parameterType="dazhimen.bg.bean.news.ModifyNewsSubtitleBean">
+        update news_content set contentvalue = #{contentvalue} where contentid = #{contentid}
+    </update>
 </mapper>
