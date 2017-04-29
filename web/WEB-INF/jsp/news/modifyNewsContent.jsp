@@ -6,7 +6,7 @@
     }
     $(function(){
         $.ajax({
-            url:"<%=request.getContextPath()%>/news/getModifyNewsTitleData.do" +
+            url:"<%=request.getContextPath()%>/news/getModifyNewsContentData.do" +
             "?nid=<%=request.getAttribute("nid").toString()%>&random_id=" + Math.random(),
             type:'get',
             async:false,
@@ -20,6 +20,48 @@
                 }
                 $("#newstitleInModifyNewsContent").val(jsonObj.title);
                 $("#nidInModifyNewsContent").val(jsonObj.nid);
+                var newsContentArr = jsonObj.newscontent;
+                if(!newsContentArr){
+                    return;
+                }
+                for(var i = 0; i < newsContentArr.length; i++){
+                    if(newsContentArr[i].contenttype == '1'){
+                        $("#modifyNewsContentTable").append("<tr id='trcontent" + i + "'><td>副标题:<span style='color:red'>*</span></td>" +
+                            "<td colspan='5'><input class='easyui-textbox' " +
+                            " style='width:700px;' id='newscontent" + i +"' name='newscontent" + i + "'/>" +
+                            "</td>" +
+                            "<td>" +
+                            "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
+                            "onclick=\"deleteNewsContent('trcontent" + i +"')\">删除</a>" +
+                            "</td>" +
+                            "</tr>");
+                        $("#newscontent" + i +"").val(newsContentArr[i].contentvalue);
+                    }
+                    if(newsContentArr[i].contenttype == '2'){
+                        $("#modifyNewsContentTable").append("<tr id='trcontent" + i + "'><td>内容图片:<span style='color:red'>*</span></td>" +
+                            "<td colspan='5'><img width='120px' height='60px' id='newscontent" + i +"' />" +
+                            "</td>" +
+                            "<td>" +
+                            "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
+                            "onclick=\"deleteNewsContent('trcontent" + i +"')\">删除</a>" +
+                            "</td>" +
+                            "</tr>");
+                        $("#newscontent" + i +"").attr("src", newsContentArr[i].contentvalue + "?rondomid=" + Math.random());
+                    }
+                    if(newsContentArr[i].contenttype == '3'){
+                        $("#modifyNewsContentTable").append("<tr id='trcontent" + i + "'><td>内容文本:<span style='color:red'>*</span></td>" +
+                            "<td colspan='5'><input class='easyui-textbox' data-options='multiline:true'" +
+                            " style='width:700px;height: 60px;' id='newscontent" + i +"' name='newscontent" + i + "'/>" +
+                            "</td>" +
+                            "<td>" +
+                            "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
+                            "onclick=\"deleteNewsContent('trcontent" + i +"')\">删除</a>" +
+                            "</td>" +
+                            "</tr>");
+                        $("#newscontent" + i +"").val(newsContentArr[i].contentvalue);
+                    }
+                }
+                $.parser.parse($("#modifyNewsContentTable"));
             }
         });
     });

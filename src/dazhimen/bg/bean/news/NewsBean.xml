@@ -116,4 +116,5 @@
     <update id="updateMainImgPath" parameterType="dazhimen.bg.bean.news.UpdateNewsMainImgFilePathBean">
         update news set mainimgurl = #{mainimage} where nid = #{nid}
     </update>
+
 </mapper>
