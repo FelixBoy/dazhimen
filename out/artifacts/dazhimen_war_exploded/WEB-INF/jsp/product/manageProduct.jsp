@@ -169,6 +169,12 @@
         var starttimeCondition = $('#starttimeCondition').datetimebox('getValue');
         var endtimeCondition = $("#endtimeCondition").datetimebox('getValue');
         var statusCondition = $("#statusCondition").val();
+        if(starttimeCondition && endtimeCondition){
+            if(starttimeCondition > endtimeCondition){
+                MsgBox.show("起始时间大于结束时间，无法检索");
+                return;
+            }
+        }
         if(pidCondition.length == '0' && pnameCondition.length == '0' && typeCondition == '0'
             && !starttimeCondition && !endtimeCondition && statusCondition == '0'){
             clearProductSearchParams();

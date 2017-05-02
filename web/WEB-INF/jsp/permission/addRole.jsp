@@ -14,6 +14,20 @@
             MsgBox.show("角色名称过长，无法保存");
             return false;
         }
+        var perContent = $("input[id^='per_']");
+        var result = false;
+        if(perContent.length > 0) {
+            perContent.each(function (index, domElement) {
+                var domid = domElement.id;
+                if($("#"+domid).prop("checked")){
+                    result = true;
+                }
+            });
+        }
+        if(!result){
+            MsgBox.show("至少选择一个权限");
+            return false;
+        }
         return true;
     }
     function submitAddRoleForm(){
@@ -70,7 +84,7 @@
                 <td colspan="4" >
                     <div class="formTitle" style="background-color:#f2f2f2;">
                         <div class="formTitle-icon">
-                        </div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">配置权限</div>
+                        </div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">配置权限<span style="color:red">*</span></div>
                         <div style="float: left;height: 100%;font: bold 14px/45px '宋体';margin-left: 10px;">
                             <a href="javascript:void(0)" class="easyui-linkbutton" onclick="selectAllPermission()">全选</a>
                             <a href="javascript:void(0)" class="easyui-linkbutton" onclick="cancelSelectAllPermission()">取消全选</a>

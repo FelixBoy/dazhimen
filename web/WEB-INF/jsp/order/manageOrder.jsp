@@ -32,13 +32,24 @@
     });
     function SearchOrderByParams() {
         var cnameCondition = $("#cnameCondition").val();
-//        var mphoneCondition = $("#mphoneCondition").val();
         var producttypeCondition = $("#producttypeCondition").val();
         var paymenttypeCondition = $("#paymenttypeCondition").val();
         var startAmountCondition = $("#startAmountCondition").val();
         var endAmountCondition = $("#endAmountCondition").val();
         var starttimeCondition = $('#starttimeCondition').datetimebox('getValue');
         var endtimeCondition = $('#endtimeCondition').datetimebox('getValue');
+        if(starttimeCondition && endtimeCondition){
+            if(starttimeCondition > endtimeCondition){
+                MsgBox.show("起始时间大于结束时间，无法检索");
+                return;
+            }
+        }
+        if(startAmountCondition && endAmountCondition){
+            if(startAmountCondition > endAmountCondition){
+                MsgBox.show("金额下限大于金额上限，无法检索");
+                return;
+            }
+        }
         if(!cnameCondition && producttypeCondition == '0' && paymenttypeCondition == '0'
             && !starttimeCondition && !endtimeCondition && !startAmountCondition && !endAmountCondition){
             clearOrderSearchParams();

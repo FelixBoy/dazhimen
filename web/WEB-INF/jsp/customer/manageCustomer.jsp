@@ -40,6 +40,18 @@
         var endBalanceCondition = $("#endBalanceCondition").val();
         var starttimeCondition = $('#starttimeCondition').datetimebox('getValue');
         var endtimeCondition = $('#endtimeCondition').datetimebox('getValue');
+        if(starttimeCondition && endtimeCondition){
+            if(starttimeCondition > endtimeCondition){
+                MsgBox.show("起始时间大于结束时间，无法检索");
+                return;
+            }
+        }
+        if(startBalanceCondition && endBalanceCondition){
+            if(startBalanceCondition > endBalanceCondition){
+                MsgBox.show("余额下限大于余额上限，无法检索");
+                return;
+            }
+        }
         if(cidCondition.length == '0' && nicknameCondition.length == '0' && nameCondition.length == '0' && weixinCondition == '0'
             && !starttimeCondition && !endtimeCondition && startBalanceCondition.length == '0' && endBalanceCondition.length == '0'){
             clearCustomerSearchParams();

@@ -122,6 +122,12 @@
         var genderCondition = $("#genderCondition").val();
         var starttimeCondition = $('#starttimeCondition').datetimebox('getValue');
         var endtimeCondition = $('#endtimeCondition').datetimebox('getValue');
+        if(starttimeCondition && endtimeCondition){
+            if(starttimeCondition > endtimeCondition){
+                MsgBox.show("起始时间大于结束时间，无法检索");
+                return;
+            }
+        }
         if(!uidCondition && !mphoneCondition && !nameCondition && !loginnameCondition
             && genderCondition == '0' && !starttimeCondition && !endtimeCondition){
             clearMasterSearchParams();

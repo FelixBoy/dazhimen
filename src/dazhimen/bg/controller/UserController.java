@@ -16,6 +16,7 @@ import dazhimen.bg.service.UserService;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import util.CheckIsExistsUtils;
 import util.Constant;
 import util.GlobalUtils;
 import util.web.ResponseUtil;
@@ -154,12 +155,20 @@ public class UserController {
         }
     }
     @RequestMapping("/fwdMainPage.do")
-    public String forwardMainPage(HttpServletRequest resq){
+    public String forwardMainPage(HttpServletRequest resq, HttpServletResponse resp){
         HttpSession sessionObj = resq.getSession(false);
         LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
+
         LoginService loginService = new LoginService();
         HashMap<String, String> permissionMap = null;
         try {
+            if(!CheckIsExistsUtils.checkUidIsExists(userBean.getUid())){
+                String loginPageUrl = resq.getContextPath()+ "/login.jsp";
+                String javaScriptSegment = "<script id=\"script_exe\" defer=\"defer\">location.href=\""+ loginPageUrl
+                        + "\";</script>";
+                ResponseUtil.writeJavaScript(resp, javaScriptSegment);
+                throw new BgException("用户名不存在");
+            }
             permissionMap = loginService.getUserPermission(userBean.getUid());
         } catch (BgException e) {
             e.printStackTrace();

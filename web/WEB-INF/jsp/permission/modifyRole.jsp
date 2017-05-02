@@ -14,6 +14,7 @@
             var rolepermissionArr = rolepermissionstr.split(",");
             for(var i = 0; i < rolepermissionArr.length; i++){
                 $("#per_" + rolepermissionArr[i]).prop("checked", true);
+                $.parser.parse($("#per_" + rolepermissionArr[i]));
             }
         }});
         $("#modifyRoleForm").form("load", "<%=request.getContextPath()%>/permission/getModifyRoleInfor.do" +
@@ -26,6 +27,20 @@
         }
         if(StringUtil.getBinaryLength($.trim($("#roleNameInModifyRole").val())) > 100){
             MsgBox.show("角色名称过长，无法保存");
+            return false;
+        }
+        var perContent = $("input[id^='per_']");
+        var result = false;
+        if(perContent.length > 0) {
+            perContent.each(function (index, domElement) {
+                var domid = domElement.id;
+                if($("#"+domid).prop("checked")){
+                    result = true;
+                }
+            });
+        }
+        if(!result){
+            MsgBox.show("至少选择一个权限");
             return false;
         }
         return true;

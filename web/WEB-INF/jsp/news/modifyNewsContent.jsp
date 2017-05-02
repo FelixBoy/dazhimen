@@ -22,20 +22,21 @@
                     return;
                 }
                 $("#newstitleInModifyNewsContent").val(jsonObj.title);
+                $("#modifyNewsContentTable").empty();
+                $("#modifyNewsContentTable").append("<tr><td colspan='7' >" +
+                    "<div class='formTitle' style='background-color:#f2f2f2;'>" +
+                    "<div class='formTitle-icon'></div>" +
+                    "<div class='formTitle-text' style='font-weight:bold;text-decoration:none;font-style:normal;text-align:left;'>"+
+                    "修改新闻内容（请点击相应按钮，编辑内容）"+
+                    "</div>"+
+                    "</div>"+
+                    "</td></tr>");
+                $.parser.parse($("#modifyNewsContentTable"));
                 $("#nidInModifyNewsContent").val(jsonObj.nid);
                 var newsContentArr = jsonObj.newscontent;
                 if(!newsContentArr){
                     return;
                 }
-                $("#modifyNewsContentTable").empty();
-                $("#modifyNewsContentTable").append("<tr><td colspan='7' >" +
-                "<div class='formTitle' style='background-color:#f2f2f2;'>" +
-                    "<div class='formTitle-icon'></div>" +
-                    "<div class='formTitle-text' style='font-weight:bold;text-decoration:none;font-style:normal;text-align:left;'>"+
-                    "修改新闻内容（请点击相应按钮，编辑内容）"+
-                    "</div>"+
-                "</div>"+
-                "</td></tr>");
                 for(var i = 0; i < newsContentArr.length; i++){
                     if(newsContentArr[i].contenttype == '1'){
                         $("#modifyNewsContentTable").append("<tr id='trcontent" + (i+1) + "'><td nowrap='nowrap'>副标题:<span style='color:red'>*</span></td>" +
@@ -55,7 +56,8 @@
                     }
                     if(newsContentArr[i].contenttype == '2'){
                         $("#modifyNewsContentTable").append("<tr id='trcontent" + (i+1) + "'><td nowrap='nowrap'>图片:<span style='color:red'>*</span></td>" +
-                            "<td colspan='5'><img width='120px' height='60px' id='newscontent" + (i+1) +"' />" +
+                            "<td colspan='5'><img width='120px' height='60px'  id='img_newscontent" + (i+1) +"'/>" +
+                            "<input type='hidden' id='newscontent" + (i+1) +"'/>"+
                             "<input type='hidden' id='id_newscontent" + (i+1) + "' name='id_newscontent" + (i+1) + "' value='" + newsContentArr[i].contentid + "'/>" +
                             "<input type='hidden' id='sort_newscontent" + (i+1) + "' name='sort_newscontent" + (i+1) + "' value='" + (i+1) + "'/>" +
                             "</td>" +
@@ -66,7 +68,7 @@
                             "onclick=\"deleteNewsContentImg('" + newsContentArr[i].contentid + "')\">删除</a>" +
                             "</td>" +
                             "</tr>");
-                        $("#newscontent" + (i+1) +"").attr("src", newsContentArr[i].contentvalue + "?rondomid=" + Math.random());
+                        $("#img_newscontent" + (i+1) +"").attr("src", newsContentArr[i].contentvalue + "?rondomid=" + Math.random());
                     }
                     if(newsContentArr[i].contenttype == '3'){
                         $("#modifyNewsContentTable").append("<tr id='trcontent" + (i+1) + "'><td nowrap='nowrap'>文本:<span style='color:red'>*</span></td>" +
@@ -91,6 +93,11 @@
     }
 
     function deleteNewsContentImg(contentid){
+        var newsContent = $("input[id^='newscontent']");
+        if(newsContent.length <= 1){
+            MsgBox.show("无法删除，至少有一个新闻内容");
+            return;
+        }
         $.messager.confirm('确认','您确认删除吗？',function(r){
             if(r){
                 $.ajax({
@@ -111,6 +118,11 @@
         });
     }
     function deleteNewsContentSubtitle(contentid){
+        var newsContent = $("input[id^='newscontent']");
+        if(newsContent.length <= 1){
+            MsgBox.show("无法删除，至少有一个新闻内容");
+            return;
+        }
         $.messager.confirm('确认','您确认删除吗？',function(r){
             if(r){
                 $.ajax({
@@ -131,6 +143,11 @@
         });
     }
     function deleteNewsContentText(contentid){
+        var newsContent = $("input[id^='newscontent']");
+        if(newsContent.length <= 1){
+            MsgBox.show("无法删除，至少有一个新闻内容");
+            return;
+        }
         $.messager.confirm('确认','您确认删除吗？',function(r){
             if(r){
                 $.ajax({
@@ -269,6 +286,11 @@
         dealSortValueInModify();
     }
     function deleteNewsContentInModify(trcontentid){
+        var newsContent = $("input[id^='newscontent']");
+        if(newsContent.length <= 1){
+            MsgBox.show("无法删除，至少有一个新闻内容");
+            return;
+        }
         $.messager.confirm('确认','您确认删除吗？',function(r){
             if (r){
                 var trcontent = $("#" + trcontentid);
@@ -353,26 +375,26 @@
                     if(!$("#" + domid).filebox("getValue")){
                         MsgBox.show("无法保存，存在图片未选择");
                         result = false;
-                        return;
+                        return false;
                     }
                     imgFileName = $("#" + domid).filebox("getValue");
                     imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
                     if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
                         MsgBox.show("无法保存，图片文件，仅支持jpg、png");
                         result = false;
-                        return;
+                        return false;
                     }
                 }else if(dom_type == '1'){
                     if($.trim($("#" + domid).val()).length == 0){
                         MsgBox.show("无法保存，存在副标题未填写");
                         result = false;
-                        return;
+                        return false;
                     }
                 }else if(dom_type == '3'){
                     if($.trim($("#" + domid).val()).length == 0){
                         MsgBox.show("无法保存，存在文本未填写");
                         result = false;
-                        return;
+                        return false;
                     }
                 }
             });

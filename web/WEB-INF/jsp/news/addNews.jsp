@@ -94,26 +94,26 @@
                     if(!$("#" + domid).filebox("getValue")){
                         MsgBox.show("无法保存，存在图片未选择");
                         result = false;
-                        return;
+                        return false;
                     }
                     imgFileName = $("#" + domid).filebox("getValue");
                     imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
                     if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
                         MsgBox.show("无法保存，图片文件，仅支持jpg、png");
                         result = false;
-                        return;
+                        return false;
                     }
                 }else if(dom_type == '1'){
                     if($.trim($("#" + domid).val()).length == 0){
                         MsgBox.show("无法保存，存在副标题未填写");
                         result = false;
-                        return;
+                        return false;
                     }
                 }else if(dom_type == '3'){
                     if($.trim($("#" + domid).val()).length == 0){
                         MsgBox.show("无法保存，存在文本未填写");
                         result = false;
-                        return;
+                        return false;
                     }
                 }
             });
@@ -210,6 +210,11 @@
         });
     }
     function deleteNewsContent(trcontentid){
+        var newsContent = $("input[id^='newscontent']");
+        if(newsContent.length <= 1){
+            MsgBox.show("无法删除，至少有一个新闻内容");
+            return;
+        }
         $.messager.confirm('确认','您确认删除吗？',function(r){
             if (r){
                 var trcontent = $("#" + trcontentid);
@@ -263,7 +268,7 @@
                 <div class="formTitle" style="background-color:#f2f2f2;">
                     <div class="formTitle-icon"></div>
                     <div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">
-                        编辑新闻内容（请点击相应按钮，编辑内容）
+                        编辑新闻内容（请点击相应按钮，编辑内容）<span style="color:red">*</span>
                     </div>
                 </div>
             </td>

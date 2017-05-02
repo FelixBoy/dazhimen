@@ -6,7 +6,7 @@
         $("#indexPlayList").datagrid("selectRow", index);
         var row = $('#indexPlayList').datagrid('getSelected');
         if(row){
-            $.messager.confirm('确认','您确认取消【'+ row.pname + '】的首页轮播吗？',function(r) {
+            $.messager.confirm('确认','您确认取消【'+ row.name + '】的首页轮播吗？',function(r) {
                 if (r) {
                     $.ajax({
                         url:"<%=request.getContextPath()%>/playsort/saveDeleteIndexPlay.do?id=" + row.id + "&type="+row.typenum
