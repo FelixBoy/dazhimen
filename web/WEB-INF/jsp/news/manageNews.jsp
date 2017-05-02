@@ -149,8 +149,16 @@
                 MsgBox.show("该新闻用于App分享，不能修改状态");
                 return;
             }
+            var charChinese = StringUtil.getChnNumber(row.title);
+            var charEnglish = StringUtil.getEngNumber(row.title);
+            var newtitle = "";
+            if(charChinese + charEnglish > 12){
+                newtitle = row.title.substring(0, 10) + "......";
+            }else{
+                newtitle = row.title;
+            }
             $('#modifyNewsStatusDialog').dialog({
-                title: '修改新闻【' + row.title + '】的状态',
+                title: '修改新闻【' + newtitle + '】的状态',
                 width: 330,
                 height: 150,
                 closed: true,
