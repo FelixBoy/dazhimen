@@ -62,7 +62,40 @@ var StringUtil = (function(){
 			Exception.throwError("StringUtil.trim", oE);
 		}
 	}
-	
+	/*
+	 * 获取字符个数、不区分中英文
+	 */
+    function getCharNumber(str){
+        try{
+            if(!str){
+                return null;
+            }
+            var chnNumber = 0,
+                charCode = -1;
+
+            for (var i = 0; i < str.length; i++) {
+
+                charCode = str.charCodeAt(i);
+
+                if ( !(charCode >= 0 && charCode <= 128) ){
+                    chnNumber ++;
+                }
+            }
+
+            charCode = -1;
+            for (var i = 0; i < str.length; i++) {
+
+                charCode = str.charCodeAt(i);
+
+                if ( charCode >= 0 && charCode <= 128 ){
+                    chnNumber ++;
+                }
+            }
+            return chnNumber;
+        }catch(oE){
+            Exception.throwError("StringUtil.getCharNumber", oE);
+        }
+    }
 	/*
 	 * 获取中文字符个数
 	 */
@@ -185,6 +218,7 @@ var StringUtil = (function(){
 		getUUID : getUUID,
 		getChnNumber : getChnNumber,
 		getEngNumber : getEngNumber,
+        getCharNumber : getCharNumber,
 		getBinaryLength : getBinaryLength,
 		replaceAll : replaceAll
 	};

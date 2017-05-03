@@ -20,8 +20,16 @@
                 $.messager.alert('提示信息','产品已经有人购买，无法修改状态！','warning');
                 return;
             }
+            var charChinese = StringUtil.getChnNumber(row.pname);
+            var charEnglish = StringUtil.getEngNumber(row.pname);
+            var newname = "";
+            if(charChinese + charEnglish > 12){
+                newname = row.pname.substring(0, 10) + "......";
+            }else{
+                newname = row.pname;
+            }
             $('#modifyProductStatusDialog').dialog({
-                title: '修改产品【' + row.pname + '】的状态',
+                title: '修改产品【' + newname + '】的状态',
                 width: 330,
                 height: 150,
                 closed: true,
