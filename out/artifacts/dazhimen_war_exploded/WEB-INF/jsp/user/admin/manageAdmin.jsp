@@ -14,6 +14,11 @@
             href: "<%=request.getContextPath()%>/user/fwdAddAdminPage.do",
             modal: true
         });
+        $("#addAdminDialog").dialog({
+            onClose:function(){
+                $("#addAdminDialog").empty();
+            }
+        });
         $('#addAdminDialog').dialog("open");
     }
     function fwdModifyAdminPage(index){
@@ -26,10 +31,15 @@
                 height: 420,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/user/fwdModifyAdminPage.do?uid="+row.uid,
                 modal: true
             });
+            $("#modifyAdminDialog").dialog({
+                onClose:function(){
+                    $("#modifyAdminDialog").empty();
+                }
+            });
             $('#modifyAdminDialog').dialog("open");
+            $("#modifyAdminDialog").dialog("refresh", "<%=request.getContextPath()%>/user/fwdModifyAdminPage.do?uid="+row.uid);
         }
     }
     function saveDeleteAdmin(index){
@@ -151,7 +161,7 @@
         if(row){
             $.messager.confirm('提示信息', '确定要重置[' + row.name +']密码为123456', function(r){
                 if (r){
-                    var md5Pw = $.md5(row.loginname + '123456');
+                    var md5Pw = $.md5("123456");
                     $.ajax({
                         url:"<%=request.getContextPath()%>/user/saveResetUserPassword.do?uid=" + row.uid + "&password=" + md5Pw + "&random_id="+Math.random(),
                         type:'get',

@@ -14,6 +14,11 @@
             href: "<%=request.getContextPath()%>/user/fwdAddAdminPage.do",
             modal: true
         });
+        $("#addAdminDialog").dialog({
+            onClose:function(){
+                $("#addAdminDialog").empty();
+            }
+        });
         $('#addAdminDialog').dialog("open");
     }
     function fwdModifyAdminPage(index){
@@ -26,10 +31,15 @@
                 height: 420,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/user/fwdModifyAdminPage.do?uid="+row.uid,
                 modal: true
             });
+            $("#modifyAdminDialog").dialog({
+                onClose:function(){
+                    $("#modifyAdminDialog").empty();
+                }
+            });
             $('#modifyAdminDialog').dialog("open");
+            $("#modifyAdminDialog").dialog("refresh", "<%=request.getContextPath()%>/user/fwdModifyAdminPage.do?uid="+row.uid);
         }
     }
     function saveDeleteAdmin(index){

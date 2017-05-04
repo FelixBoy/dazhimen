@@ -54,10 +54,16 @@
                 height: 600,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/permission/fwdModifyRolePage.do?randomid="+Math.random() + "&rid=" + row.rid,
                 modal: true
             });
+            $("#modifyRoleDialog").dialog({
+                onClose:function(){
+                    $("#modifyRoleDialog").empty();
+                }
+            });
             $('#modifyRoleDialog').dialog("open");
+            $("#modifyRoleDialog").dialog("refresh",
+                "<%=request.getContextPath()%>/permission/fwdModifyRolePage.do?randomid="+Math.random() + "&rid=" + row.rid);
         }
     }
     function fwdViewRolePage(index){
@@ -70,10 +76,16 @@
                 height: 610,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/permission/fwdViewRolePage.do?randomid="+Math.random() + "&rid=" + row.rid,
                 modal: true
             });
+            $("#viewRoleDialog").dialog({
+                onClose:function(){
+                    $("#viewRoleDialog").empty();
+                }
+            });
             $('#viewRoleDialog').dialog("open");
+            $("#viewRoleDialog").dialog("refresh",
+                "<%=request.getContextPath()%>/permission/fwdViewRolePage.do?randomid="+Math.random() + "&rid=" + row.rid);
         }
     }
     function forwardAddRolePage(){
@@ -85,6 +97,11 @@
             cache: false,
             href: "<%=request.getContextPath()%>/permission/forwardAddRolePage.do?randomid="+Math.random(),
             modal: true
+        });
+        $("#addRoleDialog").dialog({
+            onClose:function(){
+                $("#addRoleDialog").empty();
+            }
         });
         $('#addRoleDialog').dialog("open");
     }

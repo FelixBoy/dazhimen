@@ -19,14 +19,43 @@
         }});
         $("#modifyRoleForm").form("load", "<%=request.getContextPath()%>/permission/getModifyRoleInfor.do" +
             "?rid=<%=request.getAttribute("rid").toString()%>&randomid=" + Math.random());
+        $.extend($.fn.validatebox.defaults.rules, {
+            maxLen: {
+                validator: function (value, param) {
+                    var result = true;
+                    if (StringUtil.getCharNumber($.trim(value)) > param[0]) {
+                        result = false;
+                    }
+                    return result;
+                },
+                message: '已超长，最多输入{0}个字符'
+            }
+        });
+        $('#roleNameInModifyRole').textbox({
+            required: true,
+            validType: 'maxLen[20]',
+            missingMessage:'最多输入20个字符',
+            prompt:'请输入角色名称'
+        });
+
+        $('#introductionInModifyRole').textbox({
+            required: true,
+            validType: 'maxLen[300]',
+            missingMessage:'最多输入300个字符',
+            prompt:'请输入介绍'
+        });
     });
     function checkModifyRoleFormBeforeSubmit(){
         if($.trim($("#roleNameInModifyRole").val()).length == 0){
             MsgBox.show("请填写角色名称");
             return false;
         }
-        if(StringUtil.getBinaryLength($.trim($("#roleNameInModifyRole").val())) > 100){
-            MsgBox.show("角色名称过长，无法保存");
+        if(StringUtil.getCharNumber($.trim($("#roleNameInModifyRole").val())) > 20){
+            MsgBox.show("角色名称过长，最长20个字符");
+            return false;
+        }
+        if(StringUtil.getCharNumber($("#introductionInModifyRole").val()) > 300){
+            MsgBox.show("介绍超长，最多输入300个字符");
             return false;
         }
         var perContent = $("input[id^='per_']");
@@ -85,8 +114,7 @@
             </tr>
             <tr>
                 <td style="text-align: right">角色名称:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" id="roleNameInModifyRole" name="name"
-                           style="width:300px" data-options="prompt:'请输入角色名称'" /></td>
+                <td><input id="roleNameInModifyRole" name="name" style="width:300px"  /></td>
             </tr>
             <tr>
                 <td style="text-align: right">可以分配给掌门:</td>
@@ -94,7 +122,7 @@
             </tr>
             <tr>
                 <td style="text-align: right">介绍:</td>
-                <td style="text-align: left;"><input class="easyui-textbox" name="introduction" data-options="multiline:true" style="width:300px;height:60px"/></td>
+                <td style="text-align: left;"><input id="introductionInModifyRole" name="introduction" data-options="multiline:true" style="width:300px;height:60px"/></td>
             </tr>
         </table>
         <br/>
