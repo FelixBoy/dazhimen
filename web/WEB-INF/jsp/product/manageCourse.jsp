@@ -120,13 +120,13 @@
             </tr>
             <tr>
                 <td nowrap="nowrap">产品ID:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="pidInManageCourse" name="pid"></td>
+                <td><input class="dzm-noBorder-text" readonly id="pidInManageCourse" name="pid"></td>
                 <td nowrap="nowrap">名称:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="pname" name="pname"></td>
+                <td><input class="dzm-noBorder-text" readonly id="pname" name="pname"></td>
                 <td nowrap="nowrap">类型:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="type" name="type"></td>
+                <td><input class="dzm-noBorder-text" readonly id="type" name="type"></td>
                 <td nowrap="nowrap">价格:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="price" name="price"></td>
+                <td><input class="dzm-noBorder-text" readonly id="price" name="price"></td>
             </tr>
         </table>
         </form>

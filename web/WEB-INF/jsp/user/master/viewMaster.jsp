@@ -22,33 +22,33 @@
             <tr>
                 <td style="text-align: right" nowrap="nowrap">头像:</td>
                 <td><img id="headImgReal" width="100px" height="100px"/>
-                    <input class="dzm-noBorder-text" readonly="true" type="hidden" id="headerimg" name="headerimg" /></td>
+                    <input class="dzm-noBorder-text" type="hidden" id="headerimg" name="headerimg" /></td>
             </tr>
             <tr>
                 <td style="text-align: right" nowrap="nowrap">掌门ID:</td>
-                <td><input class="dzm-noBorder-text" id="uidInViewMaster" name="uid"
+                <td><input class="dzm-noBorder-text" id="uidInViewMaster" readonly name="uid"
                            style="width:300px"/></td>
             </tr>
             <tr>
                 <td style="text-align: right" nowrap="nowrap">登录名:</td>
-                <td><input class="dzm-noBorder-text" id="loginnameInViewMaster" name="loginname"
+                <td><input class="dzm-noBorder-text" id="loginnameInViewMaster" readonly name="loginname"
                            style="width:300px"/></td>
             </tr>
             <tr>
                 <td style="text-align: right" nowrap="nowrap">姓名:</td>
-                <td><input class="dzm-noBorder-text" id="nameInViewMaster" name="name" style="width:300px" /></td>
+                <td><input class="dzm-noBorder-text" id="nameInViewMaster" readonly name="name" style="width:300px" /></td>
             </tr>
             <tr>
                 <td style="text-align: right" nowrap="nowrap">手机号码:</td>
-                <td><input class="dzm-noBorder-text" id="mphoneInViewMaster" name="mphone" style="width:300px" /></td>
+                <td><input class="dzm-noBorder-text" id="mphoneInViewMaster" readonly name="mphone" style="width:300px" /></td>
             </tr>
             <tr>
                 <td style="text-align: right" nowrap="nowrap">身份:</td>
-                <td><input class="dzm-noBorder-text" id="identityInViewMaster" name="identity" style="width:300px" data-options="prompt:'请输入掌门'" /></td>
+                <td><input class="dzm-noBorder-text" id="identityInViewMaster" readonly name="identity" style="width:300px" /></td>
             </tr>
             <tr>
                 <td style="text-align: right" nowrap="nowrap">介绍:</td>
-                <td><input class="dzm-noBorder-text" name="introduction" style="width:300px" /></td>
+                <td><textarea class="dzm-noBorder-text" name="introduction" readonly style="width:300px;height: 50px;" /></td>
             </tr>
         </table>
     </form>

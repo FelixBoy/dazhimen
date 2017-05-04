@@ -15,6 +15,11 @@
             href: "<%=request.getContextPath()%>/user/fwdMasterAddPage.do?random_id=" + Math.random(),
             modal: true
         });
+        $("#masterAddDialog").dialog({
+            onClose:function(){
+                $("#masterAddDialog").empty();
+            }
+        });
         $('#masterAddDialog').dialog("open");
     }
     function fwdViewMasterPage(index){

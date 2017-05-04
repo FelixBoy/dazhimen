@@ -243,7 +243,7 @@
         </tr>
         <tr id="imgtr">
             <td nowrap="nowrap">列表图片:</td>
-            <td id="listimgtr" colspan="2"><input class="dzm-noBorder-text" readonly="true" type="hidden" id="listimage" name="listImage" />
+            <td id="listimgtr" colspan="2"><input class="dzm-noBorder-text" readonly type="hidden" id="listimage" name="listImage" />
                 <img id="listImageInModify" width="100px" height="100px"/>
             </td>
             <td align='right'>产品主图:</td>

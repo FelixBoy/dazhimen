@@ -119,11 +119,11 @@
             <tr>
                 <td style="text-align: right" nowrap="nowrap">头像:</td>
                 <td><img id="headImgRealInModifyMaster" width="100px" height="100px"/>
-                    <input class="dzm-noBorder-text" readonly="true" type="hidden" id="headerimgInModifyMaster" name="headerimg" /></td>
+                    <input class="dzm-noBorder-text" type="hidden" id="headerimgInModifyMaster" name="headerimg" /></td>
             </tr>
             <tr>
                 <td style="text-align: right">掌门ID:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="uid" name="uid" style="width:300px"></td>
+                <td><input class="dzm-noBorder-text" readonly id="uid" name="uid" style="width:300px"></td>
             </tr>
             <tr>
                 <td style="text-align: right">登录名:<span style="color:red">*</span></td>

@@ -101,7 +101,7 @@
             </tr>
             <tr>
                 <td nowrap="nowrap">列表图片:</td>
-                <td id="listimgtr" colspan="2"><input class="dzm-noBorder-text" readonly="true" type="hidden" id="listimage" name="listImage" />
+                <td id="listimgtr" colspan="2"><input class="dzm-noBorder-text" type="hidden" id="listimage" name="listImage" />
                     <img id="listImageReal" width="100px" height="100px"/></td>
             </tr>
             <tr>
@@ -121,17 +121,17 @@
             </tr>
             <tr>
                 <td>掌门ID:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="uid" name="uid"></td>
+                <td><input class="dzm-noBorder-text" readonly id="uid" name="uid"></td>
                 <td>姓名:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="name" name="uname" /></td>
+                <td><input class="dzm-noBorder-text" readonly id="name" name="uname" /></td>
                 <td>性别:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="gender" name="gender" /></td>
+                <td><input class="dzm-noBorder-text" readonly id="gender" name="gender" /></td>
                 <td>手机:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="mphone" name="mphone" /></td>
+                <td><input class="dzm-noBorder-text" readonly id="mphone" name="mphone" /></td>
             </tr>
             <tr>
                 <td>登录账户:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="loginname" name="loginname" /></td>
+                <td><input class="dzm-noBorder-text" readonly id="loginname" name="loginname" /></td>
             </tr>
         </table>
         <div id="viewMasterDialog"></div>

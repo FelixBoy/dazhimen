@@ -1,4 +1,95 @@
 <script type="text/javascript">
+    $(function () {
+        $.extend($.fn.validatebox.defaults.rules, {
+            maxLen:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber($.trim(value)) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            maxLenWithoutTrim:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber(value) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            numberAndLetter:{
+                validator: function (value, param) {
+                    var reg_loginname = /^[0-9a-zA-Z]*$/g;
+                    return reg_loginname.test(value);
+                },
+                message:'格式不正确，只能为字母或数字组合'
+            },
+            imgfile:{
+                validator: function (value, param) {
+                    var imgFileSuffixName = value.substring(value.lastIndexOf("."));
+                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                        MsgBox.show("图片格式不正确，仅支持jpg、png");
+                        return false;
+                    }
+                    return true;
+                },
+                message:'图片格式不正确，请选择jpg,png格式'
+            },
+            mphone:{
+                validator: function (value, param) {
+                    var reg = /^1\d{10}$/;
+                    return reg.test(value);
+                },
+                message:'格式不正确，只能为以1开头的11位数字'
+            }
+        });
+        $('#loginnameInAdd').textbox({
+            required: true,
+            validType: ['maxLenWithoutTrim[20]','numberAndLetter'],
+            missingMessage:'最多输入20个字符',
+            prompt:'请输入登录名'
+        });
+        $('#password').textbox({
+            required: true,
+            validType: ['maxLenWithoutTrim[20]','numberAndLetter'],
+            missingMessage:'最多输入20个字符',
+            prompt:'请输入密码'
+        });
+        $('#nameInAddMaster').textbox({
+            required: true,
+            validType: 'maxLen[20]',
+            missingMessage:'最多输入20个字符',
+            prompt:'请输入姓名'
+        });
+        $('#mphoneInAddMaseter').textbox({
+            required: true,
+            validType: ['maxLenWithoutTrim[11]','mphone'] ,
+            missingMessage:'以1开头的11位数字',
+            prompt:'请输入手机号码'
+        });
+        $('#identityInAddMaseter').textbox({
+            required: true,
+            validType: 'maxLen[50]',
+            missingMessage:'最多输入50个字符',
+            prompt:'请输入身份'
+        });
+        $("#headerimgInAddMaster").filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            prompt:'请选择头像图片',
+            validType:'imgfile'
+        });
+        $('#introduction').textbox({
+            required: true,
+            validType: 'maxLen[2000]',
+            missingMessage:'最多输入2000个字符',
+            prompt:'请输入介绍'
+        });
+    });
     var checkCountInMasterAdd = 10;
     function cbInAddMaster(){
         var f = $('#MasterAddForm_iframe'), data = "";
@@ -59,29 +150,29 @@
         LoadingMaskLayer.show();
     }
     function checkAddMasterFormBeforeSubmit(){
-        if($.trim($("#loginnameInAdd").val()).length == 0){
+        if($("#loginnameInAdd").val().length == 0){
             MsgBox.show("请输入登录名");
             return false;
         }
-        if(StringUtil.getBinaryLength($.trim($("#loginnameInAdd").val())) > 100){
-            MsgBox.show("登录名过长，无法保存");
+        if(StringUtil.getCharNumber($.trim($("#loginnameInAdd").val())) > 20){
+            MsgBox.show("登录名过长，最长20个字符");
             return false;
         }
         var reg_loginname = /^[0-9a-zA-Z]*$/g;
-        if(!reg_loginname.test($.trim($("#loginnameInAdd").val()))){
+        if(!reg_loginname.test($("#loginnameInAdd").val())){
             MsgBox.show("登录名格式不正确，只能为字母或数字组合");
             return false;
         }
-        if($.trim($("#password").val()).length == 0){
+        if($("#password").val().length == 0){
             MsgBox.show("请输入密码");
             return false;
         }
-        if(StringUtil.getBinaryLength($.trim($("#password").val())) > 30){
-            MsgBox.show("密码过长，无法保存");
+        if(StringUtil.getCharNumber($("#password").val()) > 20){
+            MsgBox.show("密码过长，最长20个字符");
             return false;
         }
         var reg_password = /^[0-9a-zA-Z]*$/g;
-        if(!reg_password.test($.trim($("#password").val()))){
+        if(!reg_password.test($("#password").val())){
             MsgBox.show("密码格式不正确，只能为字母或数字组合");
             return false;
         }
@@ -89,21 +180,25 @@
             MsgBox.show("请输入姓名");
             return fasle;
         }
-        if(StringUtil.getBinaryLength($.trim($("#nameInAddMaster").val())) > 100){
-            MsgBox.show("姓名过长，无法保存");
+        if(StringUtil.getCharNumber($.trim($("#nameInAddMaster").val())) > 20){
+            MsgBox.show("姓名过长，最长20个字符");
             return false;
         }
-        if($.trim($("#mphoneInAddMaseter").val()).length == 0){
+        if($("#mphoneInAddMaseter").val().length == 0){
             MsgBox.show("请输入手机号码");
             return false;
         }
         var reg = /^1\d{10}$/;
-        if (!reg.test($.trim($("#mphoneInAddMaseter").val()))) {
-            MsgBox.show("手机号码格式有误");
+        if (!reg.test($("#mphoneInAddMaseter").val())) {
+            MsgBox.show("手机号码格式不正确，只能为以1开头的11位数字");
             return false;
         }
         if($.trim($("#identityInAddMaseter").val()).length == 0){
-            MsgBox.show("请输入掌门身份");
+            MsgBox.show("请输入身份");
+            return false;
+        }
+        if(StringUtil.getCharNumber($.trim($("#identityInAddMaseter").val())) > 50){
+            MsgBox.show("身份过长，最长50个字符");
             return false;
         }
         if(!$("#headerimgInAddMaster").filebox("getValue")){
@@ -114,6 +209,10 @@
         var headerSuffixName = headerFileName.substring(headerFileName.lastIndexOf("."));
         if(headerSuffixName != ".jpg" && headerSuffixName != ".png"){
             MsgBox.show("头像文件格式错误，仅支持jpg、png");
+            return false;
+        }
+        if(StringUtil.getCharNumber($("#introduction").val()) > 2000){
+            MsgBox.show("介绍超长，最多输入2000个字符");
             return false;
         }
         return true;
@@ -134,30 +233,29 @@
                 </tr>
                 <tr>
                     <td style="text-align: right" nowrap="nowrap">登录名:<span style="color:red">*</span></td>
-                    <td><input class="easyui-textbox" id="loginnameInAdd" name="loginname"
-                               style="width:300px" data-options="prompt:'请输入登录名'" /></td>
+                    <td><input id="loginnameInAdd" name="loginname" style="width:300px"  /></td>
                 </tr>
                 <tr>
                     <td style="text-align: right" nowrap="nowrap">密码:<span style="color:red">*</span></td>
-                    <td><input class="easyui-textbox" id="password" name="password" style="width:300px" data-options="prompt:'请输入密码'" /></td>
+                    <td><input id="password" name="password" style="width:300px" /></td>
                 </tr>
                 <tr>
                     <td style="text-align: right" nowrap="nowrap">姓名:<span style="color:red">*</span></td>
-                    <td><input class="easyui-textbox" id="nameInAddMaster" name="name" style="width:300px" data-options="prompt:'请输入姓名'"/></td>
+                    <td><input id="nameInAddMaster" name="name" style="width:300px" /></td>
                 </tr>
                 <tr>
                     <td style="text-align: right" nowrap="nowrap">手机号码:<span style="color:red">*</span></td>
-                    <td><input class="easyui-textbox" type="text" id="mphoneInAddMaseter" name="mphone" style="width:300px" data-options="prompt:'请输入手机号码'" /></td>
+                    <td><input id="mphoneInAddMaseter" name="mphone" style="width:300px"/></td>
                 </tr>
                 <tr>
                     <td style="text-align: right" nowrap="nowrap">身份:<span style="color:red">*</span></td>
-                    <td><input class="easyui-textbox" type="text" id="identityInAddMaseter" name="identity" style="width:300px" data-options="prompt:'请输入掌门'" /></td>
+                    <td><input id="identityInAddMaseter" name="identity" style="width:300px" /></td>
                 </tr>
                 <tr>
-                    <td style="text-align: right" nowrap="nowrap">头像文件:<span style="color:red">*</span></td>
+                    <td style="text-align: right" nowrap="nowrap">头像图片:<span style="color:red">*</span></td>
                     <td>
-                        <input class="easyui-filebox" id="headerimgInAddMaster" name="headerimg" style="width:300px" accept="image/jpeg,image/png"
-                               data-options="prompt:'请选掌门头像，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                        <input id="headerimgInAddMaster" name="headerimg" style="width:300px" accept="image/jpeg,image/png"
+                               data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                     </td>
                 </tr>
                 <tr>
@@ -172,7 +270,7 @@
                 <input type="hidden" name="type" value="1"/>
                 <tr>
                     <td style="text-align: right" nowrap="nowrap">介绍:</td>
-                    <td style="text-align: left;"><input class="easyui-textbox" name="introduction" data-options="multiline:true" style="width:300px;height:60px"/></td>
+                    <td style="text-align: left;"><input id="introduction" name="introduction" data-options="multiline:true" style="width:300px;height:60px"/></td>
                 </tr>
             </table>
         </form>

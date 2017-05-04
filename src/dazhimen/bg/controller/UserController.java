@@ -36,6 +36,12 @@ import java.util.Map;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+    @RequestMapping("/getUserInforJson.do")
+    public void getUserInforJson(HttpServletRequest resq, HttpServletResponse resp){
+        HttpSession sessionObj = resq.getSession(false);
+        LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
+        ResponseUtil.writeMsg(resp, new Gson().toJson(userBean));
+    }
     @RequestMapping("/fwdTipsInforPage.do")
     public String fwdTipsInforPage(HttpServletRequest resq, HttpServletResponse resp){
         String menuid = resq.getParameter("menuid");

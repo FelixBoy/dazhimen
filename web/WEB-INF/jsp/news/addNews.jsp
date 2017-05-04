@@ -388,7 +388,7 @@
         <tr id="trcontent3">
             <td>文本:<span style="color:red">*</span></td>
             <td colspan="5">
-                <input class="easyui-textbox"  data-options='multiline:true'
+                <input data-options='multiline:true'
                        style="width:700px;height: 60px;" id="newscontent3" name="newscontent3"/>
                 <input type="hidden" id="sort_newscontent3" name="sort_newscontent3"/>
                 <input type="hidden" id="type_newscontent3" name="type_newscontent3" value='3'/>

@@ -1,6 +1,10 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ page import="dazhimen.bg.bean.login.LoginUserBean" %>
 <%@ page import="util.Constant" %>
+<%
+    HttpSession sessionObj = request.getSession(false);
+    LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
+%>
 <script type="text/javascript">
     $(function () {
         $('#pname').textbox({
@@ -79,6 +83,7 @@
                 message:'图片格式不正确，请选择jpg,png格式'
             }
         });
+        $("#selectMasterForm").form("load", "<%=request.getContextPath()%>/user/getUserInforJson.do?random_id" + Math.random());
     });
     var checkCount = 10;
     function cbInAddProduct(){
@@ -222,25 +227,21 @@
                     </div>
                 </td>
             </tr>
-            <%
-                 HttpSession sessionObj = request.getSession(false);
-                 LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
-            %>
             <tr>
                 <td>责任掌门ID:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="uid" name="uid" value="<%=userBean.getUid()%>">&nbsp&nbsp</td>
+                <td><input class="dzm-noBorder-text" readonly id="uid" name="uid">&nbsp&nbsp</td>
                 <td>登录账号:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="loginname" name="loginname" value="<%=userBean.getLoginname()%>">&nbsp&nbsp</td>
+                <td><input class="dzm-noBorder-text" readonly id="loginname" name="loginname">&nbsp&nbsp</td>
                 <td>姓名:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="name" name="name" value="<%=userBean.getUname()%>"/></td>
+                <td><input class="dzm-noBorder-text" readonly id="uname" name="uname" /></td>
             </tr>
             <tr>
                 <td>手机号码:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="mphone" name="mphone" value="<%=userBean.getMphone()%>"/>&nbsp&nbsp</td>
+                <td><input class="dzm-noBorder-text" readonly id="mphone" name="mphone"/>&nbsp&nbsp</td>
                 <td>性别:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="gender" name="gender" value="<%=userBean.getGender()%>"/>&nbsp&nbsp</td>
+                <td><input class="dzm-noBorder-text" readonly id="gender" name="gender" />&nbsp&nbsp</td>
                 <td>备注信息:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="introduction" value="<%=userBean.getIntroduction()%>" name="introduction" data-options="multiline:true" style="height:50px"/></td>
+                <td><textarea class="dzm-noBorder-text" readonly id="introduction" name="introduction" style="height:50px"/></td>
             </tr>
         </table>
         <br/>
