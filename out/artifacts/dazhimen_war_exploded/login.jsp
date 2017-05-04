@@ -22,12 +22,22 @@
             $("#userNameInput").focus();
             return;
         }
+        var reg_loginname = /^[0-9a-zA-Z]*$/g;
+        if(!reg_loginname.test($("#userNameInput").val())){
+            MsgBox.show("登录名格式不正确，只能为字母或数字组合");
+            return false;
+        }
         if(!($("#userPwdInput").val())){
             MsgBox.show("请输入密码");
             $("#userPwdInput").focus();
             return;
         }
-        var md5Pw = $.md5($("#userNameInput").val() + $("#userPwdInput").val());
+        var reg_password = /^[0-9a-zA-Z]*$/g;
+        if(!reg_password.test($("#userPwdInput").val())){
+            MsgBox.show("密码格式不正确，只能为字母或数字组合");
+            return false;
+        }
+        var md5Pw = $.md5($("#userPwdInput").val());
         $.ajax({
             url:"<%=request.getContextPath()%>/login/doLoginCheck.do?random_id="+Math.random(),
             data: {loginname:$("#userNameInput").val(), password:md5Pw},

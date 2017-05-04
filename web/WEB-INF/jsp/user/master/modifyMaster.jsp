@@ -1,7 +1,86 @@
 <script type="text/javascript">
+    $(function () {
+        $.extend($.fn.validatebox.defaults.rules, {
+            maxLen:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber($.trim(value)) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            maxLenWithoutTrim:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber(value) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            numberAndLetter:{
+                validator: function (value, param) {
+                    var reg_loginname = /^[0-9a-zA-Z]*$/g;
+                    return reg_loginname.test(value);
+                },
+                message:'格式不正确，只能为字母或数字组合'
+            },
+            imgfile:{
+                validator: function (value, param) {
+                    var imgFileSuffixName = value.substring(value.lastIndexOf("."));
+                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                        MsgBox.show("图片格式不正确，仅支持jpg、png");
+                        return false;
+                    }
+                    return true;
+                },
+                message:'图片格式不正确，请选择jpg,png格式'
+            },
+            mphone:{
+                validator: function (value, param) {
+                    var reg = /^1\d{10}$/;
+                    return reg.test(value);
+                },
+                message:'格式不正确，只能为以1开头的11位数字'
+            }
+        });
+        $('#loginnameInModify').textbox({
+            required: true,
+            validType: ['maxLenWithoutTrim[20]','numberAndLetter'],
+            missingMessage:'最多输入20个字符',
+            prompt:'请输入登录名'
+        });
+        $('#nameInModifyMaster').textbox({
+            required: true,
+            validType: 'maxLen[20]',
+            missingMessage:'最多输入20个字符',
+            prompt:'请输入姓名'
+        });
+        $('#mphoneInModifyMaseter').textbox({
+            required: true,
+            validType: ['maxLenWithoutTrim[11]','mphone'] ,
+            missingMessage:'以1开头的11位数字',
+            prompt:'请输入手机号码'
+        });
+        $('#identityInModifyMaseter').textbox({
+            required: true,
+            validType: 'maxLen[50]',
+            missingMessage:'最多输入50个字符',
+            prompt:'请输入身份'
+        });
+        $('#introductionInModfiyMaster').textbox({
+            required: true,
+            validType: 'maxLen[2000]',
+            missingMessage:'最多输入2000个字符',
+            prompt:'请输入介绍'
+        });
+    });
     var checkCountInMasterModify = 10;
     function cbInModifyMaster(){
-        var f = $('#MasterAddForm_iframe'), data = "";
+        var f = $('#MasterModifyForm_iframe'), data = "";
         if (!f.length){
             return
         }
@@ -127,26 +206,25 @@
             </tr>
             <tr>
                 <td style="text-align: right">登录名:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" id="loginnameInModify" name="loginname" style="width:300px" data-options="prompt:'请输入登录名'" /></td>
+                <td><input id="loginnameInModify" name="loginname" style="width:300px" /></td>
                 <input type="hidden" id="lognnameOrginal" name="loginnameorginal">
             </tr>
             <tr>
                 <td style="text-align: right"  nowrap="nowrap">姓名:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" style="width:300px" id="nameInModifyMaster" name="name" data-options="prompt:'请输入姓名'" /></td>
+                <td><input style="width:300px" id="nameInModifyMaster" name="name" /></td>
             </tr>
             <tr>
                 <td style="text-align: right"  nowrap="nowrap">手机号码:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" style="width:300px" id="mphoneInModifyMaseter" name="mphone" data-options="prompt:'请输入手机号码'" /></td>
+                <td><input style="width:300px" id="mphoneInModifyMaseter" name="mphone" /></td>
             </tr>
             <tr>
                 <td style="text-align: right" nowrap="nowrap">身份:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" type="text" id="identityInModifyMaseter" name="identity" style="width:300px" data-options="prompt:'请输入掌门'" /></td>
+                <td><input id="identityInModifyMaseter" name="identity" style="width:300px" /></td>
             </tr>
             <tr>
                 <td style="text-align: right" nowrap="nowrap">头像文件:</td>
                 <td>
-                    <input class="easyui-filebox" id="headerimgInMoidfyMaster" name="headerimgInModify" style="width:300px" accept="image/jpeg,image/png"
-                           data-options="prompt:'修改头像，将会覆盖原头像，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <input id="aaaaaaffffffff" name="headerimgFile11111" style="width:300px" accept="image/jpeg,image/png">
                 </td>
             </tr>
             <tr>
@@ -161,7 +239,7 @@
             <input type="hidden" name="type" value="1"/>
             <tr>
                 <td style="text-align: right">介绍:</td>
-                <td><input class="easyui-textbox" name="introduction" data-options="multiline:true" style="width:300px;height:60px;"/></td>
+                <td><input id="introductionInModfiyMaster" name="introduction" data-options="multiline:true" style="width:300px;height:60px;"/></td>
             </tr>
         </table>
     </form>

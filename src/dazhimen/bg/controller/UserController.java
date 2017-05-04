@@ -503,7 +503,8 @@ public class UserController {
         }
         ResetPasswordBean resetPasswordBean = new ResetPasswordBean();
         resetPasswordBean.setUid(uid);
-        resetPasswordBean.setPassword(password);
+        String finallyPassword = GlobalUtils.hex_md5(uid + password);
+        resetPasswordBean.setPassword(finallyPassword);
         return resetPasswordBean;
     }
     private UserBean getAddMasterBean(HttpServletRequest resq){

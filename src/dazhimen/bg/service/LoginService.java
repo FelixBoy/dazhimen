@@ -7,6 +7,7 @@ import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import util.CheckIsExistsUtils;
+import util.GlobalUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +38,16 @@ public class LoginService {
         boolean result = false;
         SqlSession sqlSession = null;
         try {
+            sqlSession = MyBatisUtil.createSession();
+            LoginUserBean userBean = userBean = sqlSession.selectOne("dazhimen.bg.bean.Login.getUserInfoByLoginname", loginname);
+            if(userBean == null || userBean.getUid() == null || userBean.getUname() == null || userBean.getUtype() == null){
+                throw new BgException("获取登录用户的信息出错");
+            }
+
             LoginBean loginBean = new LoginBean();
             loginBean.setLoginname(loginname);
-            loginBean.setPassword(password);
-            sqlSession = MyBatisUtil.createSession();
+            String finallyPassword = GlobalUtils.hex_md5(userBean.getUid() + password);
+            loginBean.setPassword(finallyPassword);
             SingleValueBean value = sqlSession.selectOne("dazhimen.bg.bean.Login.checkPassword", loginBean);
             if(value == null){
                 return false;

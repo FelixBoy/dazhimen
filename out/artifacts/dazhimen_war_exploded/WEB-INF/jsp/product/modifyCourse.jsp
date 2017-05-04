@@ -25,6 +25,8 @@
                         $("#istryInModifyCourse").prop("checked", false);
                     }
                     dealSortSelectInModify(jsonObj.sortsdata, jsonObj.sort);
+                    $("#filename").val(jsonObj.filename);
+                    $("#filesizestr").val(jsonObj.filesizestr);
                 }
             }
         });
@@ -217,7 +219,7 @@
                 </td>
             </tr>
             <tr>
-                <td>名称:<span style="color:red">*</span></td>
+                <td nowrap="nowrap">名称:<span style="color:red">*</span></td>
                 <td><input id="coursenameInModifyCourse" name="coursename"
                            data-options="prompt:'请填写课程名称'" style="width:350px">
                     <input type="hidden" id="courseidInModifyCourse" name="courseid" />
@@ -225,7 +227,7 @@
                 </td>
             </tr>
             <tr>
-                <td>排序:</td>
+                <td nowrap="nowrap">排序:</td>
                 <td>
                     <select class="easyui-combobox" name="sort" id="sortSelectInmodify" editable="false" style="width:140px;" style="width:350px">
                         <option value="99">按上架时间排序</option>
@@ -233,11 +235,19 @@
                 </td>
             </tr>
             <tr>
-                <td>试学:</td>
+                <td nowrap="nowrap">试学:</td>
                 <td><input type="checkbox" id="istryInModifyCourse" name="istry" style="width:100px" value="1"/></td>
             </tr>
             <tr>
-                <td>音频文件:</td>
+                <td nowrap="nowrap" style="text-align: right">原音频名称:</td>
+                <td><input class="dzm-noBorder-text" readonly id="filename" name="filename" style="width:350px"></td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap" style="text-align: right">原音频大小:</td>
+                <td><input class="dzm-noBorder-text" readonly id="filesizestr" name="filesizestr" style="width:350px"></td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">音频文件:</td>
                 <td>
                     <input id="audioInModifyCourse" name="audio" style="width:350px" accept="audio/mpeg"
                            data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'">

@@ -109,9 +109,9 @@ public class UserService {
             }
             String uid = new IdUtils().getUid();
             userBean.setUid(uid);
-            //密码加密规则，是loginname+password明文之后，md5
-            String passwordMd5 = GlobalUtils.hex_md5(userBean.getLoginname()+userBean.getPassword());
-            userBean.setPassword(passwordMd5);
+            String md5Pw = GlobalUtils.hex_md5(userBean.getPassword());
+            String finallyPassword = GlobalUtils.hex_md5(userBean.getUid()+md5Pw);
+            userBean.setPassword(finallyPassword);
 
             String masterMainFolderPath = userBean.getBasepath() + Constant.masterPrefixPath  + uid + "\\";
             FileManageService fileService = new FileManageService();

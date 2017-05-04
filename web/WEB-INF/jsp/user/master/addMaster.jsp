@@ -154,26 +154,26 @@
             MsgBox.show("请输入登录名");
             return false;
         }
-        if(StringUtil.getCharNumber($.trim($("#loginnameInAdd").val())) > 20){
-            MsgBox.show("登录名过长，最长20个字符");
-            return false;
-        }
         var reg_loginname = /^[0-9a-zA-Z]*$/g;
         if(!reg_loginname.test($("#loginnameInAdd").val())){
             MsgBox.show("登录名格式不正确，只能为字母或数字组合");
+            return false;
+        }
+        if(StringUtil.getCharNumber($("#loginnameInAdd").val()) > 20){
+            MsgBox.show("登录名过长，最长20个字符");
             return false;
         }
         if($("#password").val().length == 0){
             MsgBox.show("请输入密码");
             return false;
         }
-        if(StringUtil.getCharNumber($("#password").val()) > 20){
-            MsgBox.show("密码过长，最长20个字符");
-            return false;
-        }
         var reg_password = /^[0-9a-zA-Z]*$/g;
         if(!reg_password.test($("#password").val())){
             MsgBox.show("密码格式不正确，只能为字母或数字组合");
+            return false;
+        }
+        if(StringUtil.getCharNumber($("#password").val()) > 20){
+            MsgBox.show("密码过长，最长20个字符");
             return false;
         }
         if($.trim($("#nameInAddMaster").val()).length == 0){
