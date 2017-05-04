@@ -61,17 +61,19 @@ public class UserService {
             CheckOldPasswordBean oldPasswordBean = new CheckOldPasswordBean();
             String uid = modifyPasswordBean.getUid();
             String oldPassword = modifyPasswordBean.getOldpassword();
+            String oldPasswordMd5 = GlobalUtils.hex_md5(oldPassword);
+            String oldFinallyPassword = GlobalUtils.hex_md5(uid + oldPasswordMd5);
             String loginname = modifyPasswordBean.getLoginname();
-            String md5_oldPassword = GlobalUtils.hex_md5(loginname + oldPassword);
             oldPasswordBean.setUid(uid);
-            oldPasswordBean.setOldpassword(md5_oldPassword);
+            oldPasswordBean.setOldpassword(oldFinallyPassword);
             String value = sqlSession.selectOne("dazhimen.bg.bean.User.checkOldPassword", oldPasswordBean);
             if(value == null || value.equals("")){
                 throw new BgException("原始密码错误，修改密码失败");
             }
             String newPassword = modifyPasswordBean.getNewpassword();
-            String md5_newPassword = GlobalUtils.hex_md5(loginname + newPassword);
-            modifyPasswordBean.setNewpassword(md5_newPassword);
+            String newPasswordMd5 = GlobalUtils.hex_md5(newPassword);
+            String newFinallyPassword = GlobalUtils.hex_md5(uid + newPasswordMd5);
+            modifyPasswordBean.setNewpassword(newFinallyPassword);
             result = sqlSession.update("dazhimen.bg.bean.User.saveModifyPassword", modifyPasswordBean);
             sqlSession.commit();
         }catch (BgException e){

@@ -6,20 +6,74 @@
     LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
 %>
 <script type="text/javascript">
+    $(function () {
+        $.extend($.fn.validatebox.defaults.rules, {
+            maxLenWithoutTrim:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber(value) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            numberAndLetter:{
+                validator: function (value, param) {
+                    var reg_loginname = /^[0-9a-zA-Z]*$/g;
+                    return reg_loginname.test(value);
+                },
+                message:'格式不正确，只能为字母或数字组合'
+            }
+        });
+        $('#oldpassword').textbox({
+            required: true,
+            validType: ['maxLenWithoutTrim[20]','numberAndLetter'],
+            missingMessage:'最多输入20个字符',
+            prompt:'请输入原始密码'
+        });
+        $('#newpassword').textbox({
+            required: true,
+            validType: ['maxLenWithoutTrim[20]','numberAndLetter'],
+            missingMessage:'最多输入20个字符',
+            prompt:'请输入新密码'
+        });
+        $('#newpasswordcheck').textbox({
+            required: true,
+            validType: ['maxLenWithoutTrim[20]','numberAndLetter'],
+            missingMessage:'最多输入20个字符',
+            prompt:'请再次输入新密码'
+        });
+    });
     function checkModifyPassWordFormBeforeSubmit() {
-        if($.trim($("#oldpassword").val()).length == 0){
+        if($("#oldpassword").val().length == 0){
             MsgBox.show("原始密码不能为空");
             return false;
         }
-        if($.trim($("#newpassword").val()).length == 0){
+        var reg_oldpassword = /^[0-9a-zA-Z]*$/g;
+        if(!reg_oldpassword.test($("#oldpassword").val())){
+            MsgBox.show("原始密码格式不正确，只能为字母或数字组合");
+            return false;
+        }
+        if($("#newpassword").val().length == 0){
             MsgBox.show("新密码不能为空");
             return false;
         }
-        if($.trim($("#newpasswordcheck").val()).length == 0){
+        var reg_newpassword = /^[0-9a-zA-Z]*$/g;
+        if(!reg_newpassword.test($("#newpassword").val())){
+            MsgBox.show("新密码格式不正确，只能为字母或数字组合");
+            return false;
+        }
+        if($("#newpasswordcheck").val().length == 0){
             MsgBox.show("新密码确认不能为空");
             return false;
         }
-        if($.trim($("#newpasswordcheck").val()) != $.trim($("#newpassword").val())){
+        var reg_newpasswordcheck = /^[0-9a-zA-Z]*$/g;
+        if(!reg_newpasswordcheck.test($("#newpasswordcheck").val())){
+            MsgBox.show("新密码确认格式不正确，只能为字母或数字组合");
+            return false;
+        }
+        if($("#newpasswordcheck").val() != $("#newpassword").val()){
             MsgBox.show("新密码两次输入不一致");
             return false;
         }
@@ -83,15 +137,15 @@
             </tr>
             <tr>
                 <td style="text-align: right"  nowrap="nowrap">原始密码:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" id="oldpassword" type="password"  name="oldpassword" style="width:300px"></td>
+                <td><input id="oldpassword" type="password"  name="oldpassword" style="width:300px"></td>
             </tr>
             <tr>
                 <td style="text-align: right"  nowrap="nowrap">新密码:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" id="newpassword" type="password" name="newpassword" style="width:300px"></td>
+                <td><input  id="newpassword" type="password" name="newpassword" style="width:300px"></td>
             </tr>
             <tr>
                 <td style="text-align: right"  nowrap="nowrap">新密码确认:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" id="newpasswordcheck"  type="password" name="newpasswordcheck" style="width:300px"></td>
+                <td><input id="newpasswordcheck"  type="password" name="newpasswordcheck" style="width:300px"></td>
             </tr>
         </table>
     </form>
