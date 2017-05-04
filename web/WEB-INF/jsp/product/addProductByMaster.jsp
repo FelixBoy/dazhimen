@@ -5,9 +5,8 @@
     $(function () {
         $('#pname').textbox({
             required: true,
-            validType: 'length[0,50]',
+            validType: 'maxLen[50]',
             missingMessage:'最多输入50个字符',
-            invalidMessage:'已超长，最多输入50个字符',
             prompt:'请输入产品名称'
         });
         $("#price").textbox({
@@ -24,9 +23,9 @@
         });
         $("#prodcut_introduction").textbox({
             required:true,
-            missingMessage:'产品介绍，最多输入1000个字符',
-            validType: 'length[0,1000]',
-            invalidMessage:'已超长，最多输入1000个字符'
+            missingMessage:'产品介绍，最多输入2000个字符',
+            validType: 'maxLen[2000]',
+            prompt:'请输入产品介绍'
         });
         $("#listimg").filebox({
             required:true,
@@ -41,15 +40,28 @@
             validType:'imgfile'
         });
         $.extend($.fn.validatebox.defaults.rules, {
+            maxLen:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber($.trim(value)) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
             price: {
                 validator: function (value, param) {
-                var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
-                return reg.test($.trim(value));
+                    var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+                    return reg.test($.trim(value));
                 },
                 message: '金额格式不合法，请重新输入'
             },
             percent:{
                 validator: function (value, param) {
+                    if(!$.trim(value)){
+                        return true;
+                    }
                     var k= /^[1-9][0-9]{0,1}$/;
                     return k.test($.trim(value));
                 },
@@ -120,8 +132,8 @@
             MsgBox.show("请填写产品名称");
             return false;
         }
-        if(StringUtil.getCharNumber($.trim($("#pname").val())) > 5){
-            MsgBox.show("产品名称过长，无法保存");
+        if(StringUtil.getCharNumber($.trim($("#pname").val())) > 50){
+            MsgBox.show("产品名称过长，最长50个字符");
             return false;
         }
         if($.trim($("#price").val()).length == 0){
@@ -160,6 +172,10 @@
         imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
         if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
             MsgBox.show("产品主图文件，仅支持jpg、png");
+            return false;
+        }
+        if(StringUtil.getCharNumber($.trim($("#prodcut_introduction").val())) > 2000){
+            MsgBox.show("产品介绍过长，最长2000个字符");
             return false;
         }
         return true;
