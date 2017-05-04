@@ -383,10 +383,11 @@ public class ProductController {
 
     }
     @RequestMapping("/fwdModifyProductStatusPage.do")
-    public String fwdModifyProductStatusPage(HttpServletRequest resq){
-        resq.setAttribute("pid", resq.getParameter("pid"));
-        resq.setAttribute("status" ,resq.getParameter("status"));
-        return "/product/modifyProductStatus";
+    public ModelAndView fwdModifyProductStatusPage(@RequestParam("pid") String pid, @RequestParam("status") String status){
+        ModelAndView mav = new ModelAndView("/product/modifyProductStatus");
+        mav.addObject("pid", pid);
+        mav.addObject("status" , status);
+        return mav;
     }
     @RequestMapping("/saveModifyProductStatus.do")
     public void saveModifyProductStatus(HttpServletRequest resq,HttpServletResponse resp){

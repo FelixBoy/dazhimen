@@ -1,6 +1,12 @@
 <script>
     $(function(){
         $("#pidInModifyProductListImg").val("<%=request.getAttribute("pid")%>");
+        $("#listImgInModifyDialog").filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            prompt:'将会覆盖原图片',
+            validType:'imgfile'
+        });
     });
     var checkCountInModifyListImg = 10;
     function cbInModifyListImg(){
@@ -95,8 +101,8 @@
                 <td style="text-align: right" nowrap="nowrap">列表图片:<span style="color:red">*</span></td>
                 <td>
                     <input type="hidden" id="pidInModifyProductListImg" name="pid"/>
-                    <input class="easyui-filebox" id="listImgInModifyDialog" name="listimgmodify" style="width:280px" accept="image/jpeg,image/png"
-                           data-options="prompt:'将会覆盖原图片，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <input id="listImgInModifyDialog" name="listimgmodify" style="width:280px" accept="image/jpeg,image/png"
+                           data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>
         </table>

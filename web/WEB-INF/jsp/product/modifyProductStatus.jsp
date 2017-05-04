@@ -5,12 +5,12 @@
         $("#statusOldValue").val("<%=status%>");
         <%
         if(status.equals("1")){%>
-            $("#groud").attr("checked", "checked");
+            $("#groud").prop("checked", "checked");
         <%}
         if(status.equals("2")){%>
-            $("#prepare").attr("checked", "checked");
+            $("#prepare").prop("checked", "checked");
         <%}if(status.equals("3")){%>
-            $("#undergroud").attr("checked", "checked");
+            $("#undergroud").prop("checked", "checked");
         <%}%>
     <%}%>
     function modifyStatus(index){
@@ -38,7 +38,7 @@
             },
             success:function(data){
                 MsgBox.show(data);
-                $('#modifyProductStatusDialog').dialog('close');		// close the dialog
+                $('#modifyProductStatusDialog').dialog('close');
                 $('#productList').datagrid('reload');
             }
         });

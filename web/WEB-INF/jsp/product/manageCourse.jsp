@@ -18,8 +18,13 @@
                 cache: false,
                 modal: true
             });
-            $("#modifyCourseDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyCoursePage.do?courseid=" + row.courseid + "&random_id=" + Math.random());
+            $("#modifyCourseDialog").dialog({
+                onClose:function(){
+                    $("#modifyCourseDialog").empty();
+                }
+            });
             $("#modifyCourseDialog").dialog("open");
+            $("#modifyCourseDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyCoursePage.do?courseid=" + row.courseid + "&random_id=" + Math.random());
         }
     }
     function saveCourseDel(index){
@@ -54,6 +59,11 @@
             closed: true,
             cache: false,
             modal: true
+        });
+        $("#addCourseDialog").dialog({
+            onClose:function(){
+                $("#addCourseDialog").empty();
+            }
         });
         $('#addCourseDialog').dialog("open");
     }

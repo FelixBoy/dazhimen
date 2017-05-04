@@ -23,14 +23,49 @@
                 }
             }
         });
+        $.extend($.fn.validatebox.defaults.rules, {
+            maxLen:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber($.trim(value)) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            audiofile:{
+                validator: function (value, param) {
+                    var audioFileSuffixName = value.substring(value.lastIndexOf("."));
+                    if(audioFileSuffixName != ".mp3"){
+                        MsgBox.show("音频格式不正确，请选择mp3格式");
+                        return false;
+                    }
+                    return true;
+                },
+                message:'音频格式不正确，请选择mp3格式'
+            }
+        });
+        $('#coursenameInAddCourse').textbox({
+            required: true,
+            validType: 'maxLen[50]',
+            missingMessage:'最多输入50个字符',
+            prompt:'请填写课程名称'
+        });
+        $("#audioInAddCourse").filebox({
+            required:true,
+            missingMessage:'支持mp3格式',
+            prompt:'请选音频文件',
+            validType:'audiofile'
+        });
     });
     function checkCourseForm(){
         if($.trim($("#coursenameInAddCourse").val()).length == 0){
             MsgBox.show("请填写课程名称");
             return false;
         }
-        if(StringUtil.getBinaryLength($.trim($("#coursenameInAddCourse").val())) > 100){
-            MsgBox.show("课程名称过长，无法保存");
+        if(StringUtil.getCharNumber($.trim($("#coursenameInAddCourse").val())) > 50){
+            MsgBox.show("课程名称过长，最长50个字符");
             return false;
         }
         if(!$("#audioInAddCourse").filebox("getValue")){
@@ -40,7 +75,7 @@
         var audioFileName = $("#audioInAddCourse").filebox("getValue");
         var audioSuffixName = audioFileName.substring(audioFileName.lastIndexOf("."));
         if(audioSuffixName != ".mp3"){
-            MsgBox.show("音频文件格式错误，仅支持mp3");
+            MsgBox.show("音频格式不正确，请选择mp3格式");
             return false;
         }
         return true;
@@ -121,8 +156,7 @@
         </tr>
         <tr>
             <td>名称:<span style="color:red">*</span></td>
-            <td><input class="easyui-textbox"  id="coursenameInAddCourse" name="coursename"
-                       data-options="prompt:'请填写课程名称'" style="width:350px">
+            <td><input id="coursenameInAddCourse" name="coursename" style="width:350px">
                 <input type="hidden" id="pidInAddCourse" name="pid"/>
             </td>
         </tr>
@@ -141,8 +175,8 @@
         <tr>
             <td>音频文件:<span style="color:red">*</span></td>
             <td>
-                <input class="easyui-filebox" id="audioInAddCourse" name="audio" style="width:350px" accept="audio/mpeg"
-                       data-options="prompt:'请选课程音频文件，支持mp3',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                <input id="audioInAddCourse" name="audio" style="width:350px" accept="audio/mpeg"
+                       data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'">
             </td>
         </tr>
     </table>
