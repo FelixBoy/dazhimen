@@ -72,8 +72,8 @@
         if (row){
             $('#viewRoleDialog').dialog({
                 title: '查看角色信息',
-                width: 500,
-                height: 610,
+                width: 580,
+                height: 650,
                 closed: true,
                 cache: false,
                 modal: true

@@ -97,4 +97,32 @@
     <select id="getIsMasterCanOwn" resultType="java.lang.String">
         select ismastercanown from role where rid = #{rid}
     </select>
+    <select id="getAddIrRoleUserDataAllByParams" resultType="dazhimen.bg.bean.permission.ViewIrRoleUserBean"
+     parameterType="dazhimen.bg.bean.user.QueryMasterParamBean">
+        select b.uid,b.name,b.mphone,b.loginname,getcodetxt('gender', gender) gender,getcodetxt('usertype', type) typestr
+        from user b
+        where b.isdel = '0'
+        and not exists(select 1 from ir_user_role a where b.uid = a.uid and a.rid = #{rid})
+        <if test="searchCondition != null and searchCondition != ''">
+            and (b.name like concat('%', #{searchCondition}, '%')
+            or b.mphone like concat('%', #{searchCondition}, '%')
+            or b.loginname like concat('%', #{searchCondition}, '%'))
+        </if>
+        order by type desc
+    </select>
+
+    <select id="getAddIrRoleUserDataAdminOnlyByParams"  resultType="dazhimen.bg.bean.permission.ViewIrRoleUserBean"
+            parameterType="dazhimen.bg.bean.user.QueryMasterParamBean">
+        select b.uid,b.name,b.mphone,b.loginname,getcodetxt('gender', gender) gender,getcodetxt('usertype', type) typestr
+        from user b
+        where b.isdel = '0'
+        and b.type = '2'
+        and not exists(select 1 from ir_user_role a where b.uid = a.uid and a.rid = #{rid})
+        <if test="searchCondition != null and searchCondition != ''">
+            and (b.name like concat('%', #{searchCondition}, '%')
+            or b.mphone like concat('%', #{searchCondition}, '%')
+            or b.loginname like concat('%', #{searchCondition}, '%'))
+        </if>
+        order by type desc
+    </select>
 </mapper>

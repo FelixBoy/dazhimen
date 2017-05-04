@@ -3,6 +3,7 @@ package dazhimen.bg.service;
 import com.google.gson.Gson;
 import dazhimen.bg.bean.PaginationParamBean;
 import dazhimen.bg.bean.permission.*;
+import dazhimen.bg.bean.product.QueryMasterParamBean;
 import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import net.sf.json.JSONObject;
@@ -231,6 +232,36 @@ public class PermissionService {
                 irRoleUserBeans = sqlSession.selectList("dazhimen.bg.bean.Permission.getAddIrRoleUserDataAll", rid);
             }else{
                 irRoleUserBeans = sqlSession.selectList("dazhimen.bg.bean.Permission.getAddIrRoleUserDataAdminOnly", rid);
+            }
+
+        }catch (BgException e){
+            e.printStackTrace();
+            throw new BgException(e.getMessage());
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new BgException("出现异常，查询角色对应人员信息出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return irRoleUserBeans;
+    }
+    /**
+     *  获取添加角色下人员列表的数据
+     * @return  人员列表的数据
+     */
+    public List<ViewIrRoleUserBean> getAddIrRoleUserDataByParams(QueryMasterParamBean paramBean) throws BgException {
+        SqlSession sqlSession = null;
+        List<ViewIrRoleUserBean> irRoleUserBeans = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            String isMasterCanOwn = sqlSession.selectOne("dazhimen.bg.bean.Permission.getIsMasterCanOwn", paramBean.getRid());
+            if(isMasterCanOwn == null || isMasterCanOwn.equals("")){
+                throw new BgException("获取当前角色的基本信息出错");
+            }
+            if(isMasterCanOwn.equals("1")){
+                irRoleUserBeans = sqlSession.selectList("dazhimen.bg.bean.Permission.getAddIrRoleUserDataAllByParams", paramBean);
+            }else{
+                irRoleUserBeans = sqlSession.selectList("dazhimen.bg.bean.Permission.getAddIrRoleUserDataAdminOnlyByParams", paramBean);
             }
 
         }catch (BgException e){

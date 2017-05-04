@@ -7,6 +7,15 @@ public class QueryMasterParamBean {
     private String searchCondition = null;
     private Integer startnum = null;
     private Integer getrows = null;
+    private String rid = null;
+
+    public String getRid() {
+        return rid;
+    }
+
+    public void setRid(String rid) {
+        this.rid = rid;
+    }
 
     public String getSearchCondition() {
         return searchCondition;

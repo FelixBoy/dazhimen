@@ -61,8 +61,38 @@
 
         }
     }
+    function SearchMasterByParams() {
+        var searchCondition = $("#searchCondition").val();
+        if(!searchCondition){
+            clearSearchMasterParams();
+            return;
+        }
+
+        var queryParameter = $('#addIrRoleUserList').datagrid("options").queryParams;
+        queryParameter.searchCondition = searchCondition;
+        queryParameter.queryByParamFlag = Math.random();
+        $("#addIrRoleUserList").datagrid("reload");
+    }
+    function clearSearchMasterParams(){
+        var queryParameter = $('#addIrRoleUserList').datagrid("options").queryParams;
+        queryParameter.searchCondition = null;
+        queryParameter.queryByParamFlag = null;
+        $("#searchCondition").textbox("setValue","");
+        $("#addIrRoleUserList").datagrid("reload");
+    }
 </script>
 <div style="padding:5px 0;">
+    <div style="margin:0px auto;width: 650px;">
+        <form id="queryAdminParamsForm">
+            <table cellpadding="5">
+                <tr>
+                    <td  nowrap="nowrap">查询条件:</td>
+                    <td><input class="easyui-textbox"  id="searchCondition" style="width: 300px;" data-options="prompt:'可以按姓名、登录名、手机号码模糊查询'" name="searchCondition"/></td>
+                    <td><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="SearchMasterByParams()">检索</a>
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="clearSearchMasterParams()">清空条件</a></td>
+            </table>
+        </form>
+    </div>
     <table id="addIrRoleUserList" style="width: auto;height: 310px;">
     </table>
 </div>

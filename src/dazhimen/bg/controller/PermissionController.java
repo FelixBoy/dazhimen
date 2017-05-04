@@ -3,6 +3,7 @@ package dazhimen.bg.controller;
 import com.google.gson.Gson;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import dazhimen.bg.bean.permission.*;
+import dazhimen.bg.bean.product.QueryMasterParamBean;
 import dazhimen.bg.exception.BgException;
 import dazhimen.bg.service.PermissionService;
 import org.springframework.stereotype.Controller;
@@ -170,8 +171,18 @@ public class PermissionController {
     public void getAddIrRoleUserData(HttpServletRequest resq, HttpServletResponse resp){
         String rid = resq.getParameter("rid");
         PermissionService permissionService = new PermissionService();
+        List<ViewIrRoleUserBean> irRoleUserBeans = null;
         try {
-            List<ViewIrRoleUserBean> irRoleUserBeans = permissionService.getAddIrRoleUserData(rid);
+            String queryByParamFlag = resq.getParameter("queryByParamFlag");
+            if(queryByParamFlag == null || queryByParamFlag.equals("")){
+                irRoleUserBeans = permissionService.getAddIrRoleUserData(rid);
+            }else{
+                QueryMasterParamBean paramBean = new QueryMasterParamBean();
+                String searchCondition = resq.getParameter("searchCondition");
+                paramBean.setSearchCondition(searchCondition);
+                paramBean.setRid(rid);
+                irRoleUserBeans = permissionService.getAddIrRoleUserDataByParams(paramBean);
+            }
             ResponseUtil.writeMsg(resp, new Gson().toJson(irRoleUserBeans));
         } catch (BgException e) {
             e.printStackTrace();

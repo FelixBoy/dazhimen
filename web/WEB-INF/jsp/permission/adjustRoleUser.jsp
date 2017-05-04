@@ -55,14 +55,20 @@
     function forwardAddIrRoleUserPage(){
         $("#addIrRoleUserDialog").dialog({
             title:'添加拥有角色的人员',
-            width: 600,
-            height: 430,
+            width: 680,
+            height: 480,
             closed: true,
             cache: false,
             modal: true
         });
-        $("#addIrRoleUserDialog").dialog("refresh", "<%=request.getContextPath()%>/permission/forwardAddIrRoleUserPage.do?rid=" + $("#rid").val() + "&random_id=" + Math.random());
+        $("#addIrRoleUserDialog").dialog({
+            onClose:function(){
+                $("#addIrRoleUserDialog").empty();
+            }
+        });
         $("#addIrRoleUserDialog").dialog("open");
+        $("#addIrRoleUserDialog").dialog("refresh",
+            "<%=request.getContextPath()%>/permission/forwardAddIrRoleUserPage.do?rid=" + $("#rid").val() + "&random_id=" + Math.random());
     }
 </script>
 <div style="text-align: left;">

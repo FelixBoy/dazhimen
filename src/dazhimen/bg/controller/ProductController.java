@@ -100,20 +100,18 @@ public class ProductController {
     public void getSelectMasterData(HttpServletRequest resq, HttpServletResponse resp){
         try {
             ProductService productService = new ProductService();
-            String page = resq.getParameter("page");
-            String rows = resq.getParameter("rows");
-            String result = null;
+            List<UserBean> userBeans = null;
             String queryByParamFlag = resq.getParameter("queryByParamFlag");
             if(queryByParamFlag == null || queryByParamFlag.equals("")){
-                result = productService.queryAllMasters(page, rows);
+                userBeans = productService.queryAllMasters();
             }else{
                 QueryMasterParamBean paramBean = new QueryMasterParamBean();
                 String searchCondition = resq.getParameter("searchCondition");
                 paramBean.setSearchCondition(searchCondition);
-                result = productService.queryAllMastersByParams(page, rows, paramBean);
+                userBeans = productService.queryAllMastersByParams(paramBean);
             }
 
-            ResponseUtil.writeMsg(resp, result);
+            ResponseUtil.writeMsg(resp, new Gson().toJson(userBeans));
         } catch (Exception e) {
             e.printStackTrace();
             ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，查询所有掌门信息失败");
