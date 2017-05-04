@@ -7,6 +7,70 @@
         });
     }
     $(function(){
+        $.extend($.fn.validatebox.defaults.rules, {
+            maxLen:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber($.trim(value)) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            price: {
+                validator: function (value, param) {
+                    var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+                    return reg.test($.trim(value));
+                },
+                message: '金额格式不合法，请重新输入'
+            },
+            percent:{
+                validator: function (value, param) {
+                    if(!$.trim(value)){
+                        return true;
+                    }
+                    var k= /^[0-9][0-9]{0,1}$/;
+                    return k.test($.trim(value));
+                },
+                message: '减免百分比格式不合法，请重新输入'
+            },
+            imgfile:{
+                validator: function (value, param) {
+                    var imgFileSuffixName = value.substring(value.lastIndexOf("."));
+                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                        MsgBox.show("图片格式不正确，仅支持jpg、png");
+                        return false;
+                    }
+                    return true;
+                },
+                message:'图片格式不正确，请选择jpg,png格式'
+            }
+        });
+        $('#pnameInModify').textbox({
+            required: true,
+            validType: 'maxLen[50]',
+            missingMessage:'最多输入50个字符',
+            prompt:'请输入产品名称'
+        });
+        $("#priceInModify").textbox({
+            required:true,
+            missingMessage:'保留两位小数',
+            prompt:'请输入金额',
+            validType:'price'
+        });
+        $("#derateProportionInModify").textbox({
+            required:true,
+            missingMessage:'整数百分比，1-99',
+            prompt:'请输入减免比例',
+            validType:'percent'
+        });
+        $("#introduction").textbox({
+            required:true,
+            missingMessage:'介绍信息，最多输入2000个字符',
+            validType: 'maxLen[2000]',
+            prompt:'请输入产品介绍'
+        });
         $('#modifyProductForm').form({onLoadSuccess:function(){
             $("#listImageInModify").attr("src",$("#listimage").val()+"?random_id="+Math.random());
             dealMainImagesInModifyProduct();
@@ -42,9 +106,14 @@
             cache: false,
             modal: true
         });
+        $("#modifyProductMainImgDialog").dialog({
+            onClose:function(){
+                $("#modifyProductMainImgDialog").empty();
+            }
+        });
+        $('#modifyProductMainImgDialog').dialog("open");
         $("#modifyProductMainImgDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyProductMainImgPage.do?pid=" + $("#pid").val()
             + "&random_id=" + Math.random());
-        $('#modifyProductMainImgDialog').dialog("open");
     }
     function openModifyListImgDialog(){
         $('#modifyProductListImgDialog').dialog({
@@ -55,9 +124,14 @@
             cache: false,
             modal: true
         });
-        $("#modifyProductListImgDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyProductListImgPage.do?pid=" + $("#pid").val()
-            + "&random_id=" + Math.random());
+        $("#modifyProductListImgDialog").dialog({
+            onClose:function(){
+                $("#modifyProductListImgDialog").empty();
+            }
+        });
         $('#modifyProductListImgDialog').dialog("open");
+        $('#modifyProductListImgDialog').dialog("refresh","<%=request.getContextPath()%>/product/fwdModifyProductListImgPage.do?pid=" + $("#pid").val()
+                + "&random_id=" + Math.random());
     }
 
     function checkModifyProductFormBeforeSubmit(){
@@ -65,8 +139,8 @@
             MsgBox.show("请填写产品名称");
             return false;
         }
-        if(StringUtil.getBinaryLength($.trim($("#pnameInModify").val())) > 100){
-            MsgBox.show("产品名称过长，无法保存");
+        if(StringUtil.getCharNumber($.trim($("#pname").val())) > 50){
+            MsgBox.show("产品名称过长，最长50个字符");
             return false;
         }
         if($.trim($("#priceInModify").val()).length == 0){
@@ -79,10 +153,15 @@
             return false;
         }
         if($.trim($("#derateProportionInModify").val()).length > 0){
-            if($.trim($("#derateProportionInModify").val()) >99 || $.trim($("#derateProportionInModify").val()) < 0){
-                MsgBox.show("余额支付减免[" + $.trim($("#derateProportionInModify").val()) + "]超出范围");
+            var k= /^[0-9][0-9]{0,1}$/;
+            if(!k.test($.trim($("#derateProportionInModify").val()))){
+                MsgBox.show("余额支付减免[" + $.trim($("#derateProportionInModify").val()) + "]格式不正确");
                 return false;
             }
+        }
+        if(StringUtil.getCharNumber($.trim($("#introduction").val())) > 2000){
+            MsgBox.show("产品介绍过长，最长2000个字符");
+            return false;
         }
         return true;
     }
@@ -124,26 +203,26 @@
                 </td>
             </tr>
             <tr>
-                <td>产品ID:</td>
+                <td nowrap="nowrap">产品ID:</td>
                 <td><input class="dzm-noBorder-text" readonly id="pid" name="pid"></td>
-                <td>类型:</td>
+                <td nowrap="nowrap">类型:</td>
                 <td><input class="dzm-noBorder-text" readonly id="type" name="type"></td>
-                <td>掌门ID:</td>
+                <td nowrap="nowrap">掌门ID:</td>
                 <td><input class="dzm-noBorder-text" readonly id="uid" name="uid"></td>
-                <td>姓名:</td>
+                <td nowrap="nowrap">姓名:</td>
                 <td><input class="dzm-noBorder-text" readonly id="name" name="uname" /></td>
             </tr>
             <tr>
-                <td>名称:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" id="pnameInModify" name="pname"></td>
-                <td width="50px" nowrap="nowrap">价格/年:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" id="priceInModify" name="price" data-options="prompt:'请输入金额，两位小数'"></td>
-                <td class="form-label-cell">余额支付减免:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" id="derateProportionInModify" data-options="prompt:'请输入百分比'" name="derateProportion"/>%</td>
+                <td nowrap="nowrap">名称:<span style="color:red">*</span></td>
+                <td><input id="pnameInModify" name="pname"></td>
+                <td nowrap="nowrap">价格/年:<span style="color:red">*</span></td>
+                <td><input id="priceInModify" name="price"></td>
+                <td  nowrap="nowrap" class="form-label-cell">余额支付减免:<span style="color:red">*</span></td>
+                <td nowrap="nowrap"><input id="derateProportionInModify"  name="derateProportion"/>%</td>
             </tr>
             <tr>
-                <td>介绍:</td>
-                <td colspan="6"><input class="easyui-textbox" name="introduction" data-options="multiline:true" style="width:90%;height:80px;"/></td>
+                <td nowrap="nowrap">介绍:</td>
+                <td colspan="6"><input id="introduction" name="introduction" data-options="multiline:true" style="width:90%;height:80px;"/></td>
             </tr>
         </table>
 

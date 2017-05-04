@@ -4,6 +4,84 @@
           $("#uidInProductForm").val($("#uid").val());
         }});
     });
+    $(function () {
+        $('#pname').textbox({
+            required: true,
+            validType: 'maxLen[50]',
+            missingMessage:'最多输入50个字符',
+            prompt:'请输入产品名称'
+        });
+        $("#price").textbox({
+            required:true,
+            missingMessage:'保留两位小数',
+            prompt:'请输入金额',
+            validType:'price'
+        });
+        $("#derateProportion").textbox({
+            required:true,
+            missingMessage:'整数百分比，1-99',
+            prompt:'请输入减免比例',
+            validType:'percent'
+        });
+        $("#prodcut_introduction").textbox({
+            required:true,
+            missingMessage:'产品介绍，最多输入2000个字符',
+            validType: 'maxLen[2000]',
+            prompt:'请输入产品介绍'
+        });
+        $("#listimg").filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            prompt:'请选择图片，用于列表展示',
+            validType:'imgfile'
+        });
+        $("#mainimg1").filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            prompt:'请选择主图，用于首页轮播',
+            validType:'imgfile'
+        });
+        $.extend($.fn.validatebox.defaults.rules, {
+            maxLen:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber($.trim(value)) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            price: {
+                validator: function (value, param) {
+                    var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+                    return reg.test($.trim(value));
+                },
+                message: '金额格式不合法，请重新输入'
+            },
+            percent:{
+                validator: function (value, param) {
+                    if(!$.trim(value)){
+                        return true;
+                    }
+                    var k= /^[1-9][0-9]{0,1}$/;
+                    return k.test($.trim(value));
+                },
+                message: '减免百分比格式不合法，请重新输入'
+            },
+            imgfile:{
+                validator: function (value, param) {
+                    var imgFileSuffixName = value.substring(value.lastIndexOf("."));
+                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                        MsgBox.show("图片格式不正确，仅支持jpg、png");
+                        return false;
+                    }
+                    return true;
+                },
+                message:'图片格式不正确，请选择jpg,png格式'
+            }
+        });
+    });
     function selectMaster(){
         $('#selectMasterDialog').dialog({
             title: '选择掌门',
@@ -68,8 +146,8 @@
             MsgBox.show("请填写产品名称");
             return false;
         }
-        if(StringUtil.getBinaryLength($.trim($("#pname").val())) > 100){
-            MsgBox.show("产品名称过长，无法保存");
+        if(StringUtil.getCharNumber($.trim($("#pname").val())) > 50){
+            MsgBox.show("产品名称过长，最长50个字符");
             return false;
         }
         if($.trim($("#price").val()).length == 0){
@@ -83,8 +161,9 @@
             return false;
         }
         if($.trim($("#derateProportion").val()).length > 0){
-            if($.trim($("#derateProportion").val()) >99 || $.trim($("#derateProportion").val()) < 0){
-                MsgBox.show("余额支付减免[" + $.trim($("#derateProportion").val()) + "]超出范围");
+            var k= /^[0-9][0-9]{0,1}$/;
+            if(!k.test($.trim($("#derateProportion").val()))){
+                MsgBox.show("余额支付减免[" + $.trim($("#derateProportion").val()) + "]格式不正确");
                 return false;
             }
         }
@@ -107,6 +186,10 @@
         imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
         if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
             MsgBox.show("产品主图文件，仅支持jpg、png");
+            return false;
+        }
+        if(StringUtil.getCharNumber($.trim($("#prodcut_introduction").val())) > 2000){
+            MsgBox.show("产品介绍过长，最长2000个字符");
             return false;
         }
         return true;
@@ -167,7 +250,7 @@
                 <td>性别:</td>
                 <td><input class="dzm-noBorder-text" readonly="true" id="gender" name="gender" />&nbsp&nbsp</td>
                 <td>备注信息:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="introduction" name="introduction" data-options="multiline:true" style="height:50px"/></td>
+                <td><textarea class="dzm-noBorder-text" readonly="true" id="introduction" name="introduction" style="height:50px"/></td>
             </tr>
         </table>
         <div style="text-align: right;margin-right: 80px;">
@@ -189,7 +272,7 @@
             </tr>
             <tr>
                 <td>名称:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox"  id="pname" name="pname"/>
+                <td><input id="pname" name="pname"/>
                     <input type="hidden" id="uidInProductForm" name="uid"></td>
                 <td>类型:<span style="color:red">*</span></td>
                 <td>
@@ -199,27 +282,27 @@
                     </select>
                 </td>
                 <td nowrap="nowrap">价格/年:<span style="color:red">*</span></td>
-                <td><input class="easyui-textbox" id="price" name="price" data-options="prompt:'请输入金额，两位小数'" ></td>
+                <td><input id="price" name="price"></td>
             </tr>
             <tr>
                 <td>余额支付减免:</td>
-                <td><input class="easyui-textbox" id="derateProportion" data-options="prompt:'请输入百分比'"  name="derateProportion"/>%</td>
+                <td><input id="derateProportion" name="derateProportion"/>%</td>
             </tr>
             <tr>
                 <td>列表图片:<span style="color:red">*</span></td>
                 <td colspan="2">
-                        <input class="easyui-filebox" id="listimg" name="listimg" style="width:100%" accept="image/jpeg,image/png"
-                               data-options="prompt:'请选择列表图片(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                        <input id="listimg" name="listimg" style="width:100%" accept="image/jpeg,image/png"
+                               data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
                 <td nowrap="nowrap" style="text-align: right">产品主图:<span style="color:red">*</span></td>
                 <td colspan="2">
-                    <input class="easyui-filebox" id="mainimg1" name="mainimg" style="width:100%" accept="image/jpeg,image/png"
-                           data-options="prompt:'请选择产品主图(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <input id="mainimg1" name="mainimg" style="width:100%" accept="image/jpeg,image/png"
+                           data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>
             <tr>
                 <td>介绍:</td>
-                <td colspan="5"><input class="easyui-textbox" id="prodcut_introduction"
+                <td colspan="5"><input id="prodcut_introduction"
                                        style="width:100%;height:80px;"
                                        name="introduction" data-options="multiline:true"/></td>
             </tr>

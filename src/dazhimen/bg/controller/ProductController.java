@@ -618,7 +618,7 @@ public class ProductController {
             Integer derateProportion = Integer.parseInt(derateProportionStr);
             productBean.setDerateProportion(derateProportion);
         }
-        String introduction = resq.getParameter("introduction").trim();
+        String introduction = resq.getParameter("introduction");
         productBean.setIntroduction(introduction);
         return productBean;
     }

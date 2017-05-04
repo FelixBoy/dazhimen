@@ -1,6 +1,12 @@
 <script type="text/javascript">
     $(function(){
         $("#pidInModifyProductMainImg").val("<%=request.getAttribute("pid")%>");
+        $("#mainImgInModifyDialog").filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            prompt:'将会覆盖原图片',
+            validType:'imgfile'
+        });
     });
     function checkMainImgModify(){
         if(!$("#mainImgInModifyDialog").filebox("getValue")){
@@ -95,8 +101,8 @@
                 <td style="text-align: right" nowrap="nowrap">产品主图:<span style="color:red">*</span></td>
                 <td>
                     <input type="hidden" id="pidInModifyProductMainImg" name="pid"/>
-                    <input class="easyui-filebox" id="mainImgInModifyDialog" name="mainimgmodify" style="width:280px" accept="image/jpeg,image/png"
-                           data-options="prompt:'将会覆盖原图片，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <input id="mainImgInModifyDialog" name="mainimgmodify" style="width:280px" accept="image/jpeg,image/png"
+                           data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>
         </table>

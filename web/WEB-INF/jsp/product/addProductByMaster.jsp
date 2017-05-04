@@ -147,9 +147,9 @@
             return false;
         }
         if($.trim($("#derateProportion").val()).length > 0){
-            var k= /^[1-9][0-9]{0,1}$/
+            var k= /^[0-9][0-9]{0,1}$/;
             if(!k.test($.trim($("#derateProportion").val()))){
-                MsgBox.show("余额支付减免[" + $.trim($("#derateProportion").val()) + "]超出范围");
+                MsgBox.show("余额支付减免[" + $.trim($("#derateProportion").val()) + "]格式不正确");
                 return false;
             }
         }
