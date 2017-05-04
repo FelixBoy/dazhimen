@@ -1,4 +1,65 @@
 <script>
+    $(function(){
+        $.extend($.fn.validatebox.defaults.rules, {
+            maxLen:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber($.trim(value)) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            imgfile:{
+                validator: function (value, param) {
+                    var imgFileSuffixName = value.substring(value.lastIndexOf("."));
+                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                        MsgBox.show("图片格式不正确，仅支持jpg、png");
+                        return false;
+                    }
+                    return true;
+                },
+                message:'图片格式不正确，请选择jpg,png格式'
+            }
+        });
+        $('#newstitle').textbox({
+            required: true,
+            validType: 'maxLen[80]',
+            missingMessage:'最多输入80个字符',
+            prompt:'请输入新闻标题'
+        });
+        $("#newslistimg").filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            prompt:'请选择图片，用于新闻列表展示',
+            validType:'imgfile'
+        });
+        $("#newsmainimg").filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            prompt:'请选择图片，用于首页轮播',
+            validType:'imgfile'
+        });
+        $('#newscontent1').textbox({
+            required: true,
+            validType: 'maxLen[80]',
+            missingMessage:'最多输入80个字符',
+            prompt:'请输入副标题'
+        });
+        $("#newscontent2").filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            validType:'imgfile',
+            prompt:'请选择图片'
+        });
+        $('#newscontent3').textbox({
+            required: true,
+            validType: 'maxLen[4000]',
+            missingMessage:'最多输入4000个字符',
+            prompt:'请输入文本'
+        });
+    });
     var checkCount = 10;
     function cbInAddNews(){
         var f = $('#addNewsForm_iframe'), data = "";
@@ -56,8 +117,8 @@
             MsgBox.show("请填写新闻标题");
             return false;
         }
-        if(StringUtil.getBinaryLength($("#newstitle").val()) > 150){
-            MsgBox.show("新闻标题过长，无法保存");
+        if(StringUtil.getCharNumber($("#newstitle").val()) > 80){
+            MsgBox.show("新闻标题过长，最长80个字符");
             return false;
         }
         if(!$("#newslistimg").filebox("getValue")){
@@ -109,9 +170,19 @@
                         result = false;
                         return false;
                     }
+                    if(StringUtil.getCharNumber($("#" + domid).val()) > 80){
+                        MsgBox.show("副标题超长，最多输入80个字符");
+                        result = false;
+                        return false;
+                    }
                 }else if(dom_type == '3'){
                     if($.trim($("#" + domid).val()).length == 0){
                         MsgBox.show("无法保存，存在文本未填写");
+                        result = false;
+                        return false;
+                    }
+                    if(StringUtil.getCharNumber($("#" + domid).val()) > 4000){
+                        MsgBox.show("文本超长，最多输入4000个字符");
                         result = false;
                         return false;
                     }
@@ -158,7 +229,7 @@
     function addNewsSubtitle(){
         var nextIndex = getNextIndex();
         $("#newsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>副标题:<span style='color:red'>*</span></td>" +
-            "<td colspan='5'><input class='easyui-textbox' " +
+            "<td colspan='5'><input " +
             " style='width:700px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='1'>" +
@@ -168,14 +239,20 @@
                 "onclick=\"deleteNewsContent('trcontent" + nextIndex +"')\">删除</a>" +
             "</td>" +
             "</tr>");
+        $("#newscontent" + nextIndex).textbox({
+            required: true,
+            validType: 'maxLen[80]',
+            missingMessage:'最多输入80个字符',
+            prompt:'请输入副标题'
+        });
         $.parser.parse($('#trcontent'+nextIndex));
         dealSortValue();
     }
     function addNewsImage() {
         var nextIndex = getNextIndex();
         $("#newsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>图片:<span style='color:red'>*</span></td>" +
-            "<td colspan='5'><input class='easyui-filebox' " +
-            " data-options=\"prompt:'请选择图片(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'\"" +
+            "<td colspan='5'><input " +
+            " data-options=\"buttonText:'&nbsp;选&nbsp;择&nbsp;'\"" +
             "  accept='image/jpeg,image/png'  style='width:700px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='2'>" +
@@ -185,6 +262,12 @@
                 "onclick=\"deleteNewsContent('trcontent" + nextIndex +"')\">删除</a>" +
             "</td>" +
             "</tr>");
+        $("#newscontent" + nextIndex).filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            validType:'imgfile',
+            prompt:'请选择图片'
+        });
         $.parser.parse($('#trcontent'+nextIndex));
         dealSortValue();
     }
@@ -201,6 +284,12 @@
                 "onclick=\"deleteNewsContent('trcontent" + nextIndex +"')\">删除</a>" +
               "</td>" +
             "</tr>");
+        $("#newscontent" + nextIndex).textbox({
+            required: true,
+            validType: 'maxLen[4000]',
+            missingMessage:'最多输入4000个字符',
+            prompt:'请输入文本'
+        });
         $.parser.parse($('#trcontent'+nextIndex));
         dealSortValue();
     }
@@ -244,20 +333,20 @@
         <tr>
             <td>新闻标题:<span style="color:red">*</span></td>
             <td colspan="5">
-                <input class="easyui-textbox" style="width:750px" id="newstitle" name="newstitle"/>
+                <input style="width:750px" id="newstitle" name="newstitle"/>
             </td>
         </tr>
         <tr>
             <td>列表图片:<span style="color:red">*</span></td>
             <td colspan="5">
-                <input class="easyui-filebox" data-options="prompt:'用于新闻列表展示，(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'"
+                <input data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'"
                        accept="image/jpeg,image/png" style="width:100%" id="newslistimg" name="newslistimg"/>
             </td>
         </tr>
         <tr>
             <td>新闻主图:<span style="color:red">*</span></td>
             <td colspan="5">
-                <input class="easyui-filebox" data-options="prompt:'用于首页轮播，(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'"
+                <input data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'"
                        accept="image/jpeg,image/png" style="width:100%" id="newsmainimg" name="newsmainimg"/>
             </td>
         </tr>
@@ -276,7 +365,7 @@
         <tr id="trcontent1">
             <td >副标题:<span style="color:red">*</span></td>
             <td colspan="5">
-                <input class="easyui-textbox" style="width:700px;" id="newscontent1" name="newscontent1"/>
+                <input style="width:700px;" id="newscontent1" name="newscontent1"/>
                 <input type="hidden" id="sort_newscontent1" name="sort_newscontent1"/>
                 <input type="hidden" id="type_newscontent1" name="type_newscontent1" value='1'/>
             </td>
@@ -287,7 +376,7 @@
         <tr id="trcontent2">
             <td>图片:<span style="color:red">*</span></td>
             <td colspan="5">
-                <input class="easyui-filebox" data-options="prompt:'请选择图片(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'"
+                <input data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'"
                        accept="image/jpeg,image/png" style="width:700px;" id="newscontent2" name="newscontent2"/>
                 <input type="hidden" id="sort_newscontent2" name="sort_newscontent2"/>
                 <input type="hidden" id="type_newscontent2" name="type_newscontent2" value='2'/>

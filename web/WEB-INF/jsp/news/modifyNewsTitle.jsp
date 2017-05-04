@@ -24,14 +24,43 @@
                 $("#mainImageInModifyNews").attr("src",jsonObj.mainimgurl + "?rondomid=" + Math.random());
             }
         });
+        $.extend($.fn.validatebox.defaults.rules, {
+            maxLen:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber($.trim(value)) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            imgfile:{
+                validator: function (value, param) {
+                    var imgFileSuffixName = value.substring(value.lastIndexOf("."));
+                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                        MsgBox.show("图片格式不正确，仅支持jpg、png");
+                        return false;
+                    }
+                    return true;
+                },
+                message:'图片格式不正确，请选择jpg,png格式'
+            }
+        });
+        $('#newstitleInModifyTitle').textbox({
+            required: true,
+            validType: 'maxLen[80]',
+            missingMessage:'最多输入80个字符',
+            prompt:'请输入新闻标题'
+        });
     });
     function checkModifyNewsTitleFormBeforeSubmit(){
         if($.trim($("#newstitleInModifyTitle").val()).length == 0){
             MsgBox.show("新闻标题不能为空");
             return false;
         }
-        if(StringUtil.getBinaryLength($("#newstitleInModifyTitle").val()) > 150){
-            MsgBox.show("新闻标题过长，无法保存");
+        if(StringUtil.getCharNumber($("#newstitleInModifyTitle").val()) > 80){
+            MsgBox.show("新闻标题过长，最长80个字符");
             return false;
         }
         return true;
@@ -45,9 +74,14 @@
             cache: false,
             modal: true
         });
+        $("#modifyNewsListImgDialog").dialog({
+            onClose:function(){
+                $("#modifyNewsListImgDialog").empty();
+            }
+        });
+        $('#modifyNewsListImgDialog').dialog("open");
         $("#modifyNewsListImgDialog").dialog("refresh", "<%=request.getContextPath()%>/news/fwdModifyNewsListImgPage.do?nid=" + $("#nidInModifyTitle").val()
             + "&random_id=" + Math.random());
-        $('#modifyNewsListImgDialog').dialog("open");
     }
     function submitModifyNewsTitleForm(){
         if(!checkModifyNewsTitleFormBeforeSubmit()){
@@ -94,9 +128,14 @@
             cache: false,
             modal: true
         });
+        $("#modifyNewsMainImgDialog").dialog({
+            onClose:function(){
+                $("#modifyNewsMainImgDialog").empty();
+            }
+        });
+        $('#modifyNewsMainImgDialog').dialog("open");
         $("#modifyNewsMainImgDialog").dialog("refresh", "<%=request.getContextPath()%>/news/fwdModifyNewsMainImgPage.do?nid=" + $("#nidInModifyTitle").val()
             + "&random_id=" + Math.random());
-        $('#modifyNewsMainImgDialog').dialog("open");
     }
 
 </script>
@@ -121,7 +160,7 @@
         <tr>
             <td>新闻标题:<span style="color:red">*</span></td>
             <td colspan="4">
-                <input class="easyui-textbox" style="width:700px;" id="newstitleInModifyTitle" name="newstitle"/>
+                <input style="width:700px;" id="newstitleInModifyTitle" name="newstitle"/>
                 <input type="hidden" id="nidInModifyTitle" name="nid" />
             </td>
         </tr>

@@ -5,9 +5,9 @@
             $("#statusOldValue").val("<%=status%>");
             <%
             if(status.equals("1")){%>
-            $("#groud").attr("checked", "checked");
+            $("#groud").prop("checked", "checked");
             <%}if(status.equals("0")){%>
-            $("#undergroud").attr("checked", "checked");
+            $("#undergroud").prop("checked", "checked");
             <%}%>
         <%}%>
     function modifyNewsStatus(index){

@@ -149,10 +149,8 @@
                 MsgBox.show("该新闻用于App分享，不能修改状态");
                 return;
             }
-            var charChinese = StringUtil.getChnNumber(row.title);
-            var charEnglish = StringUtil.getEngNumber(row.title);
             var newtitle = "";
-            if(charChinese + charEnglish > 12){
+            if(StringUtil.getCharNumber(row.title) > 12){
                 newtitle = row.title.substring(0, 10) + "......";
             }else{
                 newtitle = row.title;
@@ -163,11 +161,16 @@
                 height: 150,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/news/fwdModifyNewsStatusPage.do?random_id=" + Math.random()+"&nid=" + row.nid
-                + "&status=" + row.statusnum,
                 modal: true
             });
+            $("#modifyNewsStatusDialog").dialog({
+                onClose:function(){
+                    $("#modifyNewsStatusDialog").empty();
+                }
+            });
             $('#modifyNewsStatusDialog').dialog("open");
+            $("#modifyNewsStatusDialog").dialog("refresh", "<%=request.getContextPath()%>/news/fwdModifyNewsStatusPage.do?random_id=" + Math.random()+"&nid=" + row.nid
+                + "&status=" + row.statusnum);
         }
     }
 </script>

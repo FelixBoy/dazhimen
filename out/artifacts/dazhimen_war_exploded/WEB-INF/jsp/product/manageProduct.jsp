@@ -32,11 +32,16 @@
                 height: 150,
                 closed: true,
                 cache: false,
-                href: "<%=request.getContextPath()%>/product/fwdModifyProductStatusPage.do?random_id=" + Math.random()+"&pid=" + row.pid
-                        + "&pid="+row.pid + "&status=" + row.statusnum,
                 modal: true
             });
+            $("#modifyProductStatusDialog").dialog({
+                onClose:function(){
+                    $("#modifyProductStatusDialog").empty();
+                }
+            });
             $('#modifyProductStatusDialog').dialog("open");
+            $("#modifyProductStatusDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyProductStatusPage.do?random_id=" + Math.random()
+                + "&pid="+row.pid + "&status=" + row.statusnum);
         }
     }
     function fwdManageCoursePage(index){

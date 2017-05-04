@@ -5,6 +5,29 @@
         });
     }
     $(function(){
+        $.extend($.fn.validatebox.defaults.rules, {
+            maxLen:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber($.trim(value)) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            imgfile:{
+                validator: function (value, param) {
+                    var imgFileSuffixName = value.substring(value.lastIndexOf("."));
+                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                        MsgBox.show("图片格式不正确，仅支持jpg、png");
+                        return false;
+                    }
+                    return true;
+                },
+                message:'图片格式不正确，请选择jpg,png格式'
+            }
+        });
         refreshNewsContent();
     });
     function refreshNewsContent(){
@@ -40,7 +63,7 @@
                 for(var i = 0; i < newsContentArr.length; i++){
                     if(newsContentArr[i].contenttype == '1'){
                         $("#modifyNewsContentTable").append("<tr id='trcontent" + (i+1) + "'><td nowrap='nowrap'>副标题:<span style='color:red'>*</span></td>" +
-                            "<td colspan='5'><input class='easyui-textbox' " +
+                            "<td colspan='5'><input " +
                             " style='width:700px;' id='newscontent" + (i+1) +"' name='newscontent" + (i+1) + "'/>" +
                             "<input type='hidden' id='id_newscontent" + (i+1) + "' name='id_newscontent" + (i+1) + "' value='" + newsContentArr[i].contentid + "'/>" +
                             "<input type='hidden' id='sort_newscontent" + (i+1) + "' name='sort_newscontent" + (i+1) + "' value='" + (i+1) + "'/>" +
@@ -52,7 +75,13 @@
                             "onclick=\"deleteNewsContentSubtitle('" + newsContentArr[i].contentid + "')\">删除</a>" +
                             "</td>" +
                             "</tr>");
-                        $("#newscontent" + (i+1) +"").val(newsContentArr[i].contentvalue);
+                        $("#newscontent" + (i+1) +"").textbox({
+                            required: true,
+                            validType: 'maxLen[80]',
+                            missingMessage:'最多输入80个字符',
+                            prompt:'请输入副标题',
+                            value:newsContentArr[i].contentvalue
+                        });
                     }
                     if(newsContentArr[i].contenttype == '2'){
                         $("#modifyNewsContentTable").append("<tr id='trcontent" + (i+1) + "'><td nowrap='nowrap'>图片:<span style='color:red'>*</span></td>" +
@@ -72,7 +101,7 @@
                     }
                     if(newsContentArr[i].contenttype == '3'){
                         $("#modifyNewsContentTable").append("<tr id='trcontent" + (i+1) + "'><td nowrap='nowrap'>文本:<span style='color:red'>*</span></td>" +
-                            "<td colspan='5'><input class='easyui-textbox' data-options='multiline:true'" +
+                            "<td colspan='5'><input data-options='multiline:true'" +
                             " style='width:650px;height: 60px;' id='newscontent" + (i+1) +"' name='newscontent" + (i+1) + "'/>" +
                             "<input type='hidden' id='id_newscontent" + (i+1) + "' name='id_newscontent" + (i+1) + "' value='" + newsContentArr[i].contentid + "'/>" +
                             "<input type='hidden' id='sort_newscontent" + (i+1) + "' name='sort_newscontent" + (i+1) + "' value='" + (i+1) + "'/>" +
@@ -84,7 +113,13 @@
                             "onclick=\"deleteNewsContentText('" + newsContentArr[i].contentid + "')\">删除</a>" +
                             "</td>" +
                             "</tr>");
-                        $("#newscontent" + (i+1) +"").val(newsContentArr[i].contentvalue);
+                        $("#newscontent" + (i+1) +"").textbox({
+                            required: true,
+                            validType: 'maxLen[4000]',
+                            missingMessage:'最多输入4000个字符',
+                            prompt:'请输入文本',
+                            value:newsContentArr[i].contentvalue
+                        });
                     }
                 }
                 $.parser.parse($("#modifyNewsContentTable"));
@@ -172,6 +207,10 @@
             MsgBox.show("新闻副标题不能为空");
             return;
         }
+        if(StringUtil.getCharNumber($("#newscontent" + index).val()) > 80){
+            MsgBox.show("副标题超长，最多输入80个字符");
+            return;
+        }
         $.ajax({
             url: "<%=request.getContextPath()%>/news/modifyNewsContentSubtitle.do" +
             "?nid=" + $("#nidInModifyNewsContent").val() + "&contentid=" + contentid
@@ -190,6 +229,10 @@
     function modifyNewsContentText(index, contentid){
         if($.trim($("#newscontent" + index).val()).length == 0){
             MsgBox.show("文本不能为空");
+            return;
+        }
+        if(StringUtil.getCharNumber($("#newscontent" + index).val()) > 4000){
+            MsgBox.show("文本超长，最多输入4000个字符");
             return;
         }
         $.ajax({
@@ -216,11 +259,16 @@
             cache: false,
             modal: true
         });
+        $("#modifyNewsContentImgDialog").dialog({
+            onClose:function(){
+                $("#modifyNewsContentImgDialog").empty();
+            }
+        });
+        $('#modifyNewsContentImgDialog').dialog("open");
         $("#modifyNewsContentImgDialog").dialog("refresh",
             "<%=request.getContextPath()%>/news/fwdModifyNewsContentImgPage.do?nid=" + $("#nidInModifyNewsContent").val()
             +"&contentid=" + contentid
             + "&random_id=" + Math.random());
-        $('#modifyNewsContentImgDialog').dialog("open");
     }
     function getNextIndexInModify(){
         var lastContent = $("input[id^='newscontent']:last");
@@ -239,7 +287,7 @@
         var nextIndex = getNextIndexInModify();
         $("#addNewsContentTable").append("<tr id='trcontent" + nextIndex + "'>" +
             "<td  nowrap='nowrap'>副标题(新增):<span style='color:red'>*</span></td>" +
-            "<td colspan='5'><input class='easyui-textbox' " +
+            "<td colspan='5'><input " +
             " style='width:700px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='1'>" +
@@ -249,14 +297,20 @@
             "onclick=\"deleteNewsContentInModify('trcontent" + nextIndex +"')\">删除</a>" +
             "</td>" +
             "</tr>");
+        $("#newscontent" + nextIndex).textbox({
+            required: true,
+            validType: 'maxLen[80]',
+            missingMessage:'最多输入80个字符',
+            prompt:'请输入副标题'
+        });
         $.parser.parse($('#trcontent'+nextIndex));
         dealSortValueInModify();
     }
     function addNewsImageInModify() {
         var nextIndex = getNextIndexInModify();
         $("#addNewsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>图片(新增):<span style='color:red'>*</span></td>" +
-            "<td colspan='5'><input class='easyui-filebox' " +
-            " data-options=\"prompt:'请选择图片(jpg、png)',buttonText:'&nbsp;选&nbsp;择&nbsp;'\"" +
+            "<td colspan='5'><input " +
+            " data-options=\"buttonText:'&nbsp;选&nbsp;择&nbsp;'\"" +
             "  accept='image/jpeg,image/png'  style='width:700px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='2'>" +
@@ -266,13 +320,19 @@
             "onclick=\"deleteNewsContentInModify('trcontent" + nextIndex +"')\">删除</a>" +
             "</td>" +
             "</tr>");
+        $("#newscontent" + nextIndex).filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            validType:'imgfile',
+            prompt:'请选择图片'
+        });
         $.parser.parse($('#trcontent'+nextIndex));
         dealSortValueInModify();
     }
     function addNewsTextInModify() {
         var nextIndex = getNextIndexInModify();
         $("#addNewsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>文本(新增):<span style='color:red'>*</span></td>" +
-            "<td colspan='5'><input class='easyui-textbox' data-options='multiline:true'" +
+            "<td colspan='5'><input data-options='multiline:true'" +
             " style='width:700px;height: 60px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='3'>" +
@@ -282,6 +342,12 @@
             "onclick=\"deleteNewsContentInModify('trcontent" + nextIndex +"')\">删除</a>" +
             "</td>" +
             "</tr>");
+        $("#newscontent" + nextIndex).textbox({
+            required: true,
+            validType: 'maxLen[4000]',
+            missingMessage:'最多输入4000个字符',
+            prompt:'请输入文本'
+        });
         $.parser.parse($('#trcontent'+nextIndex));
         dealSortValueInModify();
     }
@@ -390,9 +456,19 @@
                         result = false;
                         return false;
                     }
+                    if(StringUtil.getCharNumber($("#" + domid).val()) > 80){
+                        MsgBox.show("副标题超长，最多输入80个字符");
+                        result = false;
+                        return false;
+                    }
                 }else if(dom_type == '3'){
                     if($.trim($("#" + domid).val()).length == 0){
                         MsgBox.show("无法保存，存在文本未填写");
+                        result = false;
+                        return false;
+                    }
+                    if(StringUtil.getCharNumber($("#" + domid).val()) > 4000){
+                        MsgBox.show("文本超长，最多输入4000个字符");
                         result = false;
                         return false;
                     }

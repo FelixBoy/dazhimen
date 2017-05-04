@@ -2,6 +2,12 @@
     $(function(){
         $("#nidInModifyNewsContentImgDialog").val("<%=request.getAttribute("nid")%>");
         $("#contentidInModifyNewsContentImgDialog").val("<%=request.getAttribute("contentid")%>");
+        $("#imgInModifyNewsContentImgDialog").filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            prompt:'将会覆盖原图片',
+            validType:'imgfile'
+        });
     });
     function checkNewsContentImgModify(){
         if(!$("#imgInModifyNewsContentImgDialog").filebox("getValue")){
@@ -94,8 +100,8 @@
                 <td>
                     <input type="hidden" id="nidInModifyNewsContentImgDialog" name="nid"/>
                     <input type="hidden" id="contentidInModifyNewsContentImgDialog" name="contentid"/>
-                    <input class="easyui-filebox" id="imgInModifyNewsContentImgDialog" name="contentimgmodify" style="width:280px" accept="image/jpeg,image/png"
-                           data-options="prompt:'将会覆盖原图片，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <input id="imgInModifyNewsContentImgDialog" name="contentimgmodify" style="width:280px" accept="image/jpeg,image/png"
+                           data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>
         </table>

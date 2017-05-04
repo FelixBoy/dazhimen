@@ -1,6 +1,12 @@
 <script type="text/javascript">
     $(function(){
         $("#nidInModifyNewsListImgDialog").val("<%=request.getAttribute("nid")%>");
+        $("#listImgInModifyNewsTitleDialog").filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            prompt:'将会覆盖原图片',
+            validType:'imgfile'
+        });
     });
     function checkNewsListImgModify(){
         if(!$("#listImgInModifyNewsTitleDialog").filebox("getValue")){
@@ -110,8 +116,8 @@
                 <td style="text-align: right" nowrap="nowrap">列表图片:<span style="color:red">*</span></td>
                 <td>
                     <input type="hidden" id="nidInModifyNewsListImgDialog" name="nid"/>
-                    <input class="easyui-filebox" id="listImgInModifyNewsTitleDialog" name="listimgmodify" style="width:280px" accept="image/jpeg,image/png"
-                           data-options="prompt:'将会覆盖原图片，支持jpg、png',buttonText:'&nbsp;选&nbsp;择&nbsp;'">
+                    <input id="listImgInModifyNewsTitleDialog" name="listimgmodify" style="width:280px" accept="image/jpeg,image/png"
+                           data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>
         </table>
