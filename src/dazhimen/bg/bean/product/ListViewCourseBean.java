@@ -10,6 +10,24 @@ public class ListViewCourseBean {
     private String istry = null;
     private String audiourl = null;
     private Integer viewcount = null;
+    private String filename = null;
+    private String filesize = null;
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getFilesize() {
+        return filesize;
+    }
+
+    public void setFilesize(String filesize) {
+        this.filesize = filesize;
+    }
 
     public Integer getViewcount() {
         return viewcount;

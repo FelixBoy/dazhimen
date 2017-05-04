@@ -11,6 +11,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import util.Constant;
+import util.GlobalUtils;
 import util.IdUtils;
 import util.PaginationUtil;
 
@@ -210,12 +211,16 @@ public class ProductService {
         SqlSession sqlSession = null;
         try {
             sqlSession = MyBatisUtil.createSession();
-            sqlSession.update("dazhimen.bg.bean.Product.saveModifyCourse", courseBean);
             CommonsMultipartFile audioFile = courseBean.getAudio();
             if(audioFile != null && !audioFile.isEmpty()){
                 String cousreMainFolderPath = courseBean.getBasePath() + Constant.productPrefixPath  + courseBean.getPid() + "\\course\\";
+
+                long fileSizeByte = audioFile.getSize();
+                Double filesize = GlobalUtils.bytes2kb(fileSizeByte);
                 //获得文件的原始名称
                 String audioOrginalName = audioFile.getOriginalFilename();
+                courseBean.setFilename(audioOrginalName);
+                courseBean.setFilesize(filesize);
                 //获得原始文件的后缀
                 String audioSuffixName = audioOrginalName.substring(audioOrginalName.lastIndexOf("."));
                 //新文件名
@@ -229,6 +234,7 @@ public class ProductService {
                     throw new BgException("出现异常，保存课程音频失败");
                 }
             }
+            sqlSession.update("dazhimen.bg.bean.Product.saveModifyCourse", courseBean);
             sqlSession.commit();
             dealProductIstry(courseBean.getPid());
         } catch (Exception e) {
@@ -256,6 +262,8 @@ public class ProductService {
             throw new BgException("保存课程信息出错");
         }
             CommonsMultipartFile audioFile = courseBean.getAudio();
+            long fileSizeByte = audioFile.getSize();
+            Double fileSizeMB = GlobalUtils.bytes2kb(fileSizeByte);
             //获得文件的原始名称
             String audioOrginalName = audioFile.getOriginalFilename();
             //获得原始文件的后缀
@@ -278,6 +286,8 @@ public class ProductService {
                 sqlSession = MyBatisUtil.createSession();
                 courseBean.setAudiopath(audioFileRelPath);
                 courseBean.setCourseid(courseid);
+                courseBean.setFilesize(fileSizeMB);
+                courseBean.setFilename(audioOrginalName);
                 sqlSession.insert("dazhimen.bg.bean.Product.saveAddCourse", courseBean);
                 sqlSession.commit();
                 dealProductIstry(pid);

@@ -1,6 +1,7 @@
 package util;
 import dazhimen.bg.bean.login.LoginUserBean;
 
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.util.HashMap;
 
@@ -8,6 +9,13 @@ import java.util.HashMap;
  * Created by Administrator on 2017/3/16.
  */
 public class GlobalUtils {
+    public static Double bytes2kb(long bytes) {
+        BigDecimal filesize = new BigDecimal(bytes);
+        BigDecimal megabyte = new BigDecimal(1024 * 1024);
+        Double returnValue = filesize.divide(megabyte, 2, BigDecimal.ROUND_UP)
+                .doubleValue();
+        return returnValue;
+    }
     public static String hex_md5(String plainText) {
         String str_MD5 = plainText;
         try {

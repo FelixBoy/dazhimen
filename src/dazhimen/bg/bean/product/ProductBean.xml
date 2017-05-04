@@ -214,7 +214,7 @@
     </insert>
 
     <select id="getCourseInforByCourseid" resultType="dazhimen.bg.bean.product.UploadCourseBean">
-        select pid,courseid,coursename,sort,istry
+        select pid,courseid,coursename,sort,istry,audiofilename as filename,concat(audiofilesize,'/MB') as filesizestr
           from course
         where courseid = #{courseid}
     </select>
@@ -227,7 +227,8 @@
     <select id="queryAllCourseByPid" resultType="dazhimen.bg.bean.product.ListViewCourseBean"
             parameterType="dazhimen.bg.bean.PaginationParamBean">
         select courseid,coursename,getcodetxt('indexsort',sort) as sortstr,viewcount,
-                getcodetxt('yesorno',istry) as istry,audiopath as audiourl
+                getcodetxt('yesorno',istry) as istry,audiopath as audiourl,audiofilename as filename,
+                concat(audiofilesize,'/MB') as filesize
           from course where pid = #{pid}
           order by sort,createdate desc
         limit #{startnum},#{getrows}
@@ -277,13 +278,20 @@
 
     <update id="saveModifyCourse" parameterType="dazhimen.bg.bean.product.UploadCourseBean">
         update course
-          set coursename = #{coursename},istry = #{istry}, sort = #{sort},updatetime=now()
+          set coursename = #{coursename},istry = #{istry}, sort = #{sort},
+              updatetime=now()
+            <if test="filename != null and filename != ''">
+                ,audiofilename = #{filename}
+            </if>
+            <if test="filesize !=null and filesize!= 0">
+                ,audiofilesize = #{filesize}
+            </if>
         where courseid =  #{courseid}
     </update>
 
     <insert id="saveAddCourse" parameterType="dazhimen.bg.bean.product.UploadCourseBean">
-        insert into course(courseid,coursename,istry,sort,audiopath,createdate,updatetime,pid)
-        values(#{courseid}, #{coursename},  #{istry},  #{sort}, #{audiopath}, now() , now(), #{pid})
+        insert into course(courseid,coursename,istry,sort,audiopath,audiofilename,audiofilesize,createdate,updatetime,pid)
+        values(#{courseid}, #{coursename},  #{istry},  #{sort}, #{audiopath},#{filename},#{filesize}, now() , now(), #{pid})
     </insert>
 
     <select id="getProductMainImages" resultType="dazhimen.bg.bean.product.ViewMainImageBean">

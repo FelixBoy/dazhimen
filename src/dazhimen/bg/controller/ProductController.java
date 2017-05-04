@@ -506,6 +506,8 @@ public class ProductController {
             jsonObject.put("istry", uploadCourseBean.getIstry());
             jsonObject.put("sort", uploadCourseBean.getSort());
             jsonObject.put("sortsdata", sortData);
+            jsonObject.put("filename", uploadCourseBean.getFilename());
+            jsonObject.put("filesizestr", uploadCourseBean.getFilesizestr());
             ResponseUtil.writeMsg(resp, jsonObject.toString());
         } catch (BgException e) {
             e.printStackTrace();

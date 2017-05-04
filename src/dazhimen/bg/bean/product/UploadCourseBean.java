@@ -14,6 +14,33 @@ public class UploadCourseBean {
     private CommonsMultipartFile audio = null;
     private String audiopath = null;
     private String basePath = null;
+    private Double filesize = null;
+    private String filename = null;
+    private String filesizestr = null;
+
+    public String getFilesizestr() {
+        return filesizestr;
+    }
+
+    public void setFilesizestr(String filesizestr) {
+        this.filesizestr = filesizestr;
+    }
+
+    public Double getFilesize() {
+        return filesize;
+    }
+
+    public void setFilesize(Double filesize) {
+        this.filesize = filesize;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 
     public String getAudiopath() {
         return audiopath;

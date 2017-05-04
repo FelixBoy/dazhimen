@@ -70,7 +70,7 @@
             </tr>
             <tr>
                 <td style="text-align: right">管理员ID:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="uid" name="uid" style="width:260px"></td>
+                <td><input class="dzm-noBorder-text" readonly id="uid" name="uid" style="width:260px"></td>
             </tr>
             <tr>
                 <td style="text-align: right">登录名:<span style="color:red">*</span></td>

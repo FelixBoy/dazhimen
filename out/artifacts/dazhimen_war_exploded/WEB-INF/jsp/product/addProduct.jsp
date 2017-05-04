@@ -238,19 +238,19 @@
             </tr>
             <tr>
                 <td>责任掌门ID:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="uid" name="uid">&nbsp&nbsp</td>
+                <td><input class="dzm-noBorder-text" readonly id="uid" name="uid">&nbsp&nbsp</td>
                 <td>登录账号:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="loginname" name="loginname">&nbsp&nbsp</td>
+                <td><input class="dzm-noBorder-text" readonly id="loginname" name="loginname">&nbsp&nbsp</td>
                 <td>姓名:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="name" name="name" /></td>
+                <td><input class="dzm-noBorder-text" readonly id="name" name="name" /></td>
             </tr>
             <tr>
                 <td>手机号码:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="mphone" name="mphone"/>&nbsp&nbsp</td>
+                <td><input class="dzm-noBorder-text" readonly id="mphone" name="mphone"/>&nbsp&nbsp</td>
                 <td>性别:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="gender" name="gender" />&nbsp&nbsp</td>
+                <td><input class="dzm-noBorder-text" readonly id="gender" name="gender" />&nbsp&nbsp</td>
                 <td>备注信息:</td>
-                <td><textarea class="dzm-noBorder-text" readonly="true" id="introduction" name="introduction" style="height:50px"/></td>
+                <td><textarea class="dzm-noBorder-text" readonly id="introduction" name="introduction" style="height:50px"/></td>
             </tr>
         </table>
         <div style="text-align: right;margin-right: 80px;">

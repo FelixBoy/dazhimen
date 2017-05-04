@@ -13,7 +13,7 @@
             $("#modifyCourseDialog").dialog({
                 title:'修改课程信息',
                 width: 580,
-                height: 310,
+                height: 380,
                 closed: true,
                 cache: false,
                 modal: true
@@ -78,13 +78,15 @@
             fitColumns:true,
             loadMsg:"正在加载课程数据...",
             columns: [[
-                { field: 'courseid', title: '课程Id', width: '15%'},
-                { field: 'coursename', title: '名称', width: '25%'},
+                { field: 'courseid', title: '课程Id', width: '10%'},
+                { field: 'coursename', title: '名称', width: '15%'},
                 { field: 'sortstr', title: '排序', width: '15%'},
                 { field: 'istry', title: '是否试学', width: '10%'},
                 { field: 'viewcount', title: '已读人数', width: '10%'},
+                { field: 'filename', title: '音频文件名称', width: '15%'},
+                { field: 'filesize', title: '文件大小', width: '10%'},
                 {
-                    field: "operateID", title: '操作',width:'25%', align: 'center',
+                    field: "operateID", title: '操作',width:'15%', align: 'center',
                     formatter: function (value, rowData, rowIndex) {
                         return  '<a href="javascript:void(0)" onclick="fwdEditCoursePage('+rowIndex+')">修改信息</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="saveCourseDel('+rowIndex+')">删除</a>';
@@ -120,13 +122,13 @@
             </tr>
             <tr>
                 <td nowrap="nowrap">产品ID:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="pidInManageCourse" name="pid"></td>
+                <td><input class="dzm-noBorder-text" readonly id="pidInManageCourse" name="pid"></td>
                 <td nowrap="nowrap">名称:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="pname" name="pname"></td>
+                <td><input class="dzm-noBorder-text" readonly id="pname" name="pname"></td>
                 <td nowrap="nowrap">类型:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="type" name="type"></td>
+                <td><input class="dzm-noBorder-text" readonly id="type" name="type"></td>
                 <td nowrap="nowrap">价格:</td>
-                <td><input class="dzm-noBorder-text" readonly="true" id="price" name="price"></td>
+                <td><input class="dzm-noBorder-text" readonly id="price" name="price"></td>
             </tr>
         </table>
         </form>
