@@ -139,6 +139,10 @@
         queryParameter.starttimeCondition = starttimeCondition;
         queryParameter.endtimeCondition = endtimeCondition;
         queryParameter.queryByParamFlag = Math.random();
+        $('#adminList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#adminList").datagrid("reload");
     }
     function clearAdminSearchParams(){
@@ -153,6 +157,10 @@
         queryParameter.queryByParamFlag = Math.random();
         $("#queryAdminParamsForm").form('clear');
         $("#genderCondition").combobox('setValue','0');
+        $('#adminList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#adminList").datagrid("reload");
     }
     function saveResetAdminPassword(index){

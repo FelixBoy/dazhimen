@@ -139,7 +139,7 @@
             MsgBox.show("请填写产品名称");
             return false;
         }
-        if(StringUtil.getCharNumber($.trim($("#pname").val())) > 50){
+        if(StringUtil.getCharNumber($.trim($("#pnameInModify").val())) > 50){
             MsgBox.show("产品名称过长，最长50个字符");
             return false;
         }

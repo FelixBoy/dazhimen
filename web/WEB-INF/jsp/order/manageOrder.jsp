@@ -58,7 +58,6 @@
 
         var queryParameter = $('#orderList').datagrid("options").queryParams;
         queryParameter.cnameCondition = cnameCondition;
-//        queryParameter.mphoneCondition = mphoneCondition;
         queryParameter.producttypeCondition = producttypeCondition;
         queryParameter.paymenttypeCondition = paymenttypeCondition;
         queryParameter.starttimeCondition = starttimeCondition;
@@ -66,12 +65,15 @@
         queryParameter.startAmountCondition = startAmountCondition;
         queryParameter.endAmountCondition = endAmountCondition;
         queryParameter.queryByParamFlag = Math.random();
+        $('#orderList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#orderList").datagrid("reload");
     }
     function clearOrderSearchParams(){
         var queryParameter = $('#orderList').datagrid("options").queryParams;
         queryParameter.cnameCondition = null;
-//        queryParameter.mphoneCondition = null;
         queryParameter.producttypeCondition = null;
         queryParameter.paymenttypeCondition = null;
         queryParameter.starttimeCondition = null;
@@ -82,6 +84,10 @@
         $("#queryOrderParamsForm").form('clear');
         $("#paymenttypeCondition").combobox('setValue','0');
         $("#producttypeCondition").combobox('setValue','0');
+        $('#orderList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#orderList").datagrid("reload");
     }
 </script>

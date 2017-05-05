@@ -66,6 +66,10 @@
         queryParameter.startAmountCondition = startAmountCondition;
         queryParameter.endAmountCondition = endAmountCondition;
         queryParameter.queryByParamFlag = Math.random();
+        $('#rechargeList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#rechargeList").datagrid("reload");
     }
     function clearRechargeSearchParams(){
@@ -81,6 +85,10 @@
         queryParameter.queryByParamFlag = null;
         $("#queryRechargeParamsForm").form('clear');
         $("#paymenttypeCondition").combobox('setValue','0');
+        $('#rechargeList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#rechargeList").datagrid("reload");
     }
 </script>

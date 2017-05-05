@@ -27,7 +27,6 @@
                 newname = row.pname;
             }
             $('#modifyProductStatusDialog').dialog({
-                title: '修改产品【' + newname + '】的状态',
                 width: 330,
                 height: 150,
                 closed: true,
@@ -42,6 +41,7 @@
             $('#modifyProductStatusDialog').dialog("open");
             $("#modifyProductStatusDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyProductStatusPage.do?random_id=" + Math.random()
                 + "&pid="+row.pid + "&status=" + row.statusnum);
+            $("#modifyProductStatusDialog").dialog("setTitle", '修改产品【' + newname + '】的状态');
         }
     }
     function fwdManageCoursePage(index){
@@ -200,6 +200,10 @@
         queryParameter.endtimeCondition = endtimeCondition;
         queryParameter.statusCondition = statusCondition;
         queryParameter.queryByParamFlag = Math.random();
+        $('#productList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#productList").datagrid("reload");
     }
     function clearProductSearchParams(){
@@ -214,6 +218,10 @@
         $("#queryProductParamsForm").form('clear');
         $("#typeCondition").combobox('setValue','0');
         $("#statusCondition").combobox('setValue','0');
+        $('#productList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#productList").datagrid("reload");
     }
 </script>

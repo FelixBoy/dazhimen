@@ -61,6 +61,10 @@
         queryParameter.endtimeCondition = endtimeCondition;
         queryParameter.statusCondition = statusCondition;
         queryParameter.queryByParamFlag = Math.random();
+        $('#newsList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#newsList").datagrid("reload");
     }
     function clearNewsSearchParams(){
@@ -73,6 +77,10 @@
         queryParameter.queryByParamFlag = null;
         $("#queryNewsParamsForm").form('clear');
         $("#statusCondition").combobox('setValue','-1');
+        $('#newsList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#newsList").datagrid("reload");
     }
     function forwardAddNewsPage(){
@@ -156,7 +164,6 @@
                 newtitle = row.title;
             }
             $('#modifyNewsStatusDialog').dialog({
-                title: '修改新闻【' + newtitle + '】的状态',
                 width: 330,
                 height: 150,
                 closed: true,
@@ -171,6 +178,7 @@
             $('#modifyNewsStatusDialog').dialog("open");
             $("#modifyNewsStatusDialog").dialog("refresh", "<%=request.getContextPath()%>/news/fwdModifyNewsStatusPage.do?random_id=" + Math.random()+"&nid=" + row.nid
                 + "&status=" + row.statusnum);
+            $("#modifyNewsStatusDialog").dialog("setTitle", "修改新闻【" + newtitle + "】的状态");
         }
     }
 </script>

@@ -68,6 +68,10 @@
         queryParameter.startBalanceCondition = startBalanceCondition;
         queryParameter.endBalanceCondition = endBalanceCondition;
         queryParameter.queryByParamFlag = Math.random();
+        $('#customerList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#customerList").datagrid("reload");
     }
     function clearCustomerSearchParams(){
@@ -83,6 +87,10 @@
         queryParameter.queryByParamFlag = null;
         $("#queryCustomerParamsForm").form('clear');
         $("#weixinCondition").combobox('setValue','0');
+        $('#customerList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#customerList").datagrid("reload");
     }
 </script>

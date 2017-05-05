@@ -161,6 +161,10 @@
         queryParameter.starttimeCondition = starttimeCondition;
         queryParameter.endtimeCondition = endtimeCondition;
         queryParameter.queryByParamFlag = Math.random();
+        $('#masterList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#masterList").datagrid("reload");
     }
     function clearMasterSearchParams(){
@@ -175,6 +179,10 @@
         queryParameter.queryByParamFlag = Math.random();
         $("#queryMasterParamsForm").form('clear');
         $("#genderCondition").combobox('setValue','0');
+        $('#masterList').datagrid({
+            pageNumber: 1,
+            pageList: [10,20,30]
+        });
         $("#masterList").datagrid("reload");
     }
     function saveResetMasterPassword(index){

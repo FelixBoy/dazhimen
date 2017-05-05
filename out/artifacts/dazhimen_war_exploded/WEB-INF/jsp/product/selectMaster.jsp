@@ -38,16 +38,7 @@
                 { field: 'loginname', title: '登录名', width: '10%'},
                 { field: 'gender', title: '性别', width: '10%'},
                 { field: 'introduction', title: '介绍', width: '20%' }
-            ]],
-            pagination: true
-        });
-        $('#selectMasterList').datagrid('getPager').pagination({
-            pageSize: 10,
-            pageNumber: 1,
-            pageList: [10],
-            beforePageText: '第',
-            afterPageText: '页    共 {pages} 页',
-            displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
+            ]]
         });
     });
     function SearchMasterByParams() {
@@ -82,7 +73,7 @@
             </table>
         </form>
     </div>
-    <table id="selectMasterList">
+    <table id="selectMasterList"  style="width: auto;height: 310px;">
     </table>
 </div>
 <div style="text-align:right;padding-right:50px;padding-top:5px">

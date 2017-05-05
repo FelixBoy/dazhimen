@@ -236,11 +236,10 @@
             return;
         }
         $.ajax({
-            url: "<%=request.getContextPath()%>/news/modifyNewsContentText.do" +
-            "?nid=" + $("#nidInModifyNewsContent").val() + "&contentid=" + contentid
-            + "&text=" + $("#newscontent" + index).val() + "&random_id=" + Math.random(),
-            type: 'get',
-            async: false,
+            url: "<%=request.getContextPath()%>/news/modifyNewsContentText.do"+ "?random_id=" + Math.random(),
+            data: {nid:$("#nidInModifyNewsContent").val(), contentid:contentid,text:$("#newscontent" + index).val()},
+            type:'post',
+            async:false,
             error: function (data) {
                 MsgBox.show(data.responseText);
             },
