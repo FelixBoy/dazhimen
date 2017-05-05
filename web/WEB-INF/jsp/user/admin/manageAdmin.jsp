@@ -82,7 +82,7 @@
                 { field: 'mphone', title: '手机号码', width: '10%'},
                 { field: 'loginname', title: '登录名', width: '10%'},
                 { field: 'gender', title: '性别', width: '5%'},
-                { field: 'remarks', title: '介绍', width: '20%' },
+                { field: 'remarks', title: '备注', width: '20%' },
                 { field: 'createDatestr', title: '创建时间', width: '15%' },
                 {
                     field: "operateID", title: '操作',width:'20%', align: 'center',
