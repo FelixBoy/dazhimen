@@ -32,13 +32,13 @@
         $("#newslistimg").filebox({
             required:true,
             missingMessage:'支持jpg,png格式',
-            prompt:'请选择图片，用于新闻列表展示',
+            prompt:'用于新闻列表展示，建议大小【2M】以内',
             validType:'imgfile'
         });
         $("#newsmainimg").filebox({
             required:true,
             missingMessage:'支持jpg,png格式',
-            prompt:'请选择图片，用于首页轮播',
+            prompt:'用于首页轮播，建议大小【2M】以内',
             validType:'imgfile'
         });
         $('#newscontent1').textbox({
@@ -51,7 +51,7 @@
             required:true,
             missingMessage:'支持jpg,png格式',
             validType:'imgfile',
-            prompt:'请选择图片'
+            prompt:'新闻图片，建议大小【2M】以内'
         });
         $('#newscontent3').textbox({
             required: true,
@@ -266,7 +266,7 @@
             required:true,
             missingMessage:'支持jpg,png格式',
             validType:'imgfile',
-            prompt:'请选择图片'
+            prompt:'新闻图片，建议大小【2M】以内'
         });
         $.parser.parse($('#trcontent'+nextIndex));
         dealSortValue();

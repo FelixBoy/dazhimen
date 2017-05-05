@@ -159,6 +159,14 @@
                 return false;
             }
         }
+        if($.trim($("#derateProportionInModify").val()).length > 0){
+            var price_float = parseFloat($.trim($("#priceInModify").val()));
+            var derateProportion_float = 1 - (parseFloat($.trim($("#derateProportionInModify").val())) / 100);
+            if(price_float * derateProportion_float < 0.01){
+                MsgBox.show("减免之后，价格小于0.01元，无法保存");
+                return false;
+            }
+        }
         if(StringUtil.getCharNumber($.trim($("#introduction").val())) > 2000){
             MsgBox.show("产品介绍过长，最长2000个字符");
             return false;

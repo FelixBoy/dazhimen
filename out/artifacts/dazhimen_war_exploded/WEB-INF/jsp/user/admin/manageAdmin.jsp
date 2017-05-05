@@ -64,6 +64,7 @@
             });
         }
     }
+
     function formatOper(val,row,index){
         return '<a href="javascript:void(0)" onclick="fwdModifyAdminPage('+index+')">修改</a>&nbsp&nbsp' +
             '<a href="javascript:void(0)" onclick="saveDeleteAdmin('+index+')">删除</a>';

@@ -62,8 +62,8 @@
         });
         $('#remarksInAddAdmin').textbox({
             required: true,
-            validType: 'maxLen[2000]',
-            missingMessage:'最多输入2000个字符',
+            validType: 'maxLen[300]',
+            missingMessage:'最多输入300个字符',
             prompt:'请输入备注'
         });
     });
@@ -111,8 +111,8 @@
             MsgBox.show("手机号码格式不正确，只能为以1开头的11位数字");
             return false;
         }
-        if(StringUtil.getCharNumber($("#remarksInAddAdmin").val()) > 2000){
-            MsgBox.show("备注超长，最多输入2000个字符");
+        if(StringUtil.getCharNumber($("#remarksInAddAdmin").val()) > 300){
+            MsgBox.show("备注超长，最多输入300个字符");
             return false;
         }
         return true;

@@ -80,7 +80,7 @@
         $("#headerimgInAddMaster").filebox({
             required:true,
             missingMessage:'支持jpg,png格式',
-            prompt:'请选择头像图片',
+            prompt:'请选择头像图片，建议大小【2M】以内',
             validType:'imgfile'
         });
         $('#introduction').textbox({

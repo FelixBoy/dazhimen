@@ -323,7 +323,7 @@
             required:true,
             missingMessage:'支持jpg,png格式',
             validType:'imgfile',
-            prompt:'请选择图片'
+            prompt:'新闻图片，建议大小【2M】以内'
         });
         $.parser.parse($('#trcontent'+nextIndex));
         dealSortValueInModify();

@@ -5,7 +5,7 @@
         $("#imgInModifyNewsContentImgDialog").filebox({
             required:true,
             missingMessage:'支持jpg,png格式',
-            prompt:'将会覆盖原图片',
+            prompt:'将会覆盖原图片，建议大小【2M】以内',
             validType:'imgfile'
         });
     });

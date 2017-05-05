@@ -32,13 +32,13 @@
         $("#listimg").filebox({
             required:true,
             missingMessage:'支持jpg,png格式',
-            prompt:'请选择图片，用于列表展示',
+            prompt:'用于列表展示，建议大小【2M】以内',
             validType:'imgfile'
         });
         $("#mainimg1").filebox({
             required:true,
             missingMessage:'支持jpg,png格式',
-            prompt:'请选择主图，用于首页轮播',
+            prompt:'用于首页轮播，建议大小【2M】以内',
             validType:'imgfile'
         });
         $.extend($.fn.validatebox.defaults.rules, {
@@ -167,6 +167,14 @@
                 return false;
             }
         }
+        if($.trim($("#derateProportion").val()).length > 0){
+            var price_float = parseFloat($.trim($("#price").val()));
+            var derateProportion_float = 1 - (parseFloat($.trim($("#derateProportion").val())) / 100);
+            if(price_float * derateProportion_float < 0.01){
+                MsgBox.show("减免之后，价格小于0.01元，无法保存");
+                return false;
+            }
+        }
 
         if(!$("#listimg").filebox("getValue")){
             MsgBox.show("请选择列表图片");
@@ -271,39 +279,41 @@
                 </td>
             </tr>
             <tr>
-                <td>名称:<span style="color:red">*</span></td>
-                <td><input id="pname" name="pname"/>
+                <td nowrap="nowrap" style="text-align: right;">名称:<span style="color:red">*</span></td>
+                <td><input id="pname" name="pname" style="width: 280px;"/>
                     <input type="hidden" id="uidInProductForm" name="uid"></td>
-                <td>类型:<span style="color:red">*</span></td>
+                <td nowrap="nowrap" style="text-align: right;">类型:<span style="color:red">*</span></td>
                 <td>
-                    <select class="easyui-combobox" name="type" id="type" editable="false" style="width:98%">
+                    <select class="easyui-combobox" name="type" id="type" editable="false" style="width: 280px;">
                         <option value="1">技能包</option>
                         <option value="2">经验包</option>
                     </select>
                 </td>
-                <td nowrap="nowrap">价格/年:<span style="color:red">*</span></td>
-                <td><input id="price" name="price"></td>
             </tr>
             <tr>
-                <td>余额支付减免:</td>
-                <td><input id="derateProportion" name="derateProportion"/>%</td>
+                <td nowrap="nowrap" style="text-align: right;">价格/年:<span style="color:red">*</span></td>
+                <td><input id="price" name="price" style="width: 280px;"></td>
+                <td nowrap="nowrap" style="text-align: right;">余额支付减免:</td>
+                <td><input id="derateProportion" name="derateProportion" style="width: 280px;"/>%</td>
             </tr>
             <tr>
-                <td>列表图片:<span style="color:red">*</span></td>
-                <td colspan="2">
-                        <input id="listimg" name="listimg" style="width:100%" accept="image/jpeg,image/png"
+                <td nowrap="nowrap" style="text-align: right;">列表图片:<span style="color:red">*</span></td>
+                <td colspan="3">
+                        <input id="listimg" name="listimg" style="width:80%" accept="image/jpeg,image/png"
                                data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
-                <td nowrap="nowrap" style="text-align: right">产品主图:<span style="color:red">*</span></td>
-                <td colspan="2">
-                    <input id="mainimg1" name="mainimg" style="width:100%" accept="image/jpeg,image/png"
+            </tr>
+            <tr>
+                <td nowrap="nowrap" style="text-align: right;">产品主图:<span style="color:red">*</span></td>
+                <td colspan="3">
+                    <input id="mainimg1" name="mainimg" style="width:80%" accept="image/jpeg,image/png"
                            data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'">
                 </td>
             </tr>
             <tr>
-                <td>介绍:</td>
-                <td colspan="5"><input id="prodcut_introduction"
-                                       style="width:100%;height:80px;"
+                <td nowrap="nowrap" style="text-align: right;">介绍:</td>
+                <td colspan="3"><input id="prodcut_introduction"
+                                       style="width:98%;height:80px;"
                                        name="introduction" data-options="multiline:true"/></td>
             </tr>
         </table>
