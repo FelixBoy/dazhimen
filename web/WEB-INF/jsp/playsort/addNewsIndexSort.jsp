@@ -50,7 +50,7 @@
     }
 </script>
 <div style="padding:5px 0;">
-    <table id="addNewsIndexSortList" class="easyui-datagrid" style="width: auto;height: auto;"
+    <table id="addNewsIndexSortList" class="easyui-datagrid" style="width: auto;height: 400px;"
            url="<%=request.getContextPath()%>/playsort/getAddNewsIndexSortData.do?random_id="+Math.random()
            rownumbers="true" fitColumns="true" singleSelect="true" >
         <thead>

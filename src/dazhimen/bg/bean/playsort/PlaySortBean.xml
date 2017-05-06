@@ -20,6 +20,7 @@
         select b.nid as id,b.title as name,'新闻' as type,'3' as typenum
         from news b
         where b.status = '1' and isdel = '0' and indexplay = '0'
+        order by typenum asc, id desc
     </select>
     <update id="saveAddProductIndexPlay">
         update product
@@ -139,5 +140,60 @@
     </update>
     <update id="clearMasterIndexSort">
         update user set indexsort = '99' where isdel = '0' and type = '1'
+    </update>
+    <select id="getProductIndexSortById" resultType="java.lang.String">
+        select indexsort from product where pid = #{pid} and isdel = '0' and status != '3';
+    </select>
+    <update id="deleteSkillPackIndexSort">
+        update product set indexsort = '99' where pid = #{pid}
+    </update>
+    <update id="dealSkillPackIndexSort" >
+        update product
+          set indexsort = indexsort -1
+        where type = '1'
+        and indexsort != '99'
+        and isdel = '0'
+        and status != '3'
+        and indexsort > #{sort}
+    </update>
+    <update id="deleteProductIndexSort">
+        update product set indexsort = '99' where pid = #{pid}
+    </update>
+    <update id="dealExperiencePackIndexSort" >
+        update product
+        set indexsort = indexsort -1
+        where type = '2'
+        and indexsort != '99'
+        and isdel = '0'
+        and status != '3'
+        and indexsort > #{sort}
+    </update>
+    <select id="getNewsIndexSortById" resultType="java.lang.String">
+        select indexsort from news where nid = #{nid} and isdel = '0' and status != '0';
+    </select>
+    <update id="deleteNewsIndexSort">
+        update news set indexsort = '99' where nid = #{nid}
+    </update>
+    <update id="dealNewsIndexSort" >
+        update news
+        set indexsort = indexsort -1
+        where indexsort != '99'
+        and isdel = '0'
+        and status != '0'
+        and indexsort > #{sort}
+    </update>
+    <select id="getMasterIndexSortById" resultType="java.lang.String">
+        select indexsort from user where uid = #{uid} and isdel = '0' and type = '1';
+    </select>
+    <update id="deleteMasterIndexSort">
+        update user set indexsort = '99' where uid = #{uid}
+    </update>
+    <update id="dealMasterIndexSort" >
+        update user
+          set indexsort = indexsort -1
+        where indexsort != '99'
+        and isdel = '0'
+        and type = '1'
+        and indexsort > #{sort}
     </update>
 </mapper>

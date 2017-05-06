@@ -8,9 +8,137 @@ import org.apache.ibatis.session.SqlSession;
 import java.util.List;
 
 /**
- * Created by Administrator on 2017/4/1.
+ * 首页轮播和首页排序的Service类
  */
 public class PlaySortService {
+
+    /**
+     * 取消掌门首页排序
+     * @param uid
+     * @return
+     */
+    public boolean saveDeleteMasterSort(String uid) throws BgException {
+        SqlSession sqlSession = null;
+        int result = 0;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            String indexSort = sqlSession.selectOne("dazhimen.bg.bean.PlaySort.getMasterIndexSortById", uid);
+            if (indexSort == null || indexSort.equals("")) {
+                throw new BgException("查询掌门对应的首页排序出错");
+            }
+            result = sqlSession.update("dazhimen.bg.bean.PlaySort.deleteMasterIndexSort", uid);
+            sqlSession.update("dazhimen.bg.bean.PlaySort.dealMasterIndexSort", indexSort);
+            sqlSession.commit();
+        }catch (BgException e){
+            sqlSession.rollback();
+            e.printStackTrace();
+            throw new BgException(e.getMessage());
+        }catch (Exception e){
+            sqlSession.rollback();
+            e.printStackTrace();
+            throw new BgException("出现异常，取消掌门首页排序出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return result == 1;
+    }
+    /**
+     * 取消新闻首页排序
+     * @param nid
+     * @return
+     */
+    public boolean saveDeleteNewsSort(String nid) throws BgException {
+        SqlSession sqlSession = null;
+        int result = 0;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            String indexSort = sqlSession.selectOne("dazhimen.bg.bean.PlaySort.getNewsIndexSortById", nid);
+            if (indexSort == null || indexSort.equals("")) {
+                throw new BgException("查询新闻对应的首页排序出错");
+            }
+            result = sqlSession.update("dazhimen.bg.bean.PlaySort.deleteNewsIndexSort", nid);
+            sqlSession.update("dazhimen.bg.bean.PlaySort.dealNewsIndexSort", indexSort);
+            sqlSession.commit();
+        }catch (BgException e){
+            sqlSession.rollback();
+            e.printStackTrace();
+            throw new BgException(e.getMessage());
+        }catch (Exception e){
+            sqlSession.rollback();
+            e.printStackTrace();
+            throw new BgException("出现异常，取消新闻首页排序出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return result == 1;
+    }
+    /**
+     * 取消技能包首页排序
+     * @param pid
+     * @return
+     */
+    public boolean saveDeleteSkillPackSort(String pid) throws BgException {
+        SqlSession sqlSession = null;
+        int result = 0;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            String indexSort = sqlSession.selectOne("dazhimen.bg.bean.PlaySort.getProductIndexSortById", pid);
+            if (indexSort == null || indexSort.equals("")) {
+                throw new BgException("查询技能包对应的首页排序出错");
+            }
+            result = sqlSession.update("dazhimen.bg.bean.PlaySort.deleteProductIndexSort", pid);
+            sqlSession.update("dazhimen.bg.bean.PlaySort.dealSkillPackIndexSort", indexSort);
+            sqlSession.commit();
+        }catch (BgException e){
+            sqlSession.rollback();
+            e.printStackTrace();
+            throw new BgException(e.getMessage());
+        }catch (Exception e){
+            sqlSession.rollback();
+            e.printStackTrace();
+            throw new BgException("出现异常，取消技能包首页排序出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return result == 1;
+    }
+
+    /**
+     * 取消经验包首页排序
+     * @param pid
+     * @return
+     */
+    public boolean saveDeleteExperiencePackSort(String pid) throws BgException {
+        SqlSession sqlSession = null;
+        int result = 0;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            String indexSort = sqlSession.selectOne("dazhimen.bg.bean.PlaySort.getProductIndexSortById", pid);
+            if (indexSort == null || indexSort.equals("")) {
+                throw new BgException("查询经验包对应的首页排序出错");
+            }
+            result = sqlSession.update("dazhimen.bg.bean.PlaySort.deleteProductIndexSort", pid);
+            sqlSession.update("dazhimen.bg.bean.PlaySort.dealExperiencePackIndexSort", indexSort);
+            sqlSession.commit();
+        }catch (BgException e){
+            sqlSession.rollback();
+            e.printStackTrace();
+            throw new BgException(e.getMessage());
+        }catch (Exception e){
+            sqlSession.rollback();
+            e.printStackTrace();
+            throw new BgException("出现异常，取消经验包首页排序出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return result == 1;
+    }
+    /**
+     * 保存添加技能包首页排序
+     * @param pid
+     * @return
+     * @throws BgException
+     */
     public boolean saveAddSkillPackIndexSort(String pid) throws BgException {
         SqlSession sqlSession = null;
         int result = 0;
@@ -39,6 +167,12 @@ public class PlaySortService {
         return result == 1;
     }
 
+    /**
+     * 保存添加经验包首页排序
+     * @param pid
+     * @return
+     * @throws BgException
+     */
     public boolean saveAddExperiencePackIndexSort(String pid) throws BgException {
         SqlSession sqlSession = null;
         int result = 0;
@@ -66,6 +200,13 @@ public class PlaySortService {
         }
         return result == 1;
     }
+
+    /**
+     * 保存添加新闻首页排序
+     * @param nid
+     * @return
+     * @throws BgException
+     */
     public boolean saveAddNewsIndexSort(String nid) throws BgException {
         SqlSession sqlSession = null;
         int result = 0;
@@ -94,6 +235,12 @@ public class PlaySortService {
         return result == 1;
     }
 
+    /**
+     * 保存添加掌门首页排序
+     * @param nid
+     * @return
+     * @throws BgException
+     */
     public boolean saveAddMasterIndexSort(String nid) throws BgException {
         SqlSession sqlSession = null;
         int result = 0;
@@ -121,6 +268,11 @@ public class PlaySortService {
         }
         return result == 1;
     }
+
+    /**
+     * 清空技能包首页排序
+     * @throws BgException
+     */
     public void clearSkillPackIndexSort() throws BgException {
         SqlSession sqlSession = null;
         try{
@@ -135,6 +287,11 @@ public class PlaySortService {
             MyBatisUtil.closeSession(sqlSession);
         }
     }
+
+    /**
+     * 清空经验包首页排序
+     * @throws BgException
+     */
     public void clearExperiencePackIndexSort() throws BgException {
         SqlSession sqlSession = null;
         try{
@@ -149,6 +306,11 @@ public class PlaySortService {
             MyBatisUtil.closeSession(sqlSession);
         }
     }
+
+    /**
+     * 保存清空新闻首页排序
+     * @throws BgException
+     */
     public void clearNewsIndexSort() throws BgException {
         SqlSession sqlSession = null;
         try{
@@ -164,6 +326,10 @@ public class PlaySortService {
         }
     }
 
+    /**
+     * 保存清空掌门首页排序
+     * @throws BgException
+     */
     public void clearMasterIndexSort() throws BgException {
         SqlSession sqlSession = null;
         try{
@@ -179,6 +345,11 @@ public class PlaySortService {
         }
     }
 
+    /**
+     * 查询所有首页排序的技能包
+     * @return
+     * @throws BgException
+     */
     public List<ProductIndexSortBean> queryAllSkillPackIndexSort() throws BgException {
         List<ProductIndexSortBean> productBeans = null;
         SqlSession sqlSession = null;
@@ -193,6 +364,11 @@ public class PlaySortService {
         }
         return productBeans;
     }
+    /**
+     * 查询所有首页排序的经验包
+     * @return
+     * @throws BgException
+     */
     public List<ProductIndexSortBean> queryAllExperiencePackIndexSort() throws BgException {
         List<ProductIndexSortBean> productBeans = null;
         SqlSession sqlSession = null;
@@ -207,6 +383,11 @@ public class PlaySortService {
         }
         return productBeans;
     }
+    /**
+     * 查询所有首页排序的新闻
+     * @return
+     * @throws BgException
+     */
     public List<NewsIndexSortBean> queryAllNewsIndexSort() throws BgException {
         List<NewsIndexSortBean> newsBeans = null;
         SqlSession sqlSession = null;
@@ -221,6 +402,11 @@ public class PlaySortService {
         }
         return newsBeans;
     }
+    /**
+     * 查询所有首页排序的掌门
+     * @return
+     * @throws BgException
+     */
     public List<MasterIndexSortBean> queryAllMasterIndexSort() throws BgException {
         List<MasterIndexSortBean> masterBeans = null;
         SqlSession sqlSession = null;
@@ -236,6 +422,11 @@ public class PlaySortService {
         return masterBeans;
     }
 
+    /**
+     * 查询所有首页轮播
+     * @return
+     * @throws BgException
+     */
     public List<IndexPlayBean> queryAllIndexPlay() throws BgException {
         List<IndexPlayBean> indexPlayBeans = null;
         SqlSession sqlSession = null;
@@ -250,6 +441,11 @@ public class PlaySortService {
         }
         return indexPlayBeans;
     }
+    /**
+     * 查询可以添加 首页排序的 技能包数据
+     * @return
+     * @throws BgException
+     */
     public List<ProductIndexSortBean> getAddSkillPackIndexSortData() throws BgException {
         List<ProductIndexSortBean> productBeans = null;
         SqlSession sqlSession = null;
@@ -264,6 +460,11 @@ public class PlaySortService {
         }
         return productBeans;
     }
+    /**
+     * 查询可以添加 首页排序的 经验包数据
+     * @return
+     * @throws BgException
+     */
     public List<ProductIndexSortBean> getAddExperiencePackIndexSortData() throws BgException {
         List<ProductIndexSortBean> productBeans = null;
         SqlSession sqlSession = null;
@@ -278,6 +479,11 @@ public class PlaySortService {
         }
         return productBeans;
     }
+    /**
+     * 查询可以添加 首页排序的 新闻数据
+     * @return
+     * @throws BgException
+     */
     public List<NewsIndexSortBean> getAddNewsIndexSortData() throws BgException {
         List<NewsIndexSortBean> newsBeans = null;
         SqlSession sqlSession = null;
@@ -292,7 +498,11 @@ public class PlaySortService {
         }
         return newsBeans;
     }
-
+    /**
+     * 查询可以添加 首页排序的 掌门数据
+     * @return
+     * @throws BgException
+     */
     public List<MasterIndexSortBean> getAddMasterIndexSortData() throws BgException {
         List<MasterIndexSortBean> masterBeans = null;
         SqlSession sqlSession = null;
@@ -307,6 +517,11 @@ public class PlaySortService {
         }
         return masterBeans;
     }
+    /**
+     * 查询可以添加 首页轮播的 新闻和产品数据
+     * @return
+     * @throws BgException
+     */
     public List<IndexPlayBean> getAddIndexPlayData() throws BgException {
         List<IndexPlayBean> indexPlayBeans = null;
         SqlSession sqlSession = null;
@@ -322,6 +537,13 @@ public class PlaySortService {
         return indexPlayBeans;
     }
 
+    /**
+     * 保存新增首页轮播
+     * @param id
+     * @param type
+     * @return
+     * @throws BgException
+     */
     public boolean saveAddIndexPlay(String id, String type) throws BgException {
         SqlSession sqlSession = null;
         int result = 0;
@@ -343,6 +565,14 @@ public class PlaySortService {
         }
         return result == 1;
     }
+
+    /**
+     * 保存取消首页轮播
+     * @param id
+     * @param type
+     * @return
+     * @throws BgException
+     */
     public boolean saveDeleteIndexPlay(String id, String type) throws BgException {
         SqlSession sqlSession = null;
         int result = 0;

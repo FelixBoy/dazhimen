@@ -11,10 +11,16 @@
             height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/playsort/forwardAddSkillPackIndexSortPage.do?random_id=" + Math.random(),
             modal: true
         });
+        $("#addSkillPackIndexSortDialog").dialog({
+            onClose:function(){
+                $("#addSkillPackIndexSortDialog").empty();
+            }
+        });
         $('#addSkillPackIndexSortDialog').dialog("open");
+        $("#addSkillPackIndexSortDialog").dialog("refresh",
+            "<%=request.getContextPath()%>/playsort/forwardAddSkillPackIndexSortPage.do?random_id=" + Math.random());
     }
     function forwardAddExperiencePackIndexSortPage(){
         var rows = $("#experiencePackIndexSortList").datagrid("getRows");
@@ -28,10 +34,16 @@
             height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/playsort/forwardAddExperiencePackIndexSortPage.do?random_id=" + Math.random(),
             modal: true
         });
+        $("#addExperiencePackIndexSortDialog").dialog({
+            onClose:function(){
+                $("#addExperiencePackIndexSortDialog").empty();
+            }
+        });
         $('#addExperiencePackIndexSortDialog').dialog("open");
+        $("#addExperiencePackIndexSortDialog").dialog("refresh",
+            "<%=request.getContextPath()%>/playsort/forwardAddExperiencePackIndexSortPage.do?random_id=" + Math.random());
     }
 
     function forwardAddNewsIndexSortPage(){
@@ -46,10 +58,16 @@
             height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/playsort/forwardAddNewsIndexSortPage.do?random_id=" + Math.random(),
             modal: true
         });
+        $("#addNewsIndexSortDialog").dialog({
+            onClose:function(){
+                $("#addNewsIndexSortDialog").empty();
+            }
+        });
         $('#addNewsIndexSortDialog').dialog("open");
+        $("#addNewsIndexSortDialog").dialog("refresh",
+            "<%=request.getContextPath()%>/playsort/forwardAddNewsIndexSortPage.do?random_id=" + Math.random());
     }
 
     function forwardAddMasterIndexSortPage(){
@@ -64,10 +82,16 @@
             height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/playsort/forwardAddMasterIndexSortPage.do?random_id=" + Math.random(),
             modal: true
         });
+        $("#addMasterIndexSortDialog").dialog({
+            onClose:function(){
+                $("#addMasterIndexSortDialog").empty();
+            }
+        });
         $('#addMasterIndexSortDialog').dialog("open");
+        $("#addMasterIndexSortDialog").dialog("refresh",
+            "<%=request.getContextPath()%>/playsort/forwardAddMasterIndexSortPage.do?random_id=" + Math.random());
     }
     function clearSkillPackIndexSort(){
         $.messager.confirm('确认','您确定清空【技能包】首页排序吗？',function(r){
@@ -141,7 +165,106 @@
             }
         });
     }
-
+    function saveDeleteSkillPackSort(index){
+        $("#skillPackIndexSortList").datagrid("selectRow", index);
+        var row = $('#skillPackIndexSortList').datagrid('getSelected');
+        if(row){
+            $.messager.confirm('确认','您确认取消【技能包】【'+ row.pname + '】的首页排序吗？',function(r) {
+                if(r){
+                    $.ajax({
+                        url:"<%=request.getContextPath()%>/playsort/saveDeleteSkillPackSort.do?pid=" + row.pid + "&random_id="+Math.random(),
+                        type:'get',
+                        async:false,
+                        error:function(data){
+                            MsgBox.show(data.responseText);
+                        },
+                        success:function(data){
+                            MsgBox.show(data);
+                            $('#skillPackIndexSortList').datagrid('reload');
+                        }
+                    });
+                }
+            });
+        }
+    }
+    function saveDeleteExperiencePackSort(index){
+        $("#experiencePackIndexSortList").datagrid("selectRow", index);
+        var row = $('#experiencePackIndexSortList').datagrid('getSelected');
+        if(row){
+            $.messager.confirm('确认','您确认取消【技能包】【'+ row.pname + '】的首页排序吗？',function(r) {
+                if(r){
+                    $.ajax({
+                        url:"<%=request.getContextPath()%>/playsort/saveDeleteExperiencePackSort.do?pid=" + row.pid + "&random_id="+Math.random(),
+                        type:'get',
+                        async:false,
+                        error:function(data){
+                            MsgBox.show(data.responseText);
+                        },
+                        success:function(data){
+                            MsgBox.show(data);
+                            $('#experiencePackIndexSortList').datagrid('reload');
+                        }
+                    });
+                }
+            });
+        }
+    }
+    function saveDeleteNewsSort(index){
+        $("#newsIndexSortList").datagrid("selectRow", index);
+        var row = $('#newsIndexSortList').datagrid('getSelected');
+        if(row){
+            $.messager.confirm('确认','您确认取消【新闻】【'+ row.title + '】的首页排序吗？',function(r) {
+                if(r){
+                    $.ajax({
+                        url:"<%=request.getContextPath()%>/playsort/saveDeleteNewsSort.do?nid=" + row.nid + "&random_id="+Math.random(),
+                        type:'get',
+                        async:false,
+                        error:function(data){
+                            MsgBox.show(data.responseText);
+                        },
+                        success:function(data){
+                            MsgBox.show(data);
+                            $('#newsIndexSortList').datagrid('reload');
+                        }
+                    });
+                }
+            });
+        }
+    }
+    function saveDeleteMasterSort(index){
+        $("#masterIndexSortList").datagrid("selectRow", index);
+        var row = $('#masterIndexSortList').datagrid('getSelected');
+        if(row){
+            $.messager.confirm('确认','您确认取消【掌门】【'+ row.uname + '】的首页排序吗？',function(r) {
+                if(r){
+                    $.ajax({
+                        url:"<%=request.getContextPath()%>/playsort/saveDeleteMasterSort.do?uid=" + row.uid + "&random_id="+Math.random(),
+                        type:'get',
+                        async:false,
+                        error:function(data){
+                            MsgBox.show(data.responseText);
+                        },
+                        success:function(data){
+                            MsgBox.show(data);
+                            $('#masterIndexSortList').datagrid('reload');
+                        }
+                    });
+                }
+            });
+        }
+    }
+    function formatSkillPackOper(val,row,index){
+        return '<a href="javascript:void(0)" onclick="saveDeleteSkillPackSort('+index+')">取消排序</a>';
+    }
+    function formatExperiencePackOper(val,row,index){
+        return '<a href="javascript:void(0)" onclick="saveDeleteExperiencePackSort('+index+')">取消排序</a>';
+    }
+    function formatNewsOper(val,row,index){
+        return '<a href="javascript:void(0)" onclick="saveDeleteNewsSort('+index+')">取消排序</a>';
+    }
+    function formatMasterOper(val,row,index){
+        return '<a href="javascript:void(0)" onclick="saveDeleteMasterSort('+index+')">取消排序</a>';
+    }
 </script>
 <div style="padding:5px 0;">
     <div class="easyui-layout" style="width:100%;height:230px;text-align: center;">
@@ -152,9 +275,10 @@
                    rownumbers="true" fitColumns="true" singleSelect="true" >
                 <thead>
                 <tr>
-                    <th data-options="field:'pid'" width="30%">Id</th>
+                    <th data-options="field:'pid'" width="25%">Id</th>
                     <th data-options="field:'pname'" width="40%">名称</th>
-                    <th data-options="field:'type'" width="30%">类型</th>
+                    <th data-options="field:'type'" width="15%">类型</th>
+                    <th data-options="field:'operate',align:'center',formatter:formatSkillPackOper" width="20%">操作</th>
                 </tr>
                 </thead>
             </table>
@@ -171,9 +295,10 @@
                    rownumbers="true" fitColumns="true" singleSelect="true" >
                 <thead>
                 <tr>
-                    <th data-options="field:'pid'" width="30%">Id</th>
+                    <th data-options="field:'pid'" width="25%">Id</th>
                     <th data-options="field:'pname'" width="40%">名称</th>
-                    <th data-options="field:'type'" width="30%">类型</th>
+                    <th data-options="field:'type'" width="15%">类型</th>
+                    <th data-options="field:'operate',align:'center',formatter:formatExperiencePackOper" width="20%">操作</th>
                 </tr>
                 </thead>
             </table>
@@ -193,8 +318,9 @@
                    rownumbers="true" fitColumns="true" singleSelect="true" >
                 <thead>
                 <tr>
-                    <th data-options="field:'nid'" width="30%">Id</th>
-                    <th data-options="field:'title'" width="70%">标题</th>
+                    <th data-options="field:'nid'" width="25%">Id</th>
+                    <th data-options="field:'title'" width="55">标题</th>
+                    <th data-options="field:'operate',align:'center',formatter:formatNewsOper" width="20%">操作</th>
                 </tr>
                 </thead>
             </table>
@@ -211,9 +337,10 @@
                    rownumbers="true" fitColumns="true" singleSelect="true" >
                 <thead>
                 <tr>
-                    <th data-options="field:'uid'" width="30%">Id</th>
-                    <th data-options="field:'uname'" width="40%">姓名</th>
-                    <th data-options="field:'mphone'" width="30%">手机号码</th>
+                    <th data-options="field:'uid'" width="25%">Id</th>
+                    <th data-options="field:'uname'" width="35%">姓名</th>
+                    <th data-options="field:'mphone'" width="20%">手机号码</th>
+                    <th data-options="field:'operate',align:'center',formatter:formatMasterOper" width="20%">操作</th>
                 </tr>
                 </thead>
             </table>

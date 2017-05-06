@@ -176,38 +176,54 @@
         });
     });
     function checkMoidfyMasterFormBeforeSubmit(){
-        if($.trim($("#loginnameInModifyMaster").val()).length == 0){
+        if($("#loginnameInModifyMaster").val().length == 0){
             MsgBox.show("请输入登录名");
             return false;
         }
-        if(StringUtil.getBinaryLength($.trim($("#loginnameInModifyMaster").val())) > 100){
-            MsgBox.show("登录名过长，无法保存");
+        var reg_loginname = /^[0-9a-zA-Z]*$/g;
+        if(!reg_loginname.test($("#loginnameInModifyMaster").val())){
+            MsgBox.show("登录名格式不正确，只能为字母或数字组合");
             return false;
         }
-        var reg_loginname = /^[0-9a-zA-Z]*$/g;
-        if(!reg_loginname.test($.trim($("#loginnameInModifyMaster").val()))){
-            MsgBox.show("登录名格式不正确，只能为字母或数字组合");
+        if(StringUtil.getCharNumber($("#loginnameInModifyMaster").val()) > 20){
+            MsgBox.show("登录名过长，最长20个字符");
             return false;
         }
         if($.trim($("#nameInModifyMaster").val()).length == 0){
             MsgBox.show("请输入姓名");
             return false;
         }
-        if(StringUtil.getBinaryLength($.trim($("#nameInModifyMaster").val())) > 100){
-            MsgBox.show("姓名过长，无法保存");
+        if(StringUtil.getBinaryLength($.trim($("#nameInModifyMaster").val())) > 20){
+            MsgBox.show("姓名过长，最长20个字符");
             return false;
         }
-        if($.trim($("#mphoneInModifyMaseter").val()).length == 0){
+        if($("#mphoneInModifyMaseter").val().length == 0){
             MsgBox.show("请输入手机号码");
             return false;
         }
         var reg = /^1\d{10}$/;
-        if (!reg.test($.trim($("#mphoneInModifyMaseter").val()))) {
-            MsgBox.show("手机号码格式有误");
+        if (!reg.test($("#mphoneInModifyMaseter").val())) {
+            MsgBox.show("手机号码格式不正确，只能为以1开头的11位数字");
             return false;
         }
         if($.trim($("#identityInModifyMaseter").val()).length == 0){
-            MsgBox.show("请输入掌门身份");
+            MsgBox.show("请输入身份");
+            return false;
+        }
+        if(StringUtil.getCharNumber($.trim($("#identityInModifyMaseter").val())) > 50){
+            MsgBox.show("身份过长，最长50个字符");
+            return false;
+        }
+        if($("#fuckthismasterhead").filebox("getValue")){
+            var headerFileName = $("#fuckthismasterhead").filebox("getValue");
+            var headerSuffixName = headerFileName.substring(headerFileName.lastIndexOf("."));
+            if(headerSuffixName != ".jpg" && headerSuffixName != ".png"){
+                MsgBox.show("头像文件格式错误，仅支持jpg、png");
+                return false;
+            }
+        }
+        if(StringUtil.getCharNumber($("#introductionInModfiyMaster").val()) > 2000){
+            MsgBox.show("介绍超长，最多输入2000个字符");
             return false;
         }
         return true;

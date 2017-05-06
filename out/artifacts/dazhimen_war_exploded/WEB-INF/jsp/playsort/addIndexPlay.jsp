@@ -51,7 +51,7 @@
     }
 </script>
 <div style="padding:5px 0;">
-    <table id="addIndexPlayList" title="选择要首页轮播的产品或者新闻" class="easyui-datagrid" style="width: auto;height: auto;"
+    <table id="addIndexPlayList" title="选择要首页轮播的产品或者新闻" class="easyui-datagrid" style="width: auto;height: 400px;"
            url="<%=request.getContextPath()%>/playsort/getAddIndexPlayData.do?random_id="+Math.random()
            rownumbers="true" fitColumns="true" singleSelect="true" >
         <thead>

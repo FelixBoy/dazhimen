@@ -37,10 +37,16 @@
             height: 500,
             closed: true,
             cache: false,
-            href: "<%=request.getContextPath()%>/playsort/fwdAddIndexPlayPage.do?random_id=" + Math.random(),
             modal: true
         });
+        $("#addIndexPlayDialog").dialog({
+            onClose:function(){
+                $("#addIndexPlayDialog").empty();
+            }
+        });
         $('#addIndexPlayDialog').dialog("open");
+        $("#addIndexPlayDialog").dialog("refresh",
+            "<%=request.getContextPath()%>/playsort/fwdAddIndexPlayPage.do?random_id=" + Math.random());
     }
 </script>
 <div style="padding:5px 0;">
