@@ -536,7 +536,7 @@ public class UserController {
         user.setIdentity(resq.getParameter("identity").trim());
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
-        CommonsMultipartFile headerimgFile = (CommonsMultipartFile) multipartRequest.getFile("headerimgInModify");
+        CommonsMultipartFile headerimgFile = (CommonsMultipartFile) multipartRequest.getFile("fuackmasterheadimg");
         user.setHeaderimgFile(headerimgFile);
         user.setGender(resq.getParameter("gender"));
         user.setIntroduction(resq.getParameter("introduction"));

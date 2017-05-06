@@ -1,83 +1,4 @@
 <script type="text/javascript">
-    $(function () {
-        $.extend($.fn.validatebox.defaults.rules, {
-            maxLen:{
-                validator: function (value, param) {
-                    var result = true;
-                    if(StringUtil.getCharNumber($.trim(value)) > param[0]){
-                        result = false;
-                    }
-                    return result;
-                },
-                message:'已超长，最多输入{0}个字符'
-            },
-            maxLenWithoutTrim:{
-                validator: function (value, param) {
-                    var result = true;
-                    if(StringUtil.getCharNumber(value) > param[0]){
-                        result = false;
-                    }
-                    return result;
-                },
-                message:'已超长，最多输入{0}个字符'
-            },
-            numberAndLetter:{
-                validator: function (value, param) {
-                    var reg_loginname = /^[0-9a-zA-Z]*$/g;
-                    return reg_loginname.test(value);
-                },
-                message:'格式不正确，只能为字母或数字组合'
-            },
-            imgfile:{
-                validator: function (value, param) {
-                    var imgFileSuffixName = value.substring(value.lastIndexOf("."));
-                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
-                        MsgBox.show("图片格式不正确，仅支持jpg、png");
-                        return false;
-                    }
-                    return true;
-                },
-                message:'图片格式不正确，请选择jpg,png格式'
-            },
-            mphone:{
-                validator: function (value, param) {
-                    var reg = /^1\d{10}$/;
-                    return reg.test(value);
-                },
-                message:'格式不正确，只能为以1开头的11位数字'
-            }
-        });
-        $('#loginnameInModify').textbox({
-            required: true,
-            validType: ['maxLenWithoutTrim[20]','numberAndLetter'],
-            missingMessage:'最多输入20个字符',
-            prompt:'请输入登录名'
-        });
-        $('#nameInModifyMaster').textbox({
-            required: true,
-            validType: 'maxLen[20]',
-            missingMessage:'最多输入20个字符',
-            prompt:'请输入姓名'
-        });
-        $('#mphoneInModifyMaseter').textbox({
-            required: true,
-            validType: ['maxLenWithoutTrim[11]','mphone'] ,
-            missingMessage:'以1开头的11位数字',
-            prompt:'请输入手机号码'
-        });
-        $('#identityInModifyMaseter').textbox({
-            required: true,
-            validType: 'maxLen[50]',
-            missingMessage:'最多输入50个字符',
-            prompt:'请输入身份'
-        });
-        $('#introductionInModfiyMaster').textbox({
-            required: true,
-            validType: 'maxLen[2000]',
-            missingMessage:'最多输入2000个字符',
-            prompt:'请输入介绍'
-        });
-    });
     var checkCountInMasterModify = 10;
     function cbInModifyMaster(){
         var f = $('#MasterModifyForm_iframe'), data = "";
@@ -138,23 +59,133 @@
         LoadingMaskLayer.show();
     }
     $(function(){
-        $('#masterModifyForm').form({onLoadSuccess:function(){
-            $("#headImgRealInModifyMaster").attr("src",$("#headerimgInModifyMaster").val()+"?random_id="+Math.random());
-        }});
-        $("#masterModifyForm").form("load", "<%=request.getContextPath()%>/user/getMasterData.do" +
-            "?uid=<%=request.getAttribute("uid").toString()%>&randomid=" + Math.random());
+        $.ajax({
+            url:"<%=request.getContextPath()%>/user/getMasterData.do" +
+            "?uid=<%=request.getAttribute("uid").toString()%>&randomid=" + Math.random(),
+            type:'get',
+            async:false,
+            error:function(data){
+                MsgBox.show(data.responseText);
+            },
+            success:function(data) {
+                if (!data) {
+                    return;
+                } else {
+                    var jsonObj = JSON.parse(data);
+                    if (!jsonObj) {
+                        return;
+                    }
+                    $("#uidInModifyMaster").val(jsonObj.uid);
+                    $("#nameInModifyMaster").val(jsonObj.name);
+                    $("#mphoneInModifyMaseter").val(jsonObj.mphone);
+                    if(jsonObj.gender == '1'){
+                        $("#gender_boy").prop("checked", "checked");
+                    }else{
+                        $("#gender_girl").prop("checked", "checked");
+                    }
+                    $("#loginnameInModifyMaster").val(jsonObj.loginname);
+                    $("#lognnameOrginalInModify").val(jsonObj.loginname);
+                    $("#introductionInModfiyMaster").val(jsonObj.introduction);
+                    $("#identityInModifyMaseter").val(jsonObj.identity);
+                    $("#headImgRealInModifyMaster").attr("src", jsonObj.headerimg+"?random_id="+Math.random());
+                }
+            }
+        });
+        $.extend($.fn.validatebox.defaults.rules, {
+            maxLen:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber($.trim(value)) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            maxLenWithoutTrim:{
+                validator: function (value, param) {
+                    var result = true;
+                    if(StringUtil.getCharNumber(value) > param[0]){
+                        result = false;
+                    }
+                    return result;
+                },
+                message:'已超长，最多输入{0}个字符'
+            },
+            numberAndLetter:{
+                validator: function (value, param) {
+                    var reg_loginname = /^[0-9a-zA-Z]*$/g;
+                    return reg_loginname.test(value);
+                },
+                message:'格式不正确，只能为字母或数字组合'
+            },
+            imgfile:{
+                validator: function (value, param) {
+                    var imgFileSuffixName = value.substring(value.lastIndexOf("."));
+                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                        MsgBox.show("图片格式不正确，仅支持jpg、png");
+                        return false;
+                    }
+                    return true;
+                },
+                message:'图片格式不正确，请选择jpg,png格式'
+            },
+            mphone:{
+                validator: function (value, param) {
+                    var reg = /^1\d{10}$/;
+                    return reg.test(value);
+                },
+                message:'格式不正确，只能为以1开头的11位数字'
+            }
+        });
+        $('#loginnameInModifyMaster').textbox({
+            required: true,
+            validType: ['maxLenWithoutTrim[20]','numberAndLetter'],
+            missingMessage:'最多输入20个字符',
+            prompt:'请输入登录名'
+        });
+        $('#nameInModifyMaster').textbox({
+            required: true,
+            validType: 'maxLen[20]',
+            missingMessage:'最多输入20个字符',
+            prompt:'请输入姓名'
+        });
+        $('#mphoneInModifyMaseter').textbox({
+            required: true,
+            validType: ['maxLenWithoutTrim[11]','mphone'] ,
+            missingMessage:'以1开头的11位数字',
+            prompt:'请输入手机号码'
+        });
+        $("#fuckthismasterhead").filebox({
+            required:true,
+            validType:'imgfile',
+            missingMessage:'支持jpg,png格式',
+            prompt:'请选择头像图片，建议大小【2M】以内'
+        });
+        $('#identityInModifyMaseter').textbox({
+            required: true,
+            validType: 'maxLen[50]',
+            missingMessage:'最多输入50个字符',
+            prompt:'请输入身份'
+        });
+        $('#introductionInModfiyMaster').textbox({
+            required: true,
+            validType: 'maxLen[2000]',
+            missingMessage:'最多输入2000个字符',
+            prompt:'请输入介绍'
+        });
     });
     function checkMoidfyMasterFormBeforeSubmit(){
-        if($.trim($("#loginnameInModify").val()).length == 0){
+        if($.trim($("#loginnameInModifyMaster").val()).length == 0){
             MsgBox.show("请输入登录名");
             return false;
         }
-        if(StringUtil.getBinaryLength($.trim($("#loginnameInModify").val())) > 100){
+        if(StringUtil.getBinaryLength($.trim($("#loginnameInModifyMaster").val())) > 100){
             MsgBox.show("登录名过长，无法保存");
             return false;
         }
         var reg_loginname = /^[0-9a-zA-Z]*$/g;
-        if(!reg_loginname.test($.trim($("#loginnameInModify").val()))){
+        if(!reg_loginname.test($.trim($("#loginnameInModifyMaster").val()))){
             MsgBox.show("登录名格式不正确，只能为字母或数字组合");
             return false;
         }
@@ -197,17 +228,16 @@
             </tr>
             <tr>
                 <td style="text-align: right" nowrap="nowrap">头像:</td>
-                <td><img id="headImgRealInModifyMaster" width="100px" height="100px"/>
-                    <input class="dzm-noBorder-text" type="hidden" id="headerimgInModifyMaster" name="headerimg" /></td>
+                <td><img id="headImgRealInModifyMaster" width="100px" height="100px"/></td>
             </tr>
             <tr>
                 <td style="text-align: right">掌门ID:</td>
-                <td><input class="dzm-noBorder-text" readonly id="uid" name="uid" style="width:300px"></td>
+                <td><input class="dzm-noBorder-text" readonly id="uidInModifyMaster" name="uid" style="width:300px"></td>
             </tr>
             <tr>
                 <td style="text-align: right">登录名:<span style="color:red">*</span></td>
-                <td><input id="loginnameInModify" name="loginname" style="width:300px" /></td>
-                <input type="hidden" id="lognnameOrginal" name="loginnameorginal">
+                <td><input id="loginnameInModifyMaster" name="loginname" style="width:300px" /></td>
+                <input type="hidden" id="lognnameOrginalInModify" name="loginnameorginal">
             </tr>
             <tr>
                 <td style="text-align: right"  nowrap="nowrap">姓名:<span style="color:red">*</span></td>
@@ -224,15 +254,16 @@
             <tr>
                 <td style="text-align: right" nowrap="nowrap">头像文件:</td>
                 <td>
-                    <input id="aaaaaaffffffff" name="headerimgFile11111" style="width:300px" accept="image/jpeg,image/png">
+                    <input id="fuckthismasterhead" name="fuackmasterheadimg" data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'"
+                           style="width:300px" accept="image/jpeg,image/png"/>
                 </td>
             </tr>
             <tr>
                 <td style="text-align: right">性别:</td>
                 <td>
                     <span class="radioSpan">
-                        <input type="radio" name="gender" value="1" checked="checked">男</input>
-                        <input type="radio" name="gender" value="2">女</input>
+                        <input type="radio" id="gender_boy" name="gender" value="1" checked >男</input>
+                        <input type="radio" id="gender_girl" name="gender" value="2">女</input>
                     </span>
                 </td>
             </tr>

@@ -44,8 +44,6 @@
         }
     }
     function fwdMasterEditPage(index){
-        MsgBox.show("功能正在调整，稍后开开放");
-        return;
         $('#masterList').datagrid('selectRow',index);
         var row = $('#masterList').datagrid('getSelected');
         if (row){
