@@ -55,8 +55,8 @@
         });
         $('#coursenameInModifyCourse').textbox({
             required: true,
-            validType: 'maxLen[50]',
-            missingMessage:'最多输入50个字符',
+            validType: 'maxLen[15]',
+            missingMessage:'最多输入15个字符',
             prompt:'请填写课程名称'
         });
         $("#audioInModifyCourse").filebox({
@@ -130,8 +130,8 @@
             MsgBox.show("请填写课程名称");
             return false;
         }
-        if(StringUtil.getCharNumber($.trim($("#coursenameInModifyCourse").val())) > 50){
-            MsgBox.show("课程名称过长，最长50个字符");
+        if(StringUtil.getCharNumber($.trim($("#coursenameInModifyCourse").val())) > 15){
+            MsgBox.show("课程名称过长，最长15个字符");
             return false;
         }
         if($("#audioInModifyCourse").filebox("getValue")){

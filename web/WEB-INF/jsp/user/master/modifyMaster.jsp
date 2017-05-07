@@ -146,8 +146,8 @@
         });
         $('#nameInModifyMaster').textbox({
             required: true,
-            validType: 'maxLen[20]',
-            missingMessage:'最多输入20个字符',
+            validType: 'maxLen[15]',
+            missingMessage:'最多输入15个字符',
             prompt:'请输入姓名'
         });
         $('#mphoneInModifyMaseter').textbox({
@@ -193,8 +193,8 @@
             MsgBox.show("请输入姓名");
             return false;
         }
-        if(StringUtil.getBinaryLength($.trim($("#nameInModifyMaster").val())) > 20){
-            MsgBox.show("姓名过长，最长20个字符");
+        if(StringUtil.getBinaryLength($.trim($("#nameInModifyMaster").val())) > 15){
+            MsgBox.show("姓名过长，最长15个字符");
             return false;
         }
         if($("#mphoneInModifyMaseter").val().length == 0){
