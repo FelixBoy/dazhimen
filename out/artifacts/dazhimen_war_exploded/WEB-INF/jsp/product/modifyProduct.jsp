@@ -49,8 +49,8 @@
         });
         $('#pnameInModify').textbox({
             required: true,
-            validType: 'maxLen[50]',
-            missingMessage:'最多输入50个字符',
+            validType: 'maxLen[15]',
+            missingMessage:'最多输入15个字符',
             prompt:'请输入产品名称'
         });
         $("#priceInModify").textbox({
@@ -139,8 +139,8 @@
             MsgBox.show("请填写产品名称");
             return false;
         }
-        if(StringUtil.getCharNumber($.trim($("#pnameInModify").val())) > 50){
-            MsgBox.show("产品名称过长，最长50个字符");
+        if(StringUtil.getCharNumber($.trim($("#pnameInModify").val())) > 15){
+            MsgBox.show("产品名称过长，最长15个字符");
             return false;
         }
         if($.trim($("#priceInModify").val()).length == 0){
