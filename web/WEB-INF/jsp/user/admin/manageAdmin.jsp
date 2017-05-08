@@ -46,6 +46,10 @@
         $('#adminList').datagrid('selectRow',index);// 关键在这里
         var row = $('#adminList').datagrid('getSelected');
         if(row){
+            if(row.loginname == '<%=Constant.defaultAdministrator%>'){
+                MsgBox.show("默认管理员，不能删除");
+                return;
+            }
             $.messager.confirm('确认','您确认想要删除管理员【' + row.name + '】吗？',function(r){
                 if (r){
                     $.ajax({
@@ -184,8 +188,6 @@
                     });
                 }
             });
-
-
         }
     }
 </script>
