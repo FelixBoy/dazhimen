@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script type="text/javascript">
     $(function () {
         $.extend($.fn.validatebox.defaults.rules, {
@@ -270,7 +271,7 @@
                 <input type="hidden" name="type" value="1"/>
                 <tr>
                     <td style="text-align: right" nowrap="nowrap">介绍:</td>
-                    <td style="text-align: left;"><input id="introduction" name="introduction" data-options="multiline:true" style="width:300px;height:60px"/></td>
+                    <td style="text-align: left;"><input id="introduction" name="introduction" data-options="multiline:true" style="width:300px;height:120px"/></td>
                 </tr>
             </table>
         </form>

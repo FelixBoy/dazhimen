@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script>
     $(function(){
         $.extend($.fn.validatebox.defaults.rules, {
@@ -275,7 +276,7 @@
         var nextIndex = getNextIndex();
         $("#newsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>文本:<span style='color:red'>*</span></td>" +
             "<td colspan='5'><input class='easyui-textbox' data-options='multiline:true'" +
-            " style='width:700px;height: 60px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
+            " style='width:700px;height: 120px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='3'>" +
             "</td>" +
@@ -311,6 +312,9 @@
                 dealSortValue();
             }
         });
+    }
+    function testText(){
+        alert($("#newscontent3").val());
     }
 </script>
 <div style="text-align: left;">
@@ -389,7 +393,7 @@
             <td>文本:<span style="color:red">*</span></td>
             <td colspan="5">
                 <input data-options='multiline:true'
-                       style="width:700px;height: 60px;" id="newscontent3" name="newscontent3"/>
+                       style="width:700px;height:120px;" id="newscontent3" name="newscontent3"/>
                 <input type="hidden" id="sort_newscontent3" name="sort_newscontent3"/>
                 <input type="hidden" id="type_newscontent3" name="type_newscontent3" value='3'/>
             </td>

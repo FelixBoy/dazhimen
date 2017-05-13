@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script type="text/javascript">
     $(function(){
         $('#masterViewForm').form({onLoadSuccess:function(){
@@ -48,7 +49,7 @@
             </tr>
             <tr>
                 <td style="text-align: right" nowrap="nowrap">介绍:</td>
-                <td><textarea class="dzm-noBorder-text" name="introduction" readonly style="width:300px;height: 50px;" /></td>
+                <td><textarea class="dzm-noBorder-text" name="introduction" readonly style="width:300px;height: 120px;" /></td>
             </tr>
         </table>
     </form>

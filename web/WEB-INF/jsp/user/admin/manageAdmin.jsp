@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="dazhimen.bg.bean.login.LoginUserBean" %>
 <%@ page import="util.Constant" %><%
     HttpSession sessionObj = request.getSession(false);

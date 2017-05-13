@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script type="text/javascript">
     function returnManageNewsInModifyNewsContent(){
         $('#content_panel').panel({
@@ -100,12 +101,16 @@
                         $("#img_newscontent" + (i+1) +"").attr("src", newsContentArr[i].contentvalue + "?rondomid=" + Math.random());
                     }
                     if(newsContentArr[i].contenttype == '3'){
-                        $("#modifyNewsContentTable").append("<tr id='trcontent" + (i+1) + "'><td nowrap='nowrap'>文本:<span style='color:red'>*</span></td>" +
-                            "<td colspan='5'><input data-options='multiline:true'" +
-                            " style='width:650px;height: 60px;' id='newscontent" + (i+1) +"' name='newscontent" + (i+1) + "'/>" +
+                        $("#modifyNewsContentTable").append("<tr id='trcontent" + (i+1) + "'> " +
+                            "<td nowrap='nowrap'>文本:<span style='color:red'>*</span></td>" +
+                            "<td colspan='5'><form id='textform" + (i+1) +"' enctype='multipart/form-data' method='post'>" +
+                            "<input data-options='multiline:true'" +
+                            " style='width:650px;height: 120px;' id='newscontent" + (i+1) +"' name='text'/>" +
                             "<input type='hidden' id='id_newscontent" + (i+1) + "' name='id_newscontent" + (i+1) + "' value='" + newsContentArr[i].contentid + "'/>" +
                             "<input type='hidden' id='sort_newscontent" + (i+1) + "' name='sort_newscontent" + (i+1) + "' value='" + (i+1) + "'/>" +
-                            "</td>" +
+                            "<input type='hidden' name='nid" + "' value='" + $("#nidInModifyNewsContent").val() + "'/>" +
+                            "<input type='hidden' name='contentid" + "' value='" + newsContentArr[i].contentid + "'/>" +
+                            "</from></td>" +
                             "<td nowrap='nowrap'>" +
                             "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-save'\" " +
                             "onclick=\"modifyNewsContentText('" + (i+1) + "','" + newsContentArr[i].contentid + "')\">保存修改</a>&nbsp;&nbsp;&nbsp;" +
@@ -126,7 +131,29 @@
             }
         });
     }
-
+    function modifyNewsContentText(index, contentid){
+        if($.trim($("#newscontent" + index).val()).length == 0){
+            MsgBox.show("文本不能为空");
+            return;
+        }
+        if(StringUtil.getCharNumber($("#newscontent" + index).val()) > 4000){
+            MsgBox.show("文本超长，最多输入4000个字符");
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url:"<%=request.getContextPath()%>/news/modifyNewsContentText.do",
+            data:$("#textform" + index).serialize(),
+            async: false,
+            error: function(request) {
+                MsgBox.show(request.responseText);
+            },
+            success: function(data) {
+                MsgBox.show(data);
+                refreshNewsContent();
+            }
+        });
+    }
     function deleteNewsContentImg(contentid){
         var newsContent = $("input[id^='newscontent']");
         if(newsContent.length <= 1){
@@ -226,29 +253,6 @@
             }
         });
     }
-    function modifyNewsContentText(index, contentid){
-        if($.trim($("#newscontent" + index).val()).length == 0){
-            MsgBox.show("文本不能为空");
-            return;
-        }
-        if(StringUtil.getCharNumber($("#newscontent" + index).val()) > 4000){
-            MsgBox.show("文本超长，最多输入4000个字符");
-            return;
-        }
-        $.ajax({
-            url: "<%=request.getContextPath()%>/news/modifyNewsContentText.do"+ "?random_id=" + Math.random(),
-            data: {nid:$("#nidInModifyNewsContent").val(), contentid:contentid,text:$("#newscontent" + index).val()},
-            type:'post',
-            async:false,
-            error: function (data) {
-                MsgBox.show(data.responseText);
-            },
-            success: function (data) {
-                MsgBox.show(data);
-                refreshNewsContent();
-            }
-        });
-    }
     function openModifyNewsContentImgDialog(index, contentid){
         $('#modifyNewsContentImgDialog').dialog({
             title: '修改新闻内容图片',
@@ -332,7 +336,7 @@
         var nextIndex = getNextIndexInModify();
         $("#addNewsContentTable").append("<tr id='trcontent" + nextIndex + "'><td>文本(新增):<span style='color:red'>*</span></td>" +
             "<td colspan='5'><input data-options='multiline:true'" +
-            " style='width:700px;height: 60px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
+            " style='width:700px;height: 120px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
             "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='3'>" +
             "</td>" +
@@ -393,6 +397,7 @@
             f.remove();
         }, 100);
     }
+
     function actionAfterSubmit(jsonObj){
         LoadingMaskLayer.hide();
         var resultObj = JSON.parse(jsonObj);

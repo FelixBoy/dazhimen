@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script type="text/javascript">
     var checkCountInMasterModify = 10;
     function cbInModifyMaster(){
@@ -85,7 +86,13 @@
                     }
                     $("#loginnameInModifyMaster").val(jsonObj.loginname);
                     $("#lognnameOrginalInModify").val(jsonObj.loginname);
-                    $("#introductionInModfiyMaster").val(jsonObj.introduction);
+                    $('#introductionInModfiyMaster').textbox({
+                        required: true,
+                        validType: 'maxLen[2000]',
+                        missingMessage:'最多输入2000个字符',
+                        prompt:'请输入介绍',
+                        value:jsonObj.introduction
+                    });
                     $("#identityInModifyMaseter").val(jsonObj.identity);
                     $("#headImgRealInModifyMaster").attr("src", jsonObj.headerimg+"?random_id="+Math.random());
                 }
@@ -167,12 +174,6 @@
             validType: 'maxLen[50]',
             missingMessage:'最多输入50个字符',
             prompt:'请输入身份'
-        });
-        $('#introductionInModfiyMaster').textbox({
-            required: true,
-            validType: 'maxLen[2000]',
-            missingMessage:'最多输入2000个字符',
-            prompt:'请输入介绍'
         });
     });
     function checkMoidfyMasterFormBeforeSubmit(){
@@ -286,7 +287,7 @@
             <input type="hidden" name="type" value="1"/>
             <tr>
                 <td style="text-align: right">介绍:</td>
-                <td><input id="introductionInModfiyMaster" name="introduction" data-options="multiline:true" style="width:300px;height:60px;"/></td>
+                <td><input id="introductionInModfiyMaster" name="introduction" data-options="multiline:true" style="width:300px;height:120px;"/></td>
             </tr>
         </table>
     </form>

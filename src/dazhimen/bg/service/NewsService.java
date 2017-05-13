@@ -86,9 +86,6 @@ public class NewsService {
             }
 
             List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.News.getNewsContentById", nid);
-            if(contentBeans == null || contentBeans.size() == 0){
-                throw new BgException("获取新闻内容异常");
-            }
             String newsContentFileName = nid + "_newscontent.html";
             String newsContentFilePath = newsMainFolderPath + newsContentFileName;
             File newContentFile = new File(newsContentFilePath);
@@ -163,9 +160,6 @@ public class NewsService {
             }
 
             List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.News.getNewsContentById", nid);
-//            if(contentBeans == null || contentBeans.size() == 0){
-//                throw new BgException("获取新闻内容异常");
-//            }
             String newsContentFileName = nid + "_newscontent.html";
             String newsMainFolderPath = basePath + Constant.newsPrefixPath  + nid + "\\";
             String newsContentFilePath = newsMainFolderPath + newsContentFileName;
@@ -234,9 +228,7 @@ public class NewsService {
             }
 
             List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.News.getNewsContentById", nid);
-            if(contentBeans == null || contentBeans.size() == 0){
-                throw new BgException("获取新闻内容异常");
-            }
+
             String newsContentFileName = nid + "_newscontent.html";
             String newsMainFolderPath = basePath + Constant.newsPrefixPath  + nid + "\\";
             String newsContentFilePath = newsMainFolderPath + newsContentFileName;
@@ -302,9 +294,6 @@ public class NewsService {
             }
 
             List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.News.getNewsContentById", nid);
-            if(contentBeans == null || contentBeans.size() == 0){
-                throw new BgException("获取新闻内容异常");
-            }
             String newsContentFileName = nid + "_newscontent.html";
             String newsMainFolderPath = basePath + Constant.newsPrefixPath  + nid + "\\";
             String newsContentFilePath = newsMainFolderPath + newsContentFileName;

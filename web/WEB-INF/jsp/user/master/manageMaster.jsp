@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="util.Constant" %>
 <%@ page import="dazhimen.bg.bean.login.LoginUserBean" %>
 <%
@@ -9,7 +10,7 @@
         $('#masterAddDialog').dialog({
             title: '新增掌门',
             width: 580,
-            height: 500,
+            height: 560,
             closed: true,
             cache: false,
             href: "<%=request.getContextPath()%>/user/fwdMasterAddPage.do?random_id=" + Math.random(),
@@ -29,7 +30,7 @@
             $('#viewMasterDialog').dialog({
                 title: '查看掌门详情',
                 width: 580,
-                height: 500,
+                height: 560,
                 closed: true,
                 cache: false,
                 href: "<%=request.getContextPath()%>/user/fwdViewMasterPage.do?uid=" + row.uid + "&random_id=" + Math.random(),
@@ -50,7 +51,7 @@
             $('#masterModifyDialog').dialog({
                 title: '修改掌门信息',
                 width: 580,
-                height: 600,
+                height: 660,
                 closed: true,
                 cache: false,
                 modal: true

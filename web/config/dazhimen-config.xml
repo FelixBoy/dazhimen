@@ -2,7 +2,7 @@
 <config>
     <!--begin  阿里云部署配置  begin-->
         <!--isDeployInAliyun 是否部署在阿里云，true是，false否-->
-        <config name="isDeployInAliyun" value="true"></config>
+        <config name="isDeployInAliyun" value="false"></config>
         <!--当部署在阿里云时，AliyunIP 阿里云服务器的IP地址-->
         <config name="AliyunIP" value="47.93.48.9"></config>
     <!--end 阿里云部署配置  end-->

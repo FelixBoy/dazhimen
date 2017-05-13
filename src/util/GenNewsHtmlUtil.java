@@ -77,7 +77,7 @@ public class GenNewsHtmlUtil {
                 newsContentBF.append("          <img src=\"" + "/dazhimen/" +contentBean.getContentvalue() + "\"/>" + System.getProperty("line.separator"));
             }
             if(contentType.equals(Constant.NewsContentType_Text)){
-                newsContentBF.append("          <div class=\"main\">" + contentBean.getContentvalue() + "</div>" + System.getProperty("line.separator"));
+                newsContentBF.append("          <div class=\"main\">" + contentBean.getContentvalue().replace("\r\n", "<br/>") + "</div>" + System.getProperty("line.separator"));
             }
         }
         newsContentBF.append("      </div>" + System.getProperty("line.separator"));
@@ -98,7 +98,7 @@ public class GenNewsHtmlUtil {
                 newsContentBF.append("          <img src=\"" + imgUrl + "\"/>" + System.getProperty("line.separator"));
             }
             if(contentType.equals(Constant.NewsContentType_Text)){
-                newsContentBF.append("          <div class=\"main\">" + contentBean.getContentvalue() + "</div>" + System.getProperty("line.separator"));
+                newsContentBF.append("          <div class=\"main\">" + contentBean.getContentvalue().replace("\r\n", "<br/>") + "</div>" + System.getProperty("line.separator"));
             }
         }
         newsContentBF.append("      </div>" + System.getProperty("line.separator"));

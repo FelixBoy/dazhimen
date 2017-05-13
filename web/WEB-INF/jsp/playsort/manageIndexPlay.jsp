@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script type="text/javascript">
     function formatOper(val,row,index) {
         return '<a href="javascript:void(0)" onclick="saveDeleteIndexPlay('+index+')">取消轮播</a>';
