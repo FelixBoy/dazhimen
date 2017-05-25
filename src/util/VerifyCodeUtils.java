@@ -17,6 +17,9 @@ import java.util.Random;
  * Created by Administrator on 2017/4/23.
  */
 public class VerifyCodeUtils {
+//    public static void main(String[] args) throws ApiException {
+//        sendVerifyCodeToMphone("18769796133", "2468");
+//    }
     public static boolean sendVerifyCodeToMphone(String mphone, String verifyCode) throws ApiException {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("action", "send");
@@ -24,7 +27,7 @@ public class VerifyCodeUtils {
         params.put("account", "AB00271");
         params.put("password", "70AE96E2F487F7B26BD5A311C3A5DBB8");
         params.put("mobile", mphone);
-        params.put("content", "大职门：您的验证码是" + verifyCode + "，五分钟内有效。请勿将验证码泄露给其他人。【天津青皮】");
+        params.put("content", " 您的验证码是" + verifyCode + "，五分钟内有效。请勿将验证码泄露给其他人。【大职门App】");
         params.put("extno", "");
         params.put("sendTime", "");
         String result = null;

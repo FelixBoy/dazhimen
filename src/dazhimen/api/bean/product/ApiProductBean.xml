@@ -117,7 +117,7 @@
                 product b
          where a.pid = #{pid}
            and a.pid = b.pid
-          order by a.sort,a.createdate desc
+          order by a.sort,a.createdate
     </select>
     <select id="getReverseCourseList" resultType="dazhimen.api.bean.product.ApiListViewCourseBean">
         select courseid,coursename,a.istry,audiopath as audiourl,createdate as createdateo,viewcount,b.listimage as listimgurl
@@ -125,7 +125,7 @@
             product b
         where a.pid = #{pid}
           and a.pid = b.pid
-        order by createdate
+        order by createdate desc
     </select>
     <select id="getProductAudioUpdateCount" resultType="dazhimen.api.bean.SingleValueBean">
         select count(a.courseid) as valueinfo
