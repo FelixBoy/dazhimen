@@ -142,13 +142,13 @@
         LoadingMaskLayer.show();
     }
 </script>
-<div style="width: 500px;margin: 0 auto;">
+<div style="text-align: center;">
+    <div style="width:930px;margin: 0 auto;">
 <form id="courseForm" action="<%=request.getContextPath()%>/product/saveAddCourse.do"
       enctype="multipart/form-data" method="post">
-    <br/>
     <table cellpadding="5">
         <tr>
-            <td colspan="2" >
+            <td colspan="6" >
                 <div class="formTitle" style="background-color:#f2f2f2;">
                     <div class="formTitle-icon">
                     </div><div class="formTitle-text" style="font-weight:bold;text-decoration:none;font-style:normal;text-align:left;">填写课程信息</div>
@@ -157,31 +157,28 @@
         </tr>
         <tr>
             <td>名称:<span style="color:red">*</span></td>
-            <td><input id="coursenameInAddCourse" name="coursename" style="width:350px">
+            <td><input id="coursenameInAddCourse" name="coursename" >
                 <input type="hidden" id="pidInAddCourse" name="pid"/>
             </td>
-        </tr>
-        <tr>
             <td>排序:</td>
             <td>
                 <select id="sortSelect" class="easyui-combobox"  editable="false" name="sort" id="sort" style="width:140px;" style="width:350px">
                     <option value="99" selected>按上架时间排序</option>
                 </select>
             </td>
-        </tr>
-        <tr>
             <td>试学:</td>
             <td><input type="checkbox" id="istry" name="istry" style="width:100px" value="1"/></td>
         </tr>
         <tr>
             <td>音频文件:<span style="color:red">*</span></td>
-            <td>
+            <td colspan="4">
                 <input id="audioInAddCourse" name="audio" style="width:350px" accept="audio/mpeg"
                        data-options="buttonText:'&nbsp;选&nbsp;择&nbsp;'">
             </td>
         </tr>
     </table>
 </form>
+    </div>
     <div style="text-align: center;">
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submitAddCourse()">保存</a>
     </div>

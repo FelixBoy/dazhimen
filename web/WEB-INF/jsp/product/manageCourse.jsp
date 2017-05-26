@@ -55,8 +55,8 @@
         $('#addCourseDialog').dialog({
             title: '新增课程',
             href:"<%=request.getContextPath()%>/product/fwdAddCoursePage.do?random_id=" + Math.random(),
-            width: 580,
-            height: 310,
+            width: 950,
+            height: 550,
             closed: true,
             cache: false,
             modal: true
@@ -67,6 +67,11 @@
             }
         });
         $('#addCourseDialog').dialog("open");
+        <%--$('#content_panel').panel({--%>
+            <%--href:"<%=request.getContextPath() %>/product/fwdAddProductByMasterPage.do?random_id="+Math.random(),--%>
+            <%--onLoad:function(){--%>
+            <%--}--%>
+        <%--});--%>
     }
     $(function(){
         $("#viewProductFormInCoursePage").form("load", "<%=request.getContextPath()%>/product/getProductInforById.do" +
