@@ -1,7 +1,6 @@
 package dazhimen.bg.service;
 
-import dazhimen.bg.bean.news.GenNewsContentBean;
-import dazhimen.bg.bean.news.NewsContentBean;
+import dazhimen.bg.bean.news.*;
 import dazhimen.bg.bean.product.CourseSortDataBean;
 import dazhimen.bg.bean.*;
 import dazhimen.bg.bean.product.*;
@@ -24,8 +23,169 @@ import java.util.List;
  * Created by Administrator on 2017/3/17.
  */
 public class ProductService {
-    public void getViewCourseData(String courseid){
+    public void modifyNewsContentText(String courseid, String contentid, String text, String basePath) throws BgException {
+        if(courseid == null || courseid.equals("")){
+            throw new BgException("传入的courseid为空，修改内容文本失败");
+        }
+        if(contentid == null || contentid.equals("")){
+            throw new BgException("传入的contentid为空，修改内容文本失败");
+        }
+        if(text == null || text.equals("")){
+            throw new BgException("传入的text为空，修改内容文本失败");
+        }
         SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            ModifyNewsSubtitleBean newsSubtitleBean = new ModifyNewsSubtitleBean();
+            newsSubtitleBean.setContentid(contentid);
+            newsSubtitleBean.setContentvalue(text);
+            sqlSession.update("dazhimen.bg.bean.Product.modifyCIText", newsSubtitleBean);
+            sqlSession.commit();
+        }catch(Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，修改内容文本失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+    public void deleteCIText(String courseid, String contentid, String basePath) throws BgException {
+        if(courseid == null || courseid.equals("")){
+            throw new BgException("传入的courseid为空，删除文本失败");
+        }
+        if(contentid == null || contentid.equals("")){
+            throw new BgException("传入的contentid为空，删除文本失败");
+        }
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            String contentSort = sqlSession.selectOne("dazhimen.bg.bean.Product.getContentSortById" ,contentid);
+            if(contentSort == null || contentSort.equals("")){
+                throw new BgException("获取内容的排序信息异常");
+            }
+            sqlSession.delete("dazhimen.bg.bean.Product.deleleContent", contentid);
+            DealNewsContentSortBean dealNewsContentSortBean = new DealNewsContentSortBean();
+            dealNewsContentSortBean.setNid(courseid);
+            dealNewsContentSortBean.setSort(contentSort);
+            sqlSession.update("dazhimen.bg.bean.Product.dealContentSort", dealNewsContentSortBean);
+            sqlSession.commit();
+        }catch(BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException(e.getMessage());
+        } catch(Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，删除文本失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+    public void saveModifyCIImg(String pid, String courseid, String contentid, CommonsMultipartFile contentImgFile, String bashPath) throws BgException {
+        SqlSession sqlSession = null;
+        if(pid == null || pid.equals("")){
+            throw new BgException("传入的pid为空，修改图片失败");
+        }
+        if(courseid == null || courseid.equals("")){
+            throw new BgException("传入的courseid为空，修改图片失败");
+        }
+        if(contentid == null || contentid.equals("")){
+            throw new BgException("传入的nid为空，修改图片失败");
+        }
+        if(contentImgFile == null || contentImgFile.isEmpty()){
+            throw new BgException("传入的contentImgFile为空，修改图片失败");
+        }
+        try {
+            if(contentImgFile != null && !contentImgFile.isEmpty()) {
+                sqlSession = MyBatisUtil.createSession();
+                String contentImgPath = sqlSession.selectOne("dazhimen.bg.bean.Product.getCIImgPath", contentid);
+                if (contentImgPath == null || contentImgPath.equals("")) {
+                    throw new BgException("出现异常，查询原内容图片路径时出错");
+                }
+                String contentImgFileOldName = contentImgPath.substring(contentImgPath.lastIndexOf("/") + 1);
+                String courseMainFolderPath = bashPath + Constant.productPrefixPath  + pid + "\\course\\";
+                //获得文件的原始名称
+                String contentImgFileOrginalName = contentImgFile.getOriginalFilename();
+                //获得原始文件的后缀
+                String contentImgFileSuffixName = contentImgFileOrginalName.substring(contentImgFileOrginalName.lastIndexOf("."));
+                //新文件名
+                String contentImageFileNewName = courseid + "_" + contentid + "_contentimg" + contentImgFileSuffixName;
+                //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+                String contentImageTransferFilename = courseMainFolderPath + contentImageFileNewName;
+                try {
+                    contentImgFile.transferTo(new File(contentImageTransferFilename));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new BgException("出现异常，修改内容图片失败");
+                }
+                if(!contentImgFileOldName.equals(contentImageFileNewName)){
+                    FileManageService fileManageService = new FileManageService();
+                    fileManageService.deleteFile(courseMainFolderPath + contentImgFileOldName);
+                    //计算新闻主图图片在工程中的相对路径，用于记录到数据库
+                    String contentImageNewFileRelPath = Constant.uploadProductDbPrefixPath + pid + "/course/" + contentImageFileNewName;
+                    ModifyNewsSubtitleBean modifyNewsContentBean = new ModifyNewsSubtitleBean();
+                    modifyNewsContentBean.setContentid(contentid);
+                    modifyNewsContentBean.setContentvalue(contentImageNewFileRelPath);
+                    sqlSession.update("dazhimen.bg.bean.Product.updateContentImgPath",modifyNewsContentBean);
+                }
+                sqlSession.commit();
+            }
+        }catch(BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException(e.getMessage());
+        } catch(Exception e) {
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，修改新闻文本失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+    public void deleteCIImg(String pid, String courseid, String contentid, String basePath) throws BgException {
+        if(pid == null || pid.equals("")){
+            throw new BgException("传入的pid为空，删除图片失败");
+        }
+        if(courseid == null || courseid.equals("")){
+            throw new BgException("传入的courseid为空，删除图片失败");
+        }
+        if(contentid == null || contentid.equals("")){
+            throw new BgException("传入的contentid为空，删除图片失败");
+        }
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            String contentSort = sqlSession.selectOne("dazhimen.bg.bean.Product.getContentSortById" ,contentid);
+            if(contentSort == null || contentSort.equals("")){
+                throw new BgException("获取内容的排序信息异常");
+            }
+            String contentImgPath = sqlSession.selectOne("dazhimen.bg.bean.Product.getCIImgPath", contentid);
+            if (contentImgPath == null || contentImgPath.equals("")) {
+                throw new BgException("出现异常，查询原内容图片路径时出错");
+            }
+            String contentImgFileName = contentImgPath.substring(contentImgPath.lastIndexOf("/") + 1);
+
+            sqlSession.delete("dazhimen.bg.bean.Product.deleleContent", contentid);
+            DealNewsContentSortBean dealNewsContentSortBean = new DealNewsContentSortBean();
+            dealNewsContentSortBean.setNid(courseid);
+            dealNewsContentSortBean.setSort(contentSort);
+            sqlSession.update("dazhimen.bg.bean.Product.dealContentSort", dealNewsContentSortBean);
+
+            String courseMainFolderPath = basePath + Constant.productPrefixPath  + pid + "\\course\\";
+            FileManageService fileManageService = new FileManageService();
+            fileManageService.deleteFile(courseMainFolderPath + contentImgFileName);
+            sqlSession.commit();
+        }catch(BgException e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException(e.getMessage());
+        } catch(Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new BgException("出现异常，删除图片失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
     }
     public String getCourseSortData(String pid) throws BgException {
         SqlSession sqlSession = null;
@@ -63,6 +223,20 @@ public class ProductService {
         }else{
             return sortBF.deleteCharAt(sortBF.length() - 1).toString();
         }
+    }
+    public List<ViewNewsContentBean> getCourseIntroductionData(String courseid) throws BgException {
+        List<ViewNewsContentBean> newsContentBeans = null;
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            newsContentBeans = sqlSession.selectList("dazhimen.bg.bean.Product.getCourseIntroductionData", courseid);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BgException("出现异常，获取课程介绍出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return newsContentBeans;
     }
     public UploadCourseBean getViewCourseInforByCourseid(String courseid) throws BgException {
         UploadCourseBean courseBean = null;

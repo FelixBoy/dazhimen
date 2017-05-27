@@ -194,7 +194,12 @@
         and pid = #{pid}
         and a.isdel = '0'
     </select>
-
+    <update id="updateContentImgPath" parameterType="dazhimen.bg.bean.news.ModifyNewsSubtitleBean">
+        update course_introduction set contentvalue = #{contentvalue} where contentid = #{contentid}
+    </update>
+    <select id="getCIImgPath" resultType="java.lang.String">
+        select contentvalue from course_introduction where contentid = #{contentid}
+    </select>
     <select id="getProductInforById" resultType="dazhimen.bg.bean.product.ViewProductBean">
         select pid,pname,getcodetxt('producttype',a.type) as type,concat(a.derateProportion,'%') as derateProportion,concat(a.price,'/年') as price,
                 a.introduction,getcodetxt('indexsort',a.indexsort) as indexsort,getcodetxt('yesorno',indexplay) as indexplay,
@@ -203,6 +208,11 @@
         where a.uid = b.uid
           and pid = #{pid}
           and a.isdel = '0'
+    </select>
+    <select id="getCourseIntroductionData" resultType="dazhimen.bg.bean.news.ViewNewsContentBean">
+        select contentid,contentvalue,contenttype
+        from course_introduction where courseid = #{courseid}
+        order by contentsort
     </select>
     <select id="getCourseIntroductionById" resultType="dazhimen.bg.bean.news.GenNewsContentBean">
         select contentvalue,contenttype
@@ -332,4 +342,20 @@
     <select id="getCourseSortData" resultType="dazhimen.bg.bean.product.CourseSortDataBean">
         select sort from course where pid = #{pid} and sort != '99' order by sort;
     </select>
+
+    <select id="getContentSortById" resultType="java.lang.String">
+        select contentsort from course_introduction where contentid = #{contentid}
+    </select>
+    <delete id="deleleContent">
+        delete from course_introduction where contentid = #{contentid}
+    </delete>
+    <update id="dealContentSort" parameterType="dazhimen.bg.bean.news.DealNewsContentSortBean">
+        update course_introduction
+        set contentsort = contentsort -1
+        where courseid = #{nid}
+        and contentsort > #{sort}
+    </update>
+    <update id="modifyCIText" parameterType="dazhimen.bg.bean.news.ModifyNewsSubtitleBean">
+        update course_introduction set contentvalue = #{contentvalue} where contentid = #{contentid}
+    </update>
 </mapper>

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dazhimen.bg.bean.login.LoginUserBean;
 import dazhimen.bg.bean.news.NewsContentBean;
+import dazhimen.bg.bean.news.ViewNewsContentBean;
 import dazhimen.bg.bean.product.*;
 import dazhimen.bg.bean.user.UserBean;
 import dazhimen.bg.exception.BgException;
@@ -542,7 +543,117 @@ public class ProductController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
-
+    @RequestMapping("/fwdModifyCourseIntroductionPage.do")
+    public String fwdModifyCourseIntroductionPage(HttpServletRequest resq,HttpServletResponse resp){
+        String courseid = resq.getParameter("courseid");
+        resq.setAttribute("courseid", courseid);
+        return "/product/modifyCourseIntroduction";
+    }
+    @RequestMapping("/getModifyCIData.do")
+    public void getModifyCIData(HttpServletRequest resq,HttpServletResponse resp){
+        String courseid = resq.getParameter("courseid");
+        ProductService productService = new ProductService();
+        try {
+            UploadCourseBean courseBean = productService.getCourseInforByCourseid(courseid);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("courseid", courseBean.getCourseid());
+            jsonObject.put("coursename", courseBean.getCoursename());
+            jsonObject.put("istry", courseBean.getIstry());
+            jsonObject.put("sort", courseBean.getSort());
+            jsonObject.put("filename", courseBean.getFilename());
+            jsonObject.put("filesizestr", courseBean.getFilesizestr());
+            List<ViewNewsContentBean> newsContentBeans = productService.getCourseIntroductionData(courseid);
+            if(newsContentBeans == null || newsContentBeans.size() == 0){
+                jsonObject.put("newscontent", "");
+            }else{
+                newsContentBeans = dealModifynewsDataBean(newsContentBeans, resq);
+                jsonObject.put("newscontent", new Gson().toJson(newsContentBeans));
+            }
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/fwdModifyCIImgPage.do")
+    public ModelAndView fwdModifyCIImgPage(@RequestParam("courseid") String courseid, @RequestParam("contentid") String contentid, @RequestParam("pid") String pid){
+        ModelAndView mav = new ModelAndView("/product/modifyCIImg");
+        mav.addObject("pid", pid);
+        mav.addObject("courseid", courseid);
+        mav.addObject("contentid", contentid);
+        return mav;
+    }
+    @RequestMapping("/saveModifyCIImg.do")
+    public ModelAndView saveModifyCIImg(HttpServletRequest resq){
+        ProductService productService = new ProductService();
+        ModelAndView mav = new ModelAndView("fileUploadAfterAction");
+        try {
+            String courseid = resq.getParameter("courseid");
+            String contentid = resq.getParameter("contentid");
+            String pid = resq.getParameter("pid");
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) resq;
+            CommonsMultipartFile contentImgFile = (CommonsMultipartFile) multipartRequest.getFile("contentimgmodify");
+            String basePath = resq.getSession().getServletContext().getRealPath("/");
+            productService.saveModifyCIImg(pid,courseid,contentid,contentImgFile,basePath);
+        } catch (BgException e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code", "400");
+            jsonObj.addProperty("msg",e.getMessage());
+            mav.addObject("parameters", jsonObj.toString());
+            return mav;
+        }
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("code", "200");
+        jsonObj.addProperty("msg","修改图片成功");
+        mav.addObject("parameters", jsonObj.toString());
+        return mav;
+    }
+    @RequestMapping("/deleteCIImg.do")
+    public void deleteCIImg(HttpServletRequest resq, HttpServletResponse resp){
+        String contentid = resq.getParameter("contentid");
+        String pid = resq.getParameter("pid");
+        String courseid = resq.getParameter("courseid");
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        ProductService productService = new ProductService();
+        try {
+            productService.deleteCIImg(pid, courseid, contentid, basePath);
+            ResponseUtil.writeMsg(resp, "删除图片成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/modifyCIText.do")
+    public void modifyCIText(HttpServletRequest resq, HttpServletResponse resp){
+        String contentid = resq.getParameter("contentid");
+        String courseid = resq.getParameter("courseid");
+        String text = resq.getParameter("text");
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        ProductService productService = new ProductService();
+        try {
+            productService.modifyNewsContentText(courseid, contentid, text, basePath);
+            ResponseUtil.writeMsg(resp, "修改内容本文成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+    @RequestMapping("/deleteCIText.do")
+    public void deleteCIText(HttpServletRequest resq, HttpServletResponse resp){
+        String contentid = resq.getParameter("contentid");
+        String pid = resq.getParameter("pid");
+        String courseid = resq.getParameter("courseid");
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        ProductService productService = new ProductService();
+        try {
+            productService.deleteCIText(courseid, contentid, basePath);
+            ResponseUtil.writeMsg(resp, "删除本文成功");
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
     @RequestMapping("/fwdModifyCoursePage.do")
     public String fwdModifyCoursePage(HttpServletRequest resq,HttpServletResponse resp){
         String courseid = resq.getParameter("courseid");
@@ -577,7 +688,6 @@ public class ProductController {
             mav.addObject("parameters", jsonObj.toString());
             return mav;
         }
-
         JsonObject jsonObj = new JsonObject();
         jsonObj.addProperty("code", "200");
         jsonObj.addProperty("msg","修改课程信息成功");
@@ -609,6 +719,18 @@ public class ProductController {
             mainImage.setMainImage(prefix + "/" + mainImage.getMainImage());
         }
         return mainImageBeans;
+    }
+    private List<ViewNewsContentBean> dealModifynewsDataBean(List<ViewNewsContentBean> newsContentBeans, HttpServletRequest resq){
+
+        if(newsContentBeans != null && newsContentBeans.size() > 0){
+            for(int i = 0; i < newsContentBeans.size(); i++){
+                ViewNewsContentBean newsContentBean = newsContentBeans.get(i);
+                if(newsContentBean.getContenttype().equals("2")){
+                    newsContentBean.setContentvalue(resq.getContextPath() + "/" + newsContentBean.getContentvalue());
+                }
+            }
+        }
+        return newsContentBeans;
     }
     private UploadCourseBean getUploadCourseBean(HttpServletRequest resq){
         UploadCourseBean courseBean = new UploadCourseBean();

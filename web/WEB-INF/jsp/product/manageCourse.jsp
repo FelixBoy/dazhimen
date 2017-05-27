@@ -68,6 +68,27 @@
         });
         $('#addCourseDialog').dialog("open");
     }
+    function fwdEditCourseIntroductionPage(rowIndex){
+        $("#courseList").datagrid("selectRow", rowIndex);
+        var row = $("#courseList").datagrid("getSelected");
+        if(row){
+            $("#modifyCourseIntroductionDialog").dialog({
+                title:'修改课程介绍',
+                width: 950,
+                height: 570,
+                closed: true,
+                cache: false,
+                modal: true
+            });
+            $("#modifyCourseIntroductionDialog").dialog({
+                onClose:function(){
+                    $("#modifyCourseIntroductionDialog").empty();
+                }
+            });
+            $("#modifyCourseIntroductionDialog").dialog("open");
+            $("#modifyCourseIntroductionDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyCourseIntroductionPage.do?courseid=" + row.courseid + "&random_id=" + Math.random());
+        }
+    }
     function fwdViewCoursePage(rowIndex){
         $("#courseList").datagrid("selectRow", rowIndex);
         var row = $("#courseList").datagrid("getSelected");
@@ -102,16 +123,17 @@
             columns: [[
                 { field: 'courseid', title: '课程Id', width: '10%'},
                 { field: 'coursename', title: '名称', width: '15%'},
-                { field: 'sortstr', title: '排序', width: '15%'},
-                { field: 'istry', title: '是否试学', width: '10%'},
+                { field: 'sortstr', title: '排序', width: '12%'},
+                { field: 'istry', title: '是否试学', width: '7%'},
                 { field: 'viewcount', title: '已读人数', width: '10%'},
                 { field: 'filename', title: '音频文件名称', width: '15%'},
                 { field: 'filesize', title: '文件大小', width: '10%'},
                 {
-                    field: "operateID", title: '操作',width:'15%', align: 'center',
+                    field: "operateID", title: '操作',width:'20%', align: 'center',
                     formatter: function (value, rowData, rowIndex) {
                         return '<a href="javascript:void(0)" onclick="fwdViewCoursePage('+rowIndex+')">查看</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
-                            '<a href="javascript:void(0)" onclick="fwdEditCoursePage('+rowIndex+')">修改信息</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdEditCoursePage('+rowIndex+')">修改基本信息</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdEditCourseIntroductionPage('+rowIndex+')">修改介绍</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="saveCourseDel('+rowIndex+')">删除</a>';
                     }
                 }
@@ -161,6 +183,7 @@
     <div id="modifyCourseDialog" style="text-align: center"></div>
     <div id="addCourseDialog" style="text-align: center"></div>
     <div id="viewCourseDialog" style="text-align: center"></div>
+    <div id="modifyCourseIntroductionDialog" style="text-align: center"></div>
     <table id="courseList" style="width: auto;height: auto;">
     </table>
     <br/>

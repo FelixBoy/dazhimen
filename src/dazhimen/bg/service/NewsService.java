@@ -344,13 +344,13 @@ public class NewsService {
         SqlSession sqlSession = null;
         FileOutputStream fileOutputStream = null;
         if(nid == null || nid.equals("")){
-            throw new BgException("传入的nid为空，修改文本失败");
+            throw new BgException("传入的nid为空，修改图片失败");
         }
         if(contentid == null || contentid.equals("")){
-            throw new BgException("传入的nid为空，修改文本失败");
+            throw new BgException("传入的nid为空，修改图片失败");
         }
         if(contentImgFile == null || contentImgFile.isEmpty()){
-            throw new BgException("传入的contentImgFile为空，修改文本失败");
+            throw new BgException("传入的contentImgFile为空，修改图片失败");
         }
         try {
             if(contentImgFile != null && !contentImgFile.isEmpty()) {
@@ -447,7 +447,7 @@ public class NewsService {
             throw new BgException("传入的nid为空，修改内容文本失败");
         }
         if(contentid == null || contentid.equals("")){
-            throw new BgException("传入的nid为空，修改内容文本失败");
+            throw new BgException("传入的contentid为空，修改内容文本失败");
         }
         if(text == null || text.equals("")){
             throw new BgException("传入的text为空，修改内容文本失败");

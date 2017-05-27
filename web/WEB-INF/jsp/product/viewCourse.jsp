@@ -57,8 +57,7 @@
                     </tr>
                     <tr style="height: 60px;">
                         <td nowrap="nowrap" style="text-align: right">名称:</td>
-                        <td><input class="dzm-noBorder-text" readonly  id="coursenameInViewCourse" name="coursename" style="width:400px">
-                        </td>
+                        <td><input class="dzm-noBorder-text" readonly  id="coursenameInViewCourse" name="coursename" style="width:400px"></td>
                     </tr>
                     <tr  style="height: 60px;">
                         <td nowrap="nowrap" style="text-align: right">排序:</td>
