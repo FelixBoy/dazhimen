@@ -3,6 +3,7 @@ package dazhimen.bg.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dazhimen.bg.bean.login.LoginUserBean;
+import dazhimen.bg.bean.news.NewsContentBean;
 import dazhimen.bg.bean.product.*;
 import dazhimen.bg.bean.user.UserBean;
 import dazhimen.bg.exception.BgException;
@@ -23,6 +24,8 @@ import util.web.ResponseUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -513,6 +516,33 @@ public class ProductController {
         }
     }
 
+    @RequestMapping("/fwdViewCoursePage.do")
+    public String fwdViewCoursePage(HttpServletRequest resq,HttpServletResponse resp){
+        String courseid = resq.getParameter("courseid");
+        resq.setAttribute("courseid", courseid);
+        return "/product/viewCourse";
+    }
+    @RequestMapping("/getViewCourseData.do")
+    public void getViewCourseData(HttpServletRequest resq,HttpServletResponse resp){
+        String courseid = resq.getParameter("courseid");
+        ProductService productService = new ProductService();
+        try {
+            UploadCourseBean courseBean = productService.getViewCourseInforByCourseid(courseid);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("courseid", courseBean.getCourseid());
+            jsonObject.put("coursename", courseBean.getCoursename());
+            jsonObject.put("istry", courseBean.getIstry());
+            jsonObject.put("sort", courseBean.getSort());
+            jsonObject.put("filename", courseBean.getFilename());
+            jsonObject.put("filesizestr", courseBean.getFilesizestr());
+            jsonObject.put("courseintroductionhtml", courseBean.getCourseIntroductionHtml());
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
+        } catch (BgException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
+        }
+    }
+
     @RequestMapping("/fwdModifyCoursePage.do")
     public String fwdModifyCoursePage(HttpServletRequest resq,HttpServletResponse resp){
         String courseid = resq.getParameter("courseid");
@@ -602,6 +632,29 @@ public class ProductController {
         courseBean.setAudio(audioFile);
         String basePath = resq.getSession().getServletContext().getRealPath("/");
         courseBean.setBasePath(basePath);
+        List<NewsContentBean> newContentBeans = new ArrayList<NewsContentBean>();
+        Enumeration<String> names = resq.getParameterNames();
+        while(names.hasMoreElements()) {
+
+            String parameterName = names.nextElement();
+            if(parameterName.startsWith("type_")){
+                String contentId = parameterName.substring(5);
+                String typeValue = resq.getParameter(parameterName);
+                String sortvalue = resq.getParameter("sort_" + contentId);
+                NewsContentBean contentBean = new NewsContentBean();
+                contentBean.setContenttype(typeValue);
+                contentBean.setContentsort(sortvalue);
+              if(typeValue.equals("2")){
+                    CommonsMultipartFile file = (CommonsMultipartFile) multipartRequest.getFile(contentId);
+                    contentBean.setContentfile(file);
+                }else{
+                    String text = resq.getParameter(contentId);
+                    contentBean.setContenttext(text);
+                }
+                newContentBeans.add(contentBean);
+            }
+        }
+        courseBean.setContentBeans(newContentBeans);
         return courseBean;
     }
     private ModifyProductBasicInfoBean getSaveModifyProductionBasicInfoBean(HttpServletRequest resq){

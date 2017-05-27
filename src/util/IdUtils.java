@@ -29,6 +29,12 @@ public class IdUtils {
         n_seq = SeqUtils.autoAttachZeroFromStart(n_seq, Constant.newsSeqLength);
         return "n" + curDateStr + n_seq;
     }
+    public String getCourseIntroductionId() throws BgException {
+        String curDateStr = getCurrentDate();
+        String ci_seq = new SeqUtils().getSeqNextVal(Constant.courseIntroductionSeqName);
+        ci_seq = SeqUtils.autoAttachZeroFromStart(ci_seq, Constant.courseIntroductionSeqLength);
+        return "ci" + curDateStr + ci_seq;
+    }
     public String getNesContentId() throws BgException {
         String curDateStr = getCurrentDate();
         String nc_seq = new SeqUtils().getSeqNextVal(Constant.newsContentSeqName);

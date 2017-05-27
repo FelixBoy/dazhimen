@@ -1,5 +1,7 @@
 package dazhimen.bg.service;
 
+import dazhimen.bg.bean.news.GenNewsContentBean;
+import dazhimen.bg.bean.news.NewsContentBean;
 import dazhimen.bg.bean.product.CourseSortDataBean;
 import dazhimen.bg.bean.*;
 import dazhimen.bg.bean.product.*;
@@ -10,10 +12,7 @@ import net.sf.json.JSONObject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import util.Constant;
-import util.GlobalUtils;
-import util.IdUtils;
-import util.PaginationUtil;
+import util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -25,6 +24,9 @@ import java.util.List;
  * Created by Administrator on 2017/3/17.
  */
 public class ProductService {
+    public void getViewCourseData(String courseid){
+        SqlSession sqlSession = null;
+    }
     public String getCourseSortData(String pid) throws BgException {
         SqlSession sqlSession = null;
         List<CourseSortDataBean> courseSortDataBeans = null;
@@ -61,6 +63,23 @@ public class ProductService {
         }else{
             return sortBF.deleteCharAt(sortBF.length() - 1).toString();
         }
+    }
+    public UploadCourseBean getViewCourseInforByCourseid(String courseid) throws BgException {
+        UploadCourseBean courseBean = null;
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            courseBean = sqlSession.selectOne("dazhimen.bg.bean.Product.getViewCourseInforByCourseid", courseid);
+            List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.Product.getCourseIntroductionById", courseid);
+            String courseIntroductionHtml = GenNewsHtmlUtil.genBrowseCourseIntroductionHtml(courseBean.getCoursename(), contentBeans);
+            courseBean.setCourseIntroductionHtml(courseIntroductionHtml);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BgException("出现异常，查询指定课程信息失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return courseBean;
     }
     public UploadCourseBean getCourseInforByCourseid(String courseid) throws BgException {
         UploadCourseBean courseBean = null;
@@ -233,7 +252,8 @@ public class ProductService {
     }
     public String saveAddCourse(UploadCourseBean courseBean) throws BgException {
         //1 生成courseid
-        String courseid = new IdUtils().getCourseid();
+        IdUtils idUtils = new IdUtils();
+        String courseid = idUtils.getCourseid();
         //2 获得课程所属的pid
         String pid = courseBean.getPid();
         //2 计算课程主目录路径
@@ -264,7 +284,6 @@ public class ProductService {
                 e.printStackTrace();
                 throw new BgException("出现异常，保存课程音频失败");
             }
-            //计算列表图片在工程中的相对路径，用于记录到数据库
             String audioFileRelPath = Constant.uploadProductDbPrefixPath + pid + "/course/" + audioFileNewName;
             SqlSession sqlSession = null;
             try {
@@ -274,6 +293,35 @@ public class ProductService {
                 courseBean.setFilesize(fileSizeMB);
                 courseBean.setFilename(audioOrginalName);
                 sqlSession.insert("dazhimen.bg.bean.Product.saveAddCourse", courseBean);
+
+                List<NewsContentBean> newsContentBeans = courseBean.getContentBeans();
+                for(int i = 0; i < newsContentBeans.size(); i++){
+                    NewsContentBean contentBean = newsContentBeans.get(i);
+                    String contentId = idUtils.getCourseIntroductionId();
+                    String contenteType = contentBean.getContenttype();
+                    if(contenteType.equals("2")){
+                        CommonsMultipartFile contentFile = contentBean.getContentfile();
+                        String contentFileOrginalName = contentFile.getOriginalFilename();
+                        String contentFileSuffixName = contentFileOrginalName.substring(contentFileOrginalName.lastIndexOf("."));
+                        String contentFileNewName = courseid + "_" + contentId + "_contentimg" + contentFileSuffixName;
+                        String contentFileTransferFilename = cousreMainFolderPath + contentFileNewName;
+
+                        try {
+                            contentFile.transferTo(new File(contentFileTransferFilename));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            throw new BgException("出现异常,保存内容图片失败");
+                        }
+                        //计算列表图片在工程中的相对路径，用于记录到数据库
+                        String contentFileRelPath = Constant.uploadProductDbPrefixPath + pid + "/course/" + contentFileNewName;
+                        contentBean.setContentvalue(contentFileRelPath);
+                    }else{
+                        contentBean.setContentvalue(contentBean.getContenttext());
+                    }
+                    contentBean.setContentid(contentId);
+                    contentBean.setNid(courseid);
+                    sqlSession.insert("dazhimen.bg.bean.Product.saveAddCourseIntroduction", contentBean);
+                }
                 sqlSession.commit();
                 dealProductIstry(pid);
             } catch (Exception e) {

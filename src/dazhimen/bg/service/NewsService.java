@@ -804,8 +804,8 @@ public class NewsService {
                 throw new Exception("获取新闻信息异常");
             }
             List<GenNewsContentBean> contentBeans = sqlSession.selectList("dazhimen.bg.bean.News.getNewsContentById", nid);
-           String newsHtml = GenNewsHtmlUtil.genBrowseNewsHtml(newsBean.getTitle(), contentBeans);
-           newsBean.setNewscontenthtml(newsHtml);
+            String newsHtml = GenNewsHtmlUtil.genBrowseNewsHtml(newsBean.getTitle(), contentBeans);
+            newsBean.setNewscontenthtml(newsHtml);
         }catch (Exception e){
             e.printStackTrace();
             throw new BgException(e.getMessage());

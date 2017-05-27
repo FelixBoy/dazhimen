@@ -8,6 +8,12 @@ import java.util.List;
  * Created by Administrator on 2017/4/21.
  */
 public class GenNewsHtmlUtil {
+    public static String genBrowseCourseIntroductionHtml(String name , List<GenNewsContentBean> contentBeans){
+        StringBuffer courseIntroductionHtmlBF = new StringBuffer();
+        courseIntroductionHtmlBF.append(genNewsTitle(name));
+        courseIntroductionHtmlBF.append(genBrowseNewsContent(contentBeans));
+        return courseIntroductionHtmlBF.toString();
+    }
     public static String genBrowseNewsHtml(String title, List<GenNewsContentBean> contentBeans){
         StringBuffer newsHtmlBF = new StringBuffer();
         newsHtmlBF.append(genNewsTitle(title));

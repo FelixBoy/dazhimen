@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dazhimen.bg.bean.Product">
+    <insert id="saveAddCourseIntroduction" parameterType="dazhimen.bg.bean.news.NewsContentBean">
+        insert into course_introduction(contentid, contenttype, contentvalue, contentsort, courseid)
+        values(#{contentid},#{contenttype},#{contentvalue},#{contentsort},#{nid})
+    </insert>
     <update id="dealProductIstry">
         update product a
         set a.istry = (select case count(b.courseid) when 0 then 0
@@ -200,7 +204,11 @@
           and pid = #{pid}
           and a.isdel = '0'
     </select>
-
+    <select id="getCourseIntroductionById" resultType="dazhimen.bg.bean.news.GenNewsContentBean">
+        select contentvalue,contenttype
+        from course_introduction where courseid = #{courseid}
+        order by contentsort
+    </select>
     <insert id="saveAddProduct" parameterType="dazhimen.bg.bean.product.UploadProductBean">
         insert into product(pid,pname,type,price,derateProportion,introduction,
                             indexplay,indexsort,uid,createdatetime,listimage,updatedatetime)
@@ -212,7 +220,12 @@
         insert into product_image(imageid,path,pid)
                         values(#{imageid},    #{path},   #{pid})
     </insert>
-
+    <select id="getViewCourseInforByCourseid"  resultType="dazhimen.bg.bean.product.UploadCourseBean">
+       select pid,courseid,coursename,getcodetxt('indexsort',sort) sort,getcodetxt('yesorno',istry) istry,
+       audiofilename as filename,concat(audiofilesize,'/MB') as filesizestr
+          from course
+        where courseid = #{courseid}
+    </select>
     <select id="getCourseInforByCourseid" resultType="dazhimen.bg.bean.product.UploadCourseBean">
         select pid,courseid,coursename,sort,istry,audiofilename as filename,concat(audiofilesize,'/MB') as filesizestr
           from course

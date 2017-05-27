@@ -42,6 +42,11 @@ public class Constant {
     //字符集
     public static final String CharSet = "utf-8";
 
+    //数据库中contentid（新闻内容id)的序列名称
+    public static final String courseIntroductionSeqName = "courseintroduction_seq";
+    //contentid中编码中，最后面部分的，数字序列的长度
+    public static final int courseIntroductionSeqLength = 5;
+
     //数据库中vid（验证码id)的序列名称
     public static final String verifycodeSeqName = "verifycode_seq";
     //数据库中vid，最后面部分的，数字序列的长度

@@ -1,6 +1,9 @@
 package dazhimen.bg.bean.product;
 
+import dazhimen.bg.bean.news.NewsContentBean;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/3/26.
@@ -17,6 +20,24 @@ public class UploadCourseBean {
     private Double filesize = null;
     private String filename = null;
     private String filesizestr = null;
+    private List<NewsContentBean> contentBeans = null;
+    private String courseIntroductionHtml = null;
+
+    public String getCourseIntroductionHtml() {
+        return courseIntroductionHtml;
+    }
+
+    public void setCourseIntroductionHtml(String courseIntroductionHtml) {
+        this.courseIntroductionHtml = courseIntroductionHtml;
+    }
+
+    public List<NewsContentBean> getContentBeans() {
+        return contentBeans;
+    }
+
+    public void setContentBeans(List<NewsContentBean> contentBeans) {
+        this.contentBeans = contentBeans;
+    }
 
     public String getFilesizestr() {
         return filesizestr;

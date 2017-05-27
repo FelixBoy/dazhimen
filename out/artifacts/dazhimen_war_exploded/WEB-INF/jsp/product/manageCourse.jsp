@@ -55,8 +55,8 @@
         $('#addCourseDialog').dialog({
             title: '新增课程',
             href:"<%=request.getContextPath()%>/product/fwdAddCoursePage.do?random_id=" + Math.random(),
-            width: 580,
-            height: 310,
+            width: 950,
+            height: 570,
             closed: true,
             cache: false,
             modal: true
@@ -67,6 +67,27 @@
             }
         });
         $('#addCourseDialog').dialog("open");
+    }
+    function fwdViewCoursePage(rowIndex){
+        $("#courseList").datagrid("selectRow", rowIndex);
+        var row = $("#courseList").datagrid("getSelected");
+        if(row){
+            $("#viewCourseDialog").dialog({
+                title:'查看课程信息',
+                width: 950,
+                height: 570,
+                closed: true,
+                cache: false,
+                modal: true
+            });
+            $("#viewCourseDialog").dialog({
+                onClose:function(){
+                    $("#viewCourseDialog").empty();
+                }
+            });
+            $("#viewCourseDialog").dialog("open");
+            $("#viewCourseDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdViewCoursePage.do?courseid=" + row.courseid + "&random_id=" + Math.random());
+        }
     }
     $(function(){
         $("#viewProductFormInCoursePage").form("load", "<%=request.getContextPath()%>/product/getProductInforById.do" +
@@ -89,7 +110,8 @@
                 {
                     field: "operateID", title: '操作',width:'15%', align: 'center',
                     formatter: function (value, rowData, rowIndex) {
-                        return  '<a href="javascript:void(0)" onclick="fwdEditCoursePage('+rowIndex+')">修改信息</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
+                        return '<a href="javascript:void(0)" onclick="fwdViewCoursePage('+rowIndex+')">查看</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdEditCoursePage('+rowIndex+')">修改信息</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="saveCourseDel('+rowIndex+')">删除</a>';
                     }
                 }
@@ -138,6 +160,7 @@
 <div style="padding:5px 0;">
     <div id="modifyCourseDialog" style="text-align: center"></div>
     <div id="addCourseDialog" style="text-align: center"></div>
+    <div id="viewCourseDialog" style="text-align: center"></div>
     <table id="courseList" style="width: auto;height: auto;">
     </table>
     <br/>
