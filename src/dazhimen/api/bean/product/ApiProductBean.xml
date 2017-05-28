@@ -138,4 +138,14 @@
           from ir_customer_product a,product b
         where a.pid = b.pid and b.isdel = '0' and a.cid = #{cid}
     </select>
+
+    <select id="getCourseIntroductionById" resultType="dazhimen.api.bean.news.ApiNewsContentBean">
+        select contentvalue,contenttype
+        from course_introduction where courseid = #{courseid}
+        order by contentsort
+    </select>
+    <select id="getCourseInforById" resultType="dazhimen.api.bean.product.ApiCourseInforBean">
+        select courseid,coursename from course where courseid = #{courseid}
+    </select>
+
 </mapper>

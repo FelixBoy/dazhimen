@@ -1,6 +1,8 @@
 package dazhimen.api.controller;
 
 import com.google.gson.Gson;
+import dazhimen.api.bean.news.ApiNewsContentBean;
+import dazhimen.api.bean.product.ApiCourseInforBean;
 import dazhimen.api.bean.product.ApiListViewCourseBean;
 import dazhimen.api.bean.product.ApiProductBean;
 import dazhimen.api.bean.product.ApiSpecifyProductBean;
@@ -408,6 +410,62 @@ public class ApiProductController {
         }
         jsonObject.put("data", dataObject.toString());
         ResponseUtil.writeMsg(resp, jsonObject.toString());
+    }
+    @RequestMapping(value = "getCourseIntroductionById.do", method = RequestMethod.POST)
+    public void getCourseIntroductionById(HttpServletRequest resq, HttpServletResponse resp){
+        try {
+            ApiUtils.checkSignature(resq);
+            checkGetCourseIntroductionByIdPara(resq);
+            ApiProductService productService = new ApiProductService();
+            List<ApiNewsContentBean> contentBeans = productService.getCouseIntroductionById(resq.getParameter("courseid"));
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", "200");
+            jsonObject.put("msg", "获取成功");
+
+            JSONObject dataObject = new JSONObject();
+            ApiCourseInforBean courseInforBean = productService.getCourseInforById(resq.getParameter("courseid"));
+            dataObject.put("courseid", courseInforBean.getCourseid());
+            dataObject.put("coursename", courseInforBean.getCoursename());
+            if(contentBeans == null || contentBeans.size()==0){
+                dataObject.put("contentlist", new Gson().toJson(null));
+            }else{
+                contentBeans = dealNewsContentBean(resq,contentBeans);
+                dataObject.put("contentlist", new Gson().toJson(contentBeans));
+            }
+            jsonObject.put("data", dataObject.toString());
+            ResponseUtil.writeMsg(resp, jsonObject.toString());
+        }catch (ParameterCheckException e){
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+        } catch (ApiException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+        }
+    }
+    private List<ApiNewsContentBean> dealNewsContentBean(HttpServletRequest resq, List<ApiNewsContentBean> contentBeans){
+        String localIp = resq.getLocalAddr();//获取本地ip
+        if(Constant.isDeployInAliyun){
+            localIp = Constant.AliyunIP;
+        }
+        int localPort = resq.getLocalPort();//获取本地的端口
+        String appName = resq.getContextPath();
+        for(int i = 0; i < contentBeans.size(); i++){
+            ApiNewsContentBean contentBean = contentBeans.get(i);
+            if(contentBean.getContenttype().equals("2")){
+                String imgurl = "http://" + localIp + ":" + localPort + appName + "/" + contentBean.getContentvalue();
+                contentBean.setContentvalue(imgurl);
+            }
+        }
+        return contentBeans;
+    }
+    private void checkGetCourseIntroductionByIdPara(HttpServletRequest resq) throws ParameterCheckException {
+        String courseid = resq.getParameter("courseid");
+        if(courseid == null){
+            throw new ParameterCheckException("未取到参数[courseid]");
+        }
+        if(courseid.equals("")){
+            throw new ParameterCheckException("参数[courseid]的值为空");
+        }
     }
     private void checkGetProductInforPara(HttpServletRequest resq) throws ParameterCheckException {
         String pid = resq.getParameter("pid");

@@ -1,6 +1,7 @@
 package dazhimen.api.service;
 
 import dazhimen.api.bean.*;
+import dazhimen.api.bean.news.ApiNewsContentBean;
 import dazhimen.api.bean.order.ApiProductPriceBean;
 import dazhimen.api.bean.product.*;
 import dazhimen.api.exception.ApiException;
@@ -15,6 +16,42 @@ import java.util.List;
  * Created by Administrator on 2017/3/24.
  */
 public class ApiProductService {
+    public ApiCourseInforBean getCourseInforById(String courseid) throws ApiException {
+        ApiCourseInforBean courseInforBean = null;
+        CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();
+        if(!checkUtil.checkCourseidIsExists(courseid)){
+            throw new ApiException("传入的[courseid]值，无效。在数据库中不存在。");
+        }
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            courseInforBean = sqlSession.selectOne("dazhimen.api.bean.ApiProduct.getCourseInforById", courseid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApiException("出现异常，获取课程介绍出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return courseInforBean;
+    }
+    public List<ApiNewsContentBean> getCouseIntroductionById(String courseid) throws ApiException {
+        List<ApiNewsContentBean> contentBeans = null;
+        CheckIsExistsUtils checkUtil = new CheckIsExistsUtils();
+        if(!checkUtil.checkCourseidIsExists(courseid)){
+            throw new ApiException("传入的[courseid]值，无效。在数据库中不存在。");
+        }
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtil.createSession();
+            contentBeans = sqlSession.selectList("dazhimen.api.bean.ApiProduct.getCourseIntroductionById", courseid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApiException("出现异常，获取课程介绍出错");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+        return contentBeans;
+    }
     public String getMainImgPath(String pid) throws ApiException {
         SqlSession sqlSession = null;
         String mainImgPath = null;
