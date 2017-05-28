@@ -202,6 +202,7 @@
             return;
         }
         dealCourseFormBeforeSubmit();
+        dealSortValue();
         $("#courseForm").submit();
         LoadingMaskLayer.show();
     }

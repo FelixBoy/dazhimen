@@ -24,6 +24,7 @@
                 message:'图片格式不正确，请选择jpg,png格式'
             }
         });
+        $("#pidInAddIntroductionForm").val($("#pidInManageCourse").val());
         refreshCourseInfor();
     });
     function refreshCourseInfor(){
@@ -204,12 +205,194 @@
             }
         });
     }
+    function getNextIndexInModify(){
+        var lastContent = $("input[id^='newscontent']:last");
+        if(lastContent.length > 0){
+            var nextIndex = -1;
+            lastContent.each(function(index, domElement){
+                var lastDomId = domElement.id;
+                nextIndex = lastDomId.substring(11);
+            });
+            return parseInt(nextIndex) + 1;
+        }else{
+            return 1;
+        }
+    }
+    function dealSortValueInModify(){
+        var newsContent = $("input[id^='newscontent']");
+        if(newsContent.length > 0){
+            newsContent.each(function(index, domElement){
+                var domid = domElement.id;
+                $("#sort_" + domid).val(index + 1);
+            });
+        }
+    }
+    function addIntroductionImage() {
+        var nextIndex = getNextIndexInModify();
+        $("#addIntroductionTable").append("<tr id='trcontent" + nextIndex + "'><td nowrap='nowrap'>图片(新增):<span style='color:red'>*</span></td>" +
+            "<td colspan='5'><input " +
+            " data-options=\"buttonText:'&nbsp;选&nbsp;择&nbsp;'\"" +
+            "  accept='image/jpeg,image/png'  style='width:650px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
+            "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
+            "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='2'>" +
+            "</td>" +
+            "<td nowrap='nowrap'>" +
+            "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
+            "onclick=\"deleteCIContentInModify('trcontent" + nextIndex +"')\">删除</a>" +
+            "</td>" +
+            "</tr>");
+        $("#newscontent" + nextIndex).filebox({
+            required:true,
+            missingMessage:'支持jpg,png格式',
+            validType:'imgfile',
+            prompt:'新闻图片，建议大小【2M】以内'
+        });
+        $.parser.parse($('#trcontent'+nextIndex));
+        dealSortValueInModify();
+    }
+    function addIntroductionText() {
+        var nextIndex = getNextIndexInModify();
+        $("#addIntroductionTable").append("<tr id='trcontent" + nextIndex + "'><td>文本(新增):<span style='color:red'>*</span></td>" +
+            "<td colspan='5'><input data-options='multiline:true'" +
+            " style='width:650px;height: 120px;' id='newscontent" + nextIndex +"' name='newscontent" + nextIndex + "'/>" +
+            "<input type='hidden' id='sort_newscontent" + nextIndex + "' name='sort_newscontent" + nextIndex + "'/>" +
+            "<input type='hidden' id='type_newscontent" + nextIndex + "' name='type_newscontent" + nextIndex + "' value='3'>" +
+            "</td>" +
+            "<td>" +
+            "<a href='javascript:void(0)' class='easyui-linkbutton' data-options=\"iconCls:'icon-remove'\" " +
+            "onclick=\"deleteCIContentInModify('trcontent" + nextIndex +"')\">删除</a>" +
+            "</td>" +
+            "</tr>");
+        $("#newscontent" + nextIndex).textbox({
+            required: true,
+            validType: 'maxLen[4000]',
+            missingMessage:'最多输入4000个字符',
+            prompt:'请输入文本'
+        });
+        $.parser.parse($('#trcontent'+nextIndex));
+        dealSortValueInModify();
+    }
+    function deleteCIContentInModify(trcontentid){
+        var newsContent = $("input[id^='newscontent']");
+        if(newsContent.length <= 1){
+            MsgBox.show("无法删除，至少有一个新闻内容");
+            return;
+        }
+        $.messager.confirm('确认','您确认删除吗？',function(r){
+            if (r){
+                var trcontent = $("#" + trcontentid);
+                trcontent.remove();
+                dealSortValueInModify();
+            }
+        });
+    }
+    var checkCountInModifyCI = 10;
+    function cbInModifyCI(){
+        var f = $('#addIntroductionFormInModify_iframe'), data = "";
+        if (!f.length){
+            return
+        }
+        f.unbind();
+        var body = f.contents().find('body');
+        data = body.html();
+        if (data == ""){
+            if (--checkCountInModifyCI){
+                setTimeout(cbInModifyCI, 100);
+                return;
+            }
+        }
+        setTimeout(function(){
+            f.unbind();
+            f.remove();
+        }, 100);
+    }
+    function dealAddIntroductionFormInModifyBeforeSubmit(){
+        var frameId = "addIntroductionFormInModify_iframe", $frame = null;
+        var testFrameId = $('#'+frameId);
+        if(testFrameId.length>0){
+            testFrameId.unbind();
+            testFrameId.remove();
+        }
+        $frame = $('<iframe id='+frameId+' name='+frameId+'></iframe>').appendTo('body');
+        $frame.attr('src', window.ActiveXObject ? 'javascript:false' : 'about:blank');
+        $frame.css({
+            display:"none"
+        });
+        $frame.bind('load', cbInModifyCI);
+        $("#addIntroductionForm").attr('target', frameId);
+    }
+    function actionAfterSubmit(jsonObj){
+        LoadingMaskLayer.hide();
+        var resultObj = JSON.parse(jsonObj);
+        if(!resultObj){
+            return;
+        }
+        var code = resultObj.code;
+        if(code == '200'){
+            var msg = resultObj.msg;
+            MsgBox.show(msg);
+            $("#addIntroductionTable").empty();
+            refreshCourseInfor();
+        }else{
+            MsgBox.show(resultObj.msg);
+        }
+    }
+    function checkModifyCIFormBeforeSubmit(){
+        var addIntroductionTable = $("#addIntroductionTable");
+        var newsContent = addIntroductionTable.find("input[id^='newscontent']");
+        var result = true;
+        if(newsContent.length > 0){
+            newsContent.each(function(index, domElement){
+                var domid = domElement.id;
+                var dom_type = $("#type_" + domid).val();
+                if(!dom_type){
+                    result = false;
+                    return;
+                }
+                if(dom_type == '2'){
+                    if(!$("#" + domid).filebox("getValue")){
+                        MsgBox.show("无法保存，存在图片未选择");
+                        result = false;
+                        return false;
+                    }
+                    imgFileName = $("#" + domid).filebox("getValue");
+                    imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
+                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                        MsgBox.show("无法保存，图片文件，仅支持jpg、png");
+                        result = false;
+                        return false;
+                    }
+                }else if(dom_type == '3'){
+                    if($.trim($("#" + domid).val()).length == 0){
+                        MsgBox.show("无法保存，存在文本未填写");
+                        result = false;
+                        return false;
+                    }
+                    if(StringUtil.getCharNumber($("#" + domid).val()) > 4000){
+                        MsgBox.show("文本超长，最多输入4000个字符");
+                        result = false;
+                        return false;
+                    }
+                }
+            });
+        }else{
+            return false;
+        }
+        return result;
+    }
+    function submitAddCI(){
+        if(!checkModifyCIFormBeforeSubmit()){
+            return;
+        }
+        dealAddIntroductionFormInModifyBeforeSubmit();
+        dealSortValueInModify();
+        $("#addIntroductionForm").submit();
+        LoadingMaskLayer.show();
+    }
 </script>
 <div id="modifyCIImgDialog"></div>
 <div style="text-align: center;">
     <div style="width:850px;margin: 0 auto;">
-        <form id="courseForm" action="<%=request.getContextPath()%>/product/saveAddCourse.do"
-              enctype="multipart/form-data" method="post">
             <table cellpadding="5">
                 <tr>
                     <td colspan="6" >
@@ -238,11 +421,17 @@
             </table>
             <table id="IntroductionTable" cellpadding="5">
             </table>
+        <form id="addIntroductionForm" action="<%=request.getContextPath()%>/product/saveAddCI.do"
+              enctype="multipart/form-data" method="post">
+            <input type="hidden" name="courseid" id="courseidInAddIntroductionForm" value="<%=request.getAttribute("courseid").toString()%>"/>
+            <input type="hidden" name="pid" id="pidInAddIntroductionForm" />
+            <table id="addIntroductionTable" cellpadding="5">
+            </table>
         </form>
     </div>
     <div style="text-align: center;margin-bottom: 15px;">
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addIntroductionImage()">新增图片</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addIntroductionText()">新增文本</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submitAddCourse()">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submitAddCI()">保存</a>
     </div>
 </div>

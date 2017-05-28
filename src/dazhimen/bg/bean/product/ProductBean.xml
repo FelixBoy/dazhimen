@@ -358,4 +358,16 @@
     <update id="modifyCIText" parameterType="dazhimen.bg.bean.news.ModifyNewsSubtitleBean">
         update course_introduction set contentvalue = #{contentvalue} where contentid = #{contentid}
     </update>
+    <insert id="saveAddCI" parameterType="dazhimen.bg.bean.news.NewsContentBean">
+        insert into course_introduction(contentid, contenttype, contentvalue, contentsort, courseid)
+        values(#{contentid},#{contenttype},#{contentvalue},#{contentsort},#{nid})
+    </insert>
+
+    <select id="getCourseIntroductionImg" resultType="dazhimen.bg.bean.product.QueryCIImgPathBean">
+        select contentvalue as path from course_introduction where courseid = #{courseid} and contenttype = '2';
+    </select>
+
+    <delete id="saveCourseIntroductionDel">
+        delete from course_introduction where courseid = #{courseid};
+    </delete>
 </mapper>

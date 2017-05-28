@@ -23,6 +23,60 @@ import java.util.List;
  * Created by Administrator on 2017/3/17.
  */
 public class ProductService {
+    /**
+     * 保存新增新闻信息
+     * @param basePath
+     * @throws BgException
+     */
+    public void saveAddCI(String pid, String courseid, List<NewsContentBean> newsContentBeans, String basePath) throws BgException {
+        IdUtils idUtils = new IdUtils();
+        //2 计算新闻主目录路径
+        String cousreMainFolderPath = basePath + Constant.productPrefixPath  + pid + "\\course\\";
+        FileManageService fileService = new FileManageService();
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            for(int i = 0; i < newsContentBeans.size(); i++){
+                NewsContentBean contentBean = newsContentBeans.get(i);
+                String contentId = idUtils.getCourseIntroductionId();
+                String contenteType = contentBean.getContenttype();
+
+               if(contenteType.equals("2")){
+                    CommonsMultipartFile contentFile = contentBean.getContentfile();
+                    //获得列表图片文件的原始名称
+                    String contentFileOrginalName = contentFile.getOriginalFilename();
+                    //获得原始文件的后缀
+                    String contentFileSuffixName = contentFileOrginalName.substring(contentFileOrginalName.lastIndexOf("."));
+                    //新文件名
+                    String contentFileNewName = courseid + "_" + contentId + "_contentimg" + contentFileSuffixName;
+
+                    //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
+                    String contentFileTransferFilename = cousreMainFolderPath + contentFileNewName;
+
+                    try {
+                        contentFile.transferTo(new File(contentFileTransferFilename));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new BgException("出现异常,保存新闻内容图片失败");
+                    }
+                    //计算列表图片在工程中的相对路径，用于记录到数据库
+                    String contentFileRelPath = Constant.uploadProductDbPrefixPath + pid + "/course/" + contentFileNewName;
+                    contentBean.setContentvalue(contentFileRelPath);
+                }else{
+                    contentBean.setContentvalue(contentBean.getContenttext());
+                }
+                contentBean.setContentid(contentId);
+                contentBean.setNid(courseid);
+                sqlSession.insert("dazhimen.bg.bean.Product.saveAddCI", contentBean);
+            }
+            sqlSession.commit();
+        }catch (Exception e){
+            sqlSession.rollback();
+            throw new BgException("出现异常，添加新闻失败");
+        } finally{
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
     public void modifyNewsContentText(String courseid, String contentid, String text, String basePath) throws BgException {
         if(courseid == null || courseid.equals("")){
             throw new BgException("传入的courseid为空，修改内容文本失败");
@@ -368,10 +422,17 @@ public class ProductService {
         try {
             sqlSession = MyBatisUtil.createSession();
             sqlSession.delete("dazhimen.bg.bean.Product.saveCourseDel", courseid);
+            List<QueryCIImgPathBean> ciImgPathBeans = sqlSession.selectList("dazhimen.bg.bean.Product.getCourseIntroductionImg", courseid);
+            sqlSession.delete("dazhimen.bg.bean.Product.saveCourseIntroductionDel", courseid);
             String audioFolderPath = resq.getSession().getServletContext().getRealPath("/") + Constant.productPrefixPath  + pid + "\\course\\";
             String audioFileName = audioFolderPath + courseid+ ".mp3";
             FileManageService fileService = new FileManageService();
             fileService.deleteFile(audioFileName);
+            for(int i = 0 ; i < ciImgPathBeans.size(); i++){
+                String contentImgPath = ciImgPathBeans.get(i).getPath();
+                String contentImgFileName = contentImgPath.substring(contentImgPath.lastIndexOf("/") + 1);
+                fileService.deleteFile(audioFolderPath + contentImgFileName);
+            }
             sqlSession.commit();
             dealProductIstry(pid);
         } catch (Exception e) {

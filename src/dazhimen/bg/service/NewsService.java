@@ -97,26 +97,21 @@ public class NewsService {
         }catch (BgException e){
             e.printStackTrace();
             sqlSession.rollback();
-            fileService.deleteFolder(newsMainFolderPath);
             throw new BgException(e.getMessage());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             sqlSession.rollback();
-            fileService.deleteFolder(newsMainFolderPath);
             throw new BgException("生成新闻html文件时，字符集编码不支持");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             sqlSession.rollback();
-            fileService.deleteFolder(newsMainFolderPath);
             throw new BgException("找不到新闻html文件");
         } catch (IOException e) {
             e.printStackTrace();
             sqlSession.rollback();
-            fileService.deleteFolder(newsMainFolderPath);
             throw new BgException("生成新闻html文件时，出现读写错误");
         } catch (Exception e){
             sqlSession.rollback();
-            fileService.deleteFolder(newsMainFolderPath);
             throw new BgException("出现异常，添加新闻失败");
         } finally{
             MyBatisUtil.closeSession(sqlSession);

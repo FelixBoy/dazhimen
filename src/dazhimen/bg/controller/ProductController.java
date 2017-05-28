@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import dazhimen.bg.service.ProductService;
 import org.springframework.stereotype.Controller;
@@ -654,6 +655,30 @@ public class ProductController {
             ResponseUtil.writeFailMsgToBrowse(resp, e.getMessage());
         }
     }
+    @RequestMapping(value="/saveAddCI.do", method = RequestMethod.POST)
+    public ModelAndView saveAddCI(HttpServletRequest resq, HttpServletResponse resp){
+        String courseid = resq.getParameter("courseid");
+        String pid = resq.getParameter("pid");
+        List<NewsContentBean> newsContentBeans = getAddNewsContentBean(resq);
+        String basePath = resq.getSession().getServletContext().getRealPath("/");
+        ModelAndView mav = new ModelAndView("fileUploadAfterAction");
+        ProductService productService = new ProductService();
+        try {
+            productService.saveAddCI(pid, courseid, newsContentBeans, basePath);
+        } catch (BgException e) {
+            e.printStackTrace();
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty("code", "400");
+            jsonObj.addProperty("msg",e.getMessage());
+            mav.addObject("parameters", jsonObj.toString());
+            return mav;
+        }
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("code", "200");
+        jsonObj.addProperty("msg","课程介绍修改成功");
+        mav.addObject("parameters", jsonObj.toString());
+        return mav;
+    }
     @RequestMapping("/fwdModifyCoursePage.do")
     public String fwdModifyCoursePage(HttpServletRequest resq,HttpServletResponse resp){
         String courseid = resq.getParameter("courseid");
@@ -841,5 +866,33 @@ public class ProductController {
         String basePath = resq.getSession().getServletContext().getRealPath("/");
         productBean.setBasePath(basePath);
         return productBean;
+    }
+    public List<NewsContentBean> getAddNewsContentBean(HttpServletRequest resq){
+        MultipartRequest multipartRequest = (MultipartRequest)resq;
+        List<NewsContentBean> newContentBeans = new ArrayList<NewsContentBean>();
+        Enumeration<String> names = resq.getParameterNames();
+        while(names.hasMoreElements()) {
+            String parameterName = names.nextElement();
+            if(parameterName.startsWith("type_")){
+                String contentId = parameterName.substring(5);
+                String typeValue = resq.getParameter(parameterName);
+                String sortvalue = resq.getParameter("sort_" + contentId);
+                NewsContentBean contentBean = new NewsContentBean();
+                contentBean.setContenttype(typeValue);
+                contentBean.setContentsort(sortvalue);
+                if(typeValue.equals("1")){
+                    String subtitle = resq.getParameter(contentId);
+                    contentBean.setContentsubtitle(subtitle);
+                }else if(typeValue.equals("2")){
+                    CommonsMultipartFile file = (CommonsMultipartFile) multipartRequest.getFile(contentId);
+                    contentBean.setContentfile(file);
+                }else{
+                    String text = resq.getParameter(contentId);
+                    contentBean.setContenttext(text);
+                }
+                newContentBeans.add(contentBean);
+            }
+        }
+        return newContentBeans;
     }
 }
