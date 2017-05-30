@@ -196,7 +196,7 @@ public class ApiRechargeController {
             ResponseUtil.writeIAPFailMsgToApiResult(resp, e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
-            ResponseUtil.writeIAPFailMsgToApiResult(resp, "出现异常，复合失败");
+            ResponseUtil.writeIAPFailMsgToApiResult(resp, "出现异常，复核失败");
         }
 
     }

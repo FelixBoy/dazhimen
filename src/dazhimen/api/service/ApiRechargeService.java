@@ -191,7 +191,9 @@ public class ApiRechargeService {
         if(!new CheckIsExistsUtils().checkCidIsExists(cid)){
             throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
         }
+        receipt = receipt.replace("\r\n", "");
         String result = IAPUtil.checkIAPCertificate(receipt);
+        System.out.println(result);
         if(result == null){
             throw new ApiException("请求超时，校验苹果支付订单失败");
         }
