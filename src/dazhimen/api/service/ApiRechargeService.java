@@ -183,6 +183,19 @@ public class ApiRechargeService {
             return false;
         }
     }
+    public boolean recheckIAPRechargeResult(String recid, String cid) throws ApiException {
+        if(!new CheckIsExistsUtils().checkCidIsExists(cid)){
+            throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
+        }
+        Map<String, String> map = WXPayUtil.queryWXOrderInfo(recid);
+        if (map.get("result_code").toString().equalsIgnoreCase("SUCCESS")) {
+            map.put("attach", cid);
+            dealWXRechargeResult(map);
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     public void dealAliPayRechargeResult(Map<String, String> map) throws ApiException {
         //更新用户余额，并更新充值记录的数据

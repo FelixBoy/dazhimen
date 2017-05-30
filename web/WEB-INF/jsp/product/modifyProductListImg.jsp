@@ -70,7 +70,7 @@
         }
         var imgFileName = $("#listImgInModifyDialog").filebox("getValue");
         var imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
-        if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+        if(imgFileSuffixName.toLocaleLowerCase() != ".jpg" && imgFileSuffixName.toLocaleLowerCase() != ".png"){
             MsgBox.show("列表图片文件，仅支持jpg、png");
             return false;
         }

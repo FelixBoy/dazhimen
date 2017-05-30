@@ -16,7 +16,7 @@
         }
         var imgFileName = $("#mainImgInModifyDialog").filebox("getValue");
         var imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
-        if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+        if(imgFileSuffixName.toLocaleLowerCase() != ".jpg" && imgFileSuffixName.toLocaleLowerCase() != ".png"){
             MsgBox.show("产品主图文件，仅支持jpg、png");
             return false;
         }

@@ -57,7 +57,7 @@ public class NewsService {
                     //获得原始文件的后缀
                     String contentFileSuffixName = contentFileOrginalName.substring(contentFileOrginalName.lastIndexOf("."));
                     //新文件名
-                    String contentFileNewName = contentId + "_contentimg" + contentFileSuffixName;
+                    String contentFileNewName = contentId + "_contentimg" + contentFileSuffixName.toLowerCase();
 
                     //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
                     String contentFileTransferFilename = newsMainFolderPath + contentFileNewName;
@@ -361,7 +361,7 @@ public class NewsService {
                 //获得原始文件的后缀
                 String contentImgFileSuffixName = contentImgFileOrginalName.substring(contentImgFileOrginalName.lastIndexOf("."));
                 //新文件名
-                String contentImageFileNewName = contentid + "_contentimg" + contentImgFileSuffixName;
+                String contentImageFileNewName = contentid + "_contentimg" + contentImgFileSuffixName.toLowerCase();
                 //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
                 String contentImageTransferFilename = newsMainFolderPath + contentImageFileNewName;
                 try {
@@ -674,7 +674,7 @@ public class NewsService {
                 String mainImgFileSuffixName = mainImgFileOrginalName.substring(mainImgFileOrginalName.lastIndexOf("."));
                 //新文件名
                 //通过新闻主目录+nid+_mainimg+原始文件后缀名，计算出文件转移的路径
-                String mainImageFileNewName = nid + "_mainimg" + mainImgFileSuffixName;
+                String mainImageFileNewName = nid + "_mainimg" + mainImgFileSuffixName.toLowerCase();
                 //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
                 String mainImageTransferFilename = newsMainFolderPath + mainImageFileNewName;
                 try {
@@ -732,7 +732,7 @@ public class NewsService {
                 String listImgFileSuffixName = listImgFileOrginalName.substring(listImgFileOrginalName.lastIndexOf("."));
                 //新文件名
                 //通过新闻主目录+nid+_listimg+原始文件后缀名，计算出文件转移的路径
-                String listImageFileNewName = nid + "_listimg" + listImgFileSuffixName;
+                String listImageFileNewName = nid + "_listimg" + listImgFileSuffixName.toLowerCase();
                 //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
                 String listImageTransferFilename = newsMainFolderPath + listImageFileNewName;
                 try {
@@ -928,7 +928,7 @@ public class NewsService {
         //获得原始文件的后缀
         String listImageSuffixName = listImageOrginalName.substring(listImageOrginalName.lastIndexOf("."));
         //新文件名
-        String listImageFileNewName = nid + "_listimg" + listImageSuffixName;
+        String listImageFileNewName = nid + "_listimg" + listImageSuffixName.toLowerCase();
 
         //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
         String listImageTransferFilename = newsMainFolderPath + listImageFileNewName;
@@ -946,7 +946,7 @@ public class NewsService {
         String mainImageOrginalName = mainImgFile.getOriginalFilename();
         String mainImageSuffixName = mainImageOrginalName.substring(mainImageOrginalName.lastIndexOf("."));
         //重新编号之后的 新文件名
-        String mainImageFileNewName = nid + "_mainimg" + mainImageSuffixName;
+        String mainImageFileNewName = nid + "_mainimg" + mainImageSuffixName.toLowerCase();
         //存储到数据库中的相对路径+新文件名
         String mainImageFileRelPath = Constant.uploadNewsDbPrefixPath +  nid +  "/" + mainImageFileNewName;
 
@@ -989,7 +989,7 @@ public class NewsService {
                     //获得原始文件的后缀
                     String contentFileSuffixName = contentFileOrginalName.substring(contentFileOrginalName.lastIndexOf("."));
                     //新文件名
-                    String contentFileNewName = contentId + "_contentimg" + contentFileSuffixName;
+                    String contentFileNewName = contentId + "_contentimg" + contentFileSuffixName.toLowerCase();
 
                     //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
                     String contentFileTransferFilename = newsMainFolderPath + contentFileNewName;

@@ -39,7 +39,7 @@
             imgfile:{
                 validator: function (value, param) {
                     var imgFileSuffixName = value.substring(value.lastIndexOf("."));
-                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                    if(imgFileSuffixName.toLocaleLowerCase() != ".jpg" && imgFileSuffixName.toLocaleLowerCase() != ".png"){
                         MsgBox.show("图片格式不正确，仅支持jpg、png");
                         return false;
                     }

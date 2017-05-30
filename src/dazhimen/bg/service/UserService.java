@@ -130,7 +130,7 @@ public class UserService {
             //获得原始文件的后缀
             String headerFileSuffixName = headerFileOrginalName.substring(headerFileOrginalName.lastIndexOf("."));
             //新文件名
-            String headerFileNewName = uid + headerFileSuffixName;
+            String headerFileNewName = uid + headerFileSuffixName.toLowerCase();
             //通过掌门主目录+uid+原始文件后缀名，计算出文件转移的路径
             String headerFileTransferFilename = masterMainFolderPath + headerFileNewName;
 
@@ -352,7 +352,7 @@ public class UserService {
                 //获得原始文件的后缀
                 String headerFileSuffixName = headerFileOrginalName.substring(headerFileOrginalName.lastIndexOf("."));
                 //新文件名
-                String headerFileNewName = user.getUid() + headerFileSuffixName;
+                String headerFileNewName = user.getUid() + headerFileSuffixName.toLowerCase();
                 //通过课程主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
                 String headerFileTransferFilename = userMainFolderPath + headerFileNewName;
                 try {

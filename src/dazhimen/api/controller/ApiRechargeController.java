@@ -171,6 +171,30 @@ public class ApiRechargeController {
             e.printStackTrace();
         }
     }
+    @RequestMapping(value = "/recheckIAPRechargeResult.do", method = RequestMethod.POST)
+    public void recheckIAPRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
+        try {
+            ApiUtils.checkSignature(resq);
+            checkWXRechargeResultPara(resq);
+            ApiRechargeService rechargeService = new ApiRechargeService();
+            boolean result = rechargeService.recheckWXRechargeResult(resq.getParameter("recid"), resq.getParameter("cid"));
+            if(result){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("code", "200");
+                jsonObject.put("msg", "复核成功");
+                ResponseUtil.writeMsg(resp, jsonObject.toString());
+            }else{
+                ResponseUtil.writeFailMsgToApiResult(resp, "复核失败");
+            }
+        } catch (ParameterCheckException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+        } catch (ApiException e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+        }
+
+    }
     @RequestMapping(value = "/recheckWXRechargeResult.do", method = RequestMethod.POST)
     public void recheckWXRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
         try {

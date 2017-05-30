@@ -15,7 +15,7 @@
             imgfile:{
                 validator: function (value, param) {
                     var imgFileSuffixName = value.substring(value.lastIndexOf("."));
-                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                    if(imgFileSuffixName.toLowerCase() != ".jpg" && imgFileSuffixName.toLowerCase() != ".png"){
                         MsgBox.show("图片格式不正确，仅支持jpg、png");
                         return false;
                     }
@@ -128,7 +128,7 @@
         }
         var imgFileName = $("#newslistimg").filebox("getValue");
         var imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
-        if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+        if(imgFileSuffixName.toLowerCase() != ".jpg" && imgFileSuffixName.toLowerCase() != ".png"){
             MsgBox.show("列表图片文件，仅支持jpg、png");
             return false;
         }
@@ -138,7 +138,7 @@
         }
         imgFileName = $("#newsmainimg").filebox("getValue");
         imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
-        if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+        if(imgFileSuffixName.toLowerCase() != ".jpg" && imgFileSuffixName.toLowerCase() != ".png"){
             MsgBox.show("新闻主图文件，仅支持jpg、png");
             return false;
         }
@@ -160,7 +160,7 @@
                     }
                     imgFileName = $("#" + domid).filebox("getValue");
                     imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
-                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                    if(imgFileSuffixName.toLowerCase() != ".jpg" && imgFileSuffixName.toLowerCase() != ".png"){
                         MsgBox.show("无法保存，图片文件，仅支持jpg、png");
                         result = false;
                         return false;

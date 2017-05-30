@@ -16,7 +16,7 @@
         }
         var imgFileName = $("#mainImgInModifyNewsTitleDialog").filebox("getValue");
         var imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
-        if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+        if(imgFileSuffixName.toLowerCase() != ".jpg" && imgFileSuffixName.toLowerCase() != ".png"){
             MsgBox.show("新闻主图文件，仅支持jpg、png");
             return false;
         }

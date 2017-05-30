@@ -48,7 +48,7 @@ public class ProductService {
                     //获得原始文件的后缀
                     String contentFileSuffixName = contentFileOrginalName.substring(contentFileOrginalName.lastIndexOf("."));
                     //新文件名
-                    String contentFileNewName = courseid + "_" + contentId + "_contentimg" + contentFileSuffixName;
+                    String contentFileNewName = courseid + "_" + contentId + "_contentimg" + contentFileSuffixName.toLowerCase();
 
                     //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
                     String contentFileTransferFilename = cousreMainFolderPath + contentFileNewName;
@@ -163,7 +163,7 @@ public class ProductService {
                 //获得原始文件的后缀
                 String contentImgFileSuffixName = contentImgFileOrginalName.substring(contentImgFileOrginalName.lastIndexOf("."));
                 //新文件名
-                String contentImageFileNewName = courseid + "_" + contentid + "_contentimg" + contentImgFileSuffixName;
+                String contentImageFileNewName = courseid + "_" + contentid + "_contentimg" + contentImgFileSuffixName.toLowerCase();
                 //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
                 String contentImageTransferFilename = courseMainFolderPath + contentImageFileNewName;
                 try {
@@ -463,7 +463,7 @@ public class ProductService {
                 //获得原始文件的后缀
                 String audioSuffixName = audioOrginalName.substring(audioOrginalName.lastIndexOf("."));
                 //新文件名
-                String audioFileNewName = courseBean.getCourseid() + audioSuffixName;
+                String audioFileNewName = courseBean.getCourseid() + audioSuffixName.toLowerCase();
                 //通过课程主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
                 String audioFileTransferFilename = cousreMainFolderPath + audioFileNewName;
                 try {
@@ -509,7 +509,7 @@ public class ProductService {
             //获得原始文件的后缀
             String audioSuffixName = audioOrginalName.substring(audioOrginalName.lastIndexOf("."));
             //新文件名
-            String audioFileNewName = courseid + audioSuffixName;
+            String audioFileNewName = courseid + audioSuffixName.toLowerCase();
             //通过课程主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
             String audioFileTransferFilename = cousreMainFolderPath + audioFileNewName;
 
@@ -538,7 +538,7 @@ public class ProductService {
                         CommonsMultipartFile contentFile = contentBean.getContentfile();
                         String contentFileOrginalName = contentFile.getOriginalFilename();
                         String contentFileSuffixName = contentFileOrginalName.substring(contentFileOrginalName.lastIndexOf("."));
-                        String contentFileNewName = courseid + "_" + contentId + "_contentimg" + contentFileSuffixName;
+                        String contentFileNewName = courseid + "_" + contentId + "_contentimg" + contentFileSuffixName.toLowerCase();
                         String contentFileTransferFilename = cousreMainFolderPath + contentFileNewName;
 
                         try {
@@ -589,7 +589,7 @@ public class ProductService {
             //获得原始文件的后缀
             String listImageSuffixName = listImageOrginalName.substring(listImageOrginalName.lastIndexOf("."));
             //新文件名
-            String listImageFileNewName = pid + "_listimg" + listImageSuffixName;
+            String listImageFileNewName = pid + "_listimg" + listImageSuffixName.toLowerCase();
 
             //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
             String listImageTransferFilename = productMainFolderPath + listImageFileNewName;
@@ -621,7 +621,7 @@ public class ProductService {
                 String mainImageOrginalName = mainImgFile.getOriginalFilename();
                 String mainImageSuffixName = mainImageOrginalName.substring(mainImageOrginalName.lastIndexOf("."));
                 //重新编号之后的 新文件名
-                String mainImageFileNewName = pid + "_mainimg_"+ i + mainImageSuffixName;
+                String mainImageFileNewName = pid + "_mainimg_"+ i + mainImageSuffixName.toLowerCase();
                 //存储到数据库中的相对路径+新文件名
                 String mainImageFileRelPath = Constant.uploadProductDbPrefixPath +  pid +  "/" + mainImageFileNewName;
 
@@ -871,7 +871,7 @@ public class ProductService {
                 String listImgFileSuffixName = listImgFileOrginalName.substring(listImgFileOrginalName.lastIndexOf("."));
                 //新文件名
                 //通过课程主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
-                String listImageFileNewName = pid + "_listimg" + listImgFileSuffixName;
+                String listImageFileNewName = pid + "_listimg" + listImgFileSuffixName.toLowerCase();
                 //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
                 String listImageTransferFilename = productMainFolderPath + listImageFileNewName;
                 try {
@@ -923,7 +923,7 @@ public class ProductService {
                 String mainImgFileSuffixName = mainImgFileOrginalName.substring(mainImgFileOrginalName.lastIndexOf("."));
                 //新文件名
                 //通过课程主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
-                String mainImageFileNewName = pid + "_mainimg_1" + mainImgFileSuffixName;
+                String mainImageFileNewName = pid + "_mainimg_1" + mainImgFileSuffixName.toLowerCase();
                 //通过产品主目录+pid+_listimg+原始文件后缀名，计算出文件转移的路径
                 String mainImageTransferFilename = productMainFolderPath + mainImageFileNewName;
                 try {

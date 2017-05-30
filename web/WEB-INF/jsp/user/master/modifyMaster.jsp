@@ -129,7 +129,7 @@
             imgfile:{
                 validator: function (value, param) {
                     var imgFileSuffixName = value.substring(value.lastIndexOf("."));
-                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                    if(imgFileSuffixName.toLowerCase() != ".jpg" && imgFileSuffixName.toLowerCase() != ".png"){
                         MsgBox.show("图片格式不正确，仅支持jpg、png");
                         return false;
                     }
@@ -218,7 +218,7 @@
         if($("#fuckthismasterhead").filebox("getValue")){
             var headerFileName = $("#fuckthismasterhead").filebox("getValue");
             var headerSuffixName = headerFileName.substring(headerFileName.lastIndexOf("."));
-            if(headerSuffixName != ".jpg" && headerSuffixName != ".png"){
+            if(headerSuffixName.toLowerCase() != ".jpg" && headerSuffixName.toLowerCase() != ".png"){
                 MsgBox.show("头像文件格式错误，仅支持jpg、png");
                 return false;
             }
