@@ -18,4 +18,11 @@
     <config name="shareNewsId" value="n170428047"></config>
     <!--end  用于分享App信息的新闻配置 end-->
 
+    <!--begin 用于控制 苹果内购校验 采用正式地址，还是沙箱地址 begin-->
+    <config name="iapFormalAddress" value="false"></config>
+    <!--end 用于控制 苹果内购校验 采用正式地址，还是沙箱地址 end-->
+
+    <!--begin 用户控制是否 启用苹果内购 begin-->
+    <config name="enableIAP" value="true"></config>
+    <!--end 用户控制是否 启用苹果内购 end-->
 </config>

@@ -1,20 +1,24 @@
 package dazhimen.api.service;
 
+import com.google.gson.Gson;
 import dazhimen.api.bean.order.ApiBalanceBean;
 import dazhimen.api.bean.recharge.ApiRechargeByWeixinBean;
 import dazhimen.api.bean.order.ApiUpdateCustomerBalanceBean;
 import dazhimen.api.bean.SingleValueBean;
 import dazhimen.api.exception.ApiException;
+import dazhimen.bg.exception.BgException;
 import db.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import util.CheckIsExistsUtils;
 import util.Constant;
 import util.IdUtils;
+import util.pay.IAPUtil;
 import util.pay.WXPayUtil;
 import util.pay.AlipayUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
@@ -183,20 +187,62 @@ public class ApiRechargeService {
             return false;
         }
     }
-    public boolean recheckIAPRechargeResult(String recid, String cid) throws ApiException {
+    public boolean recheckIAPRechargeResult(String receipt, String cid, Double rechargeamount) throws ApiException, BgException {
         if(!new CheckIsExistsUtils().checkCidIsExists(cid)){
             throw new ApiException("传入的[cid]值，无效。在数据库中不存在。");
         }
-        Map<String, String> map = WXPayUtil.queryWXOrderInfo(recid);
-        if (map.get("result_code").toString().equalsIgnoreCase("SUCCESS")) {
-            map.put("attach", cid);
-            dealWXRechargeResult(map);
+        String result = IAPUtil.checkIAPCertificate(receipt);
+        if(result == null){
+            throw new ApiException("请求超时，校验苹果支付订单失败");
+        }
+        Gson gson = new Gson();
+        Map<String, Object> map = gson.fromJson(result, Map.class);
+        Double status = (Double) map.get("status");
+        Map<String, Object> reciptMap = (Map)map.get("receipt");
+        ArrayList<Map<String, Object>> list = (ArrayList<Map<String, Object>>)reciptMap.get("in_app");
+        Map<String, Object> infoMap = list.get(0);
+        String transaction_id = (String)infoMap.get("transaction_id");
+        if (status == 0.0) {
+            dealIAPRechargeResult(cid, new IdUtils().getRECId(),transaction_id, rechargeamount);
             return true;
         }else{
             return false;
         }
     }
+    public void dealIAPRechargeResult(String cid, String recid, String transaction_id, Double rechargeamount) throws ApiException {
+        //更新用户余额，并更新充值记录的数据
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
 
+            SingleValueBean valueBean = sqlSession.selectOne("dazhimen.api.bean.ApiRecharge.checkISTransactionExists", transaction_id);
+            if(valueBean != null && valueBean.getValueInfo() != null && valueBean.getValueInfo().equals("1")){
+                return;
+            }
+
+            ApiRechargeByWeixinBean rechargeByWeixinBean = new ApiRechargeByWeixinBean();
+            rechargeByWeixinBean.setCid(cid);
+            rechargeByWeixinBean.setRecamount(rechargeamount);
+            rechargeByWeixinBean.setRecid(recid);
+            rechargeByWeixinBean.setTransaction_id(transaction_id);
+            rechargeByWeixinBean.setPaymenttype(Constant.paymentType_IAP);
+            sqlSession.insert("dazhimen.api.bean.ApiRecharge.doRechargeByWeixin", rechargeByWeixinBean);
+
+            ApiUpdateCustomerBalanceBean customerBalanceBean = new ApiUpdateCustomerBalanceBean();
+            customerBalanceBean.setChangeamount(rechargeamount);
+            customerBalanceBean.setCid(cid);
+            sqlSession.update("dazhimen.api.bean.ApiRecharge.updateCustomerBalanceAfterWX",customerBalanceBean);
+
+            sqlSession.commit();
+
+        }catch (Exception e){
+            e.printStackTrace();
+            sqlSession.rollback();
+            throw new ApiException("处理苹果内购结果失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
     public void dealAliPayRechargeResult(Map<String, String> map) throws ApiException {
         //更新用户余额，并更新充值记录的数据
         SqlSession sqlSession = null;

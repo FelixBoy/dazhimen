@@ -38,7 +38,7 @@
             audiofile:{
                 validator: function (value, param) {
                     var audioFileSuffixName = value.substring(value.lastIndexOf("."));
-                    if(audioFileSuffixName != ".mp3"){
+                    if(audioFileSuffixName.toLowerCase() != ".mp3"){
                         MsgBox.show("音频格式不正确，请选择mp3格式");
                         return false;
                     }
@@ -49,7 +49,7 @@
             imgfile:{
                 validator: function (value, param) {
                     var imgFileSuffixName = value.substring(value.lastIndexOf("."));
-                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                    if(imgFileSuffixName.toLowerCase() != ".jpg" && imgFileSuffixName.toLowerCase() != ".png"){
                         MsgBox.show("图片格式不正确，仅支持jpg、png");
                         return false;
                     }
@@ -98,7 +98,7 @@
         }
         var audioFileName = $("#audioInAddCourse").filebox("getValue");
         var audioSuffixName = audioFileName.substring(audioFileName.lastIndexOf("."));
-        if(audioSuffixName != ".mp3"){
+        if(audioSuffixName.toLowerCase() != ".mp3"){
             MsgBox.show("音频格式不正确，请选择mp3格式");
             return false;
         }
@@ -120,7 +120,7 @@
                     }
                     imgFileName = $("#" + domid).filebox("getValue");
                     imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
-                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                    if(imgFileSuffixName.toLowerCase() != ".jpg" && imgFileSuffixName.toLowerCase() != ".png"){
                         MsgBox.show("无法保存，图片文件，仅支持jpg、png");
                         result = false;
                         return false;

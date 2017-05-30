@@ -45,7 +45,7 @@
             audiofile:{
                 validator: function (value, param) {
                     var audioFileSuffixName = value.substring(value.lastIndexOf("."));
-                    if(audioFileSuffixName != ".mp3"){
+                    if(audioFileSuffixName.toLowerCase() != ".mp3"){
                         MsgBox.show("音频格式不正确，请选择mp3格式");
                         return false;
                     }
@@ -138,7 +138,7 @@
         if($("#audioInModifyCourse").filebox("getValue")){
             var audioFileName = $("#audioInModifyCourse").filebox("getValue");
             var audioSuffixName = audioFileName.substring(audioFileName.lastIndexOf("."));
-            if(audioSuffixName != ".mp3"){
+            if(audioSuffixName.toLowerCase() != ".mp3"){
                 MsgBox.show("音频格式不正确，请选择mp3格式");
                 return false;
             }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import util.ApiUtils;
+import util.Constant;
 import util.pay.WXPayUtil;
 import util.pay.AlipayUtil;
 import util.web.ResponseUtil;
@@ -175,23 +176,27 @@ public class ApiRechargeController {
     public void recheckIAPRechargeResult(HttpServletRequest resq, HttpServletResponse resp) throws IOException, JDOMException {
         try {
             ApiUtils.checkSignature(resq);
-            checkWXRechargeResultPara(resq);
+            checkIAPRechargeResultPara(resq);
             ApiRechargeService rechargeService = new ApiRechargeService();
-            boolean result = rechargeService.recheckWXRechargeResult(resq.getParameter("recid"), resq.getParameter("cid"));
+            boolean result = rechargeService.recheckIAPRechargeResult(resq.getParameter("receipt"), resq.getParameter("cid"), Double.parseDouble(resq.getParameter("rechargeamout")));
             if(result){
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("code", "200");
+                jsonObject.put("enableIAP", Constant.enableIAP);
                 jsonObject.put("msg", "复核成功");
                 ResponseUtil.writeMsg(resp, jsonObject.toString());
             }else{
-                ResponseUtil.writeFailMsgToApiResult(resp, "复核失败");
+                ResponseUtil.writeIAPFailMsgToApiResult(resp, "复核失败");
             }
         } catch (ParameterCheckException e) {
             e.printStackTrace();
-            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+            ResponseUtil.writeIAPFailMsgToApiResult(resp, e.getMessage());
         } catch (ApiException e) {
             e.printStackTrace();
-            ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+            ResponseUtil.writeIAPFailMsgToApiResult(resp, e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+            ResponseUtil.writeIAPFailMsgToApiResult(resp, "出现异常，复合失败");
         }
 
     }
@@ -240,6 +245,36 @@ public class ApiRechargeController {
         } catch (ApiException e) {
             e.printStackTrace();
             ResponseUtil.writeFailMsgToApiResult(resp, e.getMessage());
+        }
+
+    }
+    private void checkIAPRechargeResultPara(HttpServletRequest resq) throws ParameterCheckException {
+        String recid = resq.getParameter("receipt");
+        if(recid == null){
+            throw new ParameterCheckException("未取到参数[receipt]");
+        }
+        if(recid.equals("")){
+            throw new ParameterCheckException("参数[receipt]的值为空");
+        }
+        String cid = resq.getParameter("cid");
+        if(cid == null){
+            throw new ParameterCheckException("未取到参数[cid]");
+        }
+        if(cid.equals("")){
+            throw new ParameterCheckException("参数[cid]的值为空");
+        }
+        try{
+            String rechargeamountStr = resq.getParameter("rechargeamout");
+            if(rechargeamountStr == null){
+                throw new ParameterCheckException("未取到参数[rechargeamout]");
+            }
+            if(rechargeamountStr.equals("")){
+                throw new ParameterCheckException("参数[rechargeamout]的值为空");
+            }
+            Double rechargeamount = Double.parseDouble(rechargeamountStr);
+        }catch (NumberFormatException e){
+            e.printStackTrace();
+            throw new ParameterCheckException("传入的充值金额格式不正确");
         }
 
     }

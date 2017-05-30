@@ -73,7 +73,7 @@
             imgfile:{
                 validator: function (value, param) {
                     var imgFileSuffixName = value.substring(value.lastIndexOf("."));
-                    if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+                    if(imgFileSuffixName.toLocaleLowerCase() != ".jpg" && imgFileSuffixName.toLocaleLowerCase() != ".png"){
                         MsgBox.show("图片格式不正确，仅支持jpg、png");
                         return false;
                     }
@@ -183,7 +183,7 @@
         }
         var imgFileName = $("#listimg").filebox("getValue");
         var imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
-        if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+        if(imgFileSuffixName.toLocaleLowerCase() != ".jpg" && imgFileSuffixName.toLocaleLowerCase() != ".png"){
             MsgBox.show("列表图片文件，仅支持jpg、png");
             return false;
         }
@@ -193,7 +193,7 @@
         }
         imgFileName = $("#mainimg1").filebox("getValue");
         imgFileSuffixName = imgFileName.substring(imgFileName.lastIndexOf("."));
-        if(imgFileSuffixName != ".jpg" && imgFileSuffixName != ".png"){
+        if(imgFileSuffixName.toLocaleLowerCase() != ".jpg" && imgFileSuffixName.toLocaleLowerCase() != ".png"){
             MsgBox.show("产品主图文件，仅支持jpg、png");
             return false;
         }

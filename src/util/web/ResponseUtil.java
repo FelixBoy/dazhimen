@@ -64,4 +64,20 @@ public class ResponseUtil {
             out.close();
         }
     }
+    public static void writeIAPFailMsgToApiResult(HttpServletResponse resp, String failMsg){
+        resp.setCharacterEncoding(Constant.CharSet);
+        PrintWriter out = null;
+        try {
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("code","400");
+            jsonObj.put("enableIAP", Constant.enableIAP);
+            jsonObj.put("msg",failMsg);
+            out = resp.getWriter();
+            out.write(jsonObj.toString());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }finally {
+            out.close();
+        }
+    }
 }

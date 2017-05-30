@@ -45,6 +45,12 @@ public class DazhimenListener  implements ServletContextListener {
                 if(itemName.equals("shareNewsId")){
                     Constant.shareNewsId = itemValue;
                 }
+                if(itemName.equals("iapFormalAddress")){
+                    Constant.iapFormalAddress = Boolean.parseBoolean(itemValue);
+                }
+                if(itemName.equals("enableIAP")){
+                    Constant.enableIAP = Boolean.parseBoolean(itemValue);
+                }
             }
         } catch (DocumentException e) {
             e.printStackTrace();

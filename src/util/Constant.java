@@ -127,6 +127,7 @@ public class Constant {
     public static final String paymentType_Balance = "1";
     public static final String paymentType_WXPay = "2";
     public static final String paymentType_AliPay = "3";
+    public static final String paymentType_IAP = "4";
 
     public static final String FrontEndVersion = "v2.2";
     //用户类型
@@ -142,4 +143,8 @@ public class Constant {
     public static String defaultAdministrator = null;
     //用于分享的新闻id
     public static String shareNewsId = null;
+
+    public static boolean enableIAP = true;
+
+    public static boolean iapFormalAddress = false;
 }
