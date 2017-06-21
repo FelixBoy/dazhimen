@@ -73,7 +73,7 @@ public class ApiLoginService {
             throw new ParameterCheckException("ApiLoginService的doMphoneLogin，参数为null");
         }
         //校验验证码
-        if(!VerifyCodeUtils.checkVerifyCode(loginBean.getVerifyCode()) && !VerifyCodeUtils.checkMobileVerifyCode(loginBean.getMphone(), loginBean.getVerifyCode())){
+        if(!VerifyCodeUtils.checkMobileVerifyCode(loginBean.getMphone(), loginBean.getVerifyCode())){
             throw new ParameterCheckException("验证码输入错误");
         }
         SqlSession sqlSession = null;

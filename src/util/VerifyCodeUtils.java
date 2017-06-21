@@ -50,15 +50,15 @@ public class VerifyCodeUtils {
             return false;
         }
     }
-    public static boolean checkVerifyCode(String verifyCode) throws ParameterCheckException {
-        if(verifyCode == null || verifyCode.equals("")){
-            throw new ParameterCheckException("传入的验证码为空");
-        }
-        if(verifyCode.equals("1234")){
-            return true;
-        }
-        return false;
-    }
+//    public static boolean checkVerifyCode(String verifyCode) throws ParameterCheckException {
+//        if(verifyCode == null || verifyCode.equals("")){
+//            throw new ParameterCheckException("传入的验证码为空");
+//        }
+//        if(verifyCode.equals("1234")){
+//            return true;
+//        }
+//        return false;
+//    }
     public static boolean checkMobileVerifyCode(String mphone, String verifyCode) throws ParameterCheckException, ApiException {
         if(verifyCode == null || verifyCode.equals("")){
             throw new ParameterCheckException("传入的验证码为空");

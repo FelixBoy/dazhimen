@@ -92,7 +92,7 @@ public class ApiCustomerService {
         }
         String mphone = customerInfoBean.getMphone();
         //校验验证码
-        if(!VerifyCodeUtils.checkVerifyCode(customerInfoBean.getVerifycode()) && !VerifyCodeUtils.checkMobileVerifyCode(customerInfoBean.getMphone(), customerInfoBean.getVerifycode())){
+        if(!VerifyCodeUtils.checkMobileVerifyCode(customerInfoBean.getMphone(), customerInfoBean.getVerifycode())){
             throw new ParameterCheckException("验证码输入错误");
         }
         SqlSession sqlSession = null;

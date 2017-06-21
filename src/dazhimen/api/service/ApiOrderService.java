@@ -93,7 +93,7 @@ public class ApiOrderService {
             }
             String mphone = customerBean.getMphone();
             //校验验证码
-            if(!VerifyCodeUtils.checkVerifyCode(verifycode) && !VerifyCodeUtils.checkMobileVerifyCode(customerBean.getMphone(), verifycode)){
+            if(!VerifyCodeUtils.checkMobileVerifyCode(customerBean.getMphone(), verifycode)){
                 throw new ParameterCheckException("验证码输入错误");
             }
             ApiCheckProductIsBuyBean checkProductIsBuyBean = new ApiCheckProductIsBuyBean();
