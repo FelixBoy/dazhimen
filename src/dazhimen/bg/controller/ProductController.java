@@ -37,6 +37,24 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
 
+    @RequestMapping("/saveModifyViewCount.do")
+    public void saveModifyViewCount(HttpServletRequest resq, HttpServletResponse resp){
+        try{
+            String courseid = resq.getParameter("courseid");
+            String viewcount = resq.getParameter("viewcount");
+            ProductService productService = new ProductService();
+            productService.saveModifyViewCount(courseid, viewcount);
+            ResponseUtil.writeMsg(resp, "修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，修改已读人数失败");
+        }
+    }
+    @RequestMapping("/fwdModifyViewCountPage.do")
+    public String fwdModifyViewCountPage(HttpServletRequest resq){
+        resq.setAttribute("courseid", resq.getParameter("courseid"));
+        return "/product/modifyViewCount";
+    }
     @RequestMapping("/saveModifyBuyCount.do")
     public void saveModifyBuyCount(HttpServletRequest resq, HttpServletResponse resp){
         try{

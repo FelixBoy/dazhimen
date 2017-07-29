@@ -10,7 +10,7 @@
     <!--begin  默认管理员账户配置 begin-->
         <!-- 配置的是登录名，-->
         <!--例如默认账户配置为 dzm，则登录名为dzm的用户 是默认管理员-->
-        <config name="defaultAdministrator" value="dzm"></config>
+        <config name="defaultAdministrator" value="admin"></config>
     <!--end  默认管理员账户配置 end-->
 
     <!--begin  用于分享App信息的新闻配置 begin-->

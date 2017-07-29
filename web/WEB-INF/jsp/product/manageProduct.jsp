@@ -154,12 +154,20 @@
                 {
                     field: "operateID", title: '操作',width:'30%', align: 'center',
                     formatter: function (value, rowData, rowIndex) {
+                        <%if(userBean.getLoginname().equals(Constant.defaultAdministrator)){%>
                         return '<a href="javascript:void(0)" onclick="fwdViewProductPage('+rowIndex+')">查看</a>&nbsp&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="fwdModifyButCountPage('+rowIndex+')">已读</a>&nbsp&nbsp&nbsp'+
                             '<a href="javascript:void(0)" onclick="fwdManageCoursePage('+rowIndex+')">管理课程</a>&nbsp&nbsp&nbsp'+
                             '<a href="javascript:void(0)" onclick="fwdModifyProductStatusPage('+rowIndex+')">修改状态</a>&nbsp&nbsp&nbsp'+
                             '<a href="javascript:void(0)" onclick="fwdEditProductPage('+rowIndex+')">编辑信息</a>&nbsp&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="saveProductDel('+rowIndex+')">删除</a>';
+                        <%}else{%>
+                        return '<a href="javascript:void(0)" onclick="fwdViewProductPage('+rowIndex+')">查看</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdManageCoursePage('+rowIndex+')">管理课程</a>&nbsp&nbsp&nbsp'+
+                            '<a href="javascript:void(0)" onclick="fwdModifyProductStatusPage('+rowIndex+')">修改状态</a>&nbsp&nbsp&nbsp'+
+                            '<a href="javascript:void(0)" onclick="fwdEditProductPage('+rowIndex+')">编辑信息</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="saveProductDel('+rowIndex+')">删除</a>';
+                        <%}%>
                     }
                 }
             ]],

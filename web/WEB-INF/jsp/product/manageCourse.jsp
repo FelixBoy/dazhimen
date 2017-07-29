@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="dazhimen.bg.bean.login.LoginUserBean" %>
+<%@ page import="util.Constant" %><%
+    HttpSession sessionObj = request.getSession(false);
+    LoginUserBean userBean = (LoginUserBean)sessionObj.getAttribute(Constant.LoginUserKey);
+%>
 <script>
     function returnManageProductInManageCourse(){
         $('#content_panel').panel({
@@ -123,18 +128,27 @@
             columns: [[
                 { field: 'courseid', title: '课程Id', width: '10%'},
                 { field: 'coursename', title: '名称', width: '15%'},
-                { field: 'sortstr', title: '排序', width: '12%'},
-                { field: 'istry', title: '是否试学', width: '7%'},
+                { field: 'sortstr', title: '排序', width: '5%'},
+                { field: 'istry', title: '是否试学', width: '10%'},
                 { field: 'viewcount', title: '已读人数', width: '10%'},
                 { field: 'filename', title: '音频文件名称', width: '15%'},
-                { field: 'filesize', title: '文件大小', width: '10%'},
+                { field: 'filesize', title: '大小', width: '10%'},
                 {
-                    field: "operateID", title: '操作',width:'20%', align: 'center',
+                    field: "operateID", title: '操作',width:'25%', align: 'center',
                     formatter: function (value, rowData, rowIndex) {
-                        return '<a href="javascript:void(0)" onclick="fwdViewCoursePage('+rowIndex+')">查看</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
-                            '<a href="javascript:void(0)" onclick="fwdEditCoursePage('+rowIndex+')">修改基本信息</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
-                            '<a href="javascript:void(0)" onclick="fwdEditCourseIntroductionPage('+rowIndex+')">修改介绍</a>&nbsp&nbsp&nbsp&nbsp&nbsp' +
+                        <%if(userBean.getLoginname().equals(Constant.defaultAdministrator)){%>
+                        return '<a href="javascript:void(0)" onclick="fwdViewCoursePage('+rowIndex+')">查看</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdEditViewCountPage('+rowIndex+')">已读</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdEditCoursePage('+rowIndex+')">修改基本信息</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdEditCourseIntroductionPage('+rowIndex+')">修改介绍</a>&nbsp&nbsp&nbsp' +
                             '<a href="javascript:void(0)" onclick="saveCourseDel('+rowIndex+')">删除</a>';
+                        <%}else{%>
+                        return '<a href="javascript:void(0)" onclick="fwdViewCoursePage('+rowIndex+')">查看</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdEditCoursePage('+rowIndex+')">修改基本信息</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdEditCourseIntroductionPage('+rowIndex+')">修改介绍</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="saveCourseDel('+rowIndex+')">删除</a>';
+                        <%}%>
+
                     }
                 }
             ]],
@@ -149,6 +163,28 @@
             displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
         });
     });
+    function fwdEditViewCountPage(index){
+        $('#courseList').datagrid('selectRow',index);
+        var row = $('#courseList').datagrid('getSelected');
+        if (row){
+            $('#modifyViewCountDialog').dialog({
+                width: 330,
+                height: 200,
+                closed: true,
+                cache: false,
+                modal: true
+            });
+            $("#modifyViewCountDialog").dialog({
+                onClose:function(){
+                    $("#modifyViewCountDialog").empty();
+                }
+            });
+            $('#modifyViewCountDialog').dialog("open");
+            $("#modifyViewCountDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyViewCountPage.do?random_id=" + Math.random()
+                + "&courseid="+row.courseid);
+            $("#modifyViewCountDialog").dialog("setTitle", '修改课程【' + row.coursename + '】的已读人数');
+        }
+    }
 </script>
 <div style="text-align: left;">
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-back'" onclick="returnManageProductInManageCourse()">返回</a>
@@ -184,6 +220,7 @@
     <div id="addCourseDialog" style="text-align: center"></div>
     <div id="viewCourseDialog" style="text-align: center"></div>
     <div id="modifyCourseIntroductionDialog" style="text-align: center"></div>
+    <div id="modifyViewCountDialog"></div>
     <table id="courseList" style="width: auto;height: auto;">
     </table>
     <br/>

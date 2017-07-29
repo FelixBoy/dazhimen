@@ -17,6 +17,9 @@
     <update id="updateMainImgPath" parameterType="dazhimen.bg.bean.product.UpdateMainImgFilePathBean">
         update product_image set path = #{mainimage} where pid = #{pid}
     </update>
+    <update id="saveModifyViewCount" parameterType="dazhimen.bg.bean.product.UpdateViewCountBean">
+        update course set viewcount = #{viewcount} where courseid = #{courseid}
+    </update>
     <update id="saveModifyBuyCount" parameterType="dazhimen.bg.bean.product.UpdateBuyCountBean">
         update product set buycount = #{buycount} where pid = #{pid}
     </update>

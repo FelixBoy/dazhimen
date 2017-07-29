@@ -23,6 +23,24 @@ import java.util.List;
  * Created by Administrator on 2017/3/17.
  */
 public class ProductService {
+    public void saveModifyViewCount(String courseid, String viewcount) throws BgException {
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            UpdateViewCountBean viewCountBean = new UpdateViewCountBean();
+            viewCountBean.setCourseid(courseid);
+            viewCountBean.setViewcount(viewcount);
+            sqlSession.update("dazhimen.bg.bean.Product.saveModifyViewCount", viewCountBean);
+            sqlSession.commit();
+        }catch (Exception e){
+            sqlSession.rollback();
+            e.printStackTrace();
+            throw new BgException("出现异常，修改已读人数失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+    }
+
     public void saveModifyBuyCount(String pid, String buycount) throws BgException{
         SqlSession sqlSession = null;
         try{
@@ -35,7 +53,7 @@ public class ProductService {
         }catch (Exception e){
             sqlSession.rollback();
             e.printStackTrace();
-            throw new BgException("出现异常，修改产品状态失败");
+            throw new BgException("出现异常，修改已购人数失败");
         }finally {
             MyBatisUtil.closeSession(sqlSession);
         }
