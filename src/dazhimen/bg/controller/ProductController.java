@@ -36,6 +36,25 @@ import java.util.List;
 @Controller
 @RequestMapping("/product")
 public class ProductController {
+
+    @RequestMapping("/saveModifyBuyCount.do")
+    public void saveModifyBuyCount(HttpServletRequest resq, HttpServletResponse resp){
+        try{
+            String pid = resq.getParameter("pid");
+            String buycount = resq.getParameter("buycount");
+            ProductService productService = new ProductService();
+            productService.saveModifyBuyCount(pid, buycount);
+            ResponseUtil.writeMsg(resp, "修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseUtil.writeFailMsgToBrowse(resp, "出现异常，修改已购人数失败");
+        }
+    }
+    @RequestMapping("/fwdModifyBuyCountPage.do")
+    public String fwdModifyBuyCountPage(HttpServletRequest resq){
+        resq.setAttribute("pid", resq.getParameter("pid"));
+        return "/product/modifyBuyCount";
+    }
     /**
      * 转向修改产品主图页面
      * @param pid 产品id

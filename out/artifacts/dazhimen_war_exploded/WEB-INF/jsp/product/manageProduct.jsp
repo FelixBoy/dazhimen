@@ -155,6 +155,7 @@
                     field: "operateID", title: '操作',width:'30%', align: 'center',
                     formatter: function (value, rowData, rowIndex) {
                         return '<a href="javascript:void(0)" onclick="fwdViewProductPage('+rowIndex+')">查看</a>&nbsp&nbsp&nbsp' +
+                            '<a href="javascript:void(0)" onclick="fwdModifyButCountPage('+rowIndex+')">已读</a>&nbsp&nbsp&nbsp'+
                             '<a href="javascript:void(0)" onclick="fwdManageCoursePage('+rowIndex+')">管理课程</a>&nbsp&nbsp&nbsp'+
                             '<a href="javascript:void(0)" onclick="fwdModifyProductStatusPage('+rowIndex+')">修改状态</a>&nbsp&nbsp&nbsp'+
                             '<a href="javascript:void(0)" onclick="fwdEditProductPage('+rowIndex+')">编辑信息</a>&nbsp&nbsp&nbsp' +
@@ -173,7 +174,28 @@
             displayMsg: '当前显示{from} - {to}条,共 {total} 条记录'
         });
     });
-
+    function fwdModifyButCountPage(index){
+        $('#productList').datagrid('selectRow',index);
+        var row = $('#productList').datagrid('getSelected');
+        if (row){
+            $('#modifyBuyCountDialog').dialog({
+                width: 330,
+                height: 200,
+                closed: true,
+                cache: false,
+                modal: true
+            });
+            $("#modifyBuyCountDialog").dialog({
+                onClose:function(){
+                    $("#modifyBuyCountDialog").empty();
+                }
+            });
+            $('#modifyBuyCountDialog').dialog("open");
+            $("#modifyBuyCountDialog").dialog("refresh", "<%=request.getContextPath()%>/product/fwdModifyBuyCountPage.do?random_id=" + Math.random()
+                + "&pid="+row.pid);
+            $("#modifyBuyCountDialog").dialog("setTitle", '修改产品【' + row.pname + '】的已购人数');
+        }
+    }
     function SearchProductByParams() {
         var pidCondition = $("#pidCondition").val();
         var pnameCondition = $("#pnameCondition").val();
@@ -228,6 +250,7 @@
 </script>
 <div style="padding:2px 0;">
     <div id="modifyProductStatusDialog"></div>
+    <div id="modifyBuyCountDialog"></div>
     <div style="margin:0px auto;width: 950px;">
         <form id="queryProductParamsForm">
             <table cellpadding="5">

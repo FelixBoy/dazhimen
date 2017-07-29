@@ -23,6 +23,24 @@ import java.util.List;
  * Created by Administrator on 2017/3/17.
  */
 public class ProductService {
+    public void saveModifyBuyCount(String pid, String buycount) throws BgException{
+        SqlSession sqlSession = null;
+        try{
+            sqlSession = MyBatisUtil.createSession();
+            UpdateBuyCountBean buyCountBean = new UpdateBuyCountBean();
+            buyCountBean.setPid(pid);
+            buyCountBean.setBuycount(buycount);
+            sqlSession.update("dazhimen.bg.bean.Product.saveModifyBuyCount", buyCountBean);
+            sqlSession.commit();
+        }catch (Exception e){
+            sqlSession.rollback();
+            e.printStackTrace();
+            throw new BgException("出现异常，修改产品状态失败");
+        }finally {
+            MyBatisUtil.closeSession(sqlSession);
+        }
+
+    }
     /**
      * 保存新增新闻信息
      * @param basePath
